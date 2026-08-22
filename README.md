@@ -39,8 +39,45 @@ Orchestrator: `src/pipeline.py`
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env             # điền ANTHROPIC_API_KEY thật vào .env
+cp .env.example .env             # điền API key + chọn LLM_PROVIDER
 ```
+
+## Đổi LLM provider
+
+Hệ thống hỗ trợ nhiều LLM qua cơ chế provider (`src/llm/providers/`), chọn bằng
+biến môi trường `LLM_PROVIDER` trong `.env` — **không cần sửa code** ở bất kỳ
+module nào khác (extraction/planning/execution/evaluation đều chỉ gọi
+`llm_call()` / `llm_call_json()`):
+
+| `LLM_PROVIDER` | SDK cần cài | Biến env liên quan |
+|---|---|---|
+| `anthropic` (mặc định) | `anthropic` | `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL` |
+| `openai` | `openai` | `OPENAI_API_KEY`, `OPENAI_MODEL` |
+| `gemini` | `google-genai` | `GEMINI_API_KEY`, `GEMINI_MODEL` |
+| `openai_compatible` | `openai` | `COMPAT_BASE_URL`, `COMPAT_MODEL`, `COMPAT_API_KEY` — dùng cho Ollama, vLLM, LM Studio, DeepSeek, Qwen, OpenRouter... |
+
+Ví dụ chạy local với Ollama:
+```bash
+# .env
+LLM_PROVIDER=openai_compatible
+COMPAT_BASE_URL=http://localhost:11434/v1
+COMPAT_MODEL=llama3.1
+```
+
+Đổi provider ngay trong code (không qua `.env`), ví dụ để so sánh 2 model:
+```python
+from src.llm.client import set_provider, llm_call
+
+set_provider("openai", model="gpt-4o")
+llm_call("...")
+
+set_provider("anthropic", model="claude-sonnet-4-6")
+llm_call("...")
+```
+
+Thêm provider mới: tạo file trong `src/llm/providers/`, kế thừa `LLMProvider`
+(`src/llm/base.py`), chỉ cần implement `complete()`, rồi đăng ký vào
+`_REGISTRY` trong `src/llm/factory.py`.
 
 Mở project trong VS Code: `code .` (đảm bảo interpreter đang trỏ vào `.venv`,
 xem `.vscode/settings.json`).
@@ -61,9 +98,10 @@ dữ liệu thật (VD từ OTT-QA/HybridQA) khi tích hợp.
 pytest tests/ -v
 ```
 
-Các test hiện tại (`test_online_kg.py`, `test_sandbox.py`, `test_evaluator.py`)
-**không cần API key** — chỉ test phần logic thuần (graph, sandbox, scoring).
-Để test end-to-end (`src/pipeline.py`) cần `ANTHROPIC_API_KEY` hợp lệ trong `.env`.
+Các test hiện tại (`test_online_kg.py`, `test_sandbox.py`, `test_evaluator.py`,
+`test_llm_factory.py`) **không cần API key thật** — chỉ test phần logic thuần
+(graph, sandbox, scoring, cơ chế chọn provider). Để test end-to-end
+(`src/pipeline.py`) cần API key hợp lệ của provider đang chọn trong `.env`.
 
 ## Việc cần làm tiếp (TODO)
 

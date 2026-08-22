@@ -1,6 +1,10 @@
-anthropic>=0.40.0
 networkx>=3.2
 duckdb>=1.0.0
 python-dotenv>=1.0.0
 pytest>=8.0.0
 rank-bm25>=0.2.2
+
+# --- LLM providers: chỉ cần cài SDK của provider bạn dùng ---
+anthropic>=0.40.0        # LLM_PROVIDER=anthropic
+openai>=1.50.0           # LLM_PROVIDER=openai hoặc openai_compatible (Ollama/vLLM/...)
+google-genai>=0.3.0      # LLM_PROVIDER=gemini
