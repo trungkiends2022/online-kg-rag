@@ -1,0 +1,50 @@
+from src.kg.online_kg import OnlineKG
+from src.kg.schema import Triple, Provenance
+from src.execution.sandbox import SandboxExecutor
+
+
+def _make_kg():
+    kg = OnlineKG()
+    kg.add_triple(Triple("Alpha Tech", "sector", "Technology", Provenance("table", "t1")))
+    kg.add_triple(Triple("Beta Foods", "sector", "Consumer", Provenance("table", "t1")))
+    return kg
+
+
+def test_successful_execution():
+    kg = _make_kg()
+    code = "result = kg.get_neighbors('Alpha Tech', 'sector')"
+    res = SandboxExecutor().run(code, kg)
+    assert res.success
+    assert res.value == ["Technology"]
+    assert not res.is_empty
+
+
+def test_empty_result():
+    kg = _make_kg()
+    code = "result = kg.get_neighbors('Nonexistent', 'sector')"
+    res = SandboxExecutor().run(code, kg)
+    assert res.success
+    assert res.is_empty
+
+
+def test_runtime_error_caught():
+    kg = _make_kg()
+    code = "result = 1 / 0"
+    res = SandboxExecutor().run(code, kg)
+    assert not res.success
+    assert "ZeroDivisionError" in res.error
+
+
+def test_import_blocked():
+    kg = _make_kg()
+    code = "import os\nresult = os.listdir('.')"
+    res = SandboxExecutor().run(code, kg)
+    assert not res.success  # __import__ không có trong SAFE_BUILTINS
+
+
+def test_timeout():
+    kg = _make_kg()
+    code = "while True:\n    pass"
+    res = SandboxExecutor().run(code, kg, timeout_sec=1)
+    assert not res.success
+    assert "timed out" in res.error
