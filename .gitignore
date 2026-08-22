@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Env / secrets
+.env
+*.key
+
+# Data (thường nặng, không commit; dùng README hướng dẫn tải lại)
+data/*
+!data/.gitkeep
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+.idea/
+
+# OS
+.DS_Store
+
+# Notebook checkpoints
+.ipynb_checkpoints/
