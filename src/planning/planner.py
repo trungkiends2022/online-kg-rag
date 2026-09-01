@@ -37,7 +37,9 @@ class PathPlanner:
         Trả về JSON: [{{"path_id": str, "steps": [...]}}, ...]
         Chỉ trả JSON.
         """
-        items = llm_call_json(prompt)
+        # Multiple paths can easily exceed the generic 1024-token response limit,
+        # especially for models that spend output tokens on internal reasoning.
+        items = llm_call_json(prompt, max_tokens=4096)
         paths = []
         for item in items:
             steps = [PathStep(**s) for s in item["steps"]]

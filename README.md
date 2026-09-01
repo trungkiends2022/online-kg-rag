@@ -92,6 +92,67 @@ Sẽ chạy demo với dữ liệu mẫu nhỏ (table + text + web) hard-code s�
 `src/pipeline.py`. Thay `table_rows` / `text_passages` / `web_snippets` bằng
 dữ liệu thật (VD từ OTT-QA/HybridQA) khi tích hợp.
 
+## Chạy benchmark HybridQA và FinQA
+
+Không cần cài MySQL, PostgreSQL, Neo4j hay một database server nào. `OnlineKG`
+dùng NetworkX trong bộ nhớ và được dựng lại cho từng câu hỏi. Dataset chỉ là các
+file JSON lưu trong `data/` (thư mục này đã được git-ignore).
+
+### HybridQA — bắt đầu bằng oracle context
+
+Tải câu hỏi và bảng/passage chính thức:
+
+```bash
+git clone https://github.com/wenhuchen/HybridQA data/HybridQA
+git clone https://github.com/wenhuchen/WikiTables-WithLinks data/WikiTables-WithLinks
+```
+
+Chạy smoke test một câu từ dev split:
+
+```bash
+python -m src.run_dataset \
+  --dataset hybridqa \
+  --input data/HybridQA/released_data/dev.json \
+  --tables-dir data/WikiTables-WithLinks/tables_tok \
+  --passages-dir data/WikiTables-WithLinks/request_tok \
+  --limit 1 \
+  --n-paths 3 \
+  --max-replans 0 \
+  --output data/results/hybridqa-dev.jsonl
+```
+
+Đây là **oracle-context mode**: mỗi câu hỏi dùng đúng table và tập passage liên
+kết bởi HybridQA; BM25 hiện tại chỉ xếp hạng passage bên trong context đó. Nên
+ổn định extraction, KG, planning và execution ở chế độ này trước khi đánh giá
+open-domain retrieval. Adapter cũng đọc được JSON export có object `table` đã
+nhúng trực tiếp, khi đó không cần `--tables-dir`; nếu summary passage cũng được
+nhúng trong cell thì không cần `--passages-dir`.
+
+> Cấu trúc một số snapshot của WikiTables-WithLinks có thể khác tên thư mục.
+> Hãy trỏ `--tables-dir` và `--passages-dir` tới các thư mục thực sự chứa file
+> `<table_id>.json`.
+
+### FinQA
+
+```bash
+git clone https://github.com/czyssrs/FinQA data/FinQA
+python -m src.run_dataset \
+  --dataset finqa \
+  --input data/FinQA/dataset/dev.json \
+  --limit 1 \
+  --n-paths 3 \
+  --max-replans 0 \
+  --output data/results/finqa-dev.jsonl
+```
+
+FinQA adapter giữ lại `program`, `program_re`, `gold_inds` và execution answer
+trong output metadata. Phiên bản hiện tại dùng chúng để phân tích lỗi; program
+accuracy/execution accuracy chuẩn của FinQA là bước tích hợp tiếp theo.
+
+Mỗi dòng output JSONL gồm ID, question, gold answer, metadata và toàn bộ kết quả
+của pipeline. Chạy `--limit 1` trước vì extraction/planning/code synthesis đều
+gọi LLM; sau đó tăng dần lên 10, 100 và toàn bộ dev split.
+
 ## Test
 
 ```bash

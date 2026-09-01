@@ -14,23 +14,45 @@ _EXTRACT_INSTRUCTION = (
 )
 
 
+def _triple_from_item(item: dict, provenance: Provenance) -> Triple:
+    """Normalize scalar JSON values returned by an LLM to the KG string schema."""
+    return Triple(
+        head=str(item["head"]),
+        relation=str(item["relation"]),
+        tail=str(item["tail"]),
+        provenance=provenance,
+    )
+
+
 class EntityRelationExtractor:
+    def __init__(self, table_batch_size: int = 5):
+        if table_batch_size < 1:
+            raise ValueError("table_batch_size must be at least 1")
+        self.table_batch_size = table_batch_size
+
     def extract_from_table(self, table_name: str, rows: list[dict]) -> list[Triple]:
-        prompt = f"""
-        Table name: {table_name}
-        Rows (JSON): {json.dumps(rows, ensure_ascii=False)}
+        # HybridQA tables commonly contain 5-20 rows. Asking for every cell as
+        # triples in one response can exceed the model's output-token budget and
+        # leave a syntactically truncated JSON array, so process bounded batches.
+        batches = [
+            rows[start:start + self.table_batch_size]
+            for start in range(0, len(rows), self.table_batch_size)
+        ] or [[]]
+        triples = []
+        for batch_index, batch in enumerate(batches):
+            prompt = f"""
+        Table name: {table_name} (batch {batch_index + 1}/{len(batches)})
+        Rows (JSON): {json.dumps(batch, ensure_ascii=False)}
 
         Trích xuất các triple (head, relation, tail) biểu diễn nội dung các dòng này.
         {_EXTRACT_INSTRUCTION}
         """
-        items = llm_call_json(prompt)
-        return [
-            Triple(
-                head=it["head"], relation=it["relation"], tail=it["tail"],
-                provenance=Provenance("table", table_name, json.dumps(rows, ensure_ascii=False)[:200]),
+            items = llm_call_json(prompt, max_tokens=4096)
+            provenance = Provenance(
+                "table", table_name, json.dumps(batch, ensure_ascii=False)[:200]
             )
-            for it in items
-        ]
+            triples.extend(_triple_from_item(item, provenance) for item in items)
+        return triples
 
     def extract_from_text(self, passage_id: str, text: str) -> list[Triple]:
         prompt = f"""
@@ -38,14 +60,9 @@ class EntityRelationExtractor:
         Trích xuất các triple (head, relation, tail) thể hiện fact trong đoạn văn.
         {_EXTRACT_INSTRUCTION}
         """
-        items = llm_call_json(prompt)
-        return [
-            Triple(
-                head=it["head"], relation=it["relation"], tail=it["tail"],
-                provenance=Provenance("text", passage_id, text[:200]),
-            )
-            for it in items
-        ]
+        items = llm_call_json(prompt, max_tokens=2048)
+        provenance = Provenance("text", passage_id, text[:200])
+        return [_triple_from_item(it, provenance) for it in items]
 
     def extract_from_web(self, url: str, snippet: str) -> list[Triple]:
         prompt = f"""
@@ -53,11 +70,6 @@ class EntityRelationExtractor:
         Trích xuất các triple (head, relation, tail).
         {_EXTRACT_INSTRUCTION}
         """
-        items = llm_call_json(prompt)
-        return [
-            Triple(
-                head=it["head"], relation=it["relation"], tail=it["tail"],
-                provenance=Provenance("web", url, snippet[:200]),
-            )
-            for it in items
-        ]
+        items = llm_call_json(prompt, max_tokens=2048)
+        provenance = Provenance("web", url, snippet[:200])
+        return [_triple_from_item(it, provenance) for it in items]
