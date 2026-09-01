@@ -1,3 +1,6 @@
+import platform
+import pytest
+
 from src.kg.online_kg import OnlineKG
 from src.kg.schema import Triple, Provenance
 from src.execution.sandbox import SandboxExecutor
@@ -42,6 +45,7 @@ def test_import_blocked():
     assert not res.success  # __import__ không có trong SAFE_BUILTINS
 
 
+@pytest.mark.skipif(platform.system() == "Windows", reason="signal.SIGALRM not available on Windows")
 def test_timeout():
     kg = _make_kg()
     code = "while True:\n    pass"
