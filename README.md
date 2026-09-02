@@ -54,6 +54,10 @@ module nào khác (extraction/planning/execution/evaluation đều chỉ gọi
 | `anthropic` (mặc định) | `anthropic` | `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL` |
 | `openai` | `openai` | `OPENAI_API_KEY`, `OPENAI_MODEL` |
 | `gemini` | `google-genai` | `GEMINI_API_KEY`, `GEMINI_MODEL` |
+| `deepseek` | `openai` | `DEEPSEEK_API_KEY`, `DEEPSEEK_MODEL` |
+| `groq` | `openai` | `GROQ_API_KEY`, `GROQ_MODEL` |
+| `nvidia_nim` | `openai` | `NVIDIA_API_KEY`, `NVIDIA_NIM_MODEL` |
+| `openrouter` | `openai` | `OPENROUTER_API_KEY`, `OPENROUTER_MODEL` |
 | `openai_compatible` | `openai` | `COMPAT_BASE_URL`, `COMPAT_MODEL`, `COMPAT_API_KEY` — dùng cho Ollama, vLLM, LM Studio, DeepSeek, Qwen, OpenRouter... |
 
 Ví dụ chạy local với Ollama:
@@ -63,6 +67,36 @@ LLM_PROVIDER=openai_compatible
 COMPAT_BASE_URL=http://localhost:11434/v1
 COMPAT_MODEL=llama3.1
 ```
+
+Ví dụ dùng Groq:
+
+```bash
+# .env
+LLM_PROVIDER=groq
+GROQ_API_KEY=gsk_...
+GROQ_MODEL=openai/gpt-oss-20b
+
+python -m src.llm.test_prompt "Trả lời ngắn gọn: 1+1 bằng bao nhiêu?" --max-tokens 1024
+```
+
+Với `openai/gpt-oss-20b`, free plan hiện công bố 30 RPM, 1.000 RPD,
+8.000 TPM và 200.000 TPD. Rate limit áp dụng ở cấp organization và có thể
+thay đổi; Groq Console là nguồn chính xác cho tài khoản của bạn.
+
+Ví dụ dùng NVIDIA NIM hosted API:
+
+```bash
+# .env
+LLM_PROVIDER=nvidia_nim
+NVIDIA_API_KEY=nvapi-...
+NVIDIA_NIM_MODEL=openai/gpt-oss-20b
+
+python -m src.llm.test_prompt "Trả lời ngắn gọn: 1+1 bằng bao nhiêu?" --max-tokens 1024
+```
+
+Tạo key từ trang model trên build.nvidia.com. Hosted prototype endpoint miễn
+phí phù hợp để thử nghiệm; NVIDIA không công bố một quota RPD cố định trên
+trang model, nên kiểm tra giới hạn thực tế trong tài khoản NVIDIA.
 
 Đổi provider ngay trong code (không qua `.env`), ví dụ để so sánh 2 model:
 ```python

@@ -29,6 +29,38 @@ def test_openai_compatible_provider_instantiates():
     assert provider.name == "openai_compatible"
 
 
+def test_openrouter_provider_instantiates(monkeypatch):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "fake-key-for-test")
+    provider = create_provider("openrouter")
+    assert isinstance(provider, LLMProvider)
+    assert provider.name == "openrouter"
+    assert provider.model == "openrouter/free"
+
+
+def test_deepseek_provider_instantiates(monkeypatch):
+    monkeypatch.setenv("DEEPSEEK_API_KEY", "fake-key-for-test")
+    provider = create_provider("deepseek")
+    assert isinstance(provider, LLMProvider)
+    assert provider.name == "deepseek"
+    assert provider.model == "deepseek-v4-flash"
+
+
+def test_groq_provider_instantiates(monkeypatch):
+    monkeypatch.setenv("GROQ_API_KEY", "fake-key-for-test")
+    provider = create_provider("groq")
+    assert isinstance(provider, LLMProvider)
+    assert provider.name == "groq"
+    assert provider.model == "openai/gpt-oss-20b"
+
+
+def test_nvidia_nim_provider_instantiates(monkeypatch):
+    monkeypatch.setenv("NVIDIA_API_KEY", "fake-key-for-test")
+    provider = create_provider("nvidia_nim")
+    assert isinstance(provider, LLMProvider)
+    assert provider.name == "nvidia_nim"
+    assert provider.model == "openai/gpt-oss-20b"
+
+
 def test_switch_provider_via_env(monkeypatch):
     import src.llm.client as client_module
 

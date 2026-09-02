@@ -1,0 +1,34 @@
+"""OpenRouter provider through its OpenAI-compatible API."""
+
+from __future__ import annotations
+
+import os
+
+from src.llm.base import LLMProvider
+
+
+class OpenRouterProvider(LLMProvider):
+    name = "openrouter"
+
+    def __init__(self, model: str | None = None, api_key: str | None = None):
+        from openai import OpenAI
+
+        self.model = model or os.environ.get("OPENROUTER_MODEL", "openrouter/free")
+        headers = {}
+        if referer := os.environ.get("OPENROUTER_SITE_URL"):
+            headers["HTTP-Referer"] = referer
+        if title := os.environ.get("OPENROUTER_APP_NAME"):
+            headers["X-OpenRouter-Title"] = title
+        self._client = OpenAI(
+            api_key=api_key or os.environ.get("OPENROUTER_API_KEY"),
+            base_url="https://openrouter.ai/api/v1",
+            default_headers=headers or None,
+        )
+
+    def complete(self, prompt: str, *, max_tokens: int = 1024) -> str:
+        response = self._client.chat.completions.create(
+            model=self.model,
+            max_tokens=max_tokens,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        return response.choices[0].message.content or ""

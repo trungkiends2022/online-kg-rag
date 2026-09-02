@@ -9,6 +9,10 @@ _REGISTRY = {
     "anthropic": "src.llm.providers.anthropic_provider.AnthropicProvider",
     "openai": "src.llm.providers.openai_provider.OpenAIProvider",
     "gemini": "src.llm.providers.gemini_provider.GeminiProvider",
+    "deepseek": "src.llm.providers.deepseek_provider.DeepSeekProvider",
+    "groq": "src.llm.providers.groq_provider.GroqProvider",
+    "nvidia_nim": "src.llm.providers.nvidia_nim_provider.NvidiaNIMProvider",
+    "openrouter": "src.llm.providers.openrouter_provider.OpenRouterProvider",
     "openai_compatible": "src.llm.providers.openai_compatible_provider.OpenAICompatibleProvider",
 }
 

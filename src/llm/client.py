@@ -15,6 +15,9 @@ from __future__ import annotations
 import os
 import re
 import json
+import time
+from datetime import datetime, timezone
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -24,6 +27,20 @@ from src.llm.base import LLMProvider
 load_dotenv()
 
 _provider: LLMProvider | None = None
+
+
+def _env_enabled(name: str) -> bool:
+    return os.environ.get(name, "").lower() in {"1", "true", "yes", "on"}
+
+
+def _write_call_log(record: dict) -> None:
+    """Append one JSON object per LLM call. API keys are never included."""
+    if not _env_enabled("LLM_LOG_ENABLED"):
+        return
+    path = Path(os.environ.get("LLM_LOG_PATH", "logs/llm_calls.jsonl"))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as stream:
+        stream.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
 def get_provider(force_reload: bool = False) -> LLMProvider:
@@ -44,7 +61,36 @@ def set_provider(name: str, **kwargs) -> None:
 
 
 def llm_call(prompt: str, *, json_mode: bool = False, max_tokens: int = 1024) -> str:
-    text = get_provider().complete(prompt, max_tokens=max_tokens)
+    provider = get_provider()
+    started_at = datetime.now(timezone.utc).isoformat()
+    started = time.perf_counter()
+    record = {
+        "timestamp": started_at,
+        "provider": provider.name,
+        "model": getattr(provider, "model", None),
+        "max_tokens": max_tokens,
+        "prompt_chars": len(prompt),
+    }
+    if _env_enabled("LLM_LOG_CONTENT"):
+        record["prompt"] = prompt
+    try:
+        text = provider.complete(prompt, max_tokens=max_tokens)
+    except Exception as exc:
+        record.update(
+            status="error",
+            error_type=type(exc).__name__,
+            duration_ms=round((time.perf_counter() - started) * 1000, 2),
+        )
+        _write_call_log(record)
+        raise
+    record.update(
+        status="ok",
+        response_chars=len(text),
+        duration_ms=round((time.perf_counter() - started) * 1000, 2),
+    )
+    if _env_enabled("LLM_LOG_CONTENT"):
+        record["response"] = text
+    _write_call_log(record)
     if json_mode:
         text = re.sub(r"^```json\s*|\s*```$", "", text.strip(), flags=re.MULTILINE)
     return text
