@@ -15,6 +15,15 @@ def test_add_triple_and_neighbors():
     assert kg.get_neighbors("Alpha Tech", relation="other") == []
 
 
+def test_rejects_extractor_self_loop():
+    kg = OnlineKG()
+    kg.add_triple(_triple("Liverpool Football Club", "located_in", "Liverpool Football Club"))
+
+    assert kg.is_empty()
+    assert kg.summary()["num_rejected_triples"] == 1
+    assert kg.rejection_log[0]["reason"] == "self_loop"
+
+
 def test_get_relations():
     kg = OnlineKG()
     kg.add_triple(_triple("Alpha Tech", "sector", "Technology"))
@@ -69,6 +78,47 @@ def test_semantic_resolution_does_not_merge_date_literals():
     EntityResolver(similarity_fn=lambda _left, _right: 1.0).resolve(kg)
     assert "15 February 1968" in kg.graph
     assert "16 February 1968" in kg.graph
+
+
+def test_club_designator_is_resolved_without_semantic_similarity():
+    kg = OnlineKG()
+    kg.add_triple(_triple("Cerro Porteño", "country", "Paraguay"))
+    kg.add_triple(_triple("Club Cerro Porteño", "founded", "1912"))
+    semantic_calls = []
+
+    def no_semantic_match(left, right):
+        semantic_calls.append((left, right))
+        return 0.0
+
+    EntityResolver(similarity_fn=no_semantic_match).resolve(kg)
+
+    assert "Cerro Porteño" not in kg.graph
+    assert kg.get_neighbors("Cerro Porteño", "founded") == ["1912"]
+    assert kg.get_neighbors("Club Cerro Porteño", "country") == ["Paraguay"]
+    assert semantic_calls == []
+    assert kg.resolution_log[-1]["tier"] == "structural"
+
+
+def test_core_name_query_resolves_when_only_full_club_name_exists():
+    kg = OnlineKG()
+    kg.add_triple(_triple("Club Cerro Porteño", "country", "Paraguay"))
+    EntityResolver(similarity_fn=lambda _left, _right: 0.0).resolve(kg)
+
+    assert kg.get_neighbors("Cerro Porteño", "country") == ["Paraguay"]
+
+
+def test_football_club_suffix_is_resolved_without_semantic_similarity():
+    kg = OnlineKG()
+    kg.add_triple(_triple("Rank 8", "club", "Liverpool"))
+    kg.add_triple(_triple("Liverpool", "country", "England"))
+    kg.add_triple(_triple("Liverpool F.C.", "founded", "1892"))
+
+    EntityResolver(similarity_fn=lambda _left, _right: 0.0).resolve(kg)
+
+    assert "Liverpool" not in kg.graph
+    assert kg.get_neighbors("Liverpool", "founded") == ["1892"]
+    assert kg.get_neighbors("Liverpool F.C.", "country") == ["England"]
+    assert kg.resolution_log[-1]["tier"] == "structural"
 
 
 def test_merge_entities():

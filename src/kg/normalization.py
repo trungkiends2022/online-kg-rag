@@ -1,4 +1,4 @@
-"""Deterministic three-tier normalization for relations and KG entities."""
+"""Deterministic normalization for relations and KG entities."""
 
 from __future__ import annotations
 
@@ -74,8 +74,36 @@ def normalize_relation(value: str, *, fuzzy_threshold: float = 0.9) -> str:
 SimilarityFn = Callable[[str, str], float]
 
 
+# Common, non-distinctive words attached to football-club names.  Keep this list
+# deliberately narrow: stripping arbitrary organization words would make names
+# such as "Manchester City" and "Manchester" unsafe to merge.
+ENTITY_PREFIX_DESIGNATORS = (("club",),)
+ENTITY_SUFFIX_DESIGNATORS = (
+    ("fc",),
+    ("cf",),
+    ("f", "c"),
+    ("c", "f"),
+    ("football", "club"),
+    ("futbol", "club"),
+)
+
+
+def normalize_entity_core(value: str) -> str:
+    """Return a deterministic key without a known sports-club designator."""
+    tokens = normalize_key(value).split()
+    for prefix in ENTITY_PREFIX_DESIGNATORS:
+        if tuple(tokens[:len(prefix)]) == prefix:
+            tokens = tokens[len(prefix):]
+            break
+    for suffix in ENTITY_SUFFIX_DESIGNATORS:
+        if tuple(tokens[-len(suffix):]) == suffix:
+            tokens = tokens[:-len(suffix)]
+            break
+    return " ".join(tokens)
+
+
 class EntityResolver:
-    """Resolve entities in three auditable tiers.
+    """Resolve entities in auditable deterministic and semantic tiers.
 
     ``similarity_fn`` can be an embedding cosine-similarity function. Without one,
     a conservative string similarity fallback is used and remains dependency-free.
@@ -132,7 +160,28 @@ class EntityResolver:
             if canonical and node != canonical:
                 kg.merge_entities(canonical, [node], tier="alias", score=1.0)
 
-        # Tier 3: optional embedding similarity (or conservative fallback).
+        # Tier 3: deterministic organization-name variants.  This handles e.g.
+        # "Cerro Porteño" and "Club Cerro Porteño" without an embedding call.
+        core_buckets: dict[str, list[str]] = defaultdict(list)
+        for node in list(kg.graph.nodes()):
+            if not self._is_literal(node):
+                core_buckets[normalize_entity_core(node)].append(node)
+        for core, group in core_buckets.items():
+            keys = {normalize_key(node) for node in group}
+            if core and len(group) > 1 and len(keys) > 1:
+                # Exact core-name equality after removing a narrow designator is
+                # strong enough without identical graph roles. A table can make
+                # the short name an object while prose uses the full name as a
+                # subject for the same entity.
+                canonical = max(group, key=self._display_score)
+                kg.merge_entities(
+                    canonical,
+                    [node for node in group if node != canonical],
+                    tier="structural",
+                    score=1.0,
+                )
+
+        # Tier 4: optional embedding similarity (or conservative fallback).
         nodes = list(kg.graph.nodes())
         consumed: set[str] = set()
         for index, left in enumerate(nodes):
@@ -155,6 +204,14 @@ class EntityResolver:
         kg.entity_key_aliases = {
             normalize_key(node): node for node in kg.graph.nodes()
         }
+        # Also support a query that omits the designator when only the full name
+        # occurred in the source.  Ambiguous core names are intentionally skipped.
+        core_targets: dict[str, list[str]] = defaultdict(list)
+        for node in kg.graph.nodes():
+            core_targets[normalize_entity_core(node)].append(node)
+        for core, targets in core_targets.items():
+            if core and len(targets) == 1:
+                kg.entity_key_aliases[core] = targets[0]
         for alias_key, canonical in self.aliases.items():
             resolved = kg._resolve_entity(canonical)
             if resolved in kg.graph:

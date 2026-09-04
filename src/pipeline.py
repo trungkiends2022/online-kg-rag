@@ -50,7 +50,7 @@ class OnlineKGPipeline:
 
             candidates = []
             for path in paths:
-                code = self.code_synth.synthesize(path, question)
+                code = self.code_synth.synthesize(path, question, kg)
                 result = self.executor.run(code, kg)
                 candidates.append((path, code, result))
 

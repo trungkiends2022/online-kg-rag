@@ -33,14 +33,16 @@ Question
 
 Orchestrator: `src/pipeline.py`
 
-### Chuẩn hoá KG theo 3 tầng
+### Chuẩn hoá KG theo 4 tầng
 
 `src/kg/normalization.py` chuẩn hoá relation và entity trước khi planning:
 
 1. lexical: Unicode/case/whitespace/punctuation và camelCase → snake_case;
 2. ontology: alias xác định như `hasNationality → nationality`,
    `Moroccan → Morocco`, `Bác Hồ → Hồ Chí Minh`;
-3. semantic: similarity có threshold mặc định `0.93`, chỉ so các node cùng vai
+3. structural: bỏ tiền/hậu tố tên CLB có kiểm soát, ví dụ
+   `Cerro Porteño ≡ Club Cerro Porteño`, trước khi cần semantic;
+4. semantic: similarity có threshold mặc định `0.93`, chỉ so các node cùng vai
    trò và bỏ qua ngày/số. Có thể truyền hàm cosine embedding qua
    `EntityResolver(similarity_fn=...)`; mặc định dùng string similarity bảo thủ.
 

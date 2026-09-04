@@ -20,9 +20,18 @@ class OnlineKG:
         self.entity_aliases: dict[str, str] = {}
         self.entity_key_aliases: dict[str, str] = {}
         self.resolution_log: list[dict] = []
+        self.rejection_log: list[dict] = []
 
     # ---- xây dựng ----
     def add_triple(self, triple: Triple) -> None:
+        if normalize_key(triple.head) == normalize_key(triple.tail):
+            self.rejection_log.append({
+                "reason": "self_loop",
+                "head": triple.head,
+                "relation": self.normalize_relation(triple.relation),
+                "tail": triple.tail,
+            })
+            return
         self.graph.add_node(triple.head)
         self.graph.add_node(triple.tail)
         self.graph.add_edge(
@@ -128,4 +137,5 @@ class OnlineKG:
             "relations": sorted({d["relation"] for _, _, d in self.graph.edges(data=True)}),
             "num_entity_aliases": len(self.entity_aliases),
             "entity_resolution": resolution_counts,
+            "num_rejected_triples": len(self.rejection_log),
         }
