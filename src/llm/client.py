@@ -96,9 +96,26 @@ def llm_call(prompt: str, *, json_mode: bool = False, max_tokens: int = 1024) ->
     return text
 
 
-def llm_call_json(prompt: str, *, max_tokens: int = 1024):
-    raw = llm_call(prompt, json_mode=True, max_tokens=max_tokens)
-    try:
-        return json.loads(raw)
-    except json.JSONDecodeError as e:
-        raise ValueError(f"LLM ({get_provider().name}) không trả JSON hợp lệ:\n{raw}") from e
+def llm_call_json(prompt: str, *, max_tokens: int = 1024, retries: int = 1):
+    """Call an LLM for JSON, retrying empty, malformed, or non-list output."""
+    last_raw = ""
+    last_error: Exception | None = None
+    for attempt in range(retries + 1):
+        retry_note = ""
+        if attempt:
+            retry_note = (
+                "\nLần trả lời trước rỗng hoặc không phải JSON list hợp lệ. "
+                "Hãy trả lại đầy đủ JSON list, không markdown và không giải thích."
+            )
+        last_raw = llm_call(prompt + retry_note, json_mode=True, max_tokens=max_tokens)
+        try:
+            parsed = json.loads(last_raw)
+            if not isinstance(parsed, list):
+                raise TypeError("expected a JSON list")
+            return parsed
+        except (json.JSONDecodeError, TypeError) as exc:
+            last_error = exc
+    raise ValueError(
+        f"LLM ({get_provider().name}) không trả JSON list hợp lệ sau "
+        f"{retries + 1} lần:\n{last_raw}"
+    ) from last_error

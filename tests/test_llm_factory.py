@@ -55,6 +55,7 @@ def test_groq_provider_instantiates(monkeypatch):
 
 def test_nvidia_nim_provider_instantiates(monkeypatch):
     monkeypatch.setenv("NVIDIA_API_KEY", "fake-key-for-test")
+    monkeypatch.setenv("NVIDIA_NIM_MODEL", "openai/gpt-oss-20b")
     provider = create_provider("nvidia_nim")
     assert isinstance(provider, LLMProvider)
     assert provider.name == "nvidia_nim"

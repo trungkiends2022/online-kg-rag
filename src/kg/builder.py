@@ -2,16 +2,20 @@
 
 from __future__ import annotations
 
-from collections import defaultdict
-
 from src.kg.online_kg import OnlineKG
+from src.kg.normalization import EntityResolver
 from src.kg.schema import Triple
 from src.extraction.extractor import EntityRelationExtractor
 
 
 class OnlineKGBuilder:
-    def __init__(self, extractor: EntityRelationExtractor | None = None):
+    def __init__(
+        self,
+        extractor: EntityRelationExtractor | None = None,
+        entity_resolver: EntityResolver | None = None,
+    ):
         self.extractor = extractor or EntityRelationExtractor()
+        self.entity_resolver = entity_resolver or EntityResolver()
 
     def build(self, retrieved: dict) -> OnlineKG:
         kg = OnlineKG()
@@ -29,19 +33,10 @@ class OnlineKGBuilder:
         for t in all_triples:
             kg.add_triple(t)
 
-        self._resolve_entities(kg)
+        self.entity_resolver.resolve(kg)
         return kg
 
     @staticmethod
     def _resolve_entities(kg: OnlineKG) -> None:
-        """
-        Entity resolution baseline (case-insensitive match). Với dữ liệu thật, nên
-        nâng cấp: LLM-based dedup, hoặc embedding similarity + threshold.
-        """
-        buckets: dict[str, list[str]] = defaultdict(list)
-        for n in kg.graph.nodes():
-            buckets[n.strip().lower()].append(n)
-        for group in buckets.values():
-            if len(group) > 1:
-                canonical = max(group, key=len)
-                kg.merge_entities(canonical, [g for g in group if g != canonical])
+        """Backward-compatible entry point for callers using the old helper."""
+        EntityResolver().resolve(kg)

@@ -54,14 +54,16 @@ SAFE_BUILTINS = {
 
 class SandboxExecutor:
     def run(self, code: str, kg: OnlineKG, timeout_sec: int = 5) -> ExecResult:
-        local_env: dict = {"kg": kg}
-        global_env = {"__builtins__": SAFE_BUILTINS}
+        # Use one namespace so functions/lambdas defined by generated code can
+        # resolve ``kg``. With separate globals/locals, top-level expressions
+        # worked but function bodies raised ``NameError: kg is not defined``.
+        exec_env: dict = {"__builtins__": SAFE_BUILTINS, "kg": kg}
         
         if platform.system() == "Windows":
             # Windows: use ThreadPoolExecutor for timeout
             try:
                 with ThreadPoolExecutor(max_workers=1) as executor:
-                    future = executor.submit(exec, code, global_env, local_env)  # noqa: S102
+                    future = executor.submit(exec, code, exec_env, exec_env)  # noqa: S102
                     future.result(timeout=timeout_sec)
             except TimeoutError:
                 return ExecResult(success=False, error="Code execution timed out")
@@ -71,12 +73,12 @@ class SandboxExecutor:
             # Unix/Linux: use signal.SIGALRM
             try:
                 with _time_limit(timeout_sec):
-                    exec(code, global_env, local_env)  # noqa: S102 -- sandboxed builtins only
+                    exec(code, exec_env, exec_env)  # noqa: S102 -- sandboxed builtins only
             except TimeoutException as e:
                 return ExecResult(success=False, error=str(e))
             except Exception as e:  # noqa: BLE001 -- bắt mọi lỗi runtime của code sinh ra
                 return ExecResult(success=False, error=f"{type(e).__name__}: {e}")
 
-        result = local_env.get("result")
+        result = exec_env.get("result")
         is_empty = result is None or (hasattr(result, "__len__") and len(result) == 0)
         return ExecResult(success=True, value=result, is_empty=is_empty)

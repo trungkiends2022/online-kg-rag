@@ -30,6 +30,18 @@ def test_empty_result():
     assert res.is_empty
 
 
+def test_generated_function_can_access_kg():
+    kg = _make_kg()
+    code = """
+def lookup(entity):
+    return kg.get_neighbors(entity, 'sector')
+result = lookup('Alpha Tech')
+"""
+    res = SandboxExecutor().run(code, kg)
+    assert res.success
+    assert res.value == ["Technology"]
+
+
 def test_runtime_error_caught():
     kg = _make_kg()
     code = "result = 1 / 0"
