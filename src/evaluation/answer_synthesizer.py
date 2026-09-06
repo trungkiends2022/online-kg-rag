@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 from src.kg.online_kg import OnlineKG
 from src.evaluation.evaluator import ScoredPath
 from src.llm.client import llm_call
@@ -23,11 +25,20 @@ class AnswerSynthesizer:
 
     def synthesize(self, question: str, best: ScoredPath, kg: OnlineKG) -> str:
         preferred = self._preferred_value(best.exec_result.value, kg)
+        evidence = [
+            {
+                "triple": [item.head, item.relation, item.tail],
+                "source_type": item.source_type,
+                "source_id": item.source_id,
+            }
+            for item in best.exec_result.evidence[:10]
+        ]
         prompt = f"""
         Question: {question}
         Kết quả thực thi (đáng tin nhất, score={best.score:.2f}): {best.exec_result.value}
         Tên hiển thị ưu tiên (alias tương đương, nếu có): {preferred}
         Lý do được chọn: {best.reasons}
+        Evidence đã được sandbox xác minh: {json.dumps(evidence, ensure_ascii=False)}
 
         Viết câu trả lời tự nhiên, ngắn gọn, dựa đúng vào kết quả trên. Khi tên
         hiển thị ưu tiên là alias của cùng entity, hãy dùng tên đó trong câu trả lời.

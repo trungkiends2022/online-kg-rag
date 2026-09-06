@@ -16,10 +16,13 @@ class OpenAIProvider(LLMProvider):
         self.model = model or os.environ.get("OPENAI_MODEL", "gpt-4o")
         self._client = OpenAI(api_key=api_key or os.environ.get("OPENAI_API_KEY"))
 
-    def complete(self, prompt: str, *, max_tokens: int = 1024) -> str:
-        resp = self._client.chat.completions.create(
+    def complete(self, prompt: str, *, max_tokens: int = 1024, temperature: float | None = None) -> str:
+        kwargs = dict(
             model=self.model,
             max_completion_tokens=max_tokens,
             messages=[{"role": "user", "content": prompt}],
         )
+        if temperature is not None:
+            kwargs["temperature"] = temperature
+        resp = self._client.chat.completions.create(**kwargs)
         return resp.choices[0].message.content or ""

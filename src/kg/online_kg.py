@@ -10,7 +10,7 @@ from typing import Callable, Optional
 
 import networkx as nx
 
-from src.kg.schema import Triple, Provenance
+from src.kg.schema import EvidenceRef, Triple, Provenance
 from src.kg.normalization import normalize_key, normalize_relation
 
 
@@ -122,6 +122,30 @@ class OnlineKG:
         if not self.graph.has_edge(head, tail):
             return []
         return [d["provenance"] for d in self.graph.get_edge_data(head, tail).values()]
+
+    def get_evidence(
+        self, head: str, tail: str, relation: Optional[str] = None
+    ) -> list[EvidenceRef]:
+        """Return verified evidence records for matching graph edges."""
+        head, tail = self._resolve_entity(head), self._resolve_entity(tail)
+        if not self.graph.has_edge(head, tail):
+            return []
+        normalized = self.normalize_relation(relation) if relation is not None else None
+        evidence = []
+        for data in self.graph.get_edge_data(head, tail).values():
+            if normalized is not None and data.get("relation") != normalized:
+                continue
+            provenance = data["provenance"]
+            evidence.append(EvidenceRef(
+                head=head,
+                relation=data["relation"],
+                tail=tail,
+                source_type=provenance.source_type,
+                source_id=provenance.source_id,
+                source_group=provenance.source_group,
+                domain=provenance.domain,
+            ))
+        return evidence
 
     def is_empty(self) -> bool:
         return self.graph.number_of_nodes() == 0

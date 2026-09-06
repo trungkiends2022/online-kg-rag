@@ -19,10 +19,13 @@ class GroqProvider(LLMProvider):
             base_url="https://api.groq.com/openai/v1",
         )
 
-    def complete(self, prompt: str, *, max_tokens: int = 1024) -> str:
-        response = self._client.chat.completions.create(
+    def complete(self, prompt: str, *, max_tokens: int = 1024, temperature: float | None = None) -> str:
+        kwargs = dict(
             model=self.model,
             max_tokens=max_tokens,
             messages=[{"role": "user", "content": prompt}],
         )
+        if temperature is not None:
+            kwargs["temperature"] = temperature
+        response = self._client.chat.completions.create(**kwargs)
         return response.choices[0].message.content or ""

@@ -36,6 +36,8 @@ _API_SIGNATURES = {
     "filter": (2, {"entities", "predicate"}),
 }
 
+CODE_MAX_TOKENS = 4096
+
 
 class CodeSynthesizer:
     @staticmethod
@@ -172,7 +174,7 @@ class CodeSynthesizer:
                     f"\nCode trước không hợp lệ ({last_error}):\n{last_code}\n"
                     "Viết lại code hoàn chỉnh, hợp lệ và phải gán biến result."
                 )
-            raw = llm_call(prompt)
+            raw = llm_call(prompt, max_tokens=CODE_MAX_TOKENS)
             last_code = raw.strip().removeprefix("```python").removeprefix("```").removesuffix("```").strip()
             if not last_code:
                 last_error = "empty code"

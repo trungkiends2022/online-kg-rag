@@ -29,3 +29,20 @@ def test_llm_call_writes_metadata_without_content(monkeypatch, tmp_path):
     assert record["response_chars"] == 12
     assert "prompt" not in record
     assert "response" not in record
+
+
+def test_llm_call_forwards_explicit_temperature(monkeypatch):
+    received = {}
+
+    class TemperatureProvider:
+        name = "fake"
+        model = "fake-model"
+
+        def complete(self, prompt, *, max_tokens, temperature=None):
+            received.update(max_tokens=max_tokens, temperature=temperature)
+            return "ok"
+
+    monkeypatch.setattr(client, "_provider", TemperatureProvider())
+
+    assert client.llm_call("prompt", max_tokens=11, temperature=0.0) == "ok"
+    assert received == {"max_tokens": 11, "temperature": 0.0}

@@ -24,14 +24,35 @@ Question
    ▼
 [6] Sandbox Executor        src/execution/sandbox.py            (CHẠY THỬ code, timeout, an toàn)
    ▼
-[7] Path Evaluator          src/evaluation/evaluator.py         (chấm điểm DỰA TRÊN kết quả execute:
-   │                                                              executability -> self-consistency ->
-   │                                                              length penalty)
+[7] Path Evaluator          src/evaluation/evaluator.py         (grounded consistency:
+   │                                                              evidence -> provenance diversity ->
+   │                                                              path agreement -> length penalty)
    ▼
 [8] Answer Synthesizer      src/evaluation/answer_synthesizer.py
 ```
 
 Orchestrator: `src/pipeline.py`
+
+### Grounded consistency và provenance diversity
+
+Sandbox bọc KG bằng `TracingKG`, vì vậy mỗi path chỉ nhận evidence từ những
+cạnh KG mà code thực sự truy vấn. Output không khớp bất kỳ cạnh evidence nào bị
+loại là `ungrounded`; LLM không được tự khai báo nguồn.
+
+Evaluator gom evidence của các path cho cùng output theo `(source_type,
+source_id)`, không đếm nhiều triple trong cùng nguồn thành nhiều nguồn độc lập.
+Provenance bonus mặc định:
+
+```text
+table support       +2.00
+text support        +1.00
+web support         +0.25
+table + text bonus  +1.50
+```
+
+Vì vậy thứ tự ưu tiên là `TABLE + TEXT > TABLE only > TEXT only > WEB only`.
+Path agreement vẫn được dùng nhưng chỉ là tín hiệu phụ; nhiều path lặp cùng một
+lỗi từ một nguồn không thể thắng output có evidence table và text độc lập.
 
 ### Chuẩn hoá KG theo 4 tầng
 
@@ -181,6 +202,50 @@ nhúng trong cell thì không cần `--passages-dir`.
 > Cấu trúc một số snapshot của WikiTables-WithLinks có thể khác tên thư mục.
 > Hãy trỏ `--tables-dir` và `--passages-dir` tới các thư mục thực sự chứa file
 > `<table_id>.json`.
+
+### Baseline HybridQA dùng cho paper
+
+Baseline đối chứng là **Oracle-context BM25 + Direct LLM**. Với mỗi câu hỏi,
+baseline giữ nguyên bảng oracle do HybridQA cung cấp, dùng BM25 chọn top-5
+passage trong tập passage liên kết, rồi đưa toàn bộ context vào đúng một lần gọi
+LLM. Baseline không dựng KG, không lập kế hoạch, không sinh code và không dùng
+evaluator. Gold answer chỉ được đọc sau khi dự đoán để tính metric, không xuất
+hiện trong prompt.
+
+Smoke test 10 câu:
+
+```bash
+python -m src.run_hybridqa_baseline \
+  --input data/HybridQA/released_data/dev.json \
+  --tables-dir data/WikiTables-WithLinks/tables_tok \
+  --passages-dir data/WikiTables-WithLinks/request_tok \
+  --output data/results/hybridqa-vanilla-rag-dev.jsonl \
+  --passage-top-k 5 \
+  --max-context-chars 24000 \
+  --max-output-tokens 1024 \
+  --temperature 0 \
+  --limit 10
+```
+
+Khi chạy toàn bộ dev split, bỏ `--limit`. Có thể thêm `--resume` để tiếp tục từ
+file JSONL đang có; khi đó `--limit` là số câu mới cần chạy. Script tạo thêm file
+`*.summary.json` chứa EM và token-F1 theo cách chuẩn hóa của evaluation script
+HybridQA, cả dạng tỷ lệ và phần trăm.
+
+Để chạy lại đúng một câu đã biết, thêm `--example-id <question_id>`.
+
+Để so sánh công bằng trong paper, chạy baseline và Online-KG trên cùng split,
+cùng provider/model, cùng giới hạn output token và `temperature=0`. Báo cáo ít
+nhất EM, F1, số LLM call/câu và latency trung bình. Bảng kết quả đề xuất:
+
+| Method | Context | EM | F1 | LLM calls/question | Latency |
+|---|---|---:|---:|---:|---:|
+| BM25 + Direct LLM | Oracle table + top-5 passages | — | — | 1 | — |
+| Online-KG (ours) | Cùng oracle context | — | — | đo từ log | — |
+
+Đây là baseline kiểm soát nội bộ, không phải kết quả SOTA đã công bố. Nếu paper
+so sánh với nghiên cứu trước, cần bổ sung riêng các số chính thức từ HybridQA và
+ghi rõ khác biệt về model, split và retrieval setting.
 
 ### FinQA
 

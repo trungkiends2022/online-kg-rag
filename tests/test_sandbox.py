@@ -20,6 +20,11 @@ def test_successful_execution():
     assert res.success
     assert res.value == ["Technology"]
     assert not res.is_empty
+    assert res.accessed_edges == 1
+    assert res.evidence[0].source_type == "table"
+    assert res.evidence[0].source_id == "t1"
+    assert res.evidence[0].head == "Alpha Tech"
+    assert res.evidence[0].tail == "Technology"
 
 
 def test_empty_result():
@@ -28,6 +33,17 @@ def test_empty_result():
     res = SandboxExecutor().run(code, kg)
     assert res.success
     assert res.is_empty
+    assert res.evidence == ()
+
+
+def test_reverse_lookup_records_evidence():
+    kg = _make_kg()
+    res = SandboxExecutor().run(
+        "result = kg.get_sources('Technology', 'sector')", kg
+    )
+    assert res.value == ["Alpha Tech"]
+    assert len(res.evidence) == 1
+    assert res.evidence[0].relation == "sector"
 
 
 def test_generated_function_can_access_kg():

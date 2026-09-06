@@ -60,7 +60,13 @@ def set_provider(name: str, **kwargs) -> None:
     _provider = create_provider(name, **kwargs)
 
 
-def llm_call(prompt: str, *, json_mode: bool = False, max_tokens: int = 1024) -> str:
+def llm_call(
+    prompt: str,
+    *,
+    json_mode: bool = False,
+    max_tokens: int = 1024,
+    temperature: float | None = None,
+) -> str:
     provider = get_provider()
     started_at = datetime.now(timezone.utc).isoformat()
     started = time.perf_counter()
@@ -69,12 +75,16 @@ def llm_call(prompt: str, *, json_mode: bool = False, max_tokens: int = 1024) ->
         "provider": provider.name,
         "model": getattr(provider, "model", None),
         "max_tokens": max_tokens,
+        "temperature": temperature,
         "prompt_chars": len(prompt),
     }
     if _env_enabled("LLM_LOG_CONTENT"):
         record["prompt"] = prompt
     try:
-        text = provider.complete(prompt, max_tokens=max_tokens)
+        kwargs = {"max_tokens": max_tokens}
+        if temperature is not None:
+            kwargs["temperature"] = temperature
+        text = provider.complete(prompt, **kwargs)
     except Exception as exc:
         record.update(
             status="error",
