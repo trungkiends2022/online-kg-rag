@@ -169,6 +169,42 @@ Không cần cài MySQL, PostgreSQL, Neo4j hay một database server nào. `Onli
 dùng NetworkX trong bộ nhớ và được dựng lại cho từng câu hỏi. Dataset chỉ là các
 file JSON lưu trong `data/` (thư mục này đã được git-ignore).
 
+### Đồng bộ dataset với đồng nghiệp
+
+Chạy từ thư mục gốc của project. Lệnh dưới đây sẽ clone dataset nếu chưa có,
+hoặc cập nhật repository hiện có bằng fast-forward:
+
+```bash
+cd /workspace/kiennt/online-kg-rag
+
+if [[ -d data/HybridQA/.git ]]; then
+   git -C data/HybridQA pull --ff-only
+else
+   git clone https://github.com/wenhuchen/HybridQA data/HybridQA
+fi
+
+if [[ -d data/WikiTables-WithLinks/.git ]]; then
+   git -C data/WikiTables-WithLinks pull --ff-only
+else
+   git clone https://github.com/wenhuchen/WikiTables-WithLinks data/WikiTables-WithLinks
+fi
+
+if [[ -d data/FinQA/.git ]]; then
+   git -C data/FinQA pull --ff-only
+else
+   git clone https://github.com/czyssrs/FinQA data/FinQA
+fi
+```
+
+Kiểm tra nhanh các file đầu vào sau khi đồng bộ:
+
+```bash
+test -f data/HybridQA/released_data/dev.json
+test -d data/WikiTables-WithLinks/tables_tok
+test -d data/WikiTables-WithLinks/request_tok
+test -f data/FinQA/dataset/dev.json
+```
+
 ### HybridQA — bắt đầu bằng oracle context
 
 Tải câu hỏi và bảng/passage chính thức:
