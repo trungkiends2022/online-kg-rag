@@ -169,7 +169,7 @@ Không cần cài MySQL, PostgreSQL, Neo4j hay một database server nào. `Onli
 dùng NetworkX trong bộ nhớ và được dựng lại cho từng câu hỏi. Dataset chỉ là các
 file JSON lưu trong `data/` (thư mục này đã được git-ignore).
 
-### Đồng bộ dataset với đồng nghiệp
+### Đồng bộ dataset
 
 Chạy từ thư mục gốc của project. Lệnh dưới đây sẽ clone dataset nếu chưa có,
 hoặc cập nhật repository hiện có bằng fast-forward:
