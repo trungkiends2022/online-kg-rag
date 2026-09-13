@@ -16,6 +16,9 @@ import os
 import re
 import json
 import time
+import threading
+from contextlib import contextmanager
+from contextvars import ContextVar
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -27,6 +30,58 @@ from src.llm.base import LLMProvider
 load_dotenv()
 
 _provider: LLMProvider | None = None
+_metrics_context: ContextVar[dict | None] = ContextVar("llm_metrics", default=None)
+_rate_lock = threading.Lock()
+_last_request_at: dict[str, float] = {}
+
+
+def _pace_provider(provider_name: str) -> None:
+    specific = f"{provider_name.upper()}_MIN_REQUEST_INTERVAL_SECONDS"
+    interval = float(
+        os.environ.get(specific, os.environ.get("LLM_MIN_REQUEST_INTERVAL_SECONDS", "0"))
+    )
+    if interval <= 0:
+        return
+    with _rate_lock:
+        now = time.monotonic()
+        wait_for = interval - (now - _last_request_at.get(provider_name, 0.0))
+        if wait_for > 0:
+            time.sleep(wait_for)
+        _last_request_at[provider_name] = time.monotonic()
+
+
+@contextmanager
+def capture_llm_metrics():
+    """Collect per-run LLM performance counters without changing provider APIs."""
+    metrics = {
+        "llm_calls": 0,
+        "llm_api_attempts": 0,
+        "llm_successful_calls": 0,
+        "llm_failed_calls": 0,
+        "llm_prompt_chars": 0,
+        "llm_response_chars": 0,
+        "llm_latency_ms": 0.0,
+    }
+    token = _metrics_context.set(metrics)
+    try:
+        yield metrics
+    finally:
+        _metrics_context.reset(token)
+
+
+def _capture_call(record: dict) -> None:
+    metrics = _metrics_context.get()
+    if metrics is None:
+        return
+    metrics["llm_calls"] += 1
+    metrics["llm_api_attempts"] += int(record.get("api_attempts", 1))
+    metrics["llm_prompt_chars"] += int(record.get("prompt_chars", 0))
+    metrics["llm_response_chars"] += int(record.get("response_chars", 0))
+    metrics["llm_latency_ms"] += float(record.get("duration_ms", 0.0))
+    if record.get("status") == "ok":
+        metrics["llm_successful_calls"] += 1
+    else:
+        metrics["llm_failed_calls"] += 1
 
 
 def _env_enabled(name: str) -> bool:
@@ -80,33 +135,67 @@ def llm_call(
     }
     if _env_enabled("LLM_LOG_CONTENT"):
         record["prompt"] = prompt
-    try:
-        kwargs = {"max_tokens": max_tokens}
-        if temperature is not None:
-            kwargs["temperature"] = temperature
-        text = provider.complete(prompt, **kwargs)
-    except Exception as exc:
+    kwargs = {"max_tokens": max_tokens}
+    if temperature is not None:
+        kwargs["temperature"] = temperature
+    api_attempts = 0
+    max_rate_retries = int(os.environ.get("LLM_RATE_LIMIT_RETRIES", "3"))
+    succeeded = False
+    last_error: Exception | None = None
+    while True:
+        api_attempts += 1
+        try:
+            _pace_provider(provider.name)
+            text = provider.complete(prompt, **kwargs)
+            succeeded = True
+            break
+        except Exception as error:
+            last_error = error
+            status_code = getattr(error, "status_code", None)
+            error_text = str(error)
+            is_rate_limit = (
+                type(error).__name__ == "RateLimitError"
+                or status_code == 429
+                or "RESOURCE_EXHAUSTED" in error_text
+            )
+            if not is_rate_limit or api_attempts > max_rate_retries:
+                break
+            match = re.search(r"(?:try again|retry) in\s+([\d.]+)s", error_text, re.IGNORECASE)
+            delay = min(float(match.group(1)) + 0.25, 59.0) if match else min(2 ** api_attempts, 30.0)
+            time.sleep(delay)
+    if not succeeded:
+        assert last_error is not None
         record.update(
             status="error",
-            error_type=type(exc).__name__,
+            error_type=type(last_error).__name__,
+            api_attempts=api_attempts,
             duration_ms=round((time.perf_counter() - started) * 1000, 2),
         )
+        _capture_call(record)
         _write_call_log(record)
-        raise
+        raise last_error
     record.update(
         status="ok",
+        api_attempts=api_attempts,
         response_chars=len(text),
         duration_ms=round((time.perf_counter() - started) * 1000, 2),
     )
     if _env_enabled("LLM_LOG_CONTENT"):
         record["response"] = text
+    _capture_call(record)
     _write_call_log(record)
     if json_mode:
         text = re.sub(r"^```json\s*|\s*```$", "", text.strip(), flags=re.MULTILINE)
     return text
 
 
-def llm_call_json(prompt: str, *, max_tokens: int = 1024, retries: int = 1):
+def llm_call_json(
+    prompt: str,
+    *,
+    max_tokens: int = 1024,
+    retries: int = 1,
+    temperature: float | None = None,
+):
     """Call an LLM for JSON, retrying empty, malformed, or non-list output."""
     last_raw = ""
     last_error: Exception | None = None
@@ -117,7 +206,12 @@ def llm_call_json(prompt: str, *, max_tokens: int = 1024, retries: int = 1):
                 "\nLần trả lời trước rỗng hoặc không phải JSON list hợp lệ. "
                 "Hãy trả lại đầy đủ JSON list, không markdown và không giải thích."
             )
-        last_raw = llm_call(prompt + retry_note, json_mode=True, max_tokens=max_tokens)
+        last_raw = llm_call(
+            prompt + retry_note,
+            json_mode=True,
+            max_tokens=max_tokens,
+            temperature=temperature,
+        )
         try:
             parsed = json.loads(last_raw)
             if not isinstance(parsed, list):

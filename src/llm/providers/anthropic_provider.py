@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 
 from src.llm.base import LLMProvider
+from src.llm.runtime_config import request_timeout_seconds, sdk_max_retries
 
 
 class AnthropicProvider(LLMProvider):
@@ -14,7 +15,11 @@ class AnthropicProvider(LLMProvider):
         import anthropic
 
         self.model = model or os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-6")
-        self._client = anthropic.Anthropic(api_key=api_key or os.environ.get("ANTHROPIC_API_KEY"))
+        self._client = anthropic.Anthropic(
+            api_key=api_key or os.environ.get("ANTHROPIC_API_KEY"),
+            timeout=request_timeout_seconds(),
+            max_retries=sdk_max_retries(),
+        )
 
     def complete(self, prompt: str, *, max_tokens: int = 1024, temperature: float | None = None) -> str:
         kwargs = dict(

@@ -24,6 +24,9 @@ class ReasoningPath:
 
 
 class PathPlanner:
+    def __init__(self, temperature: float | None = None):
+        self.temperature = temperature
+
     def generate_candidates(self, question: str, kg: OnlineKG, n: int = 5) -> list[ReasoningPath]:
         summary = kg.summary()
         prompt = f"""
@@ -39,7 +42,10 @@ class PathPlanner:
         """
         # Multiple paths can easily exceed the generic 1024-token response limit,
         # especially for models that spend output tokens on internal reasoning.
-        items = llm_call_json(prompt, max_tokens=4096)
+        kwargs = {"max_tokens": 4096}
+        if self.temperature is not None:
+            kwargs["temperature"] = self.temperature
+        items = llm_call_json(prompt, **kwargs)
         paths = []
         for item in items:
             steps = [PathStep(**s) for s in item["steps"]]

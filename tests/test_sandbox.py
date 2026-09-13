@@ -58,6 +58,18 @@ result = lookup('Alpha Tech')
     assert res.value == ["Technology"]
 
 
+def test_zip_is_available_for_pairwise_numeric_reasoning():
+    kg = _make_kg()
+    code = """
+years = [2002, 2003]
+dividends = [0.450, 0.455]
+result = dict(zip(years, dividends))
+"""
+    res = SandboxExecutor().run(code, kg)
+    assert res.success
+    assert res.value == {2002: 0.450, 2003: 0.455}
+
+
 def test_runtime_error_caught():
     kg = _make_kg()
     code = "result = 1 / 0"

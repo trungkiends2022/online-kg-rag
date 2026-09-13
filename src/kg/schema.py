@@ -12,6 +12,9 @@ class Provenance:
     raw_snippet: str = ""      # đoạn gốc sinh ra triple này (debug/trace)
     source_group: str | None = None
     domain: str | None = None
+    row_index: int | None = None
+    column_name: str | None = None
+    header_path: tuple[str, ...] | None = None
 
 
 @dataclass(frozen=True)
@@ -25,6 +28,9 @@ class EvidenceRef:
     source_id: str
     source_group: str | None = None
     domain: str | None = None
+    row_index: int | None = None
+    column_name: str | None = None
+    header_path: tuple[str, ...] | None = None
 
 
 @dataclass

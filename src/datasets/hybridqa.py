@@ -148,5 +148,9 @@ def load_hybridqa(
             table_rows=[{"table_name": table.get("title") or table_id, "rows": rows}],
             text_passages=passages,
             answer=item.get("answer_text", item.get("answer-text", item.get("answer"))),
-            metadata={"dataset": "hybridqa", "table_id": table_id},
+            metadata={
+                "dataset": "hybridqa",
+                "table_id": table_id,
+                "answer_nodes": item.get("answer-node", []),
+            },
         )

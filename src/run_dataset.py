@@ -20,6 +20,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output", type=Path, help="Write JSONL here instead of stdout")
     parser.add_argument("--n-paths", type=int, default=5)
     parser.add_argument("--max-replans", type=int, default=2)
+    parser.add_argument(
+        "--finqa-table-format", choices=("official", "raw"), default="official"
+    )
     return parser
 
 
@@ -33,7 +36,9 @@ def main() -> None:
             limit=args.limit,
         )
     else:
-        examples = load_finqa(args.input, limit=args.limit)
+        examples = load_finqa(
+            args.input, limit=args.limit, table_format=args.finqa_table_format
+        )
 
     pipeline = OnlineKGPipeline()
     if args.output:

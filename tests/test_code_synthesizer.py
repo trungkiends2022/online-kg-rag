@@ -20,7 +20,7 @@ def test_retries_invalid_code(monkeypatch):
 
     assert code == "result = kg.get_sources('date', 'birthDate')"
     assert len(calls) == 2
-    assert all(max_tokens == 4096 for _, max_tokens in calls)
+    assert all(max_tokens == module.CODE_MAX_TOKENS for _, max_tokens in calls)
     assert "SyntaxError" in calls[1][0]
 
 
@@ -107,3 +107,19 @@ def test_retries_indirect_hard_coded_result(monkeypatch):
     )
 
     assert "through a variable" in prompts[1]
+
+
+def test_retries_import_before_runtime(monkeypatch):
+    responses = iter([
+        "import math\nresult = 1",
+        'result = len(kg.get_neighbors("Liverpool Football Club", "won"))',
+    ])
+    prompts = []
+    monkeypatch.setattr(
+        module, "llm_call", lambda prompt, **_kwargs: prompts.append(prompt) or next(responses)
+    )
+    code = CodeSynthesizer().synthesize(
+        ReasoningPath("p6", [PathStep(1, "count wins")]), "How many?", _kg()
+    )
+    assert code.startswith("result = len")
+    assert "imports are not allowed" in prompts[1]

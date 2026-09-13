@@ -5,11 +5,15 @@ from __future__ import annotations
 import json
 
 from src.kg.online_kg import OnlineKG
+from src.kg.normalization import normalize_key
 from src.evaluation.evaluator import ScoredPath
 from src.llm.client import llm_call
 
 
 class AnswerSynthesizer:
+    def __init__(self, temperature: float | None = None):
+        self.temperature = temperature
+
     @staticmethod
     def _preferred_value(value, kg: OnlineKG):
         """Prefer a concise observed alias while preserving non-entity results."""
@@ -40,7 +44,18 @@ class AnswerSynthesizer:
         Lý do được chọn: {best.reasons}
         Evidence đã được sandbox xác minh: {json.dumps(evidence, ensure_ascii=False)}
 
-        Viết câu trả lời tự nhiên, ngắn gọn, dựa đúng vào kết quả trên. Khi tên
-        hiển thị ưu tiên là alias của cùng entity, hãy dùng tên đó trong câu trả lời.
+        Chỉ trả về answer span ngắn nhất, không viết thành câu và không giải thích.
+        Khi tên hiển thị ưu tiên là alias của cùng entity, hãy trả đúng tên đó.
         """
-        return llm_call(prompt)
+        if self.temperature is None:
+            answer = llm_call(prompt)
+        else:
+            answer = llm_call(prompt, temperature=self.temperature)
+        # The verbalizer may shorten an entity alias, but it must never replace
+        # the executed scalar with unrelated world knowledge.
+        if isinstance(preferred, (str, int, float, bool)):
+            expected = normalize_key(str(preferred))
+            actual = normalize_key(str(answer))
+            if actual != expected:
+                return str(preferred)
+        return answer

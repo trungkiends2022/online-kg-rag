@@ -1,5 +1,12 @@
 # Online-KG RAG: Path → Code → Execution-based Evaluation
 
+Tài liệu kiến trúc cốt lõi cho paper: [Table-Aware Online KG](reports/kien_truc_table_kg.md).
+
+Với FinQA, runner mặc định dùng bảng chuẩn hóa chính thức. Dùng
+`--finqa-table-format raw` để đánh giá parser bảng phân cấp trên `table_ori`.
+Output FinQA lưu cả `execution_accuracy` (ratio/percentage tương đương) và
+`official_execution_accuracy` (quy ước chấm gốc của FinQA).
+
 Pipeline hợp nhất **table + text + web** thành một Knowledge Graph tạm dựng
 **online (per-query, on-the-fly)** — khác với các framework build-time KG như HydraRAG
 (dựa trên Freebase/Wikidata có sẵn). Từ KG tạm này, hệ thống sinh nhiều **reasoning path**
@@ -282,6 +289,105 @@ nhất EM, F1, số LLM call/câu và latency trung bình. Bảng kết quả đ
 Đây là baseline kiểm soát nội bộ, không phải kết quả SOTA đã công bố. Nếu paper
 so sánh với nghiên cứu trước, cần bổ sung riêng các số chính thức từ HybridQA và
 ghi rõ khác biệt về model, split và retrieval setting.
+
+### Bộ baseline thống nhất cho HybridQA và FinQA
+
+Runner `src.run_baselines` hỗ trợ các phương án:
+
+| Method | Mô tả |
+|---|---|
+| `direct_llm` | Bảng oracle + passage BM25, một LLM call |
+| `flat_table_bm25` | Flatten từng row, trộn với passage rồi BM25 top-k |
+| `online_kg_path_text` | Dựng KG và sinh path dạng text, không sinh/thực thi code |
+| `oracle_evidence` | Chỉ dùng supporting facts do dataset annotate |
+| `path_consistency` | Online-KG nhưng chọn output bằng số path đồng ý |
+| `numerical_ir` | Online-KG + typed numerical IR có operator đóng và provenance |
+| `online_kg` | Pipeline đầy đủ với grounded consistency |
+
+Ví dụ chạy các baseline HybridQA trên cùng 100 câu:
+
+```bash
+for method in direct_llm flat_table_bm25 online_kg_path_text path_consistency online_kg; do
+  python -m src.run_baselines \
+    --dataset hybridqa \
+    --method "$method" \
+    --input data/HybridQA/released_data/dev.json \
+    --tables-dir data/WikiTables-WithLinks/tables_tok \
+    --passages-dir data/WikiTables-WithLinks/request_tok \
+    --output "data/results/hybridqa-${method}.jsonl" \
+    --top-k 5 --temperature 0 --limit 100
+done
+```
+
+Oracle Evidence của HybridQA cần split traced vì file thường không có annotation
+`answer-node`:
+
+```bash
+python -m src.run_baselines \
+  --dataset hybridqa \
+  --method oracle_evidence \
+  --input data/HybridQA/released_data/dev.traced.json \
+  --tables-dir data/WikiTables-WithLinks/tables_tok \
+  --passages-dir data/WikiTables-WithLinks/request_tok \
+  --output data/results/hybridqa-oracle-evidence.jsonl \
+  --temperature 0 --limit 100
+```
+
+FinQA dùng cùng runner, ví dụ:
+
+```bash
+python -m src.run_baselines \
+  --dataset finqa \
+  --method flat_table_bm25 \
+  --input data/FinQA/dataset/dev.json \
+  --output data/results/finqa-flat-table.jsonl \
+  --top-k 5 --temperature 0 --limit 100
+```
+
+Ablation typed numerical IR giữ nguyên retrieval, KG, planner và grounded
+evaluator; chỉ thay Python tự do bằng chương trình JSON với các operator
+`lookup`, `const`, `add`, `subtract`, `multiply`, `divide`, `exp`, `compare`,
+`greater`, `table_sum`, `table_average`, `table_max`, `table_min`:
+
+```bash
+python -m src.run_baselines \
+  --dataset finqa \
+  --method numerical_ir \
+  --input data/FinQA/dataset/dev.json \
+  --output data/results/finqa-numerical-ir.jsonl \
+  --top-k 5 --n-paths 5 --temperature 0 --limit 100
+```
+
+Các bước `lookup` đọc trực tiếp từ KG nên evidence của toán hạng được trace tự
+động. `ratio` được biểu diễn bằng `divide`; `percentage` là
+`multiply(divide(a, b), 100)` với unit `percent`. Symbolic fallback bị tắt trong
+biến thể này để kết quả không lẫn với một cơ chế thực thi khác.
+
+Với FinQA, runner còn báo `ir_parse_rate`, `schema_validity_rate`,
+`execution_success_rate`, `operator_accuracy`, `step_accuracy`,
+`grounding_precision` và `grounding_recall`. Operator và intermediate result
+được căn chỉnh theo chuỗi phép toán canonical trong gold program; các bước
+`lookup`/`const` không bị ép căn chỉnh theo ID. Grounding được đối chiếu riêng
+với `gold_inds`. Nếu gold program không chuyển được sang IR hỗ trợ, metric cấp
+bước là `null` thay vì tính thành sai. Error taxonomy chính gồm
+`serialization_schema`, `arithmetic_execution`, `grounding`,
+`operator_or_composition`, `unit_scale_or_unclassified` và `answer_rendering`.
+Các metric validity/execution vẫn được giữ như chỉ số vận hành, không được xem
+là các lớp reasoning error cạnh tranh với taxonomy trên.
+
+Mỗi output JSONL có metric theo dataset và một file `*.summary.json`. HybridQA
+dùng EM/token-F1; FinQA dùng numeric execution accuracy. `program_accuracy`
+hiện để `null` vì code Python path chưa được canonicalize sang DSL chính thức
+của FinQA. Annotation `answer-node` của HybridQA là weak/approximate label, nên
+Oracle Evidence cần được mô tả đúng như vậy trong paper.
+
+Runner cũng ghi các chỉ số hiệu năng trên từng câu và giá trị total/mean trong
+summary: `wall_time_ms`, `llm_latency_ms`, `non_llm_time_ms`, logical
+`llm_calls`, `llm_api_attempts`, số call thành công/thất bại, tổng ký tự prompt
+và response. Token counts để `null` cho đến khi provider-neutral interface đọc
+được usage thật; không dùng phép ước lượng ký tự/token trong kết quả paper.
+Rate-limit 429 được retry có backoff (mặc định tối đa 3 retry, cấu hình bằng
+`LLM_RATE_LIMIT_RETRIES`) và số attempt vẫn được ghi để audit.
 
 ### FinQA
 

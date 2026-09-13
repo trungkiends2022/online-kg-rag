@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 
 from src.llm.base import LLMProvider
+from src.llm.runtime_config import request_timeout_seconds, sdk_max_retries
 
 
 class OpenRouterProvider(LLMProvider):
@@ -23,6 +24,8 @@ class OpenRouterProvider(LLMProvider):
             api_key=api_key or os.environ.get("OPENROUTER_API_KEY"),
             base_url="https://openrouter.ai/api/v1",
             default_headers=headers or None,
+            timeout=request_timeout_seconds(),
+            max_retries=sdk_max_retries(),
         )
 
     def complete(self, prompt: str, *, max_tokens: int = 1024, temperature: float | None = None) -> str:

@@ -81,3 +81,18 @@ def test_load_finqa_retains_gold_program(tmp_path):
     assert len(example.text_passages) == 2
     assert example.answer == 100
     assert example.metadata["program"] == "add(100, 0)"
+    assert example.metadata["table_format"] == "official"
+
+
+def test_load_finqa_can_select_raw_hierarchical_table(tmp_path):
+    split = tmp_path / "dev.json"
+    _write_json(split, [{
+        "id": "report-raw",
+        "pre_text": [], "post_text": [],
+        "table": [["Official", "Value"], ["row", "1"]],
+        "table_ori": [["Raw", "Value"], ["row", "2"]],
+        "qa": {"question": "Q?", "exe_ans": 2, "program": "add(2, 0)"},
+    }])
+    example = next(load_finqa(split, table_format="raw"))
+    assert example.table_rows[0]["rows"][0] == {"Raw": "row", "Value": "2"}
+    assert example.metadata["table_format"] == "raw"

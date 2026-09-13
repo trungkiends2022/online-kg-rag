@@ -1,0 +1,108 @@
+digraph FinQAKG {
+  graph [
+    rankdir=LR,
+    bgcolor="white",
+    pad="0.35",
+    nodesep="0.55",
+    ranksep="1.05",
+    splines=ortho,
+    fontname="DejaVu Sans",
+    label="Online KG — FinQA: American Express",
+    labelloc=t,
+    fontsize=22
+  ];
+
+  node [
+    shape=box,
+    style="rounded,filled",
+    fillcolor="#F8FAFC",
+    color="#94A3B8",
+    penwidth=1.4,
+    fontname="DejaVu Sans",
+    fontsize=12,
+    margin="0.18,0.12"
+  ];
+
+  edge [
+    color="#64748B",
+    penwidth=1.5,
+    arrowsize=0.8,
+    fontname="DejaVu Sans",
+    fontsize=10,
+    fontcolor="#334155"
+  ];
+
+  american_express [
+    label="American Express",
+    shape=ellipse,
+    fillcolor="#DBEAFE",
+    color="#2563EB",
+    penwidth=2.4,
+    fontsize=15
+  ];
+
+  payment [label="637\n(billion)", fillcolor="#DCFCE7", color="#16A34A", penwidth=2.2];
+  transactions [label="5.0\n(billion transactions)", fillcolor="#DCFCE7", color="#16A34A", penwidth=2.2];
+  total_volume [label="647\n(billion)"];
+  cards [label="86\n(million cards)"];
+
+  calculation [
+    label="DIVIDE\n637 ÷ 5.0",
+    shape=diamond,
+    fillcolor="#FEF3C7",
+    color="#D97706",
+    penwidth=2.2
+  ];
+
+  answer [
+    label="127.4",
+    shape=doublecircle,
+    fillcolor="#FCE7F3",
+    color="#DB2777",
+    penwidth=2.6,
+    fontsize=16
+  ];
+
+  table_source [
+    label="TABLE\nV/2008/page_17.pdf-1",
+    shape=note,
+    fillcolor="#F1F5F9",
+    color="#64748B",
+    fontsize=10
+  ];
+
+  american_express -> payment [
+    label="payments_volume_billions",
+    color="#16A34A",
+    fontcolor="#15803D",
+    penwidth=3.0
+  ];
+  american_express -> transactions [
+    label="total_transactions_billions",
+    color="#16A34A",
+    fontcolor="#15803D",
+    penwidth=3.0
+  ];
+  american_express -> total_volume [label="total_volume_billions"];
+  american_express -> cards [label="cards_millions"];
+
+  payment -> calculation [color="#D97706", penwidth=2.5];
+  transactions -> calculation [color="#D97706", penwidth=2.5];
+  calculation -> answer [label="result", color="#DB2777", fontcolor="#BE185D", penwidth=3.0];
+
+  table_source -> american_express [
+    label="provenance",
+    style=dashed,
+    color="#94A3B8",
+    constraint=false
+  ];
+
+  legend [
+    label="Đường xanh: evidence được best path sử dụng\lĐường xám: fact context trong KG\lĐường cam/hồng: phép tính và answer\l",
+    shape=box,
+    style="rounded,filled",
+    fillcolor="#FFFFFF",
+    color="#CBD5E1",
+    fontsize=9
+  ];
+}

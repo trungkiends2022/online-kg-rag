@@ -144,6 +144,9 @@ class OnlineKG:
                 source_id=provenance.source_id,
                 source_group=provenance.source_group,
                 domain=provenance.domain,
+                row_index=provenance.row_index,
+                column_name=provenance.column_name,
+                header_path=provenance.header_path,
             ))
         return evidence
 

@@ -9,7 +9,11 @@ from src.datasets.common import iter_records, matrix_to_rows, read_json
 from src.datasets.schema import DatasetExample
 
 
-def load_finqa(path: str | Path, limit: int | None = None) -> Iterator[DatasetExample]:
+def load_finqa(
+    path: str | Path,
+    limit: int | None = None,
+    table_format: str = "official",
+) -> Iterator[DatasetExample]:
     """Yield FinQA documents as pipeline examples.
 
     The official file contains one document and one QA object per record.  Text is
@@ -21,7 +25,13 @@ def load_finqa(path: str | Path, limit: int | None = None) -> Iterator[DatasetEx
             break
         qa = item.get("qa", {})
         example_id = str(item.get("id") or item.get("filename") or index)
-        matrix = item.get("table_ori") or item.get("table") or []
+        if table_format not in {"official", "raw"}:
+            raise ValueError("table_format must be 'official' or 'raw'")
+        matrix = (
+            item.get("table") or item.get("table_ori") or []
+            if table_format == "official"
+            else item.get("table_ori") or item.get("table") or []
+        )
         passages = []
         for position, text in enumerate(item.get("pre_text", [])):
             passages.append({"id": f"{example_id}:pre:{position}", "text": str(text)})
@@ -40,5 +50,6 @@ def load_finqa(path: str | Path, limit: int | None = None) -> Iterator[DatasetEx
                 "program": qa.get("program"),
                 "program_re": qa.get("program_re"),
                 "gold_evidence": qa.get("gold_inds", {}),
+                "table_format": table_format,
             },
         )

@@ -46,3 +46,47 @@ def test_llm_call_forwards_explicit_temperature(monkeypatch):
 
     assert client.llm_call("prompt", max_tokens=11, temperature=0.0) == "ok"
     assert received == {"max_tokens": 11, "temperature": 0.0}
+
+
+def test_capture_llm_metrics_collects_calls(monkeypatch):
+    monkeypatch.setattr(client, "_provider", FakeProvider())
+
+    with client.capture_llm_metrics() as metrics:
+        client.llm_call("one", max_tokens=3)
+        client.llm_call("two", max_tokens=3)
+
+    assert metrics["llm_calls"] == 2
+    assert metrics["llm_successful_calls"] == 2
+    assert metrics["llm_failed_calls"] == 0
+    assert metrics["llm_prompt_chars"] == 6
+    assert metrics["llm_response_chars"] == len("reply:one") + len("reply:two")
+    assert metrics["llm_latency_ms"] >= 0
+
+
+def test_rate_limit_retry_counts_api_attempts(monkeypatch):
+    class RateLimitError(Exception):
+        pass
+
+    class FlakyProvider:
+        name = "fake"
+        model = "fake-model"
+
+        def __init__(self):
+            self.calls = 0
+
+        def complete(self, prompt, *, max_tokens):
+            self.calls += 1
+            if self.calls == 1:
+                raise RateLimitError("Please try again in 0.01s")
+            return "ok"
+
+    provider = FlakyProvider()
+    monkeypatch.setattr(client, "_provider", provider)
+    monkeypatch.setattr(client.time, "sleep", lambda seconds: None)
+
+    with client.capture_llm_metrics() as metrics:
+        assert client.llm_call("prompt") == "ok"
+
+    assert metrics["llm_calls"] == 1
+    assert metrics["llm_api_attempts"] == 2
+    assert metrics["llm_successful_calls"] == 1

@@ -45,6 +45,8 @@ class ExecResult:
     is_empty: bool = False
     evidence: tuple[EvidenceRef, ...] = ()
     accessed_edges: int = 0
+    step_values: dict[str, Any] | None = None
+    operator_trace: tuple[str, ...] = ()
 
 
 class TracingKG:
@@ -91,7 +93,7 @@ SAFE_BUILTINS = {
     "len": len, "sum": sum, "sorted": sorted, "min": min, "max": max,
     "list": list, "set": set, "dict": dict, "str": str, "int": int,
     "float": float, "bool": bool, "range": range, "enumerate": enumerate,
-    "filter": filter, "map": map, "any": any, "all": all,
+    "filter": filter, "map": map, "zip": zip, "any": any, "all": all,
 }
 
 

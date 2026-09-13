@@ -8,6 +8,7 @@ from __future__ import annotations
 import os
 
 from src.llm.base import LLMProvider
+from src.llm.runtime_config import request_timeout_seconds, sdk_max_retries
 
 
 class OpenAICompatibleProvider(LLMProvider):
@@ -20,6 +21,8 @@ class OpenAICompatibleProvider(LLMProvider):
         self._client = OpenAI(
             api_key=api_key or os.environ.get("COMPAT_API_KEY", "not-needed"),
             base_url=base_url or os.environ.get("COMPAT_BASE_URL", "http://localhost:11434/v1"),
+            timeout=request_timeout_seconds(),
+            max_retries=sdk_max_retries(),
         )
 
     def complete(self, prompt: str, *, max_tokens: int = 1024, temperature: float | None = None) -> str:

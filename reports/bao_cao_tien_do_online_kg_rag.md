@@ -2,7 +2,7 @@
 title: "BÁO CÁO TIẾN ĐỘ HỆ THỐNG ONLINE-KG RAG"
 subtitle: "Pipeline hỏi đáp đa nguồn trên HybridQA"
 author: "Nhóm nghiên cứu Online-KG RAG"
-date: "07/09/2026"
+date: "11/09/2026"
 lang: vi-VN
 ---
 
@@ -395,13 +395,107 @@ Club Cerro Porteño --country--> Paraguay
 
 Đây là kiểm thử trực tiếp entity resolution và KG traversal, không phải benchmark HybridQA end-to-end.
 
-## 2.4. Tổng hợp
+## 2.4. Ví dụ 4 — FinQA: tính payment volume trung bình trên mỗi transaction
+
+### Prompt và gold answer
+
+| Nội dung | Giá trị |
+|---|---|
+| Example ID | `V/2008/page_17.pdf-1` |
+| Prompt | What is the average payment volume per transaction for American Express? |
+| Gold program | `637 ÷ 5` |
+| Gold answer | `127.4` |
+| Display answer | `127.40` |
+
+Đây là câu hỏi số học trên báo cáo tài chính. Hệ thống phải chọn đúng dòng American Express, lấy đúng hai cột và thực hiện phép chia.
+
+### Dữ liệu chính
+
+| Company | Payments Volume (billions) | Total Transactions (billions) |
+|---|---:|---:|
+| Visa | 2,457 | 50.3 |
+| MasterCard | 1,697 | 27.0 |
+| American Express | 637 | 5.0 |
+| Discover | 102 | 1.6 |
+
+Phép tính cần thực hiện:
+
+```text
+Average payment volume per transaction
+= Payments Volume / Total Transactions
+= 637 / 5.0
+= 127.4
+```
+
+### Các bước pipeline đã chạy
+
+1. **Nhận context:** adapter FinQA chuyển bảng báo cáo và các câu văn xung quanh thành đầu vào chung của pipeline.
+2. **Retrieval:** bảng được giữ lại; các đoạn văn liên quan đến payment network và transaction được xếp hạng.
+3. **Extraction:** hệ thống tạo các fact cho từng công ty, trong đó có payment volume và total transactions của American Express.
+4. **Normalization:** tên entity trùng được hợp nhất; run ghi nhận hai lexical entity merges.
+5. **KG construction:** KG được tạo với 82 nodes, 71 edges và 38 loại relation; không có triple bị loại.
+6. **Planning:** ba candidate paths được yêu cầu. Path tốt nhất xác định đúng hai đại lượng của American Express và phép chia cần thực hiện.
+7. **Execution:** path lấy `637` từ edge payment volume, lấy `5.0` từ edge total transactions, chuyển hai giá trị về số và tính `637 / 5.0`.
+8. **Grounded evaluation:** path có evidence từ các edge đã truy cập, không trả rỗng và được chọn với score `3.75`.
+9. **Answer synthesis:** hệ thống trả: “The average payment volume per transaction for American Express is 127.4.”
+
+### Online KG đã tạo
+
+Subgraph trực tiếp phục vụ câu hỏi:
+
+![Online KG của case FinQA American Express](figures/finqa_american_express_kg.png){width=100%}
+
+```text
+                              +--payments_volume_billions----> 637
+                              |
+American Express -------------+--total_transactions_billions-> 5.0
+                              |
+                              +--total_volume_billions-------> 647
+                              |
+                              +--cards_millions--------------> 86
+```
+
+Các triple cốt lõi:
+
+| Head | Relation | Tail | Nguồn |
+|---|---|---|---|
+| American Express | payments_volume_billions | 637 | Table |
+| American Express | total_transactions_billions | 5.0 | Table |
+| American Express | total_volume_billions | 647 | Table |
+| American Express | cards_millions | 86 | Table |
+
+Reasoning path được chọn:
+
+```text
+American Express
+    ├─ payments_volume_billions → 637
+    └─ total_transactions_billions → 5.0
+
+637 ÷ 5.0 → 127.4
+```
+
+### Đánh giá kết quả
+
+| Tiêu chí | Kết quả |
+|---|---|
+| Gold numeric answer | 127.4 |
+| Executed value | 127.4 |
+| Sai số tuyệt đối | 0.0 |
+| Execution correctness | Đúng |
+| Replan | Không (`0`) |
+| Best path | `path_1` |
+| Best grounded score | 3.75 |
+
+Về ngữ nghĩa và execution, kết quả trùng hoàn toàn với gold. Tuy nhiên, answer cuối hiện là một câu tự nhiên thay vì chuỗi số thuần. Trước khi chạy evaluator chính thức của FinQA trên toàn bộ tập dữ liệu, cần bổ sung bước lấy numeric answer (`127.4`) từ câu trả lời hoặc cho Answer Synthesizer trả thêm một trường `answer_value` có cấu trúc.
+
+## 2.5. Tổng hợp
 
 | Ví dụ | Kiểu reasoning | Nguồn kết hợp | Kết quả/ý nghĩa |
 |---|---|---|---|
 | Karim Bencherifa | Ngày sinh → người → quốc tịch | Text + Table | Full pipeline trả đúng Morocco |
 | Walter Payton | Hạng 2 → player → full name → middle name | Table + Text | Baseline bỏ passage hạng 6; cần full trace run |
 | Cerro Porteño | Hợp nhất biến thể tên → country | Nhiều cách viết entity | Kiểm thử entity resolution trả Paraguay |
+| American Express | Chọn hàng/cột → chia hai đại lượng | FinQA Table | Full pipeline thực thi đúng 637 ÷ 5 = 127.4 |
 
 # 3. Kết luận
 
@@ -409,6 +503,6 @@ Pipeline hiện đã bao phủ đầy đủ retrieval, trích xuất tri thức,
 
 Phần sinh code là cơ chế biến reasoning path thành một phép kiểm chứng có thể chạy được. Nhờ code generator và sandbox, hệ thống không chấp nhận một path chỉ vì mô tả của LLM nghe hợp lý: path phải truy cập được KG, trả kết quả và để lại evidence để evaluator kiểm tra. Các lỗi cú pháp, lỗi API, sai hướng cạnh, hard-code, lỗi runtime và timeout đều được ghi nhận ở cấp path, cho phép loại path hoặc replanning mà không làm hỏng toàn bộ câu hỏi.
 
-Ví dụ Karim Bencherifa cho thấy hệ thống nối được ngày sinh trong text với nationality trong table qua entity chung. Ví dụ Walter Payton cho thấy retrieval một lượt có thể thất bại và lý do cần reasoning có điều kiện theo entity. Ví dụ Cerro Porteño minh họa vai trò của chuẩn hóa entity khi nối facts từ nhiều nguồn.
+Ví dụ Karim Bencherifa cho thấy hệ thống nối được ngày sinh trong text với nationality trong table qua entity chung. Ví dụ Walter Payton cho thấy retrieval một lượt có thể thất bại và lý do cần reasoning có điều kiện theo entity. Ví dụ Cerro Porteño minh họa vai trò của chuẩn hóa entity khi nối facts từ nhiều nguồn. Case American Express cho thấy pipeline cũng thực hiện đúng một phép toán FinQA dựa trên hai fact được lấy từ bảng.
 
 Để các case study tiếp theo có thể đưa trực tiếp vào paper, hệ thống cần lưu full trace của mỗi lần chạy: passage đã truy hồi, triple trước/sau chuẩn hóa, KG, candidate paths, kết quả thực thi, evidence và điểm từng path.

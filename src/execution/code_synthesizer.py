@@ -36,14 +36,21 @@ _API_SIGNATURES = {
     "filter": (2, {"entities", "predicate"}),
 }
 
-CODE_MAX_TOKENS = 4096
+# Generated programs are normally only a few lines. Keeping this below the
+# extraction/planning budget avoids wasting reasoning tokens and large TPM bursts.
+CODE_MAX_TOKENS = 2048
 
 
 class CodeSynthesizer:
+    def __init__(self, temperature: float | None = None):
+        self.temperature = temperature
+
     @staticmethod
     def _validate_code(code: str, kg: "OnlineKG | None" = None) -> None:
         """Reject compilable code that cannot use the public KG API correctly."""
         tree = ast.parse(code)
+        if any(isinstance(node, (ast.Import, ast.ImportFrom)) for node in ast.walk(tree)):
+            raise ValueError("imports are not allowed in sandboxed code")
         allowed_relations = set(kg.summary()["relations"]) if kg is not None else None
         assignments: dict[str, ast.expr] = {}
         for candidate in ast.walk(tree):
@@ -163,6 +170,10 @@ class CodeSynthesizer:
         {kg_context}
 
         Viết code Python thực hiện đúng reasoning path trên bằng cách gọi các hàm của `kg`.
+        Phải kiểm tra đơn vị trong câu hỏi và tên relation/entity. Nếu dữ liệu là
+        "in thousands" nhưng câu hỏi yêu cầu "in millions", chia kết quả cho 1000;
+        nếu dữ liệu là millions nhưng câu hỏi yêu cầu billions, cũng chia cho 1000
+        (và chuyển đổi tương tự theo lũy thừa 1000). Không được bỏ qua bước đổi đơn vị.
         Chỉ trả về code, không giải thích, không markdown fence.
         """
         last_code = ""
@@ -174,7 +185,10 @@ class CodeSynthesizer:
                     f"\nCode trước không hợp lệ ({last_error}):\n{last_code}\n"
                     "Viết lại code hoàn chỉnh, hợp lệ và phải gán biến result."
                 )
-            raw = llm_call(prompt, max_tokens=CODE_MAX_TOKENS)
+            kwargs = {"max_tokens": CODE_MAX_TOKENS}
+            if self.temperature is not None:
+                kwargs["temperature"] = self.temperature
+            raw = llm_call(prompt, **kwargs)
             last_code = raw.strip().removeprefix("```python").removeprefix("```").removesuffix("```").strip()
             if not last_code:
                 last_error = "empty code"
