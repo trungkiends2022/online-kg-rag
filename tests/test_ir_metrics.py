@@ -35,9 +35,9 @@ def test_step_and_operator_accuracy_use_canonical_arithmetic_steps():
 def test_grounding_uses_finqa_gold_indices():
     evidence = [
         EvidenceRef("x", "year", "1", "table", "doc", row_index=2),
-        EvidenceRef("x", "fact", "y", "text", "doc:pre:0"),
+        EvidenceRef("x", "fact", "y", "text", "doc:text:0"),
     ]
-    metrics = grounding_metrics(evidence, {"table_3": "x", "pre_text_0": "y", "post_text_2": "z"})
+    metrics = grounding_metrics(evidence, {"table_3": "x", "text_0": "y", "text_2": "z"})
     assert metrics["grounding_precision"] == 1
     assert metrics["grounding_recall"] == pytest.approx(2 / 3)
 
@@ -46,3 +46,20 @@ def test_step_metrics_are_null_without_supported_gold_program():
     metrics = numerical_ir_metrics({}, None, None, [], None)
     assert metrics["step_accuracy"] is None
     assert metrics["operator_accuracy"] is None
+
+
+def test_table_average_matches_equivalent_compressed_gold_macro():
+    predicted = {"steps": [
+        {"id": "v0", "op": "lookup", "arguments": {}},
+        {"id": "v1", "op": "table_average", "arguments": ["v0"]},
+    ], "result": "v1"}
+    metrics = numerical_ir_metrics(
+        predicted, {"v0": [45, 45, 45, 45, 44], "v1": 44.8},
+        "multiply(45, const_4), add(#0, 44), divide(#1, const_5)",
+        [], None, question="What is the average amount?",
+    )
+    assert metrics["operator_accuracy"] == 1.0
+    assert metrics["step_accuracy"] == 1.0
+    assert metrics["strict_operator_accuracy"] == 0.0
+    assert metrics["alignment_level"] == "semantic_macro"
+    assert metrics["semantic_macro"] == "average"

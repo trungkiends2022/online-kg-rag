@@ -166,3 +166,33 @@ class OnlineKG:
             "entity_resolution": resolution_counts,
             "num_rejected_triples": len(self.rejection_log),
         }
+
+    def to_trace(self) -> dict:
+        """Serialize the complete per-question KG for audit and visualization."""
+        edges = []
+        for head, tail, key, data in self.graph.edges(keys=True, data=True):
+            provenance = data["provenance"]
+            edges.append({
+                "edge_id": str(key),
+                "head": head,
+                "relation": data["relation"],
+                "tail": tail,
+                "provenance": {
+                    "source_type": provenance.source_type,
+                    "source_id": provenance.source_id,
+                    "raw_snippet": provenance.raw_snippet,
+                    "source_group": provenance.source_group,
+                    "domain": provenance.domain,
+                    "row_index": provenance.row_index,
+                    "column_name": provenance.column_name,
+                    "header_path": provenance.header_path,
+                },
+            })
+        return {
+            "nodes": [str(node) for node in self.graph.nodes()],
+            "edges": edges,
+            "aliases": dict(self.entity_aliases),
+            "resolution_log": list(self.resolution_log),
+            "rejection_log": list(self.rejection_log),
+            "summary": self.summary(),
+        }

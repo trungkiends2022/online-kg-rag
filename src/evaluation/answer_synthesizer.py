@@ -29,6 +29,11 @@ class AnswerSynthesizer:
 
     def synthesize(self, question: str, best: ScoredPath, kg: OnlineKG) -> str:
         preferred = self._preferred_value(best.exec_result.value, kg)
+        # Numeric execution is already the final denotation. Sending it through
+        # a verbalizer can silently flip a sign (e.g. -2143 -> "a decline of
+        # 2143") or round precision, defeating executable reasoning.
+        if isinstance(preferred, (int, float)) and not isinstance(preferred, bool):
+            return str(preferred)
         evidence = [
             {
                 "triple": [item.head, item.relation, item.tail],

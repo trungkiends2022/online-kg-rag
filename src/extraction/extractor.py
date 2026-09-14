@@ -45,7 +45,9 @@ class EntityRelationExtractor:
             kwargs["temperature"] = self.temperature
         return llm_call_json(prompt, **kwargs)
 
-    def extract_from_table(self, table_name: str, rows: list[dict]) -> list[Triple]:
+    def extract_from_table(
+        self, table_name: str, rows: list[dict], *, use_llm_enrichment: bool = True,
+    ) -> list[Triple]:
         # HybridQA tables commonly contain 5-20 rows. Asking for every cell as
         # triples in one response can exceed the model's output-token budget and
         # leave a syntactically truncated JSON array, so process bounded batches.
@@ -87,6 +89,8 @@ class EntityRelationExtractor:
                         "relation": relation,
                         "tail": tail,
                     }, cell_provenance))
+            if not use_llm_enrichment:
+                continue
             prompt = f"""
         Table name: {table_name} (batch {batch_index + 1}/{len(batches)})
         Rows (JSON): {json.dumps(batch, ensure_ascii=False)}

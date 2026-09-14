@@ -23,7 +23,9 @@ class OnlineKGBuilder:
 
         for row_group in retrieved.get("table_rows", []):
             all_triples += self.extractor.extract_from_table(
-                row_group.get("table_name", "unknown_table"), row_group.get("rows", [])
+                row_group.get("table_name", "unknown_table"),
+                row_group.get("rows", []),
+                use_llm_enrichment=not row_group.get("deterministic_only", False),
             )
         for passage in retrieved.get("text_passages", []):
             all_triples += self.extractor.extract_from_text(passage["id"], passage["text"])

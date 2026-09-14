@@ -1,4 +1,4 @@
-"""Run controlled HybridQA/FinQA baselines with a common output schema."""
+"""Run controlled HybridQA/FinQA/HiTab baselines with a common output schema."""
 
 from __future__ import annotations
 
@@ -20,9 +20,11 @@ from src.baselines.metrics import (
     exact_match,
     finqa_execution_match,
     finqa_ratio_percentage_match,
+    hitab_denotation_match,
+    hitab_strict_denotation_match,
     token_f1,
 )
-from src.datasets import load_finqa, load_hybridqa
+from src.datasets import load_finqa, load_hitab, load_hybridqa
 from src.pipeline import OnlineKGPipeline
 from src.llm.client import capture_llm_metrics
 from src.evaluation.ir_metrics import numerical_ir_metrics
@@ -41,11 +43,12 @@ METHODS = (
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dataset", choices=("hybridqa", "finqa"), required=True)
+    parser.add_argument("--dataset", choices=("hybridqa", "finqa", "hitab"), required=True)
     parser.add_argument("--method", choices=METHODS, required=True)
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--tables-dir", type=Path)
     parser.add_argument("--passages-dir", type=Path)
+    parser.add_argument("--hitab-tables-dir", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--example-id")
     parser.add_argument("--limit", type=int)
@@ -70,7 +73,12 @@ def _examples(args):
             tables_dir=args.tables_dir,
             passages_dir=args.passages_dir,
         )
-    return load_finqa(args.input, table_format=args.finqa_table_format)
+    if args.dataset == "finqa":
+        return load_finqa(args.input, table_format=args.finqa_table_format)
+    tables_dir = args.hitab_tables_dir or args.tables_dir
+    if tables_dir is None:
+        raise ValueError("HiTab requires --hitab-tables-dir or --tables-dir")
+    return load_hitab(args.input, tables_dir=tables_dir)
 
 
 def _make_method(args):
@@ -166,7 +174,7 @@ def main() -> None:
                 record["execution_exact_match"] = (
                     exact_match(example.answer, executed) if executed is not None else None
                 )
-            else:
+            elif args.dataset == "finqa":
                 record["official_execution_accuracy"] = finqa_execution_match(
                     example.answer, answer
                 )
@@ -203,8 +211,12 @@ def main() -> None:
                         example.metadata.get("program"),
                         prediction.get("best_evidence", []),
                         example.metadata.get("gold_evidence"),
+                        question=example.question,
                     )
                     record.update(ir_detail)
+                    record["ir_repair_count"] = (
+                        prediction.get("best_program") or {}
+                    ).get("repair_count", 0)
                     if record["execution_accuracy"] == 1:
                         record["error_category"] = None
                     elif record["schema_validity_rate"] == 0:
@@ -221,6 +233,22 @@ def main() -> None:
                         record["error_category"] = "unit_scale_or_unclassified"
                     else:
                         record["error_category"] = None
+            else:
+                record["official_denotation_accuracy"] = hitab_strict_denotation_match(
+                    example.answer, answer
+                )
+                record["denotation_accuracy"] = hitab_denotation_match(
+                    example.answer, answer
+                )
+                executed = prediction.get("executed_value")
+                record["official_path_denotation_accuracy"] = (
+                    hitab_strict_denotation_match(example.answer, executed)
+                    if executed is not None else None
+                )
+                record["path_denotation_accuracy"] = (
+                    hitab_denotation_match(example.answer, executed)
+                    if executed is not None else None
+                )
             output.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
             output.flush()
             print(json.dumps(record, ensure_ascii=False, default=str))
@@ -236,7 +264,7 @@ def main() -> None:
         em = sum(row["exact_match"] for row in records) / len(records) if records else 0.0
         f1 = sum(row["f1"] for row in records) / len(records) if records else 0.0
         summary.update(exact_match=em, f1=f1, exact_match_percent=100 * em, f1_percent=100 * f1)
-    else:
+    elif args.dataset == "finqa":
         execution = (
             sum(row["execution_accuracy"] for row in records) / len(records)
             if records else 0.0
@@ -256,6 +284,8 @@ def main() -> None:
             for key in (
                 "ir_parse_rate", "schema_validity_rate", "execution_success_rate",
                 "operator_accuracy", "step_accuracy", "grounding_precision", "grounding_recall",
+                "strict_operator_accuracy", "strict_step_accuracy",
+                "ir_repair_count",
             ):
                 values = [float(row[key]) for row in records if row.get(key) is not None]
                 summary[f"mean_{key}"] = round(sum(values) / len(values), 5) if values else None
@@ -265,6 +295,15 @@ def main() -> None:
                 if category:
                     categories[category] = categories.get(category, 0) + 1
             summary["error_taxonomy"] = categories
+    else:
+        accuracy = (
+            sum(row["denotation_accuracy"] for row in records) / len(records)
+            if records else 0.0
+        )
+        summary.update(
+            denotation_accuracy=accuracy,
+            denotation_accuracy_percent=100 * accuracy,
+        )
     if records:
         for key in (
             "wall_time_ms",

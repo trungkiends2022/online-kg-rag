@@ -16,6 +16,7 @@ from src.extraction.extractor import EntityRelationExtractor
 from src.kg.builder import OnlineKGBuilder
 from src.planning.planner import PathPlanner
 from src.planning.symbolic_search import SymbolicPathSearcher
+from src.planning.operation_intent import infer_operation_intent
 from src.execution.code_synthesizer import CodeSynthesizer
 from src.execution.sandbox import ExecResult, SandboxExecutor
 from src.execution.numerical_ir import (
@@ -70,6 +71,7 @@ class OnlineKGPipeline:
             question, table_rows, text_passages, web_snippets, top_k=retrieval_top_k
         )
         kg = self.kg_builder.build(retrieved)
+        operation_intent = infer_operation_intent(question, kg)
         last_diagnostics = []
 
         for attempt in range(max_replans + 1):
@@ -168,6 +170,8 @@ class OnlineKGPipeline:
                     "best_step_values": best.exec_result.step_values,
                     "best_operator_trace": list(best.exec_result.operator_trace),
                     "kg_summary": kg.summary(),
+                    "full_kg": kg.to_trace(),
+                    "operation_intent": operation_intent,
                     "candidate_diagnostics": last_diagnostics,
                     "replans_used": attempt,
                     "execution_mode": self.execution_mode,
@@ -178,6 +182,8 @@ class OnlineKGPipeline:
             "answer": None,
             "error": "Không tìm được path khả thi sau khi replan.",
             "kg_summary": kg.summary(),
+            "full_kg": kg.to_trace(),
+            "operation_intent": operation_intent,
             "candidate_diagnostics": last_diagnostics,
             "replans_used": max_replans,
         }

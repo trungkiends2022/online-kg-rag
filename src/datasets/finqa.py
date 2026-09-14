@@ -33,10 +33,11 @@ def load_finqa(
             else item.get("table_ori") or item.get("table") or []
         )
         passages = []
-        for position, text in enumerate(item.get("pre_text", [])):
-            passages.append({"id": f"{example_id}:pre:{position}", "text": str(text)})
-        for position, text in enumerate(item.get("post_text", [])):
-            passages.append({"id": f"{example_id}:post:{position}", "text": str(text)})
+        pre_text = item.get("pre_text", [])
+        for position, text in enumerate(pre_text):
+            passages.append({"id": f"{example_id}:text:{position}", "text": str(text)})
+        for position, text in enumerate(item.get("post_text", []), start=len(pre_text)):
+            passages.append({"id": f"{example_id}:text:{position}", "text": str(text)})
 
         yield DatasetExample(
             example_id=example_id,

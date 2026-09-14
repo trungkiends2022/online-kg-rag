@@ -192,6 +192,12 @@ class EntityResolver:
                     continue
                 if self._role(kg, left) != self._role(kg, right):
                     continue
+                left_numbers = set(re.findall(r"\d+(?:\.\d+)?", normalize_key(left)))
+                right_numbers = set(re.findall(r"\d+(?:\.\d+)?", normalize_key(right)))
+                if (left_numbers or right_numbers) and left_numbers != right_numbers:
+                    # Hierarchical row labels often share a long prefix but
+                    # differ only by year/period. Those are distinct operands.
+                    continue
                 score = float(self.similarity_fn(left, right))
                 if score < self.semantic_threshold:
                     continue

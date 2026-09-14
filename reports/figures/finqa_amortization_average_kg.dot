@@ -1,0 +1,53 @@
+digraph FinQAAmortizationKG {
+  graph [
+    rankdir=LR,
+    bgcolor="white",
+    pad="0.35",
+    nodesep="0.35",
+    ranksep="0.65",
+    label="Evidence-grounded Online KG — FinQA amortization average (2015–2019)",
+    labelloc=t,
+    fontsize=18,
+    fontname="Helvetica Bold"
+  ];
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, color="#334155"];
+  edge [fontname="Helvetica", fontsize=9, color="#64748b"];
+
+  q [label="Question\nAverage amortization amount\nfrom 2015–2019?", fillcolor="#dbeafe", color="#2563eb"];
+
+  y2015 [label="2015", fillcolor="#f8fafc"];
+  y2016 [label="2016", fillcolor="#f8fafc"];
+  y2017 [label="2017", fillcolor="#f8fafc"];
+  y2018 [label="2018", fillcolor="#f8fafc"];
+  y2019 [label="2019", fillcolor="#f8fafc"];
+
+  v2015 [label="$45 million\nTABLE row 0", fillcolor="#dcfce7", color="#16a34a"];
+  v2016 [label="$45 million\nTABLE row 1", fillcolor="#dcfce7", color="#16a34a"];
+  v2017 [label="$45 million\nTABLE row 2", fillcolor="#dcfce7", color="#16a34a"];
+  v2018 [label="$45 million\nTABLE row 3", fillcolor="#dcfce7", color="#16a34a"];
+  v2019 [label="$44 million\nTABLE row 4", fillcolor="#dcfce7", color="#16a34a"];
+
+  avg [
+    label="v5 = table_average\n(45 + 45 + 45 + 45 + 44) / 5",
+    shape=hexagon,
+    fillcolor="#fef3c7",
+    color="#d97706"
+  ];
+  answer [label="Executed answer\n44.8 million", fillcolor="#fee2e2", color="#dc2626", penwidth=2];
+
+  q -> y2015 [style=dashed, label="range start"];
+  q -> y2019 [style=dashed, label="range end"];
+
+  y2015 -> v2015 [label="amortization_amount_in_millions"];
+  y2016 -> v2016 [label="amortization_amount_in_millions"];
+  y2017 -> v2017 [label="amortization_amount_in_millions"];
+  y2018 -> v2018 [label="amortization_amount_in_millions"];
+  y2019 -> v2019 [label="amortization_amount_in_millions"];
+
+  v2015 -> avg [label="v0"];
+  v2016 -> avg [label="v1"];
+  v2017 -> avg [label="v2"];
+  v2018 -> avg [label="v3"];
+  v2019 -> avg [label="v4"];
+  avg -> answer [label="execute", color="#dc2626", penwidth=2];
+}

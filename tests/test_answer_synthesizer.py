@@ -25,3 +25,16 @@ def test_prefers_short_entity_alias_in_answer_prompt(monkeypatch):
 
     assert answer == "Liverpool"
     assert "Tên hiển thị ưu tiên (alias tương đương, nếu có): Liverpool" in prompts[0]
+
+
+def test_numeric_result_bypasses_verbalizer_and_preserves_sign(monkeypatch):
+    best = ScoredPath(
+        ReasoningPath("p1", [PathStep(1, "subtract")]),
+        '{"op":"subtract"}',
+        ExecResult(True, -2143.0, is_empty=False),
+        3.25,
+    )
+    monkeypatch.setattr(
+        module, "llm_call", lambda _prompt: (_ for _ in ()).throw(AssertionError("must not call LLM"))
+    )
+    assert AnswerSynthesizer().synthesize("How much did it decline?", best, OnlineKG()) == "-2143.0"

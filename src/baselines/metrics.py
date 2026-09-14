@@ -75,3 +75,40 @@ def finqa_ratio_percentage_match(gold: Any, prediction: Any) -> float:
         round(gold_number, 5) == round(prediction_number / 100.0, 5)
         or round(gold_number / 100.0, 5) == round(prediction_number, 5)
     )
+
+
+def hitab_strict_denotation_match(gold: Any, prediction: Any) -> float:
+    """Match HiTab denotations without changing numeric scale."""
+    gold_values = gold if isinstance(gold, (list, tuple)) else [gold]
+    prediction_values = prediction if isinstance(prediction, (list, tuple)) else [prediction]
+    if len(gold_values) == len(prediction_values) == 1:
+        gold_number = extract_last_number(gold_values[0])
+        predicted_number = extract_last_number(prediction_values[0])
+        if gold_number is not None and predicted_number is not None:
+            return float(math.isclose(gold_number, predicted_number, rel_tol=1e-5, abs_tol=1e-5))
+        return exact_match(gold_values[0], prediction_values[0])
+    normalized_gold = sorted(normalize_answer(value) for value in gold_values)
+    normalized_prediction = sorted(normalize_answer(value) for value in prediction_values)
+    return float(normalized_gold == normalized_prediction)
+
+
+def hitab_denotation_match(gold: Any, prediction: Any) -> float:
+    """Match HiTab denotations, treating ratio and percent forms as equivalent.
+
+    ``hitab_strict_denotation_match`` remains available for reporting the
+    unmodified benchmark-scale score alongside this semantic score.
+    """
+    if hitab_strict_denotation_match(gold, prediction):
+        return 1.0
+    gold_values = gold if isinstance(gold, (list, tuple)) else [gold]
+    prediction_values = prediction if isinstance(prediction, (list, tuple)) else [prediction]
+    if len(gold_values) != 1 or len(prediction_values) != 1:
+        return 0.0
+    gold_number = extract_last_number(gold_values[0])
+    predicted_number = extract_last_number(prediction_values[0])
+    if gold_number is None or predicted_number is None:
+        return 0.0
+    return float(
+        math.isclose(gold_number, predicted_number / 100.0, rel_tol=1e-5, abs_tol=1e-5)
+        or math.isclose(gold_number / 100.0, predicted_number, rel_tol=1e-5, abs_tol=1e-5)
+    )

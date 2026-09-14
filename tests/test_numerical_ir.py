@@ -6,6 +6,7 @@ from src.execution.numerical_ir import (
     NumericalIRExecutor,
     NumericalIRSynthesisError,
     NumericalProgram,
+    canonicalize_model_ir,
 )
 from src.kg.online_kg import OnlineKG
 from src.kg.schema import Provenance, Triple
@@ -68,3 +69,15 @@ def test_synthesis_error_keeps_parse_and_schema_diagnostics():
     error = NumericalIRSynthesisError("bad relation", parse_valid=True, schema_valid=True)
     assert error.parse_valid is True
     assert error.schema_valid is True
+
+
+def test_canonical_repair_accepts_unambiguous_named_binary_operands():
+    raw = {"steps": [
+        {"id": "v0", "op": "const", "arguments": 10},
+        {"id": "v1", "op": "const", "arguments": 4},
+        {"id": "v2", "op": "subtract", "arguments": {"minuend": "v0", "subtrahend": "v1"}},
+    ], "result": "v2"}
+    repaired, count = canonicalize_model_ir(raw)
+    program = NumericalProgram.from_dict(repaired, repair_count=count)
+    assert program.steps[-1].arguments == ["v0", "v1"]
+    assert program.repair_count == 1

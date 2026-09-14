@@ -24,3 +24,29 @@ def test_generate_candidates_uses_large_json_output_budget(monkeypatch):
 
     assert captured["max_tokens"] == 4096
     assert paths[0].path_id == "path-1"
+
+
+def test_generate_candidates_ignores_provider_extra_step_fields(monkeypatch):
+    kg = OnlineKG()
+    kg.add_triple(Triple("A", "relation", "B", Provenance("table", "source")))
+
+    monkeypatch.setattr(
+        planner_module,
+        "llm_call_json",
+        lambda prompt, **kwargs: [{
+            "path_id": "extra-fields",
+            "steps": [{
+                "step": "1",
+                "goal": "Add the selected values",
+                "depends_on": None,
+                "operator": "add",
+                "result": "v0",
+            }],
+        }],
+    )
+
+    paths = PathPlanner(temperature=0).generate_candidates("sum?", kg, n=1)
+
+    assert paths[0].path_id == "extra-fields"
+    assert paths[0].steps[0].step == 1
+    assert paths[0].steps[0].goal == "Add the selected values"

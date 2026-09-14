@@ -15,6 +15,20 @@ def test_add_triple_and_neighbors():
     assert kg.get_neighbors("Alpha Tech", relation="other") == []
 
 
+def test_full_trace_serializes_edges_provenance_and_aliases():
+    kg = OnlineKG()
+    kg.add_triple(Triple(
+        "Alpha", "value", "120",
+        Provenance("table", "t1", "120", row_index=2, column_name="Revenue"),
+    ))
+    kg.entity_aliases["alpha"] = "Alpha"
+    trace = kg.to_trace()
+    assert trace["nodes"] == ["Alpha", "120"]
+    assert trace["edges"][0]["relation"] == "value"
+    assert trace["edges"][0]["provenance"]["row_index"] == 2
+    assert trace["aliases"] == {"alpha": "Alpha"}
+
+
 def test_rejects_extractor_self_loop():
     kg = OnlineKG()
     kg.add_triple(_triple("Liverpool Football Club", "located_in", "Liverpool Football Club"))
@@ -78,6 +92,25 @@ def test_semantic_resolution_does_not_merge_date_literals():
     EntityResolver(similarity_fn=lambda _left, _right: 1.0).resolve(kg)
     assert "15 February 1968" in kg.graph
     assert "16 February 1968" in kg.graph
+
+
+def test_semantic_resolution_does_not_merge_hierarchical_period_paths():
+    kg = OnlineKG()
+    kg.add_triple(_triple("constant dollars / 2012", "value", "100"))
+    kg.add_triple(_triple("constant dollars / 2013", "value", "90"))
+    EntityResolver(similarity_fn=lambda _left, _right: 1.0).resolve(kg)
+    assert "constant dollars / 2012" in kg.graph
+    assert "constant dollars / 2013" in kg.graph
+
+
+def test_semantic_resolution_does_not_merge_hierarchical_rows_with_different_years():
+    kg = OnlineKG()
+    left = "constant dollars / 2012"
+    right = "constant dollars / 2013"
+    kg.add_triple(_triple(left, "value", "100"))
+    kg.add_triple(_triple(right, "value", "90"))
+    EntityResolver(similarity_fn=lambda _left, _right: 1.0).resolve(kg)
+    assert left in kg.graph and right in kg.graph
 
 
 def test_club_designator_is_resolved_without_semantic_similarity():

@@ -11,6 +11,7 @@ from typing import Any, TYPE_CHECKING
 from src.execution.sandbox import ExecResult, TracingKG
 from src.llm.client import llm_call
 from src.planning.planner import ReasoningPath
+from src.planning.operation_intent import format_operation_intent, infer_operation_intent
 
 if TYPE_CHECKING:
     from src.kg.online_kg import OnlineKG
@@ -44,9 +45,10 @@ class IRStep:
 class NumericalProgram:
     steps: tuple[IRStep, ...]
     result: str
+    repair_count: int = 0
 
     @classmethod
-    def from_dict(cls, raw: dict[str, Any]) -> "NumericalProgram":
+    def from_dict(cls, raw: dict[str, Any], *, repair_count: int = 0) -> "NumericalProgram":
         if not isinstance(raw, dict) or not isinstance(raw.get("steps"), list):
             raise ValueError("IR must be an object containing a steps list")
         steps = tuple(
@@ -59,7 +61,9 @@ class NumericalProgram:
             for item in raw["steps"]
             if isinstance(item, dict)
         )
-        program = cls(steps=steps, result=str(raw.get("result", "")))
+        program = cls(
+            steps=steps, result=str(raw.get("result", "")), repair_count=repair_count
+        )
         program.validate()
         return program
 
@@ -70,6 +74,7 @@ class NumericalProgram:
                 for step in self.steps
             ],
             "result": self.result,
+            "repair_count": self.repair_count,
         }
 
     def validate(self) -> None:
@@ -112,6 +117,45 @@ def _references(value: Any):
     elif isinstance(value, dict):
         for item in value.values():
             yield from _references(item)
+
+
+def canonicalize_model_ir(raw: dict[str, Any]) -> tuple[dict[str, Any], int]:
+    """Repair only unambiguous wrappers; never choose an operator or operand."""
+    if not isinstance(raw, dict) or not isinstance(raw.get("steps"), list):
+        return raw, 0
+    repaired = {
+        **raw,
+        "steps": [dict(step) if isinstance(step, dict) else step for step in raw["steps"]],
+    }
+    count = 0
+    binary_keys = (
+        ("left", "right"), ("a", "b"), ("x", "y"),
+        ("minuend", "subtrahend"), ("numerator", "denominator"),
+        ("base", "exponent"),
+    )
+    binary_ops = {"subtract", "divide", "exp", "greater", "compare"}
+    variadic_ops = {"add", "multiply", "table_sum", "table_average", "table_max", "table_min"}
+    for step in repaired["steps"]:
+        if not isinstance(step, dict):
+            continue
+        args = step.get("arguments")
+        if step.get("op") in binary_ops and isinstance(args, dict):
+            replacement = args.get("operands") if set(args) == {"operands"} else None
+            if replacement is None:
+                for left, right in binary_keys:
+                    if set(args) == {left, right}:
+                        replacement = [args[left], args[right]]
+                        break
+            if isinstance(replacement, list):
+                step["arguments"] = replacement
+                count += 1
+        elif step.get("op") in variadic_ops and isinstance(args, dict):
+            for key in ("operands", "values", "items"):
+                if set(args) == {key} and isinstance(args[key], list):
+                    step["arguments"] = args[key]
+                    count += 1
+                    break
+    return repaired, count
 
 
 def _number(value: Any) -> float:
@@ -220,14 +264,19 @@ class NumericalIRSynthesizer:
             {"head": h, "relation": data["relation"], "tail": t}
             for h, t, data in list(kg.graph.edges(data=True))[:100]
         ]
+        operation_intent = infer_operation_intent(question, kg)
         base_prompt = f"""
 Question: {question}
 Reasoning path: {json.dumps([s.__dict__ for s in path.steps], ensure_ascii=False)}
 KG edges: {json.dumps(edges, ensure_ascii=False)}
+Numerical operation intent inferred from question and KG schema only:
+{format_operation_intent(operation_intent)}
 
 Create an executable numerical IR as one JSON object. Allowed operators:
 lookup, const, add, subtract, multiply, divide, exp, greater, compare,
 table_sum, table_average, table_max, table_min.
+For temporal change "from A to B", preserve the signed result and compute B - A.
+Do not convert a decline to an absolute positive magnitude unless explicitly asked.
 Each step has id v0, v1, ...; op; arguments; and optional unit.
 lookup arguments are {{"entity": string, "relation": string,
 "direction": "neighbors"|"sources", optional "index": integer}}.
@@ -235,6 +284,21 @@ Other arguments contain constants or references to earlier step IDs. Use const f
 explicit question constants such as 100. Ratio is divide(a,b); percentage is
 multiply(divide(a,b),100) with unit "percent". Do not put evidence in the JSON:
 lookup provenance is captured automatically during execution.
+Follow the inferred operation intent. In particular, when it says to add displayed
+percentage cells, lookup those percentage values and add them directly; do not
+introduce count lookups, weighting, or a denominator absent from the question.
+For EVERY arithmetic operator, arguments MUST be a JSON array. Binary operators
+subtract/divide/exp/greater/compare MUST have exactly two elements. Never use an
+object such as {{"left": ..., "right": ...}} for arithmetic arguments.
+Valid percentage example:
+{{"steps":[
+  {{"id":"v0","op":"lookup","arguments":{{"entity":"row entity","relation":"year_value","direction":"neighbors","index":0}}}},
+  {{"id":"v1","op":"lookup","arguments":{{"entity":"other entity","relation":"value","direction":"neighbors","index":0}}}},
+  {{"id":"v2","op":"subtract","arguments":["v1","v0"]}},
+  {{"id":"v3","op":"divide","arguments":["v2","v0"]}},
+  {{"id":"v4","op":"const","arguments":100}},
+  {{"id":"v5","op":"multiply","arguments":["v3","v4"],"unit":"percent"}}
+],"result":"v5"}}
 Return only JSON: {{"steps": [...], "result": "vN"}}.
 """
         last_error = "empty response"
@@ -247,10 +311,13 @@ Return only JSON: {{"steps": [...], "result": "vN"}}.
                 kwargs["temperature"] = self.temperature
             raw = llm_call(prompt, **kwargs).strip()
             raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+            parse_valid = False
+            schema_valid = False
             try:
                 decoded = json.loads(raw)
                 parse_valid = True
-                program = NumericalProgram.from_dict(decoded)
+                decoded, repair_count = canonicalize_model_ir(decoded)
+                program = NumericalProgram.from_dict(decoded, repair_count=repair_count)
                 schema_valid = True
                 relations = set(kg.summary()["relations"])
                 for step in program.steps:
