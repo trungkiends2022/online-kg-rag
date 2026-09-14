@@ -1,4 +1,4 @@
-# Online-KG RAG: Path → Code → Execution-based Evaluation
+# Online-KG RAG: Path → Executable Program → Grounded Evaluation
 
 Tài liệu kiến trúc cốt lõi cho paper: [Table-Aware Online KG](reports/kien_truc_table_kg.md).
 
@@ -7,11 +7,17 @@ Với FinQA, runner mặc định dùng bảng chuẩn hóa chính thức. Dùng
 Output FinQA lưu cả `execution_accuracy` (ratio/percentage tương đương) và
 `official_execution_accuracy` (quy ước chấm gốc của FinQA).
 
+Hai pilot split cân bằng, có thể commit và chạy ngay trên server, nằm trong
+[`benchmarks/finqa/`](benchmarks/finqa/). Xem
+[`benchmarks/README.md`](benchmarks/README.md) để tái tạo đúng seed và kiểm tra
+phân bố.
+
 Pipeline hợp nhất **table + text + web** thành một Knowledge Graph tạm dựng
 **online (per-query, on-the-fly)** — khác với các framework build-time KG như HydraRAG
 (dựa trên Freebase/Wikidata có sẵn). Từ KG tạm này, hệ thống sinh nhiều **reasoning path**
-ứng viên, chuyển mỗi path thành **code Python**, **chạy thử (execute) trước**, rồi dùng
-chính kết quả thực thi để **đánh giá và chọn path đáng tin nhất**.
+ứng viên, chuyển mỗi path thành **code Python giới hạn** hoặc **typed Numerical
+IR**, **chạy thử (execute) trước**, rồi dùng chính kết quả thực thi để **đánh giá
+và chọn path đáng tin nhất**.
 
 ## Kiến trúc
 
@@ -27,7 +33,7 @@ Question
    ▼
 [4] Path Planner            src/planning/planner.py             (sinh N candidate reasoning path)
    ▼
-[5] Code Synthesizer        src/execution/code_synthesizer.py   (path -> code Python query trên kg)
+[5] Program Synthesizer     src/execution/                      (path -> Python hoặc typed Numerical IR)
    ▼
 [6] Sandbox Executor        src/execution/sandbox.py            (CHẠY THỬ code, timeout, an toàn)
    ▼
@@ -39,6 +45,10 @@ Question
 ```
 
 Orchestrator: `src/pipeline.py`
+
+Mỗi lần chạy pipeline đầy đủ còn có thể lưu `full_kg`: toàn bộ canonical node,
+directed multi-edge, relation, provenance, alias, resolution log và rejection
+log. Có thể dựng hình audit bằng `src.visualization.render_full_kg`.
 
 ### Grounded consistency và provenance diversity
 
@@ -127,6 +137,19 @@ Với `openai/gpt-oss-20b`, free plan hiện công bố 30 RPM, 1.000 RPD,
 8.000 TPM và 200.000 TPD. Rate limit áp dụng ở cấp organization và có thể
 thay đổi; Groq Console là nguồn chính xác cho tài khoản của bạn.
 
+Fallback đã kiểm tra cho workload JSON/IR là Gemini stable:
+
+```bash
+# .env
+LLM_PROVIDER=gemini
+GEMINI_MODEL=gemini-3.8-flash
+```
+
+Đối với benchmark chính thức, không đổi provider giữa các câu trong cùng một
+run. Nếu provider lỗi quota, dừng và tiếp tục bằng `--resume`, hoặc tạo một run
+mới có tên provider/model rõ ràng. `openrouter/free` chỉ phù hợp smoke test vì
+model thực tế và availability có thể thay đổi.
+
 Ví dụ dùng NVIDIA NIM hosted API:
 
 ```bash
@@ -170,7 +193,7 @@ Sẽ chạy demo với dữ liệu mẫu nhỏ (table + text + web) hard-code s�
 `src/pipeline.py`. Thay `table_rows` / `text_passages` / `web_snippets` bằng
 dữ liệu thật (VD từ OTT-QA/HybridQA) khi tích hợp.
 
-## Chạy benchmark HybridQA và FinQA
+## Chạy benchmark HybridQA, FinQA và HiTab
 
 Không cần cài MySQL, PostgreSQL, Neo4j hay một database server nào. `OnlineKG`
 dùng NetworkX trong bộ nhớ và được dựng lại cho từng câu hỏi. Dataset chỉ là các
@@ -290,7 +313,7 @@ nhất EM, F1, số LLM call/câu và latency trung bình. Bảng kết quả đ
 so sánh với nghiên cứu trước, cần bổ sung riêng các số chính thức từ HybridQA và
 ghi rõ khác biệt về model, split và retrieval setting.
 
-### Bộ baseline thống nhất cho HybridQA và FinQA
+### Bộ baseline thống nhất
 
 Runner `src.run_baselines` hỗ trợ các phương án:
 
@@ -333,15 +356,16 @@ python -m src.run_baselines \
   --temperature 0 --limit 100
 ```
 
-FinQA dùng cùng runner, ví dụ:
+FinQA dùng cùng runner. Không dùng `--limit 100` cho số liệu pilot vì lệnh đó
+chỉ lấy 100 record đầu. Dùng split cân bằng đã commit:
 
 ```bash
 python -m src.run_baselines \
   --dataset finqa \
   --method flat_table_bm25 \
-  --input data/FinQA/dataset/dev.json \
+  --input benchmarks/finqa/finqa-dev-balanced-100-seed2027.json \
   --output data/results/finqa-flat-table.jsonl \
-  --top-k 5 --temperature 0 --limit 100
+  --top-k 5 --temperature 0 --resume
 ```
 
 Ablation typed numerical IR giữ nguyên retrieval, KG, planner và grounded
@@ -353,9 +377,10 @@ evaluator; chỉ thay Python tự do bằng chương trình JSON với các oper
 python -m src.run_baselines \
   --dataset finqa \
   --method numerical_ir \
-  --input data/FinQA/dataset/dev.json \
-  --output data/results/finqa-numerical-ir.jsonl \
-  --top-k 5 --n-paths 5 --temperature 0 --limit 100
+  --input benchmarks/finqa/finqa-dev-balanced-100-seed2027.json \
+  --output data/results/finqa-balanced-100-numerical-ir.jsonl \
+  --top-k 5 --n-paths 3 --max-replans 1 \
+  --max-output-tokens 2048 --temperature 0 --resume
 ```
 
 Các bước `lookup` đọc trực tiếp từ KG nên evidence của toán hạng được trace tự
@@ -403,12 +428,54 @@ python -m src.run_dataset \
 ```
 
 FinQA adapter giữ lại `program`, `program_re`, `gold_inds` và execution answer
-trong output metadata. Phiên bản hiện tại dùng chúng để phân tích lỗi; program
-accuracy/execution accuracy chuẩn của FinQA là bước tích hợp tiếp theo.
+để tính execution, operator/step và grounding metrics. Kết quả luôn tách metric
+strict chính thức khỏi metric semantic coi ratio và percentage tương đương.
 
 Mỗi dòng output JSONL gồm ID, question, gold answer, metadata và toàn bộ kết quả
 của pipeline. Chạy `--limit 1` trước vì extraction/planning/code synthesis đều
 gọi LLM; sau đó tăng dần lên 10, 100 và toàn bộ dev split.
+
+### HiTab
+
+HiTab kiểm tra numerical reasoning trên bảng phân cấp. Adapter vật chất hóa đầy
+đủ row-header path và column-header path, đồng thời tắt LLM table enrichment để
+tránh làm mất cấu trúc hoặc sinh cạnh không có căn cứ:
+
+```bash
+git clone https://github.com/microsoft/HiTab data/HiTab
+
+python -m src.run_baselines \
+  --dataset hitab \
+  --method numerical_ir \
+  --input data/HiTab/data/dev_samples.jsonl \
+  --hitab-tables-dir data/HiTab/data/tables/raw \
+  --output data/results/hitab-dev-numerical-ir.jsonl \
+  --top-k 5 --n-paths 3 --max-replans 1 \
+  --temperature 0 --resume
+```
+
+HiTab lưu `official_denotation_accuracy` theo scale nguyên gốc và
+`denotation_accuracy` với ratio/percentage normalization. Đây là table-only
+benchmark; không dùng kết quả HiTab để claim provenance diversity giữa table và
+text.
+
+### Pilot FinQA 50/100 câu trên server nội bộ
+
+Sau khi cấu hình `COMPAT_BASE_URL`, `COMPAT_MODEL` và `COMPAT_API_KEY`:
+
+```bash
+LLM_PROVIDER=openai_compatible .venv/bin/python -m src.run_baselines \
+  --dataset finqa \
+  --method numerical_ir \
+  --input benchmarks/finqa/finqa-dev-balanced-100-seed2027.json \
+  --output data/results/finqa-dev-balanced-100-numerical-ir-internal.jsonl \
+  --top-k 5 --n-paths 3 --max-replans 1 \
+  --max-output-tokens 2048 --temperature 0 \
+  --finqa-table-format official --resume
+```
+
+Tập 50/100 chỉ dùng cho smoke test và pilot. Số liệu cuối của paper cần chạy
+toàn bộ fixed dev split sau khi đã khóa model, prompt, seed và cấu hình.
 
 ## Test
 
@@ -416,10 +483,9 @@ gọi LLM; sau đó tăng dần lên 10, 100 và toàn bộ dev split.
 pytest tests/ -v
 ```
 
-Các test hiện tại (`test_online_kg.py`, `test_sandbox.py`, `test_evaluator.py`,
-`test_llm_factory.py`) **không cần API key thật** — chỉ test phần logic thuần
-(graph, sandbox, scoring, cơ chế chọn provider). Để test end-to-end
-(`src/pipeline.py`) cần API key hợp lệ của provider đang chọn trong `.env`.
+Unit/integration tests **không cần API key thật**: chúng kiểm tra graph,
+normalization, sandbox, typed IR, metrics, sampling và provider factory. Chỉ các
+lượt end-to-end thực sự mới cần API key hoặc server LLM nội bộ.
 
 ## Việc cần làm tiếp (TODO)
 

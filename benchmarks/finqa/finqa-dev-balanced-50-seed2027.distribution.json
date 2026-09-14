@@ -1,0 +1,105 @@
+{
+  "source": "data/FinQA/dataset/dev.json",
+  "output": "benchmarks/finqa/finqa-dev-balanced-50-seed2027.json",
+  "seed": 2027,
+  "sample_size": 50,
+  "population_size": 883,
+  "population_distribution": {
+    "final_operator": {
+      "add": 56,
+      "divide": 566,
+      "greater": 10,
+      "multiply": 49,
+      "subtract": 168,
+      "table_average": 18,
+      "table_max": 7,
+      "table_min": 5,
+      "table_sum": 4
+    },
+    "evidence_modality": {
+      "both": 143,
+      "table_only": 542,
+      "text_only": 198
+    },
+    "program_steps": {
+      "1": 523,
+      "2": 287,
+      "3+": 73
+    }
+  },
+  "sample_distribution": {
+    "final_operator": {
+      "add": 3,
+      "divide": 30,
+      "greater": 1,
+      "multiply": 3,
+      "subtract": 9,
+      "table_average": 1,
+      "table_max": 1,
+      "table_min": 1,
+      "table_sum": 1
+    },
+    "evidence_modality": {
+      "both": 8,
+      "table_only": 31,
+      "text_only": 11
+    },
+    "program_steps": {
+      "1": 29,
+      "2": 16,
+      "3+": 5
+    }
+  },
+  "example_ids": [
+    "ABMD/2009/page_56.pdf-1",
+    "AON/2009/page_46.pdf-2",
+    "MRO/2009/page_139.pdf-2",
+    "BLL/2010/page_28.pdf-2",
+    "APD/2013/page_40.pdf-1",
+    "DRE/2007/page_59.pdf-3",
+    "AES/2003/page_52.pdf-1",
+    "AON/2014/page_47.pdf-3",
+    "NKE/2016/page_37.pdf-2",
+    "BLK/2016/page_119.pdf-2",
+    "IP/2009/page_37.pdf-1",
+    "APD/2016/page_57.pdf-2",
+    "C/2008/page_102.pdf-3",
+    "BLK/2012/page_160.pdf-2",
+    "PNC/2011/page_87.pdf-1",
+    "HOLX/2007/page_129.pdf-1",
+    "MAS/2018/page_35.pdf-1",
+    "MRO/2009/page_139.pdf-3",
+    "GS/2016/page_77.pdf-3",
+    "ETR/2003/page_84.pdf-1",
+    "AON/2010/page_115.pdf-3",
+    "JPM/2009/page_133.pdf-2",
+    "LMT/2010/page_42.pdf-3",
+    "TROW/2010/page_22.pdf-2",
+    "DRE/2009/page_72.pdf-1",
+    "LMT/2013/page_74.pdf-1",
+    "SNPS/2006/page_69.pdf-1",
+    "ZBH/2003/page_58.pdf-2",
+    "DISCA/2012/page_39.pdf-3",
+    "INTC/2013/page_33.pdf-3",
+    "ILMN/2007/page_78.pdf-1",
+    "MRO/2017/page_111.pdf-2",
+    "SLB/2012/page_44.pdf-2",
+    "AMT/2010/page_34.pdf-3",
+    "MMM/2005/page_95.pdf-1",
+    "APD/2016/page_96.pdf-2",
+    "AMT/2012/page_125.pdf-2",
+    "AES/2003/page_52.pdf-2",
+    "AMT/2010/page_34.pdf-1",
+    "AES/2017/page_157.pdf-1",
+    "AES/2015/page_117.pdf-1",
+    "PPG/2011/page_70.pdf-1",
+    "HIG/2008/page_318.pdf-3",
+    "JPM/2008/page_85.pdf-3",
+    "ETR/2015/page_131.pdf-1",
+    "GS/2016/page_77.pdf-1",
+    "PM/2015/page_85.pdf-4",
+    "MRO/2009/page_56.pdf-3",
+    "MRO/2011/page_73.pdf-3",
+    "JPM/2018/page_110.pdf-1"
+  ]
+}
