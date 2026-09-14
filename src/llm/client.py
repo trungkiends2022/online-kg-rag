@@ -193,7 +193,7 @@ def llm_call_json(
     prompt: str,
     *,
     max_tokens: int = 1024,
-    retries: int = 1,
+    retries: int = 3,
     temperature: float | None = None,
 ):
     """Call an LLM for JSON, retrying empty, malformed, or non-list output."""
@@ -205,6 +205,7 @@ def llm_call_json(
             retry_note = (
                 "\nLần trả lời trước rỗng hoặc không phải JSON list hợp lệ. "
                 "Hãy trả lại đầy đủ JSON list, không markdown và không giải thích."
+                f"Response trước: {last_raw}\nLỗi: {last_error}"
             )
         last_raw = llm_call(
             prompt + retry_note,

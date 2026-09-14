@@ -28,7 +28,7 @@ class EntityRelationExtractor:
     def __init__(
         self,
         table_batch_size: int = 5,
-        json_retries: int = 2,
+        json_retries: int = 3,
         temperature: float | None = None,
     ):
         if table_batch_size < 1:

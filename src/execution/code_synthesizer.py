@@ -150,7 +150,7 @@ class CodeSynthesizer:
         path: ReasoningPath,
         question: str,
         kg: "OnlineKG | None" = None,
-        retries: int = 1,
+        retries: int = 3,
     ) -> str:
         kg_context = ""
         if kg is not None:

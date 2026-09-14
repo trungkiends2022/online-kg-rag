@@ -258,7 +258,7 @@ class NumericalIRSynthesizer:
         self.temperature = temperature
 
     def synthesize(
-        self, path: ReasoningPath, question: str, kg: "OnlineKG", retries: int = 1,
+        self, path: ReasoningPath, question: str, kg: "OnlineKG", retries: int = 3,
     ) -> NumericalProgram:
         edges = [
             {"head": h, "relation": data["relation"], "tail": t}
