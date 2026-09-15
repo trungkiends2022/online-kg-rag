@@ -39,6 +39,7 @@ class PathEvaluator:
             direct = self._direct_evidence(result.value, result.evidence)
             directly_grounded[id(result)] = direct
             mode = "direct" if direct else (
+                "derived_boolean" if result.evidence and isinstance(result.value, bool) else
                 "derived_numeric" if result.evidence and self._is_numeric_result(result.value) else "none"
             )
             grounding_mode[id(result)] = mode

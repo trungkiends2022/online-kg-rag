@@ -148,7 +148,21 @@ def main() -> None:
                 break
             started = time.perf_counter()
             with capture_llm_metrics() as performance:
-                prediction = _run_method(method, example, args)
+                try:
+                    prediction = _run_method(method, example, args)
+                except Exception as exc:  # one bad model response must not stop a dataset run
+                    prediction = {
+                        "answer": None,
+                        "executed_value": None,
+                        "error": f"{type(exc).__name__}: {exc}",
+                        "fatal_error_type": type(exc).__name__,
+                        "run_status": "failed",
+                        "method": args.method,
+                        "execution_mode": (
+                            "numerical_ir" if args.method == "numerical_ir" else None
+                        ),
+                        "candidate_diagnostics": [],
+                    }
             wall_time_ms = round((time.perf_counter() - started) * 1000, 2)
             performance["llm_latency_ms"] = round(performance["llm_latency_ms"], 2)
             performance["wall_time_ms"] = wall_time_ms
@@ -217,16 +231,32 @@ def main() -> None:
                     record["ir_repair_count"] = (
                         prediction.get("best_program") or {}
                     ).get("repair_count", 0)
-                    if record["execution_accuracy"] == 1:
+                    if prediction.get("run_status") == "failed":
+                        error_text = f"{prediction.get('fatal_error_type', '')} {prediction.get('error', '')}".lower()
+                        record["error_category"] = (
+                            "serialization_schema"
+                            if "json" in error_text or "decode" in error_text
+                            else "pipeline_failure"
+                        )
+                    elif record["execution_accuracy"] == 1:
                         record["error_category"] = None
                     elif record["schema_validity_rate"] == 0:
                         record["error_category"] = "serialization_schema"
                     elif record["execution_success_rate"] == 0:
                         record["error_category"] = "arithmetic_execution"
-                    elif ir_detail.get("grounding_recall") is not None and ir_detail["grounding_recall"] < 1:
+                    elif ir_detail.get("grounding_precision") is not None and ir_detail["grounding_precision"] < 1:
                         record["error_category"] = "grounding"
+                    elif (
+                        ir_detail.get("grounding_recall") is not None
+                        and ir_detail["grounding_recall"] < 1
+                        and ir_detail.get("operator_accuracy") is not None
+                        and ir_detail["operator_accuracy"] < 1
+                    ):
+                        record["error_category"] = "operand_or_operator_selection"
+                    elif ir_detail.get("grounding_recall") is not None and ir_detail["grounding_recall"] < 1:
+                        record["error_category"] = "operand_selection"
                     elif ir_detail.get("operator_accuracy") is not None and ir_detail["operator_accuracy"] < 1:
-                        record["error_category"] = "operator_or_composition"
+                        record["error_category"] = "operator_selection"
                     elif record["path_execution_accuracy"] == 1 and record["execution_accuracy"] == 0:
                         record["error_category"] = "answer_rendering"
                     elif record["execution_accuracy"] == 0:
@@ -260,6 +290,7 @@ def main() -> None:
         if line.strip()
     ]
     summary = {"method": args.method, "dataset": args.dataset, "num_examples": len(records)}
+    summary["failed_examples"] = sum(row.get("run_status") == "failed" for row in records)
     if args.dataset == "hybridqa":
         em = sum(row["exact_match"] for row in records) / len(records) if records else 0.0
         f1 = sum(row["f1"] for row in records) / len(records) if records else 0.0

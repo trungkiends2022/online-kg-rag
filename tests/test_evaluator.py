@@ -68,6 +68,18 @@ def test_derived_numeric_output_keeps_grounded_lineage():
     assert "grounding_mode=derived_numeric" in scored[0].reasons
 
 
+def test_derived_boolean_output_keeps_grounded_lineage():
+    evidence = (
+        EvidenceRef("Ball", "return", "178.93", "table", "returns"),
+        EvidenceRef("Index", "return", "105.34", "table", "returns"),
+    )
+    result = ExecResult(True, True, evidence=evidence, accessed_edges=2)
+    scored = PathEvaluator().evaluate_all([(_path("comparison"), "code", result)])
+
+    assert scored[0].score > float("-inf")
+    assert "grounding_mode=derived_boolean" in scored[0].reasons
+
+
 def test_table_and_text_evidence_beats_three_paths_from_one_source():
     wrong = _result("Arsenal", "text", "same-passage")
     table = _result("Liverpool", "table", "league-table")

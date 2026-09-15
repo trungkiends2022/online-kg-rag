@@ -90,10 +90,13 @@ class OnlineKG:
         if entity not in self.graph:
             return []
         out = []
+        seen = set()
         normalized = self.normalize_relation(relation) if relation is not None else None
         for _, tgt, data in self.graph.out_edges(entity, data=True):
             if normalized is None or data.get("relation") == normalized:
-                out.append(tgt)
+                if tgt not in seen:
+                    out.append(tgt)
+                    seen.add(tgt)
         return out
 
     def get_sources(self, entity: str, relation: Optional[str] = None) -> list[str]:
@@ -103,9 +106,12 @@ class OnlineKG:
             return []
         normalized = self.normalize_relation(relation) if relation is not None else None
         sources = []
+        seen = set()
         for src, _, data in self.graph.in_edges(entity, data=True):
             if normalized is None or data.get("relation") == normalized:
-                sources.append(src)
+                if src not in seen:
+                    sources.append(src)
+                    seen.add(src)
         return sources
 
     def get_relations(self, entity: str) -> list[str]:

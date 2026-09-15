@@ -20,6 +20,9 @@ if TYPE_CHECKING:
 SUPPORTED_OPERATORS = frozenset({
     "lookup", "const", "add", "subtract", "multiply", "divide", "exp",
     "greater", "compare", "table_sum", "table_average", "table_max", "table_min",
+    "less", "negate", "count", "range", "argmax", "argmin",
+    "topk_argmax", "topk_argmin", "kth_argmax", "kth_argmin",
+    "filter_greater", "filter_less",
 })
 NUMERICAL_IR_MAX_TOKENS = 2048
 _REF_RE = re.compile(r"^v\d+$")
@@ -79,7 +82,7 @@ class NumericalProgram:
 
     def validate(self) -> None:
         seen: set[str] = set()
-        binary = {"subtract", "divide", "exp", "greater", "compare"}
+        binary = {"subtract", "divide", "exp", "greater", "less", "compare"}
         variadic = {"add", "multiply", "table_sum", "table_average", "table_max", "table_min"}
         for step in self.steps:
             if not _REF_RE.fullmatch(step.id) or step.id in seen:
@@ -103,6 +106,17 @@ class NumericalProgram:
             elif step.op in variadic:
                 if not isinstance(step.arguments, (list, tuple)) or not step.arguments:
                     raise ValueError(f"{step.op} requires one or more operands")
+            elif step.op in {"negate", "range", "argmax", "argmin"}:
+                if not isinstance(step.arguments, (list, tuple)) or not step.arguments:
+                    raise ValueError(f"{step.op} requires a non-empty list")
+            elif step.op == "count" and step.arguments in (None, [], {}):
+                raise ValueError("count requires a collection")
+            elif step.op in {"topk_argmax", "topk_argmin", "kth_argmax", "kth_argmin"}:
+                if not isinstance(step.arguments, dict) or not {"items", "k"} <= set(step.arguments):
+                    raise ValueError(f"{step.op} requires items and k")
+            elif step.op in {"filter_greater", "filter_less"}:
+                if not isinstance(step.arguments, dict) or not {"items", "threshold"} <= set(step.arguments):
+                    raise ValueError(f"{step.op} requires items and threshold")
             seen.add(step.id)
         if not self.steps or self.result not in seen:
             raise ValueError("result must reference an existing IR step")
@@ -133,7 +147,7 @@ def canonicalize_model_ir(raw: dict[str, Any]) -> tuple[dict[str, Any], int]:
         ("minuend", "subtrahend"), ("numerator", "denominator"),
         ("base", "exponent"),
     )
-    binary_ops = {"subtract", "divide", "exp", "greater", "compare"}
+    binary_ops = {"subtract", "divide", "exp", "greater", "less", "compare"}
     variadic_ops = {"add", "multiply", "table_sum", "table_average", "table_max", "table_min"}
     for step in repaired["steps"]:
         if not isinstance(step, dict):
@@ -211,6 +225,11 @@ class NumericalIRExecutor:
             return values[value]
         if isinstance(value, list):
             return [NumericalIRExecutor._resolve(item, values) for item in value]
+        if isinstance(value, dict):
+            return {
+                key: NumericalIRExecutor._resolve(item, values)
+                for key, item in value.items()
+            }
         return value
 
     def _execute(self, step: IRStep, values: dict[str, Any], kg: TracingKG) -> Any:
@@ -224,11 +243,36 @@ class NumericalIRExecutor:
             return args.get("value") if isinstance(args, dict) else args
 
         resolved = self._resolve(args, values)
+        if step.op in {"argmax", "argmin", "topk_argmax", "topk_argmin", "kth_argmax", "kth_argmin", "filter_greater", "filter_less"}:
+            config = resolved if isinstance(resolved, dict) else {"items": resolved}
+            items = config.get("items", resolved)
+            pairs = []
+            for item in items:
+                if isinstance(item, dict) and "label" in item and "value" in item:
+                    pairs.append((str(item["label"]), _number(item["value"])))
+                elif isinstance(item, (list, tuple)) and len(item) == 2:
+                    pairs.append((str(item[0]), _number(item[1])))
+                else:
+                    raise ValueError(f"{step.op} items require label/value pairs")
+            reverse = step.op in {"argmax", "topk_argmax", "kth_argmax"}
+            ranked = sorted(pairs, key=lambda pair: (pair[1], pair[0]), reverse=reverse)
+            if step.op in {"argmax", "argmin"}:
+                return ranked[0][0]
+            if step.op in {"topk_argmax", "topk_argmin"}:
+                return [label for label, _ in ranked[:int(_number(config["k"]))]]
+            if step.op in {"kth_argmax", "kth_argmin"}:
+                return ranked[int(_number(config["k"])) - 1][0]
+            threshold = _number(config["threshold"])
+            predicate = (lambda value: value > threshold) if step.op == "filter_greater" else (lambda value: value < threshold)
+            return [label for label, value in pairs if predicate(value)]
         operands = list(resolved.values()) if isinstance(resolved, dict) else resolved
         if not isinstance(operands, list):
             operands = [operands]
         if step.op.startswith("table_") and len(operands) == 1 and isinstance(operands[0], list):
             operands = operands[0]
+        if step.op == "count":
+            collection = operands[0] if len(operands) == 1 and isinstance(operands[0], list) else operands
+            return len(collection)
         nums = [_number(item) for item in operands]
         if step.op in {"add", "table_sum"}:
             return sum(nums)
@@ -242,6 +286,12 @@ class NumericalIRExecutor:
             return nums[0] ** nums[1]
         if step.op in {"greater", "compare"}:
             return nums[0] > nums[1]
+        if step.op == "less":
+            return nums[0] < nums[1]
+        if step.op == "negate":
+            return -nums[0]
+        if step.op == "range":
+            return [max(nums), min(nums)]
         if step.op == "table_average":
             return sum(nums) / len(nums)
         if step.op == "table_max":
@@ -260,10 +310,31 @@ class NumericalIRSynthesizer:
     def synthesize(
         self, path: ReasoningPath, question: str, kg: "OnlineKG", retries: int = 1,
     ) -> NumericalProgram:
-        edges = [
-            {"head": h, "relation": data["relation"], "tail": t}
-            for h, t, data in list(kg.graph.edges(data=True))[:100]
-        ]
+        question_terms = set(re.findall(r"[a-z0-9]+", question.lower()))
+        ranked_edges = []
+        seen_edges = set()
+        for position, (head, tail, data) in enumerate(kg.graph.edges(data=True)):
+            provenance = data.get("provenance")
+            source_type = getattr(provenance, "source_type", "unknown")
+            identity = (str(head), str(data["relation"]), str(tail), source_type)
+            if identity in seen_edges:
+                continue
+            seen_edges.add(identity)
+            rendered = " ".join(map(str, identity[:3])).lower()
+            edge_terms = set(re.findall(r"[a-z0-9]+", rendered))
+            overlap = len(question_terms & edge_terms)
+            phrase_bonus = sum(
+                len(term) for term in question_terms
+                if len(term) >= 4 and term in rendered
+            )
+            ranked_edges.append((overlap, phrase_bonus, -position, {
+                "head": head,
+                "relation": data["relation"],
+                "tail": tail,
+                "source_type": source_type,
+            }))
+        ranked_edges.sort(key=lambda item: item[:3], reverse=True)
+        edges = [item[3] for item in ranked_edges[:200]]
         operation_intent = infer_operation_intent(question, kg)
         base_prompt = f"""
 Question: {question}
@@ -274,7 +345,9 @@ Numerical operation intent inferred from question and KG schema only:
 
 Create an executable numerical IR as one JSON object. Allowed operators:
 lookup, const, add, subtract, multiply, divide, exp, greater, compare,
-table_sum, table_average, table_max, table_min.
+less, negate, count, range, table_sum, table_average, table_max, table_min,
+argmax, argmin, topk_argmax, topk_argmin, kth_argmax, kth_argmin,
+filter_greater, filter_less.
 For temporal change "from A to B", preserve the signed result and compute B - A.
 Do not convert a decline to an absolute positive magnitude unless explicitly asked.
 Each step has id v0, v1, ...; op; arguments; and optional unit.
@@ -287,6 +360,29 @@ lookup provenance is captured automatically during execution.
 Follow the inferred operation intent. In particular, when it says to add displayed
 percentage cells, lookup those percentage values and add them directly; do not
 introduce count lookups, weighting, or a denominator absent from the question.
+Ground every operand that is available in the KG. Before emitting an aggregation,
+enumerate the complete requested scope: every named entity, applicable table row,
+time period, or category. Do not silently omit intermediate rows. For periods such
+as "three months ended March", include all applicable dated rows through March,
+not only the row whose date label is March.
+Match row/entity wording exactly. Do not substitute a related accounting row
+(for example, "additions to plant and equipment") for the row named by the
+question (for example, "capital expenditures on a GAAP basis").
+Preserve displayed table magnitudes for the final answer; do not rescale a table
+value solely because a header says thousands or millions. When combining text and
+table operands that explicitly use different units, normalize them to the same
+unit before arithmetic.
+If the question is boolean/comparative (e.g. outperform), retrieve both compared
+values and use greater/compare. If the question asks a total but an exact total
+cell exists, prefer that cell unless the reasoning path explicitly requires
+table_sum over a complete displayed row or set.
+Selection operators consume label/value pairs such as
+[{{"label":"Ontario","value":"v0"}},{{"label":"Quebec","value":"v1"}}].
+Use argmax/argmin for one label; topk_argmax/topk_argmin with
+{{"items":[...],"k":3}} for a list; kth_argmax/kth_argmin for the kth label.
+Use filter_greater/filter_less with {{"items":[...],"threshold":0}} and then
+count when the question asks how many satisfy a condition. HiTab range returns
+[maximum, minimum]. Use negate for an explicitly requested opposite sign.
 For EVERY arithmetic operator, arguments MUST be a JSON array. Binary operators
 subtract/divide/exp/greater/compare MUST have exactly two elements. Never use an
 object such as {{"left": ..., "right": ...}} for arithmetic arguments.

@@ -78,14 +78,37 @@ operand was derived from that evidence. The exact scoring rule and rejection
 conditions must be audited against the implementation before publication.
 
 \subsection{Typed Numerical Programs}
-A numerical variant represents lookup and arithmetic operations in a typed
-intermediate representation. The experiment will compare it with Python
-generation while controlling shared upstream components. Any differences in
-fallback behavior must be reported as part of the treatment.
+A numerical variant represents graph lookup and numerical reasoning in a typed,
+closed intermediate representation. Its scalar operators cover the complete
+FinQA program vocabulary: addition, subtraction, multiplication, division,
+exponentiation, comparison, and table sum/average/minimum/maximum. To support
+HiTab without flattening its hierarchy, the IR additionally provides signed
+negation, less-than comparison, count, range, threshold filtering, and
+label--value selection operators (argmin/argmax, top-$k$, and $k$-th selection).
+Selection operators return the associated entity label rather than discarding
+it after comparing values. HiTab annotations such as pair-argmax and
+topk-argmin map to the corresponding label--value operator; ``opposite'' maps
+to signed negation.
+
+Lookup results are value-deduplicated before arithmetic so parallel provenance
+edges cannot cause double counting, while all supporting edges remain in the
+audit trace. Candidate prompts require exact row matching, complete operand
+coverage, explicit cross-source unit normalization, and conservative handling
+of cells named ``total.'' Candidate edges are ranked against the question
+instead of being truncated in graph insertion order.
+
+Malformed programs are treated as measured failures. A malformed candidate is
+assigned negative-infinite selection score without suppressing valid sibling
+candidates. A serialization or provider failure before candidate execution
+writes a zero-accuracy record for that example and continues the dataset run.
+Thus reported accuracy includes generation failures rather than silently
+dropping them. The experiment compares this IR with Python generation while
+controlling shared upstream components and reporting any fallback differences.
 
 \section{Experimental Protocol}
 \subsection{Datasets and Metrics}
-Use HybridQA for table--text QA and FinQA for numerical reasoning. Add verified
+Use HybridQA for table--text QA, FinQA for table--text numerical reasoning, and
+HiTab for cross-domain hierarchical-table reasoning. Add verified
 dataset citations, versions, split sizes, and sample identifiers. Report
 HybridQA exact match and token F1. For FinQA, prioritize the official execution
 metric and separately label any relaxed ratio/percentage metric. Do not report

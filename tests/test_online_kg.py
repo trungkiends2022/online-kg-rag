@@ -176,3 +176,13 @@ def test_provenance_tracking():
     prov = kg.get_provenance("Alpha Tech", "Technology")
     assert len(prov) == 1
     assert prov[0].source_type == "table"
+
+
+def test_multigraph_provenance_does_not_duplicate_lookup_values():
+    kg = OnlineKG()
+    kg.add_triple(Triple("revenue", "2015", "45", Provenance("table", "deterministic")))
+    kg.add_triple(Triple("revenue", "2015", "45", Provenance("table", "llm")))
+
+    assert kg.graph.number_of_edges() == 2
+    assert kg.get_neighbors("revenue", "2015") == ["45"]
+    assert len(kg.get_evidence("revenue", "45", "2015")) == 2

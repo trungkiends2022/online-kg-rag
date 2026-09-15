@@ -29,6 +29,10 @@ class AnswerSynthesizer:
 
     def synthesize(self, question: str, best: ScoredPath, kg: OnlineKG) -> str:
         preferred = self._preferred_value(best.exec_result.value, kg)
+        # FinQA boolean denotations use yes/no rather than Python's True/False.
+        # The comparison itself has already been executed and grounded.
+        if isinstance(preferred, bool):
+            return "yes" if preferred else "no"
         # Numeric execution is already the final denotation. Sending it through
         # a verbalizer can silently flip a sign (e.g. -2143 -> "a decline of
         # 2143") or round precision, defeating executable reasoning.

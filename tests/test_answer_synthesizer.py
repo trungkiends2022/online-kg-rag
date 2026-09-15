@@ -38,3 +38,16 @@ def test_numeric_result_bypasses_verbalizer_and_preserves_sign(monkeypatch):
         module, "llm_call", lambda _prompt: (_ for _ in ()).throw(AssertionError("must not call LLM"))
     )
     assert AnswerSynthesizer().synthesize("How much did it decline?", best, OnlineKG()) == "-2143.0"
+
+
+def test_boolean_result_bypasses_verbalizer_and_uses_yes_no(monkeypatch):
+    best = ScoredPath(
+        ReasoningPath("p1", [PathStep(1, "compare")]),
+        "",
+        ExecResult(True, True, is_empty=False),
+        1.0,
+    )
+    monkeypatch.setattr(
+        module, "llm_call", lambda _prompt: (_ for _ in ()).throw(AssertionError("must not call LLM"))
+    )
+    assert AnswerSynthesizer().synthesize("Did A outperform B?", best, OnlineKG()) == "yes"

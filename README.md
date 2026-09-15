@@ -395,10 +395,18 @@ Với FinQA, runner còn báo `ir_parse_rate`, `schema_validity_rate`,
 `lookup`/`const` không bị ép căn chỉnh theo ID. Grounding được đối chiếu riêng
 với `gold_inds`. Nếu gold program không chuyển được sang IR hỗ trợ, metric cấp
 bước là `null` thay vì tính thành sai. Error taxonomy chính gồm
-`serialization_schema`, `arithmetic_execution`, `grounding`,
-`operator_or_composition`, `unit_scale_or_unclassified` và `answer_rendering`.
-Các metric validity/execution vẫn được giữ như chỉ số vận hành, không được xem
-là các lớp reasoning error cạnh tranh với taxonomy trên.
+`serialization_schema`, `pipeline_failure`, `arithmetic_execution`, `grounding`,
+`operand_selection`, `operator_selection`, `operand_or_operator_selection`,
+`unit_scale_or_unclassified` và `answer_rendering`. Các metric
+validity/execution vẫn được giữ như chỉ số vận hành, không được xem là các lớp
+reasoning error cạnh tranh với taxonomy trên.
+
+Malformed hoặc non-JSON output không làm dừng benchmark. Nếu chỉ một candidate
+IR lỗi, candidate đó nhận execution failure và các path còn lại vẫn được chấm.
+Nếu lỗi xảy ra ở extraction/planning khiến cả câu không thể tiếp tục, runner ghi
+một record có `run_status="failed"`, accuracy bằng 0 và error category tương
+ứng, flush JSONL rồi chuyển sang câu kế tiếp. `--resume` bỏ qua cả record đúng
+lẫn record sai đã được ghi, bảo đảm không lặp API call ngoài ý muốn.
 
 Mỗi output JSONL có metric theo dataset và một file `*.summary.json`. HybridQA
 dùng EM/token-F1; FinQA dùng numeric execution accuracy. `program_accuracy`

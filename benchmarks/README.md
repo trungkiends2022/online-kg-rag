@@ -16,9 +16,15 @@ Every final-operator category present in the development split is represented
 when the requested sample size permits. Each `.distribution.json` file records
 the source split, seed, distributions, and selected example IDs.
 
-Regenerate both checked-in subsets:
+Regenerate the checked-in pilot subsets:
 
 ```bash
+.venv/bin/python -m src.sample_finqa \
+  --input data/FinQA/dataset/dev.json \
+  --output benchmarks/finqa/finqa-dev-balanced-20-seed2027.json \
+  --report benchmarks/finqa/finqa-dev-balanced-20-seed2027.distribution.json \
+  --size 20 --seed 2027
+
 .venv/bin/python -m src.sample_finqa \
   --input data/FinQA/dataset/dev.json \
   --output benchmarks/finqa/finqa-dev-balanced-50-seed2027.json \
@@ -46,6 +52,6 @@ LLM_PROVIDER=openai_compatible .venv/bin/python -m src.run_baselines \
   --finqa-table-format official --resume
 ```
 
-The 50/100-example subsets are intended for smoke testing and pilot evaluation.
+The 20/50/100-example subsets are intended for smoke testing and pilot evaluation.
 Final paper results should use the full fixed development split after all
 prompts and configurations have been frozen.

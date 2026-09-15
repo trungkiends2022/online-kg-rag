@@ -81,3 +81,42 @@ def test_canonical_repair_accepts_unambiguous_named_binary_operands():
     program = NumericalProgram.from_dict(repaired, repair_count=count)
     assert program.steps[-1].arguments == ["v0", "v1"]
     assert program.repair_count == 1
+
+
+def test_ir_supports_hitab_selection_range_filter_and_count():
+    program = NumericalProgram.from_dict({
+        "steps": [
+            {"id": "v0", "op": "const", "arguments": 4},
+            {"id": "v1", "op": "const", "arguments": -2},
+            {"id": "v2", "op": "const", "arguments": 9},
+            {"id": "v3", "op": "argmax", "arguments": [
+                {"label": "A", "value": "v0"}, {"label": "B", "value": "v2"}]},
+            {"id": "v4", "op": "topk_argmin", "arguments": {"items": [
+                {"label": "A", "value": "v0"}, {"label": "B", "value": "v1"},
+                {"label": "C", "value": "v2"}], "k": 2}},
+            {"id": "v5", "op": "filter_less", "arguments": {"items": [
+                {"label": "A", "value": "v0"}, {"label": "B", "value": "v1"}],
+                "threshold": 0}},
+            {"id": "v6", "op": "count", "arguments": "v5"},
+            {"id": "v7", "op": "range", "arguments": ["v0", "v1", "v2"]},
+        ],
+        "result": "v7",
+    })
+    result = NumericalIRExecutor().run(program, _kg())
+    assert result.success
+    assert result.step_values["v3"] == "B"
+    assert result.step_values["v4"] == ["B", "A"]
+    assert result.step_values["v6"] == 1
+    assert result.value == [9.0, -2.0]
+
+
+def test_ir_supports_less_and_negate():
+    program = NumericalProgram.from_dict({
+        "steps": [
+            {"id": "v0", "op": "less", "arguments": [2, 3]},
+            {"id": "v1", "op": "negate", "arguments": [5]},
+        ],
+        "result": "v1",
+    })
+    result = NumericalIRExecutor().run(program, _kg())
+    assert result.success and result.step_values["v0"] is True and result.value == -5

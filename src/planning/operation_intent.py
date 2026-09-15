@@ -32,14 +32,48 @@ def infer_operation_intent(question: str, kg: "OnlineKG") -> dict[str, Any]:
     if "average" in text or "on average" in text:
         preferred.append("table_average")
         constraints.append("Average the requested displayed values; do not sum them.")
+    if any(term in text for term in ("highest", "largest", "most ")):
+        preferred.append("argmax")
+    if any(term in text for term in ("lowest", "smallest", "least ")):
+        preferred.append("argmin")
+    if re.search(r"\btop\s+\d+\b", text):
+        preferred.append("topk_argmax")
+    if re.search(r"\b(second|third|fourth)\s+(largest|highest)\b", text):
+        preferred.append("kth_argmax")
+    if re.search(r"\b(second|third|fourth)\s+(smallest|lowest)\b", text):
+        preferred.append("kth_argmin")
+    if "range" in text:
+        preferred.append("range")
+        constraints.append("For HiTab range denotations, return [maximum, minimum].")
+    if re.search(r"\bhow many\b", text) and any(term in text for term in ("reported", "countries", "provinces", "territories", "groups")):
+        preferred.append("count")
     if any(term in text for term in ("difference", "increase", "decline", "decrease")):
         preferred.append("subtract")
+    if any(term in text for term in ("outperform", "greater than", "higher than")):
+        preferred.append("greater")
+        constraints.append(
+            "This is a comparison question. Retrieve both compared values and execute "
+            "greater(left, right); return the grounded boolean as yes or no."
+        )
+    if asks_proportion and not combined_terms:
+        preferred.append("divide")
+        constraints.append(
+            "For a share or percentage, retrieve both the numerator and denominator. "
+            "Normalize explicitly stated text units before division; multiply by 100 only "
+            "when returning a percentage rather than a ratio."
+        )
     if re.search(r"\bfrom\b.+\bto\b", text):
         constraints.append(
             "For temporal change from A to B, preserve the sign and calculate B minus A."
         )
-    if "total" in text or "sum" in text:
+    if "sum" in text or (combined_terms and not asks_proportion):
         preferred.append("add")
+    if "total" in text:
+        constraints.append(
+            "The word 'total' may name an existing row/cell rather than request addition. "
+            "Prefer an exact total entity when present; use table_sum only when the question "
+            "asks to aggregate a displayed row or set."
+        )
 
     return {
         "source": "question_and_kg_schema",

@@ -1,0 +1,75 @@
+{
+  "source": "data/FinQA/dataset/dev.json",
+  "output": "benchmarks/finqa/finqa-dev-balanced-20-seed2027.json",
+  "seed": 2027,
+  "sample_size": 20,
+  "population_size": 883,
+  "population_distribution": {
+    "final_operator": {
+      "add": 56,
+      "divide": 566,
+      "greater": 10,
+      "multiply": 49,
+      "subtract": 168,
+      "table_average": 18,
+      "table_max": 7,
+      "table_min": 5,
+      "table_sum": 4
+    },
+    "evidence_modality": {
+      "both": 143,
+      "table_only": 542,
+      "text_only": 198
+    },
+    "program_steps": {
+      "1": 523,
+      "2": 287,
+      "3+": 73
+    }
+  },
+  "sample_distribution": {
+    "final_operator": {
+      "add": 1,
+      "divide": 10,
+      "greater": 1,
+      "multiply": 1,
+      "subtract": 3,
+      "table_average": 1,
+      "table_max": 1,
+      "table_min": 1,
+      "table_sum": 1
+    },
+    "evidence_modality": {
+      "both": 3,
+      "table_only": 12,
+      "text_only": 5
+    },
+    "program_steps": {
+      "1": 11,
+      "2": 7,
+      "3+": 2
+    }
+  },
+  "example_ids": [
+    "ABMD/2009/page_56.pdf-1",
+    "AON/2009/page_46.pdf-2",
+    "MRO/2009/page_139.pdf-2",
+    "BLL/2010/page_28.pdf-2",
+    "APD/2013/page_40.pdf-1",
+    "DRE/2007/page_59.pdf-3",
+    "AES/2003/page_52.pdf-1",
+    "AON/2014/page_47.pdf-3",
+    "NKE/2016/page_37.pdf-2",
+    "BLK/2016/page_119.pdf-2",
+    "IP/2009/page_37.pdf-1",
+    "APD/2016/page_57.pdf-2",
+    "C/2008/page_102.pdf-3",
+    "BLK/2012/page_160.pdf-2",
+    "PNC/2011/page_87.pdf-1",
+    "HOLX/2007/page_129.pdf-1",
+    "MAS/2018/page_35.pdf-1",
+    "MRO/2009/page_139.pdf-3",
+    "GS/2016/page_77.pdf-3",
+    "ETR/2003/page_84.pdf-1"
+  ]
+}

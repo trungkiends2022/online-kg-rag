@@ -32,3 +32,18 @@ def test_temporal_change_preserves_signed_subtraction():
     )
     assert "subtract" in intent["preferred_operators"]
     assert any("B minus A" in rule for rule in intent["constraints"])
+
+
+def test_outperform_prefers_grounded_boolean_comparison():
+    intent = infer_operation_intent(
+        "Did Ball outperform the packaging index?", _kg_with_relation("five_year_return")
+    )
+    assert "greater" in intent["preferred_operators"]
+    assert "add" not in intent["preferred_operators"]
+
+
+def test_total_name_alone_does_not_force_addition():
+    intent = infer_operation_intent(
+        "What is total operating income in 2013?", _kg_with_relation("operating_income")
+    )
+    assert "add" not in intent["preferred_operators"]
