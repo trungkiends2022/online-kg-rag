@@ -21,6 +21,7 @@ class OnlineKG:
         self.entity_key_aliases: dict[str, str] = {}
         self.resolution_log: list[dict] = []
         self.rejection_log: list[dict] = []
+        self.extraction_errors: list[dict] = []
 
     # ---- xây dựng ----
     def add_triple(self, triple: Triple) -> None:
@@ -171,6 +172,7 @@ class OnlineKG:
             "num_entity_aliases": len(self.entity_aliases),
             "entity_resolution": resolution_counts,
             "num_rejected_triples": len(self.rejection_log),
+            "num_extraction_errors": len(self.extraction_errors),
         }
 
     def to_trace(self) -> dict:
@@ -200,5 +202,6 @@ class OnlineKG:
             "aliases": dict(self.entity_aliases),
             "resolution_log": list(self.resolution_log),
             "rejection_log": list(self.rejection_log),
+            "extraction_errors": list(self.extraction_errors),
             "summary": self.summary(),
         }

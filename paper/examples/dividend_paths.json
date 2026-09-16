@@ -1,0 +1,143 @@
+{
+  "kind": "constructed illustration; not an LLM prediction",
+  "question": "What is the percentage increase from the March dividend to the newly declared dividend?",
+  "edges": [
+    [
+      "e1",
+      "March 31",
+      "2002_dividend",
+      "0.450",
+      "table",
+      "T1"
+    ],
+    [
+      "e2",
+      "Acme",
+      "declared_dividend",
+      "0.455",
+      "text",
+      "P1"
+    ],
+    [
+      "e3",
+      "March 31",
+      "2002_high",
+      "26.50",
+      "table",
+      "T1"
+    ]
+  ],
+  "candidates": [
+    {
+      "path": "A",
+      "steps": [
+        "Read earlier dividend",
+        "Read new dividend",
+        "Compute percentage increase"
+      ],
+      "code": "a = kg.get_neighbors(\n    \"March 31\", \"2002_dividend\")[0]\nb = kg.get_neighbors(\n    \"Acme\", \"declared_dividend\")[0]\nresult = (float(b)-float(a))/float(a)*100\n",
+      "output": 1.111111111111112,
+      "score": 7.25,
+      "evidence": [
+        {
+          "head": "March 31",
+          "relation": "2002_dividend",
+          "tail": "0.450",
+          "source_type": "table",
+          "source_id": "T1",
+          "source_group": null,
+          "domain": null,
+          "row_index": null,
+          "column_name": null,
+          "header_path": null
+        },
+        {
+          "head": "Acme",
+          "relation": "declared_dividend",
+          "tail": "0.455",
+          "source_type": "text",
+          "source_id": "P1",
+          "source_group": null,
+          "domain": null,
+          "row_index": null,
+          "column_name": null,
+          "header_path": null
+        }
+      ]
+    },
+    {
+      "path": "B",
+      "steps": [
+        "Read earlier dividend",
+        "Read new dividend",
+        "Reverse subtraction"
+      ],
+      "code": "a = kg.get_neighbors(\n    \"March 31\", \"2002_dividend\")[0]\nb = kg.get_neighbors(\n    \"Acme\", \"declared_dividend\")[0]\nresult = (float(a)-float(b))/float(a)*100\n",
+      "output": -1.111111111111112,
+      "score": 7.25,
+      "evidence": [
+        {
+          "head": "March 31",
+          "relation": "2002_dividend",
+          "tail": "0.450",
+          "source_type": "table",
+          "source_id": "T1",
+          "source_group": null,
+          "domain": null,
+          "row_index": null,
+          "column_name": null,
+          "header_path": null
+        },
+        {
+          "head": "Acme",
+          "relation": "declared_dividend",
+          "tail": "0.455",
+          "source_type": "text",
+          "source_id": "P1",
+          "source_group": null,
+          "domain": null,
+          "row_index": null,
+          "column_name": null,
+          "header_path": null
+        }
+      ]
+    },
+    {
+      "path": "C",
+      "steps": [
+        "Read high price as old value",
+        "Read new dividend",
+        "Compute percentage change"
+      ],
+      "code": "a = kg.get_neighbors(\n    \"March 31\", \"2002_high\")[0]\nb = kg.get_neighbors(\n    \"Acme\", \"declared_dividend\")[0]\nresult = (float(b)-float(a))/float(a)*100\n",
+      "output": -98.28301886792453,
+      "score": 7.25,
+      "evidence": [
+        {
+          "head": "March 31",
+          "relation": "2002_high",
+          "tail": "26.50",
+          "source_type": "table",
+          "source_id": "T1",
+          "source_group": null,
+          "domain": null,
+          "row_index": null,
+          "column_name": null,
+          "header_path": null
+        },
+        {
+          "head": "Acme",
+          "relation": "declared_dividend",
+          "tail": "0.455",
+          "source_type": "text",
+          "source_id": "P1",
+          "source_group": null,
+          "domain": null,
+          "row_index": null,
+          "column_name": null,
+          "header_path": null
+        }
+      ]
+    }
+  ]
+}

@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import ast
 import json
+import re
 from typing import TYPE_CHECKING
 
 from src.planning.planner import ReasoningPath
+from src.planning.operation_intent import format_operation_intent, infer_operation_intent
 from src.llm.client import llm_call
 
 if TYPE_CHECKING:
@@ -153,11 +155,23 @@ class CodeSynthesizer:
         retries: int = 1,
     ) -> str:
         kg_context = ""
+        operation_guidance = ""
         if kg is not None:
+            question_terms = set(re.findall(r"[a-z0-9]+", question.lower()))
+            ranked = []
+            for position, (head, tail, data) in enumerate(kg.graph.edges(data=True)):
+                rendered = f"{head} {data['relation']} {tail}".lower()
+                overlap = len(question_terms & set(re.findall(r"[a-z0-9]+", rendered)))
+                scoped_bonus = 3 if data["relation"] == "annual_interest_amount" else 0
+                ranked.append((overlap + scoped_bonus, -position, head, tail, data))
+            ranked.sort(key=lambda item: item[:2], reverse=True)
             edges = [
                 {"head": head, "relation": data["relation"], "tail": tail}
-                for head, tail, data in list(kg.graph.edges(data=True))[:100]
+                for _, _, head, tail, data in ranked[:100]
             ]
+            operation_guidance = format_operation_intent(
+                infer_operation_intent(question, kg)
+            )
             kg_context = (
                 f"\nEntities hợp lệ: {list(kg.graph.nodes())[:100]}"
                 f"\nRelations hợp lệ: {kg.summary()['relations']}"
@@ -166,6 +180,7 @@ class CodeSynthesizer:
         base_prompt = f"""
         Question: {question}
         Reasoning path: {json.dumps([s.__dict__ for s in path.steps], ensure_ascii=False)}
+        Numerical operation constraints: {operation_guidance}
         {KG_API_DOC}
         {kg_context}
 

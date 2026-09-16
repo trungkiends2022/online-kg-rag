@@ -54,6 +54,17 @@ def test_ir_supports_table_operators_and_financial_number_parsing():
     assert result.success and result.value == 1050
 
 
+def test_ir_counts_inclusive_year_span():
+    program = NumericalProgram.from_dict({
+        "steps": [
+            {"id": "v0", "op": "inclusive_year_count", "arguments": [2017, 2025]},
+        ],
+        "result": "v0",
+    })
+    result = NumericalIRExecutor().run(program, _kg())
+    assert result.success and result.value == 9
+
+
 @pytest.mark.parametrize("bad", [
     {"steps": [{"id": "v0", "op": "eval", "arguments": []}], "result": "v0"},
     {"steps": [{"id": "v1", "op": "add", "arguments": ["v0", 1]}], "result": "v1"},

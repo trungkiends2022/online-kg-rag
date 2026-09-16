@@ -48,7 +48,10 @@ def extract_last_number(value: Any) -> float | None:
 def finqa_execution_match(gold: Any, prediction: Any) -> float:
     """Match FinQA execution results after the official five-decimal rounding."""
     gold_text = str(gold).strip().lower()
-    prediction_text = str(prediction).strip().lower().rstrip(".! ")
+    prediction_text = (
+        "yes" if prediction is True else "no" if prediction is False
+        else str(prediction).strip().lower().rstrip(".! ")
+    )
     if gold_text in {"yes", "no"}:
         return float(prediction_text == gold_text)
     gold_number = extract_last_number(gold)

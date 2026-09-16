@@ -1,0 +1,12 @@
+\begin{figure}[t]
+\centering
+\input{figures/pipeline-diagram}
+\caption{Overview of Online-KG. Retrieval and graph construction run once per
+question. Candidate plans are converted to Python programs or, in the numerical
+variant, typed IR programs. Execution returns outputs and accessed-edge evidence
+for candidate selection. The dashed loop generates fresh plans over the same
+graph when no candidate is admissible, subject to a replanning budget. Python
+mode additionally permits a symbolic-search fallback before replanning
+(omitted from the diagram).}
+\label{fig:pipeline}
+\end{figure}

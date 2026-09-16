@@ -53,6 +53,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--example-id")
     parser.add_argument("--limit", type=int)
     parser.add_argument("--top-k", type=int, default=5)
+    parser.add_argument("--second-stage-k", type=int, default=3)
     parser.add_argument("--max-context-chars", type=int, default=24_000)
     parser.add_argument("--max-output-tokens", type=int, default=1024)
     parser.add_argument("--temperature", type=float, default=0.0)
@@ -117,6 +118,7 @@ def _run_method(method, example, args) -> dict:
             n_paths=args.n_paths,
             max_replans=args.max_replans,
             retrieval_top_k=args.top_k,
+            retrieval_second_stage_k=args.second_stage_k,
         )
     else:
         prediction = method.run(example)
@@ -356,6 +358,7 @@ def main() -> None:
         "n_paths": args.n_paths,
         "max_replans": args.max_replans,
         "finqa_table_format": args.finqa_table_format,
+        "second_stage_k": args.second_stage_k,
     }
     summary_path = args.output.with_suffix(args.output.suffix + ".summary.json")
     summary_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")

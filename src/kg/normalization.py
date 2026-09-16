@@ -198,6 +198,13 @@ class EntityResolver:
                     # Hierarchical row labels often share a long prefix but
                     # differ only by year/period. Those are distinct operands.
                     continue
+                # Negating modifiers encode a different measure.  Lexical or
+                # embedding similarity is not sufficient to merge ``GAAP``
+                # with ``non-GAAP`` (and analogous positive/negative labels).
+                left_tokens = set(normalize_key(left).split())
+                right_tokens = set(normalize_key(right).split())
+                if ("non" in left_tokens) != ("non" in right_tokens):
+                    continue
                 score = float(self.similarity_fn(left, right))
                 if score < self.semantic_threshold:
                     continue

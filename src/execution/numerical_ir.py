@@ -23,6 +23,7 @@ SUPPORTED_OPERATORS = frozenset({
     "less", "negate", "count", "range", "argmax", "argmin",
     "topk_argmax", "topk_argmin", "kth_argmax", "kth_argmin",
     "filter_greater", "filter_less",
+    "inclusive_year_count",
 })
 NUMERICAL_IR_MAX_TOKENS = 2048
 _REF_RE = re.compile(r"^v\d+$")
@@ -82,7 +83,7 @@ class NumericalProgram:
 
     def validate(self) -> None:
         seen: set[str] = set()
-        binary = {"subtract", "divide", "exp", "greater", "less", "compare"}
+        binary = {"subtract", "divide", "exp", "greater", "less", "compare", "inclusive_year_count"}
         variadic = {"add", "multiply", "table_sum", "table_average", "table_max", "table_min"}
         for step in self.steps:
             if not _REF_RE.fullmatch(step.id) or step.id in seen:
@@ -288,6 +289,8 @@ class NumericalIRExecutor:
             return nums[0] > nums[1]
         if step.op == "less":
             return nums[0] < nums[1]
+        if step.op == "inclusive_year_count":
+            return int(nums[1] - nums[0] + 1)
         if step.op == "negate":
             return -nums[0]
         if step.op == "range":
@@ -348,6 +351,7 @@ lookup, const, add, subtract, multiply, divide, exp, greater, compare,
 less, negate, count, range, table_sum, table_average, table_max, table_min,
 argmax, argmin, topk_argmax, topk_argmin, kth_argmax, kth_argmin,
 filter_greater, filter_less.
+Use inclusive_year_count(start_year,end_year) for an inclusive year span.
 For temporal change "from A to B", preserve the signed result and compute B - A.
 Do not convert a decline to an absolute positive magnitude unless explicitly asked.
 Each step has id v0, v1, ...; op; arguments; and optional unit.

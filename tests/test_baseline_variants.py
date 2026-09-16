@@ -155,6 +155,8 @@ def test_finqa_numeric_answer_metrics():
     assert finqa_execution_match(1_000_000, "1000001") == 0.0
     assert finqa_execution_match("yes", "yes") == 1.0
     assert finqa_execution_match("no", "yes") == 0.0
+    assert finqa_execution_match("yes", True) == 1.0
+    assert finqa_execution_match("no", False) == 1.0
     assert finqa_ratio_percentage_match(0.21651, 21.650534895568008) == 1.0
     assert finqa_ratio_percentage_match(21.65053, 0.2165053) == 1.0
     assert finqa_ratio_percentage_match(0.21651, 18.0) == 0.0

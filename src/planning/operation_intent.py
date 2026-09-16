@@ -62,6 +62,16 @@ def infer_operation_intent(question: str, kg: "OnlineKG") -> dict[str, Any]:
             "Normalize explicitly stated text units before division; multiply by 100 only "
             "when returning a percentage rather than a ratio."
         )
+    year_range = re.search(r"\bfrom\s+(20\d{2})\s+to\s+(20\d{2})\b", text)
+    if "interest" in text and year_range and "annual_interest_amount" in relations:
+        preferred.append("multiply")
+        start, end = map(int, year_range.groups())
+        constraints.append(
+            f"Use the explicitly grounded annual_interest_amount scoped to the notes "
+            f"matching the requested endpoint/year, not interest_rate multiplied by "
+            f"principal and not an annual amount scoped to other notes. The inclusive "
+            f"period from {start} through {end} contains {end - start + 1} years."
+        )
     if re.search(r"\bfrom\b.+\bto\b", text):
         constraints.append(
             "For temporal change from A to B, preserve the sign and calculate B minus A."

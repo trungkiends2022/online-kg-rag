@@ -1,0 +1,51 @@
+\begin{tikzpicture}[
+  >=stealth,
+  stage/.style={draw,rounded corners=2pt,align=center,text width=7.4cm,
+    minimum height=9mm,inner sep=3pt,font=\small},
+  source/.style={draw,align=center,text width=3.3cm,
+    minimum height=9mm,inner sep=3pt,font=\small},
+  flow/.style={->,line width=0.6pt},
+  note/.style={font=\scriptsize,align=center,fill=white,inner sep=2pt}
+]
+\node[source] (question) at (-2.05,0)
+  {Question $q$};
+\node[source] (sources) at (2.05,0)
+  {Supplied tables and passages};
+
+\node[stage] (retrieve) at (0,-1.3)
+  {\textbf{1. Retrieve context}\\
+   BM25 + bounded schema-aware supplementation};
+\node[stage] (build) at (0,-2.65)
+  {\textbf{2. Construct query-time KG $G_q$}\\
+   Structural + semantic triples; provenance; entity resolution};
+\node[stage] (plan) at (0,-4)
+  {\textbf{3. Generate candidate plans}\\
+   Question + graph summary $\longrightarrow p_1,\ldots,p_N$};
+\node[stage] (synth) at (0,-5.35)
+  {\textbf{4. Synthesize executable candidates}\\
+   Each plan $p_i\longrightarrow c_i$: Python or typed numerical IR};
+\node[stage] (execute) at (0,-6.7)
+  {\textbf{5. Execute against $G_q$ and trace evidence}\\
+   Each $c_i\longrightarrow$ status $s_i$, output $y_i$, evidence $\mathcal{E}_i$};
+\node[stage] (select) at (0,-8.05)
+  {\textbf{6. Evaluate and select}\\
+   Admissibility gate; source support; output agreement};
+\node[stage] (answer) at (0,-9.65)
+  {\textbf{7. Produce answer and audit record}\\
+   Selected value, program, evidence, and candidate diagnostics};
+
+\draw[flow] (question.south) -- ++(0,-0.18) -| (retrieve.north);
+\draw[flow] (sources.south) -- ++(0,-0.18) -| (retrieve.north);
+\draw[flow] (retrieve) -- (build);
+\draw[flow] (build) -- (plan);
+\draw[flow] (plan) -- (synth);
+\draw[flow] (synth) -- (execute);
+\draw[flow] (execute) -- (select);
+\draw[flow] (select) -- node[note,right] {Admissible candidate} (answer);
+
+\draw[flow,dashed] (select.east) -- (5.05,-8.05)
+  -- node[note,rotate=90,above] {No admissible candidate: replan on the same KG}
+  (5.05,-4) -- (plan.east);
+\node[note] at (0,-10.55)
+  {Empty KG or exhausted replanning budget $\longrightarrow$ no answer + error record};
+\end{tikzpicture}

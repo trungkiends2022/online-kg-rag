@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import json
 
-from src.retrieval.coarse_retrieval import coarse_retrieve
+from src.retrieval.coarse_retrieval import two_stage_retrieve
 from src.extraction.extractor import EntityRelationExtractor
 from src.kg.builder import OnlineKGBuilder
 from src.planning.planner import PathPlanner
@@ -23,6 +23,7 @@ from src.execution.numerical_ir import (
     NumericalIRExecutor,
     NumericalIRSynthesizer,
 )
+from src.execution.finqa_templates import deterministic_numerical_candidates
 from src.evaluation.evaluator import PathEvaluator
 from src.evaluation.answer_synthesizer import AnswerSynthesizer
 
@@ -66,9 +67,11 @@ class OnlineKGPipeline:
         n_paths: int = 5,
         max_replans: int = 2,
         retrieval_top_k: int = 10,
+        retrieval_second_stage_k: int = 3,
     ) -> dict:
-        retrieved = coarse_retrieve(
-            question, table_rows, text_passages, web_snippets, top_k=retrieval_top_k
+        retrieved = two_stage_retrieve(
+            question, table_rows, text_passages, web_snippets,
+            top_k=retrieval_top_k, second_stage_k=retrieval_second_stage_k,
         )
         kg = self.kg_builder.build(retrieved)
         operation_intent = infer_operation_intent(question, kg)
@@ -78,10 +81,32 @@ class OnlineKGPipeline:
             if kg.is_empty():
                 return {"answer": None, "error": "Online KG rỗng — không đủ dữ liệu retrieve."}
 
-            paths = self.planner.generate_candidates(question, kg, n=n_paths) if n_paths > 0 else []
+            template_candidates = (
+                deterministic_numerical_candidates(question, kg)
+                if self.execution_mode == "numerical_ir" else []
+            )
+            try:
+                paths = self.planner.generate_candidates(question, kg, n=n_paths) if n_paths > 0 else []
+            except Exception:
+                # A deterministic typed candidate can still be valid even if a
+                # provider fails while producing optional natural-language paths.
+                # Preserve the original exception only when there is no fallback.
+                if not template_candidates:
+                    raise
+                paths = []
 
             candidates = []
             ir_validation: dict[str, tuple[bool, bool]] = {}
+            # High-confidence table templates use the exact same typed IR and
+            # executor as model programs. They are included as candidates rather
+            # than replacing planning, so the evidence-aware evaluator can still
+            # reject them when their grounded trace is weaker.
+            if self.execution_mode == "numerical_ir":
+                for template_path, template_program in template_candidates:
+                    code = json.dumps(template_program.to_dict(), ensure_ascii=False)
+                    result = self.ir_executor.run(template_program, kg)
+                    ir_validation[template_path.path_id] = (True, True)
+                    candidates.append((template_path, code, result))
             for path in paths:
                 try:
                     if self.execution_mode == "numerical_ir":
@@ -175,6 +200,7 @@ class OnlineKGPipeline:
                     "candidate_diagnostics": last_diagnostics,
                     "replans_used": attempt,
                     "execution_mode": self.execution_mode,
+                    "retrieval_trace": retrieved.get("retrieval_trace", {}),
                 }
             # không path nào khả dụng -> replan (vòng lặp tiếp theo sinh path mới)
 
@@ -186,6 +212,7 @@ class OnlineKGPipeline:
             "operation_intent": operation_intent,
             "candidate_diagnostics": last_diagnostics,
             "replans_used": max_replans,
+            "retrieval_trace": retrieved.get("retrieval_trace", {}),
         }
 
 

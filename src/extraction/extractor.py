@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 
 from src.kg.schema import Triple, Provenance
 from src.llm.client import llm_call_json
@@ -102,15 +103,77 @@ class EntityRelationExtractor:
             triples.extend(_triple_from_item(item, provenance) for item in items)
         return triples
 
-    def extract_from_text(self, passage_id: str, text: str) -> list[Triple]:
+    def extract_from_text(
+        self, passage_id: str, text: str, *, context_before: str = ""
+    ) -> list[Triple]:
+        context_note = (
+            f"Previous context (resolve pronouns/subject only): {context_before}\n"
+            if context_before else ""
+        )
         prompt = f"""
+        {context_note}
         Passage: {text}
         Trích xuất các triple (head, relation, tail) thể hiện fact trong đoạn văn.
         {_EXTRACT_INSTRUCTION}
         """
-        items = self._call_json(prompt, max_tokens=4096)
+        # Deterministic numerical facts below remain useful even when a provider
+        # returns malformed JSON.  Do not discard the whole passage merely
+        # because optional semantic enrichment failed.
+        try:
+            items = self._call_json(prompt, max_tokens=4096)
+        except Exception:
+            items = []
         provenance = Provenance("text", passage_id, text[:200])
-        return [_triple_from_item(it, provenance) for it in items]
+        triples = [_triple_from_item(it, provenance) for it in items]
+
+        # Preserve a typed and scoped annual-interest fact independently of LLM
+        # relation wording. FinQA often splits its subject and amount across two
+        # adjacent sentences, which otherwise collapses several unrelated
+        # "interest" amounts onto the same generic KG node.
+        amount_match = re.search(
+            r"interest(?:\s+on\s+the\s+([^,.]+?))?\s+(?:of\s+)?(?:approximately\s+)?"
+            r"(\$\s*[\d,.]+\s+million\s+per\s+year)",
+            text,
+            flags=re.IGNORECASE,
+        )
+        if amount_match:
+            subject = (amount_match.group(1) or "").strip()
+            if not subject:
+                antecedents = re.findall(r"\b(20\d{2}\s+notes)\b", context_before, re.I)
+                subject = antecedents[-1] if antecedents else "interest"
+            triples.insert(0, Triple(
+                head=subject,
+                relation="annual_interest_amount",
+                tail=amount_match.group(2),
+                provenance=provenance,
+            ))
+            triples.insert(1, Triple(
+                head=subject,
+                relation="payment_frequency",
+                tail="annual",
+                provenance=provenance,
+            ))
+        # Financial prose frequently gives a current value and the absolute
+        # change from an earlier period in one sentence. Preserve both values
+        # with explicit temporal relations so an executable program can derive
+        # the earlier value instead of selecting a same-named table row.
+        change_match = re.search(
+            r"(?P<head>[a-z][a-z\s-]{2,}?)\s+increased\s+\$?\s*"
+            r"(?P<delta>[\d,.]+)\s+million.*?\s+from\s+(?P<start>20\d{2})\s+"
+            r"to\s+\$?\s*(?P<end_value>[\d,.]+)\s+(?P<unit>billion|million)\s+"
+            r"in\s+(?P<end>20\d{2})",
+            text,
+            flags=re.IGNORECASE,
+        )
+        if change_match:
+            head = change_match.group("head").strip()
+            triples.extend([
+                Triple(head, f"value_{change_match.group('end')}",
+                       f"${change_match.group('end_value')} {change_match.group('unit')}", provenance),
+                Triple(head, f"increase_from_{change_match.group('start')}_to_{change_match.group('end')}",
+                       f"${change_match.group('delta')} million", provenance),
+            ])
+        return triples
 
     def extract_from_web(self, url: str, snippet: str) -> list[Triple]:
         prompt = f"""

@@ -1,4 +1,10 @@
-from src.sample_finqa import attributes, balanced_sample
+from src.sample_finqa import (
+    CORE_ARITHMETIC_OPERATORS,
+    attributes,
+    balanced_sample,
+    filter_records,
+    program_operators,
+)
 
 
 def _item(index, program, evidence):
@@ -19,3 +25,19 @@ def test_balanced_sample_is_reproducible_and_covers_operators():
 
     assert [item["id"] for item in first] == [item["id"] for item in second]
     assert {attributes(item)[0] for item in first} == {"add", "subtract", "multiply"}
+
+
+def test_filter_records_selects_exactly_two_core_arithmetic_steps():
+    records = [
+        _item(0, "subtract(5, 2), divide(#0, 2)", {"table_1": "x"}),
+        _item(1, "add(1, 2)", {"table_1": "x"}),
+        _item(2, "table_sum(table), divide(#0, 2)", {"table_1": "x"}),
+        _item(3, "multiply(3, 4), add(#0, 1)", {"text_1": "x"}),
+    ]
+
+    selected = filter_records(
+        records, exact_steps=2, allowed_operators=CORE_ARITHMETIC_OPERATORS
+    )
+
+    assert [item["id"] for item in selected] == ["0", "3"]
+    assert program_operators(selected[0]) == ("subtract", "divide")

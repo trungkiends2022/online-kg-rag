@@ -1,0 +1,114 @@
+{
+  "source": "data/FinQA/dataset/dev.json",
+  "output": "benchmarks/finqa/finqa-dev-2step-core-30-seed2027.json",
+  "seed": 2027,
+  "sample_size": 30,
+  "population_size": 883,
+  "selection_criteria": {
+    "exact_steps": 2,
+    "allowed_operators": [
+      "add",
+      "divide",
+      "multiply",
+      "subtract"
+    ]
+  },
+  "eligible_population_size": 287,
+  "population_distribution": {
+    "final_operator": {
+      "add": 56,
+      "divide": 566,
+      "greater": 10,
+      "multiply": 49,
+      "subtract": 168,
+      "table_average": 18,
+      "table_max": 7,
+      "table_min": 5,
+      "table_sum": 4
+    },
+    "evidence_modality": {
+      "both": 143,
+      "table_only": 542,
+      "text_only": 198
+    },
+    "program_steps": {
+      "1": 523,
+      "2": 287,
+      "3+": 73
+    }
+  },
+  "eligible_population_distribution": {
+    "final_operator": {
+      "add": 20,
+      "divide": 239,
+      "multiply": 15,
+      "subtract": 13
+    },
+    "evidence_modality": {
+      "both": 53,
+      "table_only": 163,
+      "text_only": 71
+    },
+    "program_steps": {
+      "2": 287
+    }
+  },
+  "sample_distribution": {
+    "final_operator": {
+      "add": 2,
+      "divide": 24,
+      "multiply": 2,
+      "subtract": 2
+    },
+    "evidence_modality": {
+      "both": 6,
+      "table_only": 17,
+      "text_only": 7
+    },
+    "program_steps": {
+      "2": 30
+    }
+  },
+  "operator_sequences": {
+    "add -> add": 1,
+    "add -> divide": 3,
+    "divide -> subtract": 2,
+    "multiply -> divide": 3,
+    "multiply -> multiply": 1,
+    "subtract -> add": 1,
+    "subtract -> divide": 18,
+    "subtract -> multiply": 1
+  },
+  "example_ids": [
+    "BLK/2014/page_119.pdf-1",
+    "AON/2014/page_47.pdf-2",
+    "MRO/2007/page_149.pdf-2",
+    "DISH/2013/page_138.pdf-3",
+    "DRE/2007/page_59.pdf-1",
+    "ETR/2002/page_24.pdf-1",
+    "ILMN/2007/page_78.pdf-3",
+    "MSI/2006/page_61.pdf-1",
+    "STT/2009/page_73.pdf-1",
+    "APD/2016/page_57.pdf-2",
+    "CDNS/2012/page_30.pdf-4",
+    "PM/2018/page_24.pdf-3",
+    "IPG/2008/page_21.pdf-3",
+    "LMT/2006/page_90.pdf-2",
+    "DRE/2009/page_56.pdf-1",
+    "LMT/2010/page_42.pdf-3",
+    "UNP/2008/page_77.pdf-3",
+    "UNP/2008/page_79.pdf-1",
+    "AMT/2005/page_54.pdf-1",
+    "CDNS/2006/page_30.pdf-3",
+    "MRO/2006/page_33.pdf-1",
+    "AMT/2012/page_125.pdf-1",
+    "LLY/2018/page_63.pdf-1",
+    "AMT/2010/page_34.pdf-1",
+    "APD/2014/page_44.pdf-2",
+    "HII/2017/page_104.pdf-2",
+    "BLL/2007/page_35.pdf-1",
+    "C/2017/page_328.pdf-1",
+    "TROW/2010/page_22.pdf-1",
+    "LMT/2015/page_99.pdf-2"
+  ]
+}

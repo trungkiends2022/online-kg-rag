@@ -22,15 +22,42 @@ class OnlineKGBuilder:
         all_triples: list[Triple] = []
 
         for row_group in retrieved.get("table_rows", []):
-            all_triples += self.extractor.extract_from_table(
-                row_group.get("table_name", "unknown_table"),
-                row_group.get("rows", []),
-                use_llm_enrichment=not row_group.get("deterministic_only", False),
-            )
+            table_name = row_group.get("table_name", "unknown_table")
+            rows = row_group.get("rows", [])
+            try:
+                all_triples += self.extractor.extract_from_table(
+                    table_name, rows,
+                    use_llm_enrichment=not row_group.get("deterministic_only", False),
+                )
+            except Exception as exc:
+                # Cell triples do not depend on model output; retain them when
+                # optional LLM table enrichment is malformed.
+                all_triples += self.extractor.extract_from_table(
+                    table_name, rows, use_llm_enrichment=False,
+                )
+                kg.extraction_errors.append({
+                    "source_type": "table", "source_id": table_name,
+                    "error": f"{type(exc).__name__}: {exc}", "fallback": "deterministic_cells",
+                })
         for passage in retrieved.get("text_passages", []):
-            all_triples += self.extractor.extract_from_text(passage["id"], passage["text"])
+            try:
+                all_triples += self.extractor.extract_from_text(
+                    passage["id"], passage["text"],
+                    context_before=passage.get("context_before", ""),
+                )
+            except Exception as exc:
+                kg.extraction_errors.append({
+                    "source_type": "text", "source_id": passage["id"],
+                    "error": f"{type(exc).__name__}: {exc}", "fallback": "skip_source",
+                })
         for snippet in retrieved.get("web_snippets", []):
-            all_triples += self.extractor.extract_from_web(snippet["url"], snippet["text"])
+            try:
+                all_triples += self.extractor.extract_from_web(snippet["url"], snippet["text"])
+            except Exception as exc:
+                kg.extraction_errors.append({
+                    "source_type": "web", "source_id": snippet["url"],
+                    "error": f"{type(exc).__name__}: {exc}", "fallback": "skip_source",
+                })
 
         for t in all_triples:
             kg.add_triple(t)

@@ -150,6 +150,22 @@ run. Nếu provider lỗi quota, dừng và tiếp tục bằng `--resume`, ho�
 mới có tên provider/model rõ ràng. `openrouter/free` chỉ phù hợp smoke test vì
 model thực tế và availability có thể thay đổi.
 
+Ví dụ dùng DeepSeek V4 Flash qua OpenRouter, với reasoning của OpenRouter:
+
+```bash
+# .env -- API key chỉ lưu trong file này, không commit.
+LLM_PROVIDER=openrouter
+OPENROUTER_API_KEY=sk-or-v1-...
+OPENROUTER_MODEL=deepseek/deepseek-v4-flash
+OPENROUTER_REASONING_ENABLED=true
+OPENROUTER_SITE_URL=http://localhost
+OPENROUTER_APP_NAME=Online KG RAG
+```
+
+`OPENROUTER_REASONING_ENABLED=true` làm client gửi trường
+`reasoning: {"enabled": true}`. Tắt biến này nếu model/route không hỗ trợ
+reasoning hoặc khi muốn kiểm soát chặt chi phí và độ trễ benchmark.
+
 Ví dụ dùng NVIDIA NIM hosted API:
 
 ```bash
@@ -326,6 +342,12 @@ Runner `src.run_baselines` hỗ trợ các phương án:
 | `path_consistency` | Online-KG nhưng chọn output bằng số path đồng ý |
 | `numerical_ir` | Online-KG + typed numerical IR có operator đóng và provenance |
 | `online_kg` | Pipeline đầy đủ với grounded consistency |
+
+Các phương án thực thi Online-KG dùng retrieval hai giai đoạn: BM25 theo câu hỏi,
+sau đó bổ sung tối đa `--second-stage-k` passage bằng query expansion deterministic
+từ numerical intent, thời gian và schema bảng. Stage 2 không gọi thêm LLM; tải API
+chỉ tăng khi các passage bổ sung được đưa qua triple extractor. Dùng
+`--second-stage-k 0` để tắt khi chạy ablation.
 
 Ví dụ chạy các baseline HybridQA trên cùng 100 câu:
 

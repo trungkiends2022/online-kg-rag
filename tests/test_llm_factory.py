@@ -31,10 +31,29 @@ def test_openai_compatible_provider_instantiates():
 
 def test_openrouter_provider_instantiates(monkeypatch):
     monkeypatch.setenv("OPENROUTER_API_KEY", "fake-key-for-test")
+    monkeypatch.setenv("OPENROUTER_MODEL", "openrouter/free")
     provider = create_provider("openrouter")
     assert isinstance(provider, LLMProvider)
     assert provider.name == "openrouter"
     assert provider.model == "openrouter/free"
+
+
+def test_openrouter_reasoning_extension_is_opt_in(monkeypatch):
+    from types import SimpleNamespace
+
+    monkeypatch.setenv("OPENROUTER_API_KEY", "fake-key-for-test")
+    monkeypatch.setenv("OPENROUTER_REASONING_ENABLED", "true")
+    provider = create_provider("openrouter")
+    captured = {}
+
+    class FakeCompletions:
+        def create(self, **kwargs):
+            captured.update(kwargs)
+            return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content="ok"))])
+
+    provider._client = SimpleNamespace(chat=SimpleNamespace(completions=FakeCompletions()))
+    assert provider.complete("hello", max_tokens=12) == "ok"
+    assert captured["extra_body"] == {"reasoning": {"enabled": True}}
 
 
 def test_deepseek_provider_instantiates(monkeypatch):

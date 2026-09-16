@@ -113,6 +113,18 @@ def test_semantic_resolution_does_not_merge_hierarchical_rows_with_different_yea
     assert left in kg.graph and right in kg.graph
 
 
+def test_semantic_resolution_does_not_merge_negated_accounting_rows():
+    kg = OnlineKG()
+    gaap = "capital expenditures on a gaap basis"
+    non_gaap = "capital expenditures on a non-gaap basis"
+    kg.add_triple(_triple(gaap, "2013", "1747.8"))
+    kg.add_triple(_triple(non_gaap, "2013", "1996.7"))
+
+    EntityResolver(similarity_fn=lambda _left, _right: 1.0).resolve(kg)
+
+    assert gaap in kg.graph and non_gaap in kg.graph
+
+
 def test_club_designator_is_resolved_without_semantic_similarity():
     kg = OnlineKG()
     kg.add_triple(_triple("Cerro Porteño", "country", "Paraguay"))

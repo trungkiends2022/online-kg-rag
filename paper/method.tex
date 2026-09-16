@@ -1,0 +1,272 @@
+\section{Method}
+\label{sec:method}
+\subsection{Overview and Retrieval Context}
+Figure~\ref{fig:pipeline} summarizes the complete pipeline and the bounded
+replanning loop.
+Given a question $q$, supplied tables $\mathcal{T}$, and an associated passage
+pool $\mathcal{D}$, Online-KG returns an answer together with its selected
+program and recorded graph evidence. The pipeline constructs one graph per
+question, proposes candidate plans, executes their programs, and ranks the
+resulting candidates. A reasoning path here is a sequence of goals and step
+dependencies; it need not correspond to a single simple path in the graph.
+Arithmetic may combine values from disconnected graph components that share a
+report context.
+
+Retrieval precedes graph construction. A first stage ranks passages by BM25
+against $q$. A second stage supplements the selected passages with a bounded
+number of previously unselected items, using deterministic query expansions
+from question cues and table headers. The implementation uses budgets $k$ and
+$b$ for these stages, respectively, and deduplicates items by source identifier.
+Up to two preceding passages are provided as antecedent-resolution context for
+supplementary items. Tables are retained from the supplied input up to the
+configured table limit; this step does not perform corpus-wide table search.
+The Python pipeline defaults to $k=10$ and $b=3$; experimental settings must
+record any runner overrides. Optional web snippets follow the same retrieval
+interface, but web access is not required by the benchmark setting.
+
+\subsection{Structural and Semantic Graph Construction}
+Let $G_q=(V_q,E_q)$ be a directed multigraph. An edge is represented as
+\begin{equation}
+ e=(h,r,t,\pi),
+\end{equation}
+where $h$ and $t$ are entity or literal nodes, $r$ is a normalized relation,
+and $\pi$ records provenance. Provenance includes a source type and identifier
+and, for structural table edges, row position, column name, and header path.
+Parallel edges retain alternative source records for the same relationship.
+
+\paragraph{Structural table edges.}
+Dataset adapters provide row dictionaries with qualified column names. The
+extractor uses the first field as the row identifier and converts each remaining
+nonempty cell into an edge:
+\begin{equation}
+ e_{ij}=\bigl(u_i,\operatorname{norm}(H_j),v_{ij},\pi_{ij}\bigr),
+\end{equation}
+where $u_i$ identifies row $i$, $H_j$ is the qualified header for column $j$,
+and $v_{ij}$ is its cell value. For hierarchical input, the adapter must retain
+the relevant header levels before extraction. For example,
+\texttt{2002 / Dividend} becomes \texttt{2002\_dividend}, distinguishing it
+from \texttt{2002\_high}. The extractor records header components from this
+qualified name. Empty row identifiers and empty cell values are skipped;
+normalized self-loops are rejected by the graph layer. Consequently, preservation
+is conditional on the adapter representation and these insertion rules, rather
+than a claim that every original cell is always retained.
+
+\paragraph{Semantic enrichment and resolution.}
+An LLM optionally extracts additional table relationships and extracts triples
+from selected passages. Structural and semantic edges are inserted into the
+same graph. If optional table enrichment fails, construction falls back to
+structural extraction for that table; a failed passage extraction is logged and
+that source is skipped. Entity resolution applies lexical normalization,
+configured aliases, structural name rules, and a conservative similarity stage.
+The default similarity function compares normalized strings, with threshold
+$0.93$ for the final stage; it is not an embedding model. Resolution events are
+logged. Source identifiers are preserved, but identical row labels across
+multiple tables can still be ambiguous because source metadata is not itself
+a unique node identifier.
+
+\paragraph{Running example: dividend change.}
+Table~\ref{tab:dividend} and a short passage illustrate the representation.
+All examples in this section are constructed demonstrations, not reported
+benchmark predictions. Suppose the question is: \emph{What is the percentage
+increase from the March dividend to the newly declared dividend?} The associated
+passage states: ``Acme declared a new dividend of 0.455 dollars per share.''
+The earlier value is $0.450$, whereas $26.50$ is a price and must not be used
+as a dividend operand.
+\begin{table}[t]
+\caption{Illustrative input with a two-level column header. The passage supplies
+an additional dividend value for the same report context.}
+\label{tab:dividend}
+\centering
+\begin{tabular}{lrrr}
+\toprule
+ & \multicolumn{3}{c}{2002} \\
+\cmidrule(lr){2-4}
+Quarter ended & High & Low & Dividend \\
+\midrule
+March 31 & 26.50 & 22.92 & 0.450 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Figure~\ref{fig:dividend-kg} separates graph edges from program data flow.
+The table row and company node need not be connected by an invented ownership
+edge: the candidate program can query both components within the supplied
+report context. An incorrect company association remains a potential planning
+or extraction error.
+\input{figures/dividend.tex}
+
+\subsection{Candidate Planning and Executable Programs}
+The planner receives the question, a bounded graph summary, and numerical
+operation hints inferred from the question and graph schema. The current
+summary includes up to 50 node names and 50 relations. It requests $N$
+distinct candidate plans, each with step goals and optional dependencies.
+These plans are jointly generated candidates, not statistically independent
+samples. The code synthesizer then translates each plan $p_i$ into a program
+$c_i$ using the available graph schema and query interface.
+
+Forward lookup, \texttt{get\_neighbors}, returns objects of matching outgoing
+edges; reverse lookup, \texttt{get\_sources}, returns matching subjects.
+Programs may also inspect relations and filter entity lists. The synthesizer
+validates generated Python, including import rejection and checks on recognized
+API calls. The executor exposes a restricted set of built-ins and enforces a
+five-second default timeout. Its output is read from the variable
+\texttt{result}. These restrictions are implementation safeguards, not a
+formally verified isolation boundary.
+
+For the illustrative graph, the following program reads both operands from
+edges rather than embedding the answer:
+\begin{lstlisting}[caption={Illustrative Python program for the dividend graph.},label={lst:dividend}]
+old = float(kg.get_neighbors(
+    "March 31", "2002_dividend")[0])
+new = float(kg.get_neighbors(
+    "Acme", "declared_dividend")[0])
+result = (new - old) / old * 100
+\end{lstlisting}
+This example assumes each lookup has one matching value and the operands share
+a unit. Its result is
+\begin{equation}
+ 100\frac{0.455-0.450}{0.450}=1.111\ldots\ \text{percent}.
+\end{equation}
+The multiplier $100$ is an operation constant. Missing values, multiple
+conflicting values, zero denominators, and incompatible units require explicit
+handling in a generated program; the illustrative indexing is not a general
+ambiguity-resolution procedure.
+
+\paragraph{Contrasting executable candidates.}
+Figure~\ref{fig:kg-paths} extends the running example with three constructed
+plans and their programs. A uses the dividend values with the intended
+operation, B reverses the subtraction, and C substitutes the high-price cell
+for the earlier dividend. Executing the programs produces different answers,
+but each accesses two edges from the same two source types. When evaluated
+together, all three receive score $7.25$: their agreement term is $1/3$,
+and the remaining support and length terms are identical. Candidate order
+breaks the tie; this is not evidence that the evaluator detects either error.
+The single-candidate score reported below instead uses agreement $1$.
+\input{figures/kg-paths}
+
+\paragraph{Example: relational composition.}
+For an illustrative question asking which country a club's player was born in,
+consider the triples $(\mathrm{Lina},\mathrm{club},\mathrm{Orion\ FC})$
+from a table and $(\mathrm{Lina},\mathrm{born\_in},\mathrm{Porto})$ and
+$(\mathrm{Porto},\mathrm{country},\mathrm{Portugal})$ from a passage.
+A program first uses reverse lookup to find Lina from Orion FC, then follows
+\texttt{born\_in} and \texttt{country}. This example requires a join and a
+relation chain rather than arithmetic. The terminal answer, Portugal, occurs
+directly as an edge endpoint, unlike the derived percentage in the first example.
+
+\subsection{Execution Traces and Typed Numerical Variant}
+Execution produces $x_i=(s_i,y_i,\mathcal{E}_i)$: a success indicator, output,
+and set of recorded evidence references. A tracing wrapper records provenance
+for edges returned by forward and reverse lookups. Returned neighbor values
+are deduplicated, while their parallel supporting edges remain in the trace.
+The trace covers returned edges even if subsequent Python computation discards
+some of them. Thus, $\mathcal{E}_i$ records access, not full operand-level
+causal dependence.
+
+The numerical variant replaces Python generation with a JSON program
+containing ordered steps $(\mathrm{id},\mathrm{operator},\mathrm{arguments},
+\mathrm{unit})$ and a result reference. Validation checks the operator set,
+step identifiers, and references to earlier steps. Lookup and constant steps
+supply inputs to arithmetic, comparison, aggregation, and label-selection
+operators. For the dividend example, its conceptual sequence is
+\begin{equation}
+\begin{split}
+ v_1&=\operatorname{lookup}(\mathrm{March\ 31},\mathrm{2002\_dividend}),\\
+ v_2&=\operatorname{lookup}(\mathrm{Acme},\mathrm{declared\_dividend}),\\
+ v_3&=\operatorname{subtract}(v_2,v_1),\quad
+ v_4=\operatorname{divide}(v_3,v_1),\\
+ v_5&=\operatorname{multiply}(v_4,100).
+\end{split}
+\end{equation}
+This notation illustrates dependencies rather than the literal JSON schema.
+The interpreter records intermediate values and operators. Unit annotations
+and explicit conversions aid inspection but do not constitute a general
+proof of dimensional correctness. Hierarchical-table questions can additionally
+use label--value selection: for values $(\mathrm{North},12)$ and
+$(\mathrm{South},18)$, an argmax operation returns South, rather than only 18.
+The operator vocabulary also includes count, range, threshold filters, and
+rank-based selection; support for an operator does not ensure correct operand
+selection.
+
+\subsection{Evidence-Aware Candidate Selection}
+\label{sec:selection}
+The implemented selector first rejects execution failures, empty outputs, and
+candidates without evidence. A direct-support heuristic matches normalized
+output terms to evidence endpoints using equality, token membership, or
+substring containment. Let $\mathcal{D}_i\subseteq\mathcal{E}_i$ denote the
+matched references. An output with $\mathcal{D}_i\ne\varnothing$ is classified
+as directly supported. Numeric or Boolean outputs with nonempty evidence may
+instead be admitted as derived results. This latter gate does not verify that
+every operand was obtained from the trace.
+
+Outputs are grouped by the evaluator's serialization key: scalar values use
+JSON serialization, and sequence-like values use sorted string elements.
+Grouping is not general semantic or numeric-tolerance equivalence. For an
+admissible output group $y$, evidence is pooled across its admitted candidates:
+\begin{equation}
+ \mathcal{E}(y)=\bigcup_{i:\,\operatorname{key}(y_i)=\operatorname{key}(y)}
+ \mathcal{E}_i.
+\end{equation}
+Let $n_s(y)$ count distinct $(\mathrm{source\ type},\mathrm{source\ id})$
+pairs and $n_t(y)$ count distinct $(h,r,t)$ triples in this union. Their
+saturated support terms are
+\begin{equation}
+ U(y)=\min\{n_s(y)/3,1\},\qquad
+ T(y)=\min\{n_t(y)/4,1\}.
+\end{equation}
+Let $I_{\rm tab},I_{\rm txt},I_{\rm web}$ indicate which source types occur
+in the group. The provenance bonus is
+\begin{equation}
+ B(y)=2I_{\rm tab}+I_{\rm txt}+0.25I_{\rm web}
+       +1.5I_{\rm tab}I_{\rm txt}.
+\end{equation}
+These are fixed heuristic weights in the current implementation, not learned
+probabilities or guarantees of source independence.
+
+Agreement $A(y)$ is the fraction of successful, nonempty candidates with the
+same output key. In the implementation this denominator is formed before the
+evidence gate, so it can include candidates subsequently rejected for lacking
+evidence. The per-candidate direct-match term is
+\begin{equation}
+ P_i=\begin{cases}
+ |\mathcal{D}_i|/\max\{a_i,|\mathcal{E}_i|,1\}, & \text{direct support},\\
+ 0.5, & \text{derived numeric or Boolean output},
+ \end{cases}
+\end{equation}
+where $a_i$ is the recorded accessed-edge count. Although the implementation
+labels this quantity ``evidence precision,'' it is a matching heuristic rather
+than precision against annotated gold evidence. With $L_i$ planned steps,
+the final score is
+\begin{equation}
+ S_i=4U(y_i)+B(y_i)+1.5T(y_i)+A(y_i)+P_i-0.5L_i.
+\end{equation}
+Rejected candidates receive $-\infty$. The highest-scoring admitted candidate
+is selected; ties follow candidate order. Because support is pooled by output,
+a selected candidate can benefit from evidence accessed by another candidate
+with the same answer. Its own returned trace remains $\mathcal{E}_i$.
+
+For the dividend example, assume one admitted three-step plan accesses exactly
+the two operand edges, one table source and one text source. Then $U=2/3$,
+$T=1/2$, $B=4.5$, $A=1$, and $P=0.5$, giving $S\approx7.92$.
+This calculated score illustrates the rule, not a measured model prediction.
+Reversing the subtraction while accessing the same edges could obtain the same
+score. The example makes explicit why evidence-aware selection cannot alone
+establish semantic correctness.
+
+\subsection{Failure Handling and Answer Production}
+A synthesis or execution failure rejects the affected candidate while allowing
+other candidates to compete. If the Python mode yields no admissible candidate,
+a symbolic graph-search fallback may supply additional executed candidates.
+This fallback is disabled in the numerical-IR variant. If selection still
+fails, the pipeline generates a fresh set of plans over the same graph, up to
+$R$ replanning rounds. It does not retrieve again or rebuild the graph during
+these rounds, and candidates are not accumulated across rounds. An empty graph
+or exhausted budget yields no answer and an error record.
+
+For a selected numeric scalar, answer production returns its executed value
+without LLM rewriting. Boolean values are rendered as yes/no. Other outputs
+can pass through a verbalizer, with a normalized scalar check and fallback to
+the preferred observed entity alias. The returned artifact includes the chosen
+program, its evidence, candidate diagnostics, and the per-query graph. Experiments
+must report $N$, $R$, retrieval budgets, execution mode, and fallback policy,
+since each changes either the candidate pool or computational cost.

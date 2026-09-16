@@ -15,6 +15,9 @@ class OpenRouterProvider(LLMProvider):
         from openai import OpenAI
 
         self.model = model or os.environ.get("OPENROUTER_MODEL", "openrouter/free")
+        self.reasoning_enabled = os.environ.get(
+            "OPENROUTER_REASONING_ENABLED", "false"
+        ).strip().lower() in {"1", "true", "yes", "on"}
         headers = {}
         if referer := os.environ.get("OPENROUTER_SITE_URL"):
             headers["HTTP-Referer"] = referer
@@ -36,5 +39,10 @@ class OpenRouterProvider(LLMProvider):
         )
         if temperature is not None:
             kwargs["temperature"] = temperature
+        # OpenRouter exposes provider reasoning as a top-level request field.
+        # ``extra_body`` keeps this extension compatible with the OpenAI SDK
+        # while leaving other providers and models unchanged.
+        if self.reasoning_enabled:
+            kwargs["extra_body"] = {"reasoning": {"enabled": True}}
         response = self._client.chat.completions.create(**kwargs)
         return response.choices[0].message.content or ""

@@ -12,11 +12,36 @@ from typing import Any
 
 
 OPERATOR_RE = re.compile(r"([A-Za-z_]+)\s*\(")
+CORE_ARITHMETIC_OPERATORS = frozenset({"add", "subtract", "multiply", "divide"})
+
+
+def program_operators(item: dict[str, Any]) -> tuple[str, ...]:
+    """Return the ordered FinQA operators in the gold program."""
+    qa = item.get("qa", {})
+    return tuple(OPERATOR_RE.findall(str(qa.get("program", ""))))
+
+
+def filter_records(
+    records: list[dict[str, Any]],
+    *,
+    exact_steps: int | None = None,
+    allowed_operators: set[str] | frozenset[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Select records by gold-program complexity and operator vocabulary."""
+    selected = []
+    for item in records:
+        operators = program_operators(item)
+        if exact_steps is not None and len(operators) != exact_steps:
+            continue
+        if allowed_operators is not None and not set(operators) <= set(allowed_operators):
+            continue
+        selected.append(item)
+    return selected
 
 
 def attributes(item: dict[str, Any]) -> tuple[str, str, str]:
     qa = item.get("qa", {})
-    operators = OPERATOR_RE.findall(str(qa.get("program", "")))
+    operators = program_operators(item)
     final_operator = operators[-1] if operators else "none"
     step_bucket = "1" if len(operators) <= 1 else "2" if len(operators) == 2 else "3+"
     evidence = qa.get("gold_inds") or {}
@@ -87,10 +112,24 @@ def main() -> None:
     parser.add_argument("--size", type=int, choices=range(1, 884), default=100)
     parser.add_argument("--seed", type=int, default=2027)
     parser.add_argument("--report", type=Path)
+    parser.add_argument(
+        "--exact-steps", type=int,
+        help="keep only examples with exactly this many gold-program operations",
+    )
+    parser.add_argument(
+        "--core-arithmetic-only", action="store_true",
+        help="keep only add/subtract/multiply/divide gold programs",
+    )
     args = parser.parse_args()
 
     records = json.loads(args.input.read_text(encoding="utf-8"))
-    sample = balanced_sample(records, args.size, args.seed)
+    allowed_operators = CORE_ARITHMETIC_OPERATORS if args.core_arithmetic_only else None
+    eligible = filter_records(
+        records,
+        exact_steps=args.exact_steps,
+        allowed_operators=allowed_operators,
+    )
+    sample = balanced_sample(eligible, args.size, args.seed)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(sample, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     report = {
@@ -99,8 +138,17 @@ def main() -> None:
         "seed": args.seed,
         "sample_size": args.size,
         "population_size": len(records),
+        "selection_criteria": {
+            "exact_steps": args.exact_steps,
+            "allowed_operators": sorted(allowed_operators) if allowed_operators else None,
+        },
+        "eligible_population_size": len(eligible),
         "population_distribution": _distribution(records),
+        "eligible_population_distribution": _distribution(eligible),
         "sample_distribution": _distribution(sample),
+        "operator_sequences": dict(sorted(Counter(
+            " -> ".join(program_operators(item)) for item in sample
+        ).items())),
         "example_ids": [str(item.get("id") or item.get("filename")) for item in sample],
     }
     report_path = args.report or args.output.with_suffix(".distribution.json")

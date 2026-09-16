@@ -47,3 +47,13 @@ def test_total_name_alone_does_not_force_addition():
         "What is total operating income in 2013?", _kg_with_relation("operating_income")
     )
     assert "add" not in intent["preferred_operators"]
+
+
+def test_scoped_annual_interest_prefers_explicit_fact_and_inclusive_period():
+    kg = _kg_with_relation("annual_interest_amount")
+    intent = infer_operation_intent(
+        "What is the interest from 2017 to 2025 as a percentage of borrowings?", kg
+    )
+
+    assert "multiply" in intent["preferred_operators"]
+    assert any("contains 9 years" in rule for rule in intent["constraints"])
