@@ -80,3 +80,57 @@ LLM_PROVIDER=openai_compatible .venv/bin/python -m src.run_baselines \
 The 20/50/100-example subsets are intended for smoke testing and pilot evaluation.
 Final paper results should use the full fixed development split after all
 prompts and configurations have been frozen.
+
+## Controlled FinQA 500
+
+The following command produces five non-overlapping 100-example shards from
+FinQA dev. Every gold program has one or two operations and only uses `add`,
+`subtract`, `multiply`, or `divide`.
+
+```bash
+.venv/bin/python -m src.sample_finqa \
+  --input data/FinQA/dataset/dev.json \
+  --output benchmarks/finqa/finqa-dev-1to2step-core-100-seed2027.json \
+  --size 100 --seed 2027 --min-steps 1 --max-steps 2 \
+  --core-arithmetic-only --shards 5
+```
+
+Run shards sequentially by replacing `shard01` with `shard02` through `shard05`:
+
+```bash
+LLM_PROVIDER=openrouter .venv/bin/python -m src.run_baselines \
+  --dataset finqa --method numerical_ir \
+  --input benchmarks/finqa/finqa-dev-1to2step-core-100-seed2027-shard01.json \
+  --output data/results/finqa-dev-1to2step-core-shard01.jsonl \
+  --top-k 5 --n-paths 1 --max-replans 0 \
+  --max-output-tokens 2048 --temperature 0 --finqa-table-format official \
+  --llm-timeout-seconds 35 --llm-sdk-retries 0 --resume
+```
+
+## HybridQA table + text 100
+
+This subset contains 100 dev examples with a verified table file, non-empty
+linked passage file, answer, and unique table ID.
+
+```bash
+.venv/bin/python -m src.sample_hybridqa \
+  --input data/HybridQA/released_data/dev.json \
+  --tables-dir data/WikiTables-WithLinks/tables_tok \
+  --passages-dir data/WikiTables-WithLinks/request_tok \
+  --output benchmarks/hybridqa/hybridqa-dev-table-text-100-seed2027.json \
+  --size 100 --seed 2027
+```
+
+Run the HybridQA set with both table and linked-text sources:
+
+```bash
+LLM_PROVIDER=openrouter .venv/bin/python -m src.run_baselines \
+  --dataset hybridqa --method online_kg \
+  --input benchmarks/hybridqa/hybridqa-dev-table-text-100-seed2027.json \
+  --tables-dir data/WikiTables-WithLinks/tables_tok \
+  --passages-dir data/WikiTables-WithLinks/request_tok \
+  --output data/results/hybridqa-dev-table-text-100-online-kg.jsonl \
+  --top-k 5 --second-stage-k 2 --n-paths 1 --max-replans 0 \
+  --max-output-tokens 2048 --temperature 0 \
+  --llm-timeout-seconds 35 --llm-sdk-retries 0 --resume
+```

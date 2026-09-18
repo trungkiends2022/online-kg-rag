@@ -25,6 +25,8 @@ def filter_records(
     records: list[dict[str, Any]],
     *,
     exact_steps: int | None = None,
+    min_steps: int | None = None,
+    max_steps: int | None = None,
     allowed_operators: set[str] | frozenset[str] | None = None,
 ) -> list[dict[str, Any]]:
     """Select records by gold-program complexity and operator vocabulary."""
@@ -33,10 +35,32 @@ def filter_records(
         operators = program_operators(item)
         if exact_steps is not None and len(operators) != exact_steps:
             continue
+        if min_steps is not None and len(operators) < min_steps:
+            continue
+        if max_steps is not None and len(operators) > max_steps:
+            continue
         if allowed_operators is not None and not set(operators) <= set(allowed_operators):
             continue
         selected.append(item)
     return selected
+
+
+def disjoint_balanced_shards(
+    records: list[dict[str, Any]], *, shard_size: int, shards: int, seed: int,
+) -> list[list[dict[str, Any]]]:
+    """Create reproducible, non-overlapping balanced shards from one population."""
+    if shard_size * shards > len(records):
+        raise ValueError(
+            f"requested {shards} shards of {shard_size}, but only {len(records)} records are eligible"
+        )
+    remaining = list(records)
+    result = []
+    for shard_index in range(shards):
+        shard = balanced_sample(remaining, shard_size, seed + shard_index)
+        selected_ids = {id(item) for item in shard}
+        remaining = [item for item in remaining if id(item) not in selected_ids]
+        result.append(shard)
+    return result
 
 
 def attributes(item: dict[str, Any]) -> tuple[str, str, str]:
@@ -116,9 +140,15 @@ def main() -> None:
         "--exact-steps", type=int,
         help="keep only examples with exactly this many gold-program operations",
     )
+    parser.add_argument("--min-steps", type=int, help="minimum gold-program operations")
+    parser.add_argument("--max-steps", type=int, help="maximum gold-program operations")
     parser.add_argument(
         "--core-arithmetic-only", action="store_true",
         help="keep only add/subtract/multiply/divide gold programs",
+    )
+    parser.add_argument(
+        "--shards", type=int, default=1,
+        help="write this many disjoint shards; --output is used as a filename prefix",
     )
     args = parser.parse_args()
 
@@ -127,33 +157,54 @@ def main() -> None:
     eligible = filter_records(
         records,
         exact_steps=args.exact_steps,
+        min_steps=args.min_steps,
+        max_steps=args.max_steps,
         allowed_operators=allowed_operators,
     )
-    sample = balanced_sample(eligible, args.size, args.seed)
+    if args.shards < 1:
+        raise ValueError("shards must be positive")
+    samples = disjoint_balanced_shards(
+        eligible, shard_size=args.size, shards=args.shards, seed=args.seed,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(sample, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    report = {
+    report_base = {
         "source": str(args.input),
-        "output": str(args.output),
         "seed": args.seed,
-        "sample_size": args.size,
+        "shard_size": args.size,
+        "shards": args.shards,
         "population_size": len(records),
         "selection_criteria": {
             "exact_steps": args.exact_steps,
+            "min_steps": args.min_steps,
+            "max_steps": args.max_steps,
             "allowed_operators": sorted(allowed_operators) if allowed_operators else None,
         },
         "eligible_population_size": len(eligible),
         "population_distribution": _distribution(records),
         "eligible_population_distribution": _distribution(eligible),
-        "sample_distribution": _distribution(sample),
-        "operator_sequences": dict(sorted(Counter(
-            " -> ".join(program_operators(item)) for item in sample
-        ).items())),
-        "example_ids": [str(item.get("id") or item.get("filename")) for item in sample],
     }
-    report_path = args.report or args.output.with_suffix(".distribution.json")
-    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps(report, ensure_ascii=False, indent=2))
+    reports = []
+    for index, sample in enumerate(samples, start=1):
+        suffix = f"-shard{index:02d}" if args.shards > 1 else ""
+        output = args.output.with_name(f"{args.output.stem}{suffix}{args.output.suffix}")
+        output.write_text(json.dumps(sample, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        report = {
+            **report_base,
+            "shard_index": index,
+            "output": str(output),
+            "sample_distribution": _distribution(sample),
+            "operator_sequences": dict(sorted(Counter(
+                " -> ".join(program_operators(item)) for item in sample
+            ).items())),
+            "example_ids": [str(item.get("id") or item.get("filename")) for item in sample],
+        }
+        report_path = (
+            args.report.with_name(f"{args.report.stem}{suffix}{args.report.suffix}")
+            if args.report else output.with_suffix(".distribution.json")
+        )
+        report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        reports.append(report)
+    print(json.dumps(reports, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":

@@ -29,18 +29,34 @@ from src.evaluation.answer_synthesizer import AnswerSynthesizer
 
 
 class OnlineKGPipeline:
-    def __init__(self, temperature: float | None = None, execution_mode: str = "python"):
+    def __init__(
+        self,
+        temperature: float | None = None,
+        execution_mode: str = "python",
+        finqa_canonical_ratio: bool = False,
+        max_output_tokens: int = 4096,
+        table_llm_enrichment: bool = True,
+    ):
         if execution_mode not in {"python", "numerical_ir"}:
             raise ValueError(f"unsupported execution mode: {execution_mode}")
         self.execution_mode = execution_mode
+        self.finqa_canonical_ratio = finqa_canonical_ratio
+        self.max_output_tokens = max_output_tokens
+        self.table_llm_enrichment = table_llm_enrichment
         self.kg_builder = OnlineKGBuilder(
-            EntityRelationExtractor(temperature=temperature)
+            EntityRelationExtractor(
+                temperature=temperature, max_output_tokens=max_output_tokens
+            )
         )
-        self.planner = PathPlanner(temperature=temperature)
+        self.planner = PathPlanner(
+            temperature=temperature, max_output_tokens=max_output_tokens
+        )
         self.symbolic_search = SymbolicPathSearcher()
         self.code_synth = CodeSynthesizer(temperature=temperature)
         self.executor = SandboxExecutor()
-        self.ir_synth = NumericalIRSynthesizer(temperature=temperature)
+        self.ir_synth = NumericalIRSynthesizer(
+            temperature=temperature, max_output_tokens=max_output_tokens
+        )
         self.ir_executor = NumericalIRExecutor()
         self.evaluator = PathEvaluator()
         self.answerer = AnswerSynthesizer(temperature=temperature)
@@ -73,6 +89,12 @@ class OnlineKGPipeline:
             question, table_rows, text_passages, web_snippets,
             top_k=retrieval_top_k, second_stage_k=retrieval_second_stage_k,
         )
+        # FinQA already supplies a normalized table.  Its deterministic cell
+        # triples retain every value and header, while skipping optional table
+        # paraphrasing avoids the largest and least reliable OpenRouter calls.
+        if not self.table_llm_enrichment:
+            for row_group in retrieved.get("table_rows", []):
+                row_group["deterministic_only"] = True
         kg = self.kg_builder.build(retrieved)
         operation_intent = infer_operation_intent(question, kg)
         last_diagnostics = []
@@ -87,12 +109,11 @@ class OnlineKGPipeline:
             )
             try:
                 paths = self.planner.generate_candidates(question, kg, n=n_paths) if n_paths > 0 else []
-            except Exception:
-                # A deterministic typed candidate can still be valid even if a
-                # provider fails while producing optional natural-language paths.
-                # Preserve the original exception only when there is no fallback.
-                if not template_candidates:
-                    raise
+            except Exception as error:
+                # Planning is optional: templates and symbolic search can still
+                # solve a case.  Keep a diagnostic instead of failing the whole
+                # benchmark item when a provider or a custom planner crashes.
+                self.planner.last_error = f"{type(error).__name__}: {error}"
                 paths = []
 
             candidates = []
@@ -110,7 +131,12 @@ class OnlineKGPipeline:
             for path in paths:
                 try:
                     if self.execution_mode == "numerical_ir":
-                        program = self.ir_synth.synthesize(path, question, kg)
+                        program = self.ir_synth.synthesize(
+                            path,
+                            question,
+                            kg,
+                            finqa_canonical_ratio=self.finqa_canonical_ratio,
+                        )
                         code = json.dumps(program.to_dict(), ensure_ascii=False)
                         result = self.ir_executor.run(program, kg)
                         ir_validation[path.path_id] = (True, True)
@@ -198,6 +224,8 @@ class OnlineKGPipeline:
                     "full_kg": kg.to_trace(),
                     "operation_intent": operation_intent,
                     "candidate_diagnostics": last_diagnostics,
+                    "planner_error": self.planner.last_error,
+                    "extraction_errors": kg.extraction_errors,
                     "replans_used": attempt,
                     "execution_mode": self.execution_mode,
                     "retrieval_trace": retrieved.get("retrieval_trace", {}),
@@ -211,6 +239,8 @@ class OnlineKGPipeline:
             "full_kg": kg.to_trace(),
             "operation_intent": operation_intent,
             "candidate_diagnostics": last_diagnostics,
+            "planner_error": self.planner.last_error,
+            "extraction_errors": kg.extraction_errors,
             "replans_used": max_replans,
             "retrieval_trace": retrieved.get("retrieval_trace", {}),
         }

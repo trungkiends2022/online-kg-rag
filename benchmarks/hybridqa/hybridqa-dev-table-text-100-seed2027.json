@@ -1,0 +1,702 @@
+[
+  {
+    "question_id": "4ab9c14a7cc6020f",
+    "question": "Which team won silver when the competition was held in the capital and largest city of the autonomous community of Catalonia ?",
+    "table_id": "FIRS_Senior_Men's_Inline_Hockey_World_Championships_2",
+    "answer-text": "United States",
+    "question_postag": "NNP NN VBD RB WRB DT NN VBD VBN IN DT NN CC JJS NN IN DT JJ NN IN NNP ."
+  },
+  {
+    "question_id": "dbbc068c7187196c",
+    "question": "Which country 's border is close to the city whose university was founded in 1950 ?",
+    "table_id": "List_of_universities_in_Pakistan_2",
+    "answer-text": "Afghanistan",
+    "question_postag": "JJ NN POS NN VBZ RB TO DT NN WP$ NN VBD VBN IN CD ."
+  },
+  {
+    "question_id": "0e3fb387cf42b338",
+    "question": "The Prince George , British Columbia radio station with frequency 0090.3 FM has a transmitter on top of what mountain ?",
+    "table_id": "Media_in_Prince_George,_British_Columbia_0",
+    "answer-text": "Mount Seymour",
+    "question_postag": "DT NNP NNP , NNP NNP NN NN IN NN CD NNP VBZ DT NN IN NN IN WP NN ."
+  },
+  {
+    "question_id": "838aac5f49b4c172",
+    "question": "What is the nickname given to the player whose career lasted from 1968 to 1974 ?",
+    "table_id": "List_of_Persepolis_F.C._players_0",
+    "answer-text": "Paa Talaaee",
+    "question_postag": "WP VBZ DT JJ VBN TO DT NN WP$ NN VBN IN CD TO CD ."
+  },
+  {
+    "question_id": "a269b85316c926cf",
+    "question": "What genre was the earliest album ?",
+    "table_id": "List_of_year-end_number-one_albums_(New_Zealand)_0",
+    "answer-text": "progressive rock",
+    "question_postag": "WP NN VBD DT JJS NN ."
+  },
+  {
+    "question_id": "f9d774663b4cf842",
+    "question": "What kind of river is referenced by the name of the state which hosts the ING New England Golf Classic ?",
+    "table_id": "2011_LPGA_Futures_Tour_0",
+    "answer-text": "tidal",
+    "question_postag": "WP NN IN NN VBZ VBN IN DT NN IN DT NN WDT VBZ DT NNP NNP NNP NNP NNP ."
+  },
+  {
+    "question_id": "a102534600abe4d3",
+    "question": "Parly located on what peninsula is the place where the wind farm south of Sundrop Farms will be ?",
+    "table_id": "Wind_power_in_South_Australia_1",
+    "answer-text": "Eyre",
+    "question_postag": "RB VBN IN WP NN VBZ DT NN WRB DT NN NN NN IN NNP NNP MD VB ."
+  },
+  {
+    "question_id": "05a9815876b1491b",
+    "question": "What is the country for the airport that it at an elevation of 5 m ( 16 ft ) , therefore at risk of serious flooding ?",
+    "table_id": "List_of_the_busiest_airports_in_Central_America_4",
+    "answer-text": "Belize City",
+    "question_postag": "WP VBZ DT NN IN DT NN IN PRP IN DT NN IN CD NN ( CD NN ) , RB IN NN IN JJ NN ."
+  },
+  {
+    "question_id": "3c67a80a1ac83640",
+    "question": "What were the previous team colors of the MLB team that went longer than the Pittsburgh Pirates not winning a pennant ?",
+    "table_id": "List_of_Major_League_Baseball_franchise_postseason_droughts_2",
+    "answer-text": "royal blue and gold",
+    "question_postag": "WP VBD DT JJ NN NNS IN DT NNP NN WDT VBD JJR IN DT NNP NNP RB VBG DT NN ."
+  },
+  {
+    "question_id": "bc4238f3b67aae5a",
+    "question": "What is the Southern Hemisphere of the festival in which people dodge churchyards , stiles , and crossroads , since spirits are thought to convene there ?",
+    "table_id": "Neo-Druidism_0",
+    "answer-text": "30 April , or 1 May",
+    "question_postag": "WP VBZ DT NNP NNP IN DT NN IN WDT NNS VBP NNS , NNS , CC NNS , IN NNS VBP VBN TO VB RB ."
+  },
+  {
+    "question_id": "392326622341c6cd",
+    "question": "What is the longest event contested internationally by the athlete to win a medal on 30 July ?",
+    "table_id": "South_Korea_at_the_2012_Summer_Olympics_0",
+    "answer-text": "1,500-meter freestyle",
+    "question_postag": "WP VBZ DT JJS NN VBN RB IN DT NN TO VB DT NN IN CD NNP ."
+  },
+  {
+    "question_id": "aacc7a9edca15a6e",
+    "question": "What is the producer of the film Angrej wife 's name ?",
+    "table_id": "List_of_highest-grossing_Tollywood_films_9",
+    "answer-text": "wife producer Pammi Baweja",
+    "question_postag": "WP VBZ DT NN IN DT NN NNP NN POS NN ."
+  },
+  {
+    "question_id": "96551046ac83465f",
+    "question": "Who is the oldest player on 2012 Sporting Kansas City ?",
+    "table_id": "2012_Sporting_Kansas_City_season_0",
+    "answer-text": "Jimmy Nielsen",
+    "question_postag": "WP VBZ DT JJS NN IN CD VBG NNP NNP ."
+  },
+  {
+    "question_id": "8435886fc262e0ae",
+    "question": "Which of the teams in Jupiter has the Major League Affiliate who was been playing the longest ?",
+    "table_id": "List_of_Minor_League_Baseball_leagues_and_teams_16",
+    "answer-text": "GCL Cardinals",
+    "question_postag": "WDT IN DT NNS IN NNP VBZ DT NNP NNP NNP WP VBD VBN VBG DT JJS ."
+  },
+  {
+    "question_id": "58220b9e398ac82c",
+    "question": "What is the current position of the club that was established through the merger of New Brighton AFC and Rangers AFC in 2007 ?",
+    "table_id": "Mainland_Premier_League_0",
+    "answer-text": "3rd",
+    "question_postag": "WP VBZ DT JJ NN IN DT NN WDT VBD VBN IN DT NN IN NNP NNP NNP CC NNP NNP IN CD ."
+  },
+  {
+    "question_id": "8889405c463c3f81",
+    "question": "What is the name of the school that is located in the suburb whose main industry in town is wheat farming ?",
+    "table_id": "List_of_schools_in_rural_Western_Australia_0",
+    "answer-text": "Binnu Primary School",
+    "question_postag": "WP VBZ DT NN IN DT NN WDT VBZ VBN IN DT NN WP$ JJ NN IN NN VBZ JJ VBG ."
+  },
+  {
+    "question_id": "d5712ff57caa71c2",
+    "question": "Where is the park featuring the Steadman Heritage Farmstead Museum located ?",
+    "table_id": "List_of_nature_centers_in_Tennessee_0",
+    "answer-text": "Kingsport",
+    "question_postag": "WRB VBZ DT NN VBG DT NNP NNP NNP NNP VBN ."
+  },
+  {
+    "question_id": "ede24655b7ed3e89",
+    "question": "What is the city or town of the historic place that is a one-story , gable-front rectangular frame building measuring approximately 500 square feet ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Dent_County,_Missouri_0",
+    "answer-text": "Salem",
+    "question_postag": "WP VBZ DT NN CC NN IN DT JJ NN WDT VBZ DT JJ , JJ NN NN VBG VBG RB CD JJ NNS ."
+  },
+  {
+    "question_id": "44dc7e2d452ae4fa",
+    "question": "How far is the park voted `` Best Kids ' Area '' from Cincinnati ?",
+    "table_id": "Amusement_Today_18",
+    "answer-text": "24 miles",
+    "question_postag": "WRB RB VBZ DT NN VBD `` JJS NNP POS NNP '' IN NNP ."
+  },
+  {
+    "question_id": "29636e460014a1d0",
+    "question": "Where is this retail company that provides economic services such as management of money headquartered ?",
+    "table_id": "List_of_companies_traded_on_the_JSE_5",
+    "answer-text": "Parow , Cape Town",
+    "question_postag": "WRB VBZ DT JJ NN WDT VBZ JJ NNS JJ IN NN IN NN VBN ."
+  },
+  {
+    "question_id": "8b5f97a47681ff1f",
+    "question": "What is the nickname of the club that Bob Cheek played for ?",
+    "table_id": "1975_Knockout_Carnival_1",
+    "answer-text": "The Kangaroos",
+    "question_postag": "WP VBZ DT NN IN DT NN WDT NNP NNP VBD IN ."
+  },
+  {
+    "question_id": "d201e4699edeaf8e",
+    "question": "What is the party affiliation of the recently elected mayor of the city that has a suburb with 11,000 residents ?",
+    "table_id": "List_of_schools_in_Hunter_and_the_Central_Coast_4",
+    "answer-text": "Labor",
+    "question_postag": "WP VBZ DT NN NN IN DT RB VBN NN IN DT NN WDT VBZ DT NN IN CD NNS ."
+  },
+  {
+    "question_id": "4fe797a61ecf1e3a",
+    "question": "Which city is this video game , published by the company founded in 1983 in Boulder , Colorado , set in ?",
+    "table_id": "Index_of_MS-DOS_games_(V)_0",
+    "answer-text": "San Francisco",
+    "question_postag": "JJ NN VBZ DT JJ NN , VBN IN DT NN VBD IN CD IN NNP , NNP , VBN IN ."
+  },
+  {
+    "question_id": "8bf5b6d786fcf616",
+    "question": "By what percentage did the city 's municipal population decline over the last decade whose venue is home to the Warhawks men 's and women 's basketball teams ?",
+    "table_id": "1985_NCAA_Women's_Division_I_Basketball_Tournament_2",
+    "answer-text": "8.1 percent",
+    "question_postag": "IN WP NN VBD DT NN POS JJ NN NN IN DT JJ NN WP$ NN VBZ VBN TO DT NNP NNS POS CC NNS POS NN NNS ."
+  },
+  {
+    "question_id": "689cb23ab574e7df",
+    "question": "Where did the team of the Marijampolė Football Arena win its first trophy ?",
+    "table_id": "2011_A_Lyga_0",
+    "answer-text": "the Lithuanian Cup",
+    "question_postag": "WRB VBD DT NN IN DT NNP NNP NNP VB PRP$ JJ NN ."
+  },
+  {
+    "question_id": "40c90d425dd103e2",
+    "question": "Which peninsula is the home country of Mariya Shatalova in a dispute with Russia over ?",
+    "table_id": "2010_European_Team_Championships_Super_League_27",
+    "answer-text": "Crimean Peninsula",
+    "question_postag": "JJ NN VBZ DT NN NN IN NNP NNP IN DT NN IN NNP IN ."
+  },
+  {
+    "question_id": "2533b8545f309e03",
+    "question": "Who is the +71.5 kg winner when the 66.5 kg winner is the one who was born on October 14 , 1990 ?",
+    "table_id": "World_Nogi_Brazilian_Jiu-Jitsu_Championship_1",
+    "answer-text": "Talita Nogueira",
+    "question_postag": "WP VBZ DT JJ NN NN WRB DT CD NN NN VBZ DT NN WP VBD VBN IN NNP CD , CD ."
+  },
+  {
+    "question_id": "7c5caa876e170005",
+    "question": "Who is the developer of the shopping mall whose entire ground floor is occupied by Robinsons Supermarket ?",
+    "table_id": "List_of_shopping_malls_in_the_Philippines_18",
+    "answer-text": "City Government of Pagadian",
+    "question_postag": "WP VBZ DT NN IN DT NN NN WP$ JJ NN NN VBZ VBN IN NNP NNP ."
+  },
+  {
+    "question_id": "5b52ea5f64795fbc",
+    "question": "What is the canton of the reserve whose medieval centre retains the ancient street plan ?",
+    "table_id": "List_of_reserves_for_waterbirds_and_migratory_birds_in_Switzerland_0",
+    "answer-text": "Schaffhausen , Thurgau",
+    "question_postag": "WP VBZ DT NN IN DT NN WP$ NN NN VBZ DT JJ NN NN ."
+  },
+  {
+    "question_id": "567f6f83e9c538b9",
+    "question": "Which country in which an isopod species was discovered has a population of over 320 million ?",
+    "table_id": "Thermosphaeroma_0",
+    "answer-text": "United States",
+    "question_postag": "JJ NN IN WDT DT NN NNS VBD VBN VBZ DT NN IN IN CD CD ."
+  },
+  {
+    "question_id": "677d98894290e638",
+    "question": "What was the first honour for the person who was Emir of Afghanistan from 1901 until 1919 ?",
+    "table_id": "List_of_honorary_British_knights_and_dames_7",
+    "answer-text": "GCMG",
+    "question_postag": "WP VBD DT JJ NN IN DT NN WP VBD NNP IN NNP IN CD IN CD ."
+  },
+  {
+    "question_id": "0513d2eb9e1e999b",
+    "question": "What is the population of the city who 's country seat is Pineville . ?",
+    "table_id": "Eastern_Kentucky_Coalfield_1",
+    "answer-text": "Middlesboro",
+    "question_postag": "WP VBZ DT NN IN DT NN WP VBZ NN NN VBZ NNP . ."
+  },
+  {
+    "question_id": "56f1c6a168ef7f63",
+    "question": "What famous designer was the car driven by number 11 co -- designed by ?",
+    "table_id": "1992_Don't_Drink_Drive_Sandown_500_0",
+    "answer-text": "George Kordaz",
+    "question_postag": "WP JJ NN VBD DT NN VBN IN NN CD NN : VBN IN ."
+  },
+  {
+    "question_id": "98bf12435986e18d",
+    "question": "Which film is the show in which Adam Beach plays Tommy Bright Hawk inspired by ?",
+    "table_id": "Adam_Beach_1",
+    "answer-text": "Lone Wolf McQuade",
+    "question_postag": "NNP NN VBZ DT NN IN WDT NNP NNP VBZ NNP NNP NNP VBN IN ."
+  },
+  {
+    "question_id": "368031bedef12c9e",
+    "question": "Of the gold medal winners , who was born in Sainte-Maxime ?",
+    "table_id": "France_at_the_1968_Winter_Olympics_0",
+    "answer-text": "Marielle Goitschel",
+    "question_postag": "IN DT NN NN NNS , WP VBD VBN IN NNP ."
+  },
+  {
+    "question_id": "850a59fe3f1c2a82",
+    "question": "How many athletes competed in the Olympics in which Julieta Granada was flag bearer for Paraguay ?",
+    "table_id": "List_of_flag_bearers_for_Paraguay_at_the_Olympics_0",
+    "answer-text": "More than 11,000",
+    "question_postag": "WRB JJ NNS VBN IN DT NNPS IN WDT NNP NNP VBD JJ NN IN NNP ."
+  },
+  {
+    "question_id": "1bbeb7c89e43dbdb",
+    "question": "Which publication ranked the wrestler who has won in 5 ladder matches number one in 2002 ?",
+    "table_id": "Ladder_match_0",
+    "answer-text": "Pro Wrestling Illustrated",
+    "question_postag": "JJ NN VBD DT NN WP VBZ VBN IN CD NN NNS NN CD IN CD ."
+  },
+  {
+    "question_id": "ae723bdaccec45e4",
+    "question": "What work is the basis of the 2003 movie in which Christina Cole portrayed Clarissa Payne ?",
+    "table_id": "Christina_Cole_0",
+    "answer-text": "The Reluctant Debutante",
+    "question_postag": "WP NN VBZ DT NN IN DT CD NN IN WDT NNP NNP VBD NNP NNP ."
+  },
+  {
+    "question_id": "39e391cd77584b30",
+    "question": "What was this incident also known as when this team that had never failed to medal in any IIHF tournament they entered lost in the final ?",
+    "table_id": "Soviet_Union_at_the_1980_Winter_Olympics_0",
+    "answer-text": "the Miracle on Ice",
+    "question_postag": "WP VBD DT NN RB VBN IN WRB DT NN WDT VBD RB VBN TO VB IN DT NNP NN PRP VBD VBN IN DT JJ ."
+  },
+  {
+    "question_id": "15cea7ab70b74cda",
+    "question": "In what Premier League do the football team play who are based in the city that lies on the Atlantic Ocean coast of Río Muni and is also home to a club whose name begins with `` D '' ?",
+    "table_id": "List_of_football_clubs_in_Equatorial_Guinea_0",
+    "answer-text": "Equatoguinean",
+    "question_postag": "IN WP NNP NNP VBP DT NN NN NN WP VBP VBN IN DT NN WDT VBZ IN DT NNP NNP NN IN NNP NNP CC VBZ RB NN TO DT NN WP$ NN VBZ IN `` NNP '' ."
+  },
+  {
+    "question_id": "90cab5faf0fc81e3",
+    "question": "Of the drivers in position 7 and 8 , which driver has the earliest birth date ?",
+    "table_id": "1991_Monaco_Grand_Prix_0",
+    "answer-text": "Olivier Grouillard",
+    "question_postag": "IN DT NNS IN NN CD CC CD , WDT NN VBZ DT JJS NN NN ."
+  },
+  {
+    "question_id": "7afd532e53fbf841",
+    "question": "What are the coordinates of the historic place that is a two-story brick building with a gable roof and a three-story entry tower ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Montgomery_County,_Kentucky_0",
+    "answer-text": "38°03′25″N 83°56′26″W / 38.056944°N 83.940556°W / 38.056944 ; -83.940556 ( Methodist Episcopal Church South )",
+    "question_postag": "WP VBP DT NNS IN DT JJ NN WDT VBZ DT JJ NN NN IN DT JJ NN CC DT JJ NN NN ."
+  },
+  {
+    "question_id": "45afa1768b409df9",
+    "question": "What month was the driver with a gap of +3.926 born ?",
+    "table_id": "2001_Japanese_Grand_Prix_0",
+    "answer-text": "July",
+    "question_postag": "WP NN VBD DT NN IN DT NN IN NNP NN ."
+  },
+  {
+    "question_id": "a8f21d5965180480",
+    "question": "What is the name of the temple whose place is a city and a union territory of India ?",
+    "table_id": "List_of_large_Hindu_temples_0",
+    "answer-text": "Akshardham",
+    "question_postag": "WP VBZ DT NN IN DT NN WP$ NN VBZ DT NN CC DT NN NN IN NNP ."
+  },
+  {
+    "question_id": "970ef018b797297f",
+    "question": "The celebrity eliminated from Dancing with the Stars on October 14 , 2008 was born in what month ?",
+    "table_id": "Dancing_with_the_Stars_(U.S._season_7)_0",
+    "answer-text": "November",
+    "question_postag": "DT NN VBN IN VBG IN DT NNS IN NNP CD , CD VBD VBN IN WP NN ."
+  },
+  {
+    "question_id": "702b1e9e25d4925d",
+    "question": "What is the source of the list that is released three times annually ?",
+    "table_id": "International_rankings_of_Iran_10",
+    "answer-text": "United Nations",
+    "question_postag": "WP VBZ DT NN IN DT NN WDT VBZ VBN CD NNS RB ."
+  },
+  {
+    "question_id": "13d25c53d82024f4",
+    "question": "Name the Romanian county , part of Romania 's Transylvania region , renowned for its Medieval past and featuring also the country 's third highest peak ?",
+    "table_id": "Carpathian_Mountains_0",
+    "answer-text": "Brașov",
+    "question_postag": "NN DT JJ NN , NN IN NNP POS NNP NN , VBD IN PRP$ NNP NN CC NN RB DT NN POS JJ JJS NN ."
+  },
+  {
+    "question_id": "dd410a79fd8c010a",
+    "question": "Who is the Pokémon Ranger in the video-game based movie released on July 15 , 2006 ?",
+    "table_id": "List_of_films_based_on_video_games_3",
+    "answer-text": "Jack Walker",
+    "question_postag": "WP VBZ DT NNP NNP IN DT NN VBN NN VBN IN NNP CD , CD ."
+  },
+  {
+    "question_id": "bc251e6a97cf07cd",
+    "question": "What has the namesake of the airport that handled 6,453,100 flyers in 2009 been credited with contributing to ?",
+    "table_id": "List_of_the_busiest_airports_in_Latin_America_10",
+    "answer-text": "Mexican independence",
+    "question_postag": "WP VBZ DT NN IN DT NN WDT VBD CD NNS IN CD VBN VBN IN VBG TO ."
+  },
+  {
+    "question_id": "f2f50ad106185184",
+    "question": "Which country contains the namesake of the city of the Argentinian football club Racing ?",
+    "table_id": "List_of_football_clubs_in_Argentina_8",
+    "answer-text": "Spain",
+    "question_postag": "JJ NN VBZ DT NN IN DT NN IN DT NNP NN NN NNP ."
+  },
+  {
+    "question_id": "2942626f8bf48862",
+    "question": "Who established the city that Project Runway participant Bonnie Dominguez lived in ?",
+    "table_id": "Project_Runway_(season_3)_0",
+    "answer-text": "Juan Rodríguez Cabrillo",
+    "question_postag": "WP VBD DT NN WDT NNP NNP JJ NNP NNP VBD IN ."
+  },
+  {
+    "question_id": "cc493c32ece23420",
+    "question": "What is the retirement reason of the athlete who was acknowledged as one of the finest Aboriginal players in the history of the game in 2005 ?",
+    "table_id": "2007_AFL_Draft_1",
+    "answer-text": "Waning passion for the game",
+    "question_postag": "WP VBZ DT NN NN IN DT NN WP VBD VBN IN CD IN DT JJS JJ NNS IN DT NN IN DT NN IN CD ."
+  },
+  {
+    "question_id": "7e63a5394158c57e",
+    "question": "What is the platform type of the station situated next to two secondary schools and located Kuala Lumpur , Malaysia ?",
+    "table_id": "Ampang_Line_1",
+    "answer-text": "Side",
+    "question_postag": "WP VBZ DT NN NN IN DT NN VBD JJ TO CD JJ NNS CC VBN NNP NNP , NNP ."
+  },
+  {
+    "question_id": "fd32ee126f34a11e",
+    "question": "Graham Moss played for a club that uses what nickname ?",
+    "table_id": "1975_Knockout_Carnival_2",
+    "answer-text": "the Bombers",
+    "question_postag": "NNP NNP VBD IN DT NN WDT VBZ WP NN ."
+  },
+  {
+    "question_id": "b574e8fa7ac931cd",
+    "question": "Who is the daughter of the directer of the Argentinian film ?",
+    "table_id": "List_of_submissions_to_the_65th_Academy_Awards_for_Best_Foreign_Language_Film_0",
+    "answer-text": "Guadalupe Subiela",
+    "question_postag": "WP VBZ DT NN IN DT NN IN DT NNP NN ."
+  },
+  {
+    "question_id": "ba3f376db9c56cf9",
+    "question": "How many copies of albums by the musician with the single I Love You Love Me Love have been purchased ?",
+    "table_id": "List_of_UK_Singles_Chart_number_ones_of_the_1970s_0",
+    "answer-text": "20 million",
+    "question_postag": "WRB JJ NNS IN NNS IN DT NN IN DT JJ PRP VBP PRP VB NNP NNP VBP VBN VBN ."
+  },
+  {
+    "question_id": "247f15347d58e54a",
+    "question": "For the owner who made the cover of TIME magazine on May 7 , 1934 , what was the horse name ?",
+    "table_id": "American_Champion_Two-Year-Old_Filly_2",
+    "answer-text": "Busher",
+    "question_postag": "IN DT NN WP VBD DT NN IN NNP NN IN NNP CD , CD , WP VBD DT NN NN ."
+  },
+  {
+    "question_id": "3cd9a72d45ef59aa",
+    "question": "Gautama Buddha is said to have visited a site five years after attaining what status , on a notable island off the coast of Jaffna Peninsula ?",
+    "table_id": "Solosmasthana_0",
+    "answer-text": "Enlightenment",
+    "question_postag": "NNP NNP VBZ VBD TO VB VBN DT NN CD NNS IN VBG WP NN , IN DT JJ NN IN DT NN IN NNP NNP ."
+  },
+  {
+    "question_id": "2a496d1fdc6346ca",
+    "question": "What is the class year of the man who served as the U.S. ambassador to the Soviet Union from 1941 until 1943 ?",
+    "table_id": "List_of_United_States_Naval_Academy_alumni_14",
+    "answer-text": "1895",
+    "question_postag": "WP VBZ DT NN NN IN DT NN WP VBD IN DT NNP NN TO DT NNP NNP IN CD IN CD ."
+  },
+  {
+    "question_id": "5163fdb238a060bd",
+    "question": "In what month did the season conclude the year that Owen Turtenwald won the Grand Prix in Nice ?",
+    "table_id": "Owen_Turtenwald_0",
+    "answer-text": "August",
+    "question_postag": "IN WP NN VBD DT NN VBP DT NN IN NNP NNP VBD DT NNP NNP IN NNP ."
+  },
+  {
+    "question_id": "c0fb5a15327dc7a5",
+    "question": "How many types of influenza virus can affect people ?",
+    "table_id": "List_of_vaccine_topics_0",
+    "answer-text": "4",
+    "question_postag": "WRB JJ NNS IN NN NN MD VB NNS ."
+  },
+  {
+    "question_id": "ec394404f4f90a8f",
+    "question": "What was the house in Cass County as station of ?",
+    "table_id": "List_of_National_Historic_Landmarks_in_Iowa_0",
+    "answer-text": "Underground Railway",
+    "question_postag": "WP VBD DT NN IN NNP NNP IN NN IN ."
+  },
+  {
+    "question_id": "0f2111fe720e378d",
+    "question": "What is the metro area population for the city home to the Fernhill club ?",
+    "table_id": "List_of_soccer_clubs_in_Australia_5",
+    "answer-text": "5,230,330",
+    "question_postag": "WP VBZ DT JJ NN NN IN DT NN NN TO DT NNP NN ."
+  },
+  {
+    "question_id": "4a49b1cf1e787b5d",
+    "question": "Which film did the American Jewish actress in Community and Mad Men co-write and produce ?",
+    "table_id": "List_of_Jewish_actors_1",
+    "answer-text": "Horse Girl",
+    "question_postag": "NNP NN VBD DT NNP NNP NN IN NNP CC NNP NNP JJ CC VB ."
+  },
+  {
+    "question_id": "2f813cd800de02c9",
+    "question": "What is the capacity of the venue that was given the name Spartak Stadium in 1939 ?",
+    "table_id": "2005_Belarusian_Premier_League_0",
+    "answer-text": "11,200",
+    "question_postag": "WP VBZ DT NN IN DT NN WDT VBD VBN DT NN NNP NNP IN CD ."
+  },
+  {
+    "question_id": "dcc00aa6352f6f8f",
+    "question": "What river does the borough that 's 51.5 % Korean lie on ?",
+    "table_id": "List_of_U.S._cities_with_significant_Korean-American_populations_3",
+    "answer-text": "Hudson",
+    "question_postag": "WP NN VBZ DT NN WDT VBZ CD NN JJ NN IN ."
+  },
+  {
+    "question_id": "ab4d60dfbc3697eb",
+    "question": "What year was the club re-established whose kit manufacturer was founded in 1923 by Albert Messmer ?",
+    "table_id": "2013_Esiliiga_1",
+    "answer-text": "1992",
+    "question_postag": "WP NN VBD DT JJ JJ WP$ JJ NN VBD VBN IN CD IN NNP NNP ."
+  },
+  {
+    "question_id": "add62518bba104a5",
+    "question": "For the Thai ingredient Buap liam , what does the fruit look similar to ?",
+    "table_id": "List_of_Thai_ingredients_3",
+    "answer-text": "cucumber or zucchini",
+    "question_postag": "IN DT NNP NN NNP NN , WP VBZ DT NN NN JJ TO ."
+  },
+  {
+    "question_id": "1c85ef57aef5f3b4",
+    "question": "How many people live in the town where the West End Elementary school is located ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Wyandot_County,_Ohio_0",
+    "answer-text": "3,674",
+    "question_postag": "WRB JJ NNS VBP IN DT NN WRB DT NNP NNP NNP NN VBZ VBN ."
+  },
+  {
+    "question_id": "72cf8b2014b82323",
+    "question": "What is the length of the Canadian rail line with the fewest annual riders ?",
+    "table_id": "Light_rail_in_North_America_0",
+    "answer-text": "24.3 km",
+    "question_postag": "WP VBZ DT NN IN DT NNP NN NN IN DT JJS JJ NNS ."
+  },
+  {
+    "question_id": "64779ef1c02df1f3",
+    "question": "How many buildings are located on the campus of the school attended by the only guard drafted by Green Bay in 1978 ?",
+    "table_id": "1978_Green_Bay_Packers_season_0",
+    "answer-text": "378",
+    "question_postag": "WRB JJ NNS VBP VBN IN DT NN IN DT NN VBN IN DT JJ NN VBN IN NNP NNP IN CD ."
+  },
+  {
+    "question_id": "16eae0e4921fac90",
+    "question": "How much land does the main campus of the school whose scientific research papers were ranked # 16 encompass ?",
+    "table_id": "Performance_Ranking_of_Scientific_Papers_for_World_Universities_14",
+    "answer-text": "124-acre",
+    "question_postag": "WRB JJ NN VBZ DT JJ NN IN DT NN WP$ JJ NN NNS VBD VBN # CD NN ."
+  },
+  {
+    "question_id": "0822c2d7d5aa35db",
+    "question": "What are the points of the gymnast who scored a perfect ten on floor in the all around event of the 1989 World Artistic Gymnastics Championships ?",
+    "table_id": "1991_World_Artistic_Gymnastics_Championships_10",
+    "answer-text": "9.412",
+    "question_postag": "WP VBP DT NNS IN DT NN WP VBD DT JJ NN IN NN IN DT DT IN NN IN DT CD NNP NNP NNP NNP ."
+  },
+  {
+    "question_id": "9e56fe650742c8c3",
+    "question": "What festival did the musicians with the record Lungs act as headliners for in 2015 ?",
+    "table_id": "Triple_J_Hottest_100,_2009_1",
+    "answer-text": "Glastonbury Festival",
+    "question_postag": "WP NN VBD DT NNS IN DT NN NNP NN IN NNS IN IN CD ."
+  },
+  {
+    "question_id": "f30703672c705f53",
+    "question": "What was the est . population at the 2006 census of the city that is situated on a mountain ridge , surrounded by fertile land ?",
+    "table_id": "Administrative_divisions_of_Yemen_0",
+    "answer-text": "2,238,537",
+    "question_postag": "WP VBD DT JJS . NN IN DT CD NN IN DT NN WDT VBZ VBN IN DT NN NN , VBN IN NN NN ."
+  },
+  {
+    "question_id": "14e283a6aa0bfe78",
+    "question": "What is the name of the school whose location is located 41 miles northwest of Minneapolis ; and 27 miles southeast of St . Cloud ?",
+    "table_id": "Mississippi_8_Conference_0",
+    "answer-text": "Big Lake High School",
+    "question_postag": "WP VBZ DT NN IN DT NN WP$ NN VBZ VBN CD NNS RB IN NNP : CC CD NNS RB IN NNP . NNP ."
+  },
+  {
+    "question_id": "992e4963c0f58aa8",
+    "question": "What year did the winner of the cup release an iPhone game ?",
+    "table_id": "UCI_Mountain_Bike_World_Cup_6",
+    "answer-text": "2006",
+    "question_postag": "WP NN VBD DT NN IN DT NN NN DT NN NN ."
+  },
+  {
+    "question_id": "a62e2ba12afa18d7",
+    "question": "Who is the catholic senator who is from the state where Niagra Falls is located ?",
+    "table_id": "Religious_affiliation_in_the_United_States_Senate_10",
+    "answer-text": "Kirsten Gillibrand",
+    "question_postag": "WP VBZ DT JJ NN WP VBZ IN DT NN WRB NNP NNP VBZ VBN ."
+  },
+  {
+    "question_id": "53625f430b0f6efb",
+    "question": "What year was an Eagle Scout born who is noted for a University that offers over 90 undergraduate and 160 graduate programs across ten schools ?",
+    "table_id": "List_of_Eagle_Scouts_1",
+    "answer-text": "1951",
+    "question_postag": "WP NN VBD DT NNP NNP NN WP VBZ VBN IN DT NNP WDT VBZ IN CD JJ CC CD NN NNS IN NN NNS ."
+  },
+  {
+    "question_id": "bb12ed7157ed6e59",
+    "question": "What are the dates of the church whose city , state is 150 miles ( 240 km ) west of Fort Worth ?",
+    "table_id": "List_of_Presbyterian_churches_in_the_United_States_39",
+    "answer-text": "1924 built 1992 NRHP-listed",
+    "question_postag": "WP VBP DT NNS IN DT NN WP$ NN , NN VBZ CD NNS ( CD NN ) NN IN NNP NNP ."
+  },
+  {
+    "question_id": "8026dce65166887a",
+    "question": "How many stories tall is the church in DeWitt ?",
+    "table_id": "List_of_Methodist_churches_in_the_United_States_3",
+    "answer-text": "2",
+    "question_postag": "WRB JJ NNS VBP VBZ DT NN IN NNP ."
+  },
+  {
+    "question_id": "5134f46e5e716b10",
+    "question": "Which church in Eastbourne belongs to the largest Christian church denomination ?",
+    "table_id": "List_of_places_of_worship_in_Eastbourne_1",
+    "answer-text": "St Gregory 's Church ( original building )",
+    "question_postag": "WDT NN IN NNP NNS TO DT JJS JJ NN NN ."
+  },
+  {
+    "question_id": "616c1742cd23d87c",
+    "question": "In what year did the first place finisher of the earliest Ronde van Drenthe year , in which a cyclist won second place the most often , win the World Team Time Trial Championship ?",
+    "table_id": "Ronde_van_Drenthe_1",
+    "answer-text": "2012",
+    "question_postag": "IN WP NN VBD DT JJ NN NN IN DT JJS NNP NN NNP NN , IN WDT DT NN VBD JJ NN DT RBS RB , VB DT NNP NNP NNP NNP NNP ."
+  },
+  {
+    "question_id": "9c3dc7011fdbf7ce",
+    "question": "When was the vessel in the class that consisted of 151 frigates launched ?",
+    "table_id": "List_of_ships_of_the_Royal_Australian_Navy_20",
+    "answer-text": "14 December 1944",
+    "question_postag": "WRB VBD DT NN IN DT NN WDT VBD IN CD NNS VBN ."
+  },
+  {
+    "question_id": "f694471b2edde7ae",
+    "question": "How many years after Mariana Pajón won her first national title did she win her first world title ?",
+    "table_id": "Colombia_at_the_2012_Summer_Olympics_0",
+    "answer-text": "4",
+    "question_postag": "WRB JJ NNS IN NNP NNP VBD PRP$ JJ JJ NN VBD PRP VB PRP$ JJ NN NN ."
+  },
+  {
+    "question_id": "07efe2340c5d3ebd",
+    "question": "What is the airport name for the city that was previously known as António Enes ?",
+    "table_id": "List_of_airports_in_Mozambique_0",
+    "answer-text": "Angoche Airport",
+    "question_postag": "WP VBZ DT NN NN IN DT NN WDT VBD RB VBN IN NNP NNP ."
+  },
+  {
+    "question_id": "2463f57b026e2c94",
+    "question": "What is the amount of area of land ( in sq mi ) that forms the LGA that includes the small community located in the Great Southern region of Western Australia ?",
+    "table_id": "List_of_schools_in_rural_Western_Australia_5",
+    "answer-text": "586",
+    "question_postag": "WP VBZ DT NN IN NN IN NN ( IN NN NN ) WDT VBZ DT NNP WDT VBZ DT JJ NN VBN IN DT NNP NNP NN IN JJ NNP ."
+  },
+  {
+    "question_id": "86bd2ab3b6b2973f",
+    "question": "What alumni from this list are still living ?",
+    "table_id": "List_of_alumni_of_the_University_of_St_Andrews_12",
+    "answer-text": "Alistair Moffat",
+    "question_postag": "WP VBZ IN DT NN VBP RB VBG ."
+  },
+  {
+    "question_id": "a0cb2effd429a40c",
+    "question": "When was the Location `` 38°42′10″N 120°04′21″W / 38.702683°N 120.072417°W / 38.702683 ; -120.072417 '' built ?",
+    "table_id": "California_Historical_Landmarks_in_Amador_County,_California_0",
+    "answer-text": "1864",
+    "question_postag": "WRB VBD DT NNP `` CD CD NN CD CD JJ CD : NN '' VBN ."
+  },
+  {
+    "question_id": "afe8e3db7cf0769d",
+    "question": "When was the team that played at the arena that could hold 12,000 people originally formed ?",
+    "table_id": "2014_China_League_One_0",
+    "answer-text": "February 5 , 2007",
+    "question_postag": "WRB VBD DT NN WDT VBD IN DT NN WDT MD VB CD NNS RB VBN ."
+  },
+  {
+    "question_id": "aa503399ffa11ba6",
+    "question": "When did the home arena of the Calgary Flames receive its current name ?",
+    "table_id": "List_of_National_Hockey_League_attendance_figures_5",
+    "answer-text": "2010",
+    "question_postag": "WRB VBD DT NN NN IN DT NNP NNP VBP PRP$ JJ NN ."
+  },
+  {
+    "question_id": "01ee1bfecd753a7e",
+    "question": "How many people performed on the most recent song to win ?",
+    "table_id": "Grammy_Award_for_Best_Jazz_Vocal_Performance,_Male_0",
+    "answer-text": "five",
+    "question_postag": "WRB JJ NNS VBN IN DT RBS JJ NN TO VB ."
+  },
+  {
+    "question_id": "311c829ad7226d81",
+    "question": "What is the establishment year of the church located on 1545 Tremont Street ?",
+    "table_id": "List_of_Catholic_churches_in_the_United_States_21",
+    "answer-text": "1870",
+    "question_postag": "WP VBZ DT JJ NN IN DT NN VBN IN CD NNP NNP ."
+  },
+  {
+    "question_id": "0806c3b8501364fb",
+    "question": "How many days was the event for the silver medal winner that performed the event in the standing position ?",
+    "table_id": "Austria_at_the_2012_Summer_Paralympics_0",
+    "answer-text": "4 days",
+    "question_postag": "WRB JJ NNS VBD DT NN IN DT NN NN NN WDT VBD DT NN IN DT VBG NN ."
+  },
+  {
+    "question_id": "51b148d6265b2433",
+    "question": "In what year was the lyricist of `` Jis dil mein basa tha pyaar tera '' born ?",
+    "table_id": "Binaca_Geetmala_annual_list_1975_0",
+    "answer-text": "1924",
+    "question_postag": "IN WP NN VBD DT NN IN `` NNP NN NN NN NN NN NN '' VBN ."
+  },
+  {
+    "question_id": "876a22f2e7918e4e",
+    "question": "What is the largest city in the county that is home to the state park that borders Lake Wilhelm ?",
+    "table_id": "List_of_Pennsylvania_state_parks_1",
+    "answer-text": "Hermitage",
+    "question_postag": "WP VBZ DT JJS NN IN DT NN WDT VBZ NN TO DT NN NN IN NNS NNP NNP ."
+  },
+  {
+    "question_id": "e3fc6f415a87eb73",
+    "question": "What is the distance in miles between Des Moines and the city which contains Hilton Coliseum ?",
+    "table_id": "1998_NCAA_Women's_Division_I_Basketball_Tournament_2",
+    "answer-text": "30",
+    "question_postag": "WP VBZ DT NN IN NNS IN NNP NNP CC DT NN WDT VBZ NNP NNP ."
+  },
+  {
+    "question_id": "63f5fa13c6c34e1d",
+    "question": "What was the time of the only driver in history to win seven Formula One World Championships , five of which he won consecutively ?",
+    "table_id": "2000_Australian_Grand_Prix_0",
+    "answer-text": "1:31.075",
+    "question_postag": "WP VBD DT NN IN DT JJ NN IN NN TO VB CD NNP NNP NNP NNP , CD IN WDT PRP VBD RB ."
+  },
+  {
+    "question_id": "d645f1424332b346",
+    "question": "How many planes that retired after 2010 were serviced by Swissair ?",
+    "table_id": "Atlasjet_1",
+    "answer-text": "2",
+    "question_postag": "WRB JJ NNS WDT VBD IN CD VBD VBN IN NNP ."
+  },
+  {
+    "question_id": "624764b796080261",
+    "question": "How many passengers in 2017 went through the airport in Canada that has 234,306 aircraft movements per year ?",
+    "table_id": "List_of_the_busiest_airports_in_Canada_23",
+    "answer-text": "17.34 million",
+    "question_postag": "WRB JJ NNS IN CD VBD IN DT NN IN NNP WDT VBZ CD NN NNS IN NN ."
+  }
+]

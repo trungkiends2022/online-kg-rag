@@ -17,12 +17,12 @@ def test_table_extraction_normalizes_scalar_values_to_strings(monkeypatch):
         fake_llm_call_json,
     )
 
-    triples = EntityRelationExtractor().extract_from_table("revenue", [])
+    triples = EntityRelationExtractor(max_output_tokens=777).extract_from_table("revenue", [])
 
     assert triples[0].head == "Alpha Tech"
     assert triples[0].relation == "revenue"
     assert triples[0].tail == "120"
-    assert captured["max_tokens"] == 4096
+    assert captured["max_tokens"] == 777
     assert captured["retries"] == 2
 
 

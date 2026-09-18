@@ -25,8 +25,12 @@ class ReasoningPath:
 
 
 class PathPlanner:
-    def __init__(self, temperature: float | None = None):
+    def __init__(self, temperature: float | None = None, max_output_tokens: int = 4096):
+        if max_output_tokens < 1:
+            raise ValueError("max_output_tokens must be positive")
         self.temperature = temperature
+        self.max_output_tokens = max_output_tokens
+        self.last_error: str | None = None
 
     def generate_candidates(self, question: str, kg: OnlineKG, n: int = 5) -> list[ReasoningPath]:
         summary = kg.summary()
@@ -38,7 +42,9 @@ class PathPlanner:
         Numerical operation intent inferred from question and KG schema only:
         {format_operation_intent(operation_intent)}
 
-        Sinh {n} reasoning path KHÁC NHAU (không phải code, chỉ là kế hoạch các bước)
+        Sinh {n} reasoning path KHÁC NHAU (không phải code, chỉ là kế hoạch các bước).
+        Mỗi path tối đa 3 step; mỗi goal tối đa 20 từ. Không diễn giải phép tính
+        bằng số cụ thể, chỉ mô tả lookup và operation cần thực hiện.
         để trả lời câu hỏi trên bằng cách truy vấn KG này.
         Với thay đổi theo thời gian "from A to B", giữ dấu và tính B - A;
         không tự đổi thành độ lớn dương chỉ vì câu hỏi dùng từ increase/decline.
@@ -51,10 +57,25 @@ class PathPlanner:
         """
         # Multiple paths can easily exceed the generic 1024-token response limit,
         # especially for models that spend output tokens on internal reasoning.
-        kwargs = {"max_tokens": 4096}
+        kwargs = {"max_tokens": self.max_output_tokens}
         if self.temperature is not None:
             kwargs["temperature"] = self.temperature
-        items = llm_call_json(prompt, **kwargs)
+        self.last_error = None
+        try:
+            items = llm_call_json(prompt, **kwargs)
+        except Exception as error:
+            # A long multi-path response is the most common source of truncated
+            # JSON. Retry once with a single compact path so one malformed
+            # planner response does not discard an otherwise usable KG.
+            if n <= 1:
+                self.last_error = f"{type(error).__name__}: {error}"
+                return []
+            compact_prompt = prompt + "\nRetry: return exactly one path with at most 3 short steps."
+            try:
+                items = llm_call_json(compact_prompt, **kwargs)
+            except Exception as compact_error:
+                self.last_error = f"{type(compact_error).__name__}: {compact_error}"
+                return []
         paths = []
         for item in items:
             if not isinstance(item, dict) or not isinstance(item.get("steps"), list):

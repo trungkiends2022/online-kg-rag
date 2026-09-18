@@ -31,14 +31,18 @@ class EntityRelationExtractor:
         table_batch_size: int = 5,
         json_retries: int = 2,
         temperature: float | None = None,
+        max_output_tokens: int = 4096,
     ):
         if table_batch_size < 1:
             raise ValueError("table_batch_size must be at least 1")
         if json_retries < 0:
             raise ValueError("json_retries must be non-negative")
+        if max_output_tokens < 1:
+            raise ValueError("max_output_tokens must be positive")
         self.table_batch_size = table_batch_size
         self.json_retries = json_retries
         self.temperature = temperature
+        self.max_output_tokens = max_output_tokens
 
     def _call_json(self, prompt: str, max_tokens: int):
         kwargs = {"max_tokens": max_tokens, "retries": self.json_retries}
@@ -99,7 +103,7 @@ class EntityRelationExtractor:
         Trích xuất các triple (head, relation, tail) biểu diễn nội dung các dòng này.
         {_EXTRACT_INSTRUCTION}
         """
-            items = self._call_json(prompt, max_tokens=4096)
+            items = self._call_json(prompt, max_tokens=self.max_output_tokens)
             triples.extend(_triple_from_item(item, provenance) for item in items)
         return triples
 
@@ -120,7 +124,7 @@ class EntityRelationExtractor:
         # returns malformed JSON.  Do not discard the whole passage merely
         # because optional semantic enrichment failed.
         try:
-            items = self._call_json(prompt, max_tokens=4096)
+            items = self._call_json(prompt, max_tokens=self.max_output_tokens)
         except Exception:
             items = []
         provenance = Provenance("text", passage_id, text[:200])
@@ -181,6 +185,6 @@ class EntityRelationExtractor:
         Trích xuất các triple (head, relation, tail).
         {_EXTRACT_INSTRUCTION}
         """
-        items = self._call_json(prompt, max_tokens=4096)
+        items = self._call_json(prompt, max_tokens=self.max_output_tokens)
         provenance = Provenance("web", url, snippet[:200])
         return [_triple_from_item(it, provenance) for it in items]

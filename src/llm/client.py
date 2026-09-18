@@ -213,7 +213,7 @@ def llm_call_json(
             temperature=temperature,
         )
         try:
-            parsed = json.loads(last_raw)
+            parsed = _parse_json_list(last_raw)
             if not isinstance(parsed, list):
                 raise TypeError("expected a JSON list")
             return parsed
@@ -223,3 +223,23 @@ def llm_call_json(
         f"LLM ({get_provider().name}) không trả JSON list hợp lệ sau "
         f"{retries + 1} lần:\n{last_raw}"
     ) from last_error
+
+
+def _parse_json_list(raw: str) -> list:
+    """Parse a list even when a provider adds a short prose prefix or fence.
+
+    We deliberately do not try to repair incomplete JSON: accepting a truncated
+    program is worse than retrying it.  ``raw_decode`` only relaxes harmless
+    wrapping text produced by some OpenRouter models.
+    """
+    text = raw.strip()
+    try:
+        parsed = json.loads(text)
+    except json.JSONDecodeError as original_error:
+        start = text.find("[")
+        if start < 0:
+            raise original_error
+        parsed, _ = json.JSONDecoder().raw_decode(text[start:])
+    if not isinstance(parsed, list):
+        raise TypeError("expected a JSON list")
+    return parsed

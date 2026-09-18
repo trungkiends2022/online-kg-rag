@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import time
 from pathlib import Path
 
@@ -56,6 +57,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--second-stage-k", type=int, default=3)
     parser.add_argument("--max-context-chars", type=int, default=24_000)
     parser.add_argument("--max-output-tokens", type=int, default=1024)
+    parser.add_argument(
+        "--llm-timeout-seconds", type=float,
+        help="Timeout for one provider request; overrides LLM_REQUEST_TIMEOUT_SECONDS.",
+    )
+    parser.add_argument(
+        "--llm-sdk-retries", type=int,
+        help="Provider SDK retry count; overrides LLM_SDK_MAX_RETRIES.",
+    )
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--n-paths", type=int, default=5)
     parser.add_argument("--max-replans", type=int, default=2)
@@ -105,6 +114,11 @@ def _make_method(args):
     pipeline = OnlineKGPipeline(
         temperature=args.temperature,
         execution_mode="numerical_ir" if args.method == "numerical_ir" else "python",
+        finqa_canonical_ratio=(args.dataset == "finqa" and args.method == "numerical_ir"),
+        max_output_tokens=args.max_output_tokens,
+        table_llm_enrichment=not (
+            args.dataset == "finqa" and args.method == "numerical_ir"
+        ),
     )
     if args.method == "path_consistency":
         pipeline.evaluator = PathConsistencyEvaluator()
@@ -128,6 +142,14 @@ def _run_method(method, example, args) -> dict:
 
 def main() -> None:
     args = build_parser().parse_args()
+    if args.llm_timeout_seconds is not None:
+        if args.llm_timeout_seconds <= 0:
+            raise ValueError("--llm-timeout-seconds must be positive")
+        os.environ["LLM_REQUEST_TIMEOUT_SECONDS"] = str(args.llm_timeout_seconds)
+    if args.llm_sdk_retries is not None:
+        if args.llm_sdk_retries < 0:
+            raise ValueError("--llm-sdk-retries must be non-negative")
+        os.environ["LLM_SDK_MAX_RETRIES"] = str(args.llm_sdk_retries)
     method = _make_method(args)
     completed, mode = set(), "w"
     if args.resume and args.output.exists():

@@ -6,6 +6,7 @@ from src.execution.numerical_ir import (
     NumericalIRExecutor,
     NumericalIRSynthesisError,
     NumericalProgram,
+    canonicalize_finqa_percentage_result,
     canonicalize_model_ir,
 )
 from src.kg.online_kg import OnlineKG
@@ -39,6 +40,39 @@ def test_ir_executes_percentage_and_preserves_lookup_evidence():
     assert result.value == pytest.approx(22.2222222)
     assert result.accessed_edges == 2
     assert {item.column_name for item in result.evidence} == {"2001", "2002"}
+
+
+def test_finqa_percentage_result_uses_ratio_not_presentation_percent():
+    program = NumericalProgram.from_dict({
+        "steps": [
+            {"id": "v0", "op": "const", "arguments": 201},
+            {"id": "v1", "op": "const", "arguments": 128},
+            {"id": "v2", "op": "subtract", "arguments": ["v0", "v1"]},
+            {"id": "v3", "op": "divide", "arguments": ["v2", "v1"]},
+            {"id": "v4", "op": "const", "arguments": 100},
+            {"id": "v5", "op": "multiply", "arguments": ["v3", "v4"], "unit": "percent"},
+        ],
+        "result": "v5",
+    })
+
+    canonical = canonicalize_finqa_percentage_result(
+        program, "What was the percentage increase?"
+    )
+
+    assert canonical.result == "v3"
+    assert NumericalIRExecutor().run(canonical, _kg()).value == pytest.approx(0.5703125)
+
+
+def test_finqa_ratio_policy_does_not_change_non_percentage_multiply():
+    program = NumericalProgram.from_dict({
+        "steps": [
+            {"id": "v0", "op": "const", "arguments": 5},
+            {"id": "v1", "op": "const", "arguments": 100},
+            {"id": "v2", "op": "multiply", "arguments": ["v0", "v1"]},
+        ],
+        "result": "v2",
+    })
+    assert canonicalize_finqa_percentage_result(program, "What is the total?") == program
 
 
 def test_ir_supports_table_operators_and_financial_number_parsing():

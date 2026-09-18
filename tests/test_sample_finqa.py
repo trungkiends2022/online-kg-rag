@@ -2,6 +2,7 @@ from src.sample_finqa import (
     CORE_ARITHMETIC_OPERATORS,
     attributes,
     balanced_sample,
+    disjoint_balanced_shards,
     filter_records,
     program_operators,
 )
@@ -41,3 +42,13 @@ def test_filter_records_selects_exactly_two_core_arithmetic_steps():
 
     assert [item["id"] for item in selected] == ["0", "3"]
     assert program_operators(selected[0]) == ("subtract", "divide")
+
+
+def test_disjoint_balanced_shards_do_not_repeat_records():
+    records = [
+        _item(index, "subtract(5, 2), divide(#0, 2)", {"table_1": "x"})
+        for index in range(6)
+    ]
+    shards = disjoint_balanced_shards(records, shard_size=2, shards=3, seed=2027)
+    ids = [item["id"] for shard in shards for item in shard]
+    assert len(ids) == len(set(ids)) == 6

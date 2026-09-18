@@ -173,6 +173,45 @@ def canonicalize_model_ir(raw: dict[str, Any]) -> tuple[dict[str, Any], int]:
     return repaired, count
 
 
+def canonicalize_finqa_percentage_result(
+    program: NumericalProgram, question: str,
+) -> NumericalProgram:
+    """Keep FinQA percentage-like answers in the benchmark's ratio convention.
+
+    FinQA annotates a 57.03% change as ``0.5703``. Models often append an
+    otherwise reasonable ``* 100`` presentation step. Keep that step in the
+    trace for audit, but make the preceding ratio the program result. This
+    applies only when the question asks for a percentage-like quantity.
+    """
+    question_text = question.casefold()
+    percentage_like = any(term in question_text for term in (
+        "percent", "percentage", "ratio", "rate of return", "roi", "growth rate",
+    ))
+    if not percentage_like:
+        return program
+    by_id = {step.id: step for step in program.steps}
+    result = by_id[program.result]
+    if result.op != "multiply" or not isinstance(result.arguments, (list, tuple)):
+        return program
+    if len(result.arguments) != 2:
+        return program
+
+    def is_hundred(argument: Any) -> bool:
+        if argument == 100:
+            return True
+        if isinstance(argument, str) and argument in by_id:
+            step = by_id[argument]
+            return step.op == "const" and _number(step.arguments) == 100
+        return False
+
+    left, right = result.arguments
+    if is_hundred(left) and isinstance(right, str) and right in by_id:
+        return NumericalProgram(program.steps, right, program.repair_count)
+    if is_hundred(right) and isinstance(left, str) and left in by_id:
+        return NumericalProgram(program.steps, left, program.repair_count)
+    return program
+
+
 def _number(value: Any) -> float:
     if isinstance(value, bool):
         raise ValueError("boolean is not a numeric operand")
@@ -307,11 +346,19 @@ class NumericalIRExecutor:
 class NumericalIRSynthesizer:
     """Generate a JSON numerical program instead of unrestricted Python."""
 
-    def __init__(self, temperature: float | None = None):
+    def __init__(self, temperature: float | None = None, max_output_tokens: int = NUMERICAL_IR_MAX_TOKENS):
+        if max_output_tokens < 1:
+            raise ValueError("max_output_tokens must be positive")
         self.temperature = temperature
+        self.max_output_tokens = max_output_tokens
 
     def synthesize(
-        self, path: ReasoningPath, question: str, kg: "OnlineKG", retries: int = 1,
+        self,
+        path: ReasoningPath,
+        question: str,
+        kg: "OnlineKG",
+        retries: int = 1,
+        finqa_canonical_ratio: bool = False,
     ) -> NumericalProgram:
         question_terms = set(re.findall(r"[a-z0-9]+", question.lower()))
         ranked_edges = []
@@ -339,6 +386,16 @@ class NumericalIRSynthesizer:
         ranked_edges.sort(key=lambda item: item[:3], reverse=True)
         edges = [item[3] for item in ranked_edges[:200]]
         operation_intent = infer_operation_intent(question, kg)
+        finqa_percentage_instruction = """
+For FinQA, the executed answer for a percentage/rate/return must be a decimal
+ratio: return 0.57031 for 57.031%. Do NOT multiply a ratio by 100. A human-facing
+answer can later render the ratio as a percentage. For basis-point or
+percentage-point questions, subtract the displayed percentage values directly;
+do not multiply their difference by 100 unless a source value is explicitly a
+decimal fraction rather than a displayed percentage.
+""" if finqa_canonical_ratio else """
+For a percentage output, multiply a ratio by 100 and set unit to "percent".
+"""
         base_prompt = f"""
 Question: {question}
 Reasoning path: {json.dumps([s.__dict__ for s in path.steps], ensure_ascii=False)}
@@ -358,8 +415,8 @@ Each step has id v0, v1, ...; op; arguments; and optional unit.
 lookup arguments are {{"entity": string, "relation": string,
 "direction": "neighbors"|"sources", optional "index": integer}}.
 Other arguments contain constants or references to earlier step IDs. Use const for
-explicit question constants such as 100. Ratio is divide(a,b); percentage is
-multiply(divide(a,b),100) with unit "percent". Do not put evidence in the JSON:
+explicit question constants such as 100. Ratio is divide(a,b). {finqa_percentage_instruction}
+Do not put evidence in the JSON:
 lookup provenance is captured automatically during execution.
 Follow the inferred operation intent. In particular, when it says to add displayed
 percentage cells, lookup those percentage values and add them directly; do not
@@ -406,7 +463,7 @@ Return only JSON: {{"steps": [...], "result": "vN"}}.
         schema_valid = False
         for attempt in range(retries + 1):
             prompt = base_prompt if not attempt else base_prompt + f"\nPrevious IR invalid: {last_error}. Return corrected JSON only."
-            kwargs = {"max_tokens": NUMERICAL_IR_MAX_TOKENS}
+            kwargs = {"max_tokens": self.max_output_tokens}
             if self.temperature is not None:
                 kwargs["temperature"] = self.temperature
             raw = llm_call(prompt, **kwargs).strip()
@@ -423,7 +480,10 @@ Return only JSON: {{"steps": [...], "result": "vN"}}.
                 for step in program.steps:
                     if step.op == "lookup" and kg.normalize_relation(step.arguments["relation"]) not in relations:
                         raise ValueError(f"relation not present in KG: {step.arguments['relation']}")
-                return program
+                return (
+                    canonicalize_finqa_percentage_result(program, question)
+                    if finqa_canonical_ratio else program
+                )
             except (json.JSONDecodeError, ValueError, TypeError) as exc:
                 last_error = str(exc)
         raise NumericalIRSynthesisError(

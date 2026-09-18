@@ -406,9 +406,10 @@ python -m src.run_baselines \
 ```
 
 Các bước `lookup` đọc trực tiếp từ KG nên evidence của toán hạng được trace tự
-động. `ratio` được biểu diễn bằng `divide`; `percentage` là
-`multiply(divide(a, b), 100)` với unit `percent`. Symbolic fallback bị tắt trong
-biến thể này để kết quả không lẫn với một cơ chế thực thi khác.
+động. `ratio` được biểu diễn bằng `divide`. Với FinQA, câu hỏi hỏi percentage
+vẫn phải trả ratio thập phân theo gold annotation (ví dụ `0.57031` cho
+`57.031%`); không nhân thêm 100. Symbolic fallback bị tắt trong biến thể này để
+kết quả không lẫn với một cơ chế thực thi khác.
 
 Với FinQA, runner còn báo `ir_parse_rate`, `schema_validity_rate`,
 `execution_success_rate`, `operator_accuracy`, `step_accuracy`,
