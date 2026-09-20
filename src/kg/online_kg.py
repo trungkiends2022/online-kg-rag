@@ -17,6 +17,13 @@ from src.kg.normalization import normalize_key, normalize_relation
 class OnlineKG:
     def __init__(self):
         self.graph = nx.MultiDiGraph()
+        # The executable graph remains value-centric for the sandbox API.  A
+        # parallel typed structural trace preserves table/text topology for
+        # audit, retrieval analysis and path ablations without polluting the
+        # semantic entity graph with implementation IDs.
+        self.node_types: dict[str, set[str]] = {}
+        self.structural_nodes: dict[str, dict] = {}
+        self.structural_edges: list[dict] = []
         self.entity_aliases: dict[str, str] = {}
         self.entity_key_aliases: dict[str, str] = {}
         self.resolution_log: list[dict] = []
@@ -35,11 +42,38 @@ class OnlineKG:
             return
         self.graph.add_node(triple.head)
         self.graph.add_node(triple.tail)
+        self.node_types.setdefault(str(triple.head), set()).add("Entity")
+        self.node_types.setdefault(str(triple.tail), set()).add("Attribute")
         self.graph.add_edge(
             triple.head, triple.tail,
             relation=self.normalize_relation(triple.relation),
             provenance=triple.provenance,
         )
+
+    def register_table_structure(self, table_name: str, rows: list[dict]) -> None:
+        """Record Table/Row/Column/Cell structure in the provenance trace."""
+        table_id = f"table:{table_name}"
+        self.structural_nodes.setdefault(table_id, {"id": table_id, "type": "Table", "label": table_name})
+        for row_index, row in enumerate(rows):
+            row_id = f"{table_id}:row:{row_index}"
+            self.structural_nodes[row_id] = {"id": row_id, "type": "Row", "row_index": row_index}
+            self.structural_edges.append({"head": table_id, "relation": "row_contains", "tail": row_id})
+            for column, value in row.items():
+                column_id = f"{table_id}:column:{column}"
+                cell_id = f"{row_id}:cell:{column}"
+                self.structural_nodes.setdefault(column_id, {"id": column_id, "type": "Column", "label": str(column)})
+                self.structural_nodes[cell_id] = {
+                    "id": cell_id, "type": "Cell", "value": str(value),
+                    "row_index": row_index, "column": str(column),
+                }
+                self.structural_edges.extend((
+                    {"head": row_id, "relation": "row_contains", "tail": cell_id},
+                    {"head": cell_id, "relation": "column_of", "tail": column_id},
+                ))
+
+    def register_passage(self, passage_id: str) -> None:
+        node_id = f"passage:{passage_id}"
+        self.structural_nodes.setdefault(node_id, {"id": node_id, "type": "Passage", "label": passage_id})
 
     @staticmethod
     def normalize_relation(relation: str) -> str:
@@ -173,6 +207,7 @@ class OnlineKG:
             "entity_resolution": resolution_counts,
             "num_rejected_triples": len(self.rejection_log),
             "num_extraction_errors": len(self.extraction_errors),
+            "node_types": {key: sorted(value) for key, value in self.node_types.items()},
         }
 
     def to_trace(self) -> dict:
@@ -197,8 +232,16 @@ class OnlineKG:
                 },
             })
         return {
+            # Keep the legacy string list for renderers and downstream scripts;
+            # typed metadata is supplied separately.
             "nodes": [str(node) for node in self.graph.nodes()],
+            "node_metadata": [
+                {"id": str(node), "types": sorted(self.node_types.get(str(node), {"Entity"}))}
+                for node in self.graph.nodes()
+            ],
             "edges": edges,
+            "structural_nodes": list(self.structural_nodes.values()),
+            "structural_edges": list(self.structural_edges),
             "aliases": dict(self.entity_aliases),
             "resolution_log": list(self.resolution_log),
             "rejection_log": list(self.rejection_log),

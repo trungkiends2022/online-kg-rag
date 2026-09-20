@@ -36,6 +36,7 @@ def test_openrouter_provider_instantiates(monkeypatch):
     assert isinstance(provider, LLMProvider)
     assert provider.name == "openrouter"
     assert provider.model == "openrouter/free"
+    assert str(provider._client.base_url) == "https://openrouter.ai/api/v1/"
 
 
 def test_openrouter_reasoning_extension_is_opt_in(monkeypatch):
@@ -54,6 +55,24 @@ def test_openrouter_reasoning_extension_is_opt_in(monkeypatch):
     provider._client = SimpleNamespace(chat=SimpleNamespace(completions=FakeCompletions()))
     assert provider.complete("hello", max_tokens=12) == "ok"
     assert captured["extra_body"] == {"reasoning": {"enabled": True}}
+
+
+def test_openrouter_can_explicitly_disable_reasoning(monkeypatch):
+    from types import SimpleNamespace
+
+    monkeypatch.setenv("OPENROUTER_API_KEY", "fake-key-for-test")
+    monkeypatch.setenv("OPENROUTER_REASONING_ENABLED", "false")
+    provider = create_provider("openrouter")
+    captured = {}
+
+    class FakeCompletions:
+        def create(self, **kwargs):
+            captured.update(kwargs)
+            return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content="ok"))])
+
+    provider._client = SimpleNamespace(chat=SimpleNamespace(completions=FakeCompletions()))
+    assert provider.complete("hello", max_tokens=12) == "ok"
+    assert captured["extra_body"] == {"reasoning": {"enabled": False}}
 
 
 def test_deepseek_provider_instantiates(monkeypatch):

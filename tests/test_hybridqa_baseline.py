@@ -1,5 +1,5 @@
 from src.baselines.hybridqa_rag import BaselineConfig, HybridQARAGBaseline
-from src.baselines.metrics import exact_match, normalize_answer, token_f1
+from src.baselines.metrics import exact_match, normalize_answer, semantic_exact_match, token_f1
 from src.datasets.schema import DatasetExample
 
 
@@ -29,6 +29,8 @@ def test_metrics_match_hybridqa_normalization():
     assert normalize_answer("The Liverpool!") == "liverpool"
     assert exact_match("Liverpool", "the Liverpool.") == 1.0
     assert token_f1("Liverpool football club", "Liverpool club") == 0.8
+    assert exact_match("Morocco", "Moroccan") == 0.0
+    assert semantic_exact_match("Morocco", "Moroccan") == 1.0
 
 
 def test_prompt_keeps_full_oracle_table_and_ranks_only_passages():

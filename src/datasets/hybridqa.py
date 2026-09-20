@@ -116,6 +116,7 @@ def load_hybridqa(
     tables_dir: str | Path | None = None,
     passages_dir: str | Path | None = None,
     limit: int | None = None,
+    example_id: str | None = None,
 ) -> Iterator[DatasetExample]:
     """Yield HybridQA records in oracle-context mode.
 
@@ -128,6 +129,12 @@ def load_hybridqa(
     for index, item in enumerate(iter_records(read_json(path))):
         if limit is not None and index >= limit:
             break
+        item_id = str(item.get("question_id") or item.get("id") or index)
+        # Filter before loading the external table and all linked passages.
+        # This makes single-case debugging/benchmark runs practical on the
+        # official split without changing the full-dataset behavior.
+        if example_id is not None and item_id != str(example_id):
+            continue
         table_id = str(item.get("table_id") or item.get("table", {}).get("uid") or index)
         table = item.get("table")
         if not isinstance(table, dict):
@@ -141,9 +148,8 @@ def load_hybridqa(
             external = _load_external_passages(passage_root, table_id)
             known_ids = {passage["id"] for passage in passages}
             passages.extend(passage for passage in external if passage["id"] not in known_ids)
-        example_id = str(item.get("question_id") or item.get("id") or index)
         yield DatasetExample(
-            example_id=example_id,
+            example_id=item_id,
             question=str(item["question"]),
             table_rows=[{"table_name": table.get("title") or table_id, "rows": rows}],
             text_passages=passages,

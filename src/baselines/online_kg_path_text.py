@@ -11,7 +11,7 @@ from src.extraction.extractor import EntityRelationExtractor
 from src.kg.builder import OnlineKGBuilder
 from src.llm.client import get_provider, llm_call
 from src.planning.planner import PathPlanner
-from src.retrieval.coarse_retrieval import coarse_retrieve
+from src.retrieval.coarse_retrieval import two_stage_retrieve
 
 
 class OnlineKGPathTextBaseline:
@@ -39,12 +39,13 @@ class OnlineKGPathTextBaseline:
 
     def run(self, example: DatasetExample) -> dict:
         started = time.perf_counter()
-        retrieved = coarse_retrieve(
+        retrieved = two_stage_retrieve(
             example.question,
             example.table_rows,
             example.text_passages,
             example.web_snippets,
             top_k=self.config.top_k,
+            second_stage_k=3,
         )
         kg = self.kg_builder.build(retrieved)
         if kg.is_empty():
@@ -106,6 +107,8 @@ Answer:"""
             "latency_ms": round((time.perf_counter() - started) * 1000, 2),
             "prompt_chars": len(prompt),
             "kg_summary": kg.summary(),
+            "entity_anchor": retrieved.get("retrieval_trace", {}).get("entity_anchor", {}),
+            "retrieval_trace": retrieved.get("retrieval_trace", {}),
             "reasoning_paths": path_records,
             "execution_mode": "path_text",
             "code_generated": False,

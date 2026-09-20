@@ -25,6 +25,9 @@ class OpenRouterProvider(LLMProvider):
             headers["X-OpenRouter-Title"] = title
         self._client = OpenAI(
             api_key=api_key or os.environ.get("OPENROUTER_API_KEY"),
+            # The OpenAI SDK appends ``/chat/completions`` itself.  OpenRouter's
+            # curl/requests examples include that endpoint because they issue a
+            # raw HTTP POST, whereas the SDK expects the API root here.
             base_url="https://openrouter.ai/api/v1",
             default_headers=headers or None,
             timeout=request_timeout_seconds(),
@@ -42,7 +45,8 @@ class OpenRouterProvider(LLMProvider):
         # OpenRouter exposes provider reasoning as a top-level request field.
         # ``extra_body`` keeps this extension compatible with the OpenAI SDK
         # while leaving other providers and models unchanged.
-        if self.reasoning_enabled:
-            kwargs["extra_body"] = {"reasoning": {"enabled": True}}
+        kwargs["extra_body"] = {
+            "reasoning": {"enabled": self.reasoning_enabled}
+        }
         response = self._client.chat.completions.create(**kwargs)
         return response.choices[0].message.content or ""

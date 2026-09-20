@@ -9,7 +9,7 @@
 \lstset{basicstyle=\ttfamily\small,breaklines=true,frame=single,columns=fullflexible,captionpos=b}
 
 \begin{document}
-\title{Executable Reasoning over Query-Time Knowledge Graphs for Table--Text Question Answering}
+\title{Traceable Executable Reasoning over Query-Time Knowledge Graphs for Table--Text Question Answering}
 \author{Author Names to Be Added}
 \institute{Affiliations and corresponding author email to be added}
 \maketitle
@@ -21,18 +21,20 @@ retrieved values. A plausible reasoning path does not establish that its
 computation is correct or supported by the available evidence. We present
 Online-KG, a retrieval-augmented question answering framework that constructs
 a knowledge graph at query time and evaluates candidate reasoning paths through
-program execution. The graph combines deterministic table triples, which retain
-row and column context, with semantic triples extracted from associated text.
-Candidate paths are translated into Python programs and executed through a
-restricted graph interface that records evidence access. An evidence-aware
-selector combines execution outcomes, source support, and agreement among
-candidate answers. A typed numerical program variant makes arithmetic
-operations and their inputs explicit. We design a controlled evaluation on
-HybridQA, FinQA, and HiTab to examine the contributions of table structure,
-executable reasoning, and candidate selection, alongside their computational
-cost. The framework makes candidate computations and consulted graph evidence
-available for inspection, while treating execution success and evidence access
-as signals rather than guarantees of answer correctness.
+program execution. A deterministic entity anchor resolves a table-derived
+bridge entity from question constraints and uses it to supplement first-stage
+passage retrieval. The framework maintains an executable entity--relation graph
+and a parallel typed structural trace for tables and passages. Candidate paths
+are translated into Python programs or typed numerical programs and executed
+through a restricted graph interface that records evidence access. An
+evidence-aware selector combines execution outcomes, source support, and
+agreement among candidate answers. Each prediction exports retrieval decisions,
+the selected program, evidence, and path-level diagnostics for audit. We design
+a controlled evaluation on HybridQA, FinQA, and HiTab to examine retrieval,
+table structure, executable reasoning, and candidate selection alongside their
+computational cost. Execution success, evidence access, and the exported
+score-derived confidence remain diagnostic signals rather than guarantees of
+answer correctness.
 % Add a quantitative findings sentence after completing controlled experiments.
 \keywords{Knowledge graphs \and Retrieval-augmented generation \and Executable reasoning \and Table question answering}
 \end{abstract}
@@ -74,10 +76,14 @@ We present Online-KG, a framework organized around the sequence
 \emph{construct, plan, execute, and select}. For each question, the system
 constructs a graph from the supplied table and retrieved passages.
 Deterministic structural triples retain row identities and column context,
-including hierarchical header paths where available. Semantic triples add
+including hierarchical header paths where available. Before passage enrichment,
+a deterministic anchor can resolve a bridge entity from a table constraint, such
+as a rank, and retrieve its associated passage. Semantic triples add
 relationships extracted from the accompanying content, and edge provenance
-records their sources. Here, ``online'' refers to construction at query time;
-it does not imply continual training or access to live web information.
+records their sources. A parallel typed trace retains table, row, column, cell,
+and passage topology for audit without changing the executable graph API.
+Here, ``online'' refers to construction at query time; it does not imply
+continual training or access to live web information.
 
 The system then generates multiple candidate reasoning paths and translates
 them into executable Python programs. Programs access the graph through a
@@ -101,16 +107,19 @@ within that context rather than open-domain retrieval. Comparisons include
 direct answering, graph paths without code execution, agreement-only selection,
 and alternative executable representations.
 
-The paper develops three methodological contributions:
+The paper develops four methodological contributions:
 \begin{itemize}
+    \item A two-stage retrieval procedure that uses inspectable question
+    constraints to identify table-derived bridge entities, followed by
+    entity-centered passage supplementation.
     \item A query-time graph construction procedure combining structural table
-    triples and semantic evidence, with row--column context and edge provenance
-    available to downstream reasoning.
+    triples and semantic evidence, with a parallel typed topology trace and
+    edge provenance available for audit.
     \item An executable reasoning pipeline that converts candidate graph paths
     into programs and records their outputs and consulted graph evidence.
-    \item An evidence-aware candidate selection mechanism that combines source
-    support with execution outcomes and answer agreement, enabling controlled
-    comparison with selection based on agreement alone.
+    \item An evidence-aware candidate selection mechanism and prediction trace
+    that expose source support, executed paths, and answer diagnostics for
+    controlled comparison with selection based on agreement alone.
 \end{itemize}
 % Finalize empirical contribution claims only after evaluating matched runs.
 
@@ -146,7 +155,12 @@ Compare direct answering from the same context, flattened-table retrieval,
 graph paths without execution, agreement-only selection, and the full system.
 Evaluate typed numerical programs separately. Planned construction ablations
 include structural-only and semantic-only triples and removal of header
-hierarchy. Verify that each ablation is implemented before running it.
+hierarchy. Add a retrieval ablation that sets the second-stage budget to zero,
+and compare
+generic schema expansion with bridge-entity supplementation where anchorable
+questions are available. Report anchor coverage, bridge-entity retrieval recall,
+and answer metrics separately; retrieving a bridge entity does not ensure a
+correct final answer. Verify that each ablation is implemented before running it.
 
 \subsection{Controls and Cost}
 Fix example identifiers, model version, decoding settings, context limits, and
@@ -154,6 +168,10 @@ retrieval settings across comparable methods. Record candidate count, replanning
 budget, fallback policy, API attempts, logical model calls, and wall time.
 Use measured provider token usage if available; missing usage is not zero.
 Report paired uncertainty estimates and failure rates on a fixed evaluation set.
+Archive retrieval traces, typed structural traces, selected-path metrics, and
+the repository revision. Treat the exported confidence as an uncalibrated
+diagnostic; do not evaluate it as calibrated confidence without a dedicated
+calibration study.
 
 \section{Results and Error Analysis}
 \textbf{Pending benchmark evaluation.} The currently inspected development

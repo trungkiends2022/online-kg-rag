@@ -134,3 +134,35 @@ LLM_PROVIDER=openrouter .venv/bin/python -m src.run_baselines \
   --max-output-tokens 2048 --temperature 0 \
   --llm-timeout-seconds 35 --llm-sdk-retries 0 --resume
 ```
+
+## HybridQA controlled 1,500
+
+The 1,500-example split is sampled once from traced HybridQA dev records and
+uses unique tables. Sampling and shard allocation are stratified by answer kind,
+answer-node source, a table-to-text bridge proxy, and ordinal/superlative/count
+cues. Each shard is shuffled deterministically. The result is seven balanced
+200-example shards plus one proportionally balanced 100-example shard. Recreate
+the master split and all eight shards with:
+
+```bash
+.venv/bin/python -m src.sample_hybridqa \
+  --input data/HybridQA/released_data/dev.traced.json \
+  --tables-dir data/WikiTables-WithLinks/tables_tok \
+  --passages-dir data/WikiTables-WithLinks/request_tok \
+  --output benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027.json \
+  --size 1500 --shard-size 200 --seed 2027 --require-answer-node \
+  --stratify-reasoning
+```
+
+Run all eight shards through the six controlled HybridQA methods. The runner is
+sequential and every output uses `--resume`, so restarting it is safe:
+
+```bash
+scripts/run_hybridqa_1500.sh
+```
+
+To run only selected shards, pass their two-digit indices, for example:
+
+```bash
+scripts/run_hybridqa_1500.sh 01 02
+```

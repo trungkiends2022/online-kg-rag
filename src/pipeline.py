@@ -161,6 +161,15 @@ class OnlineKGPipeline:
                 candidates.append((path, code, result))
 
             scored = self.evaluator.evaluate_all(candidates)
+            # Deterministic entity-centric paths complement, rather than only
+            # rescue, LLM-generated programs. This makes table -> bridge entity
+            # -> linked passage patterns available even when a planner returns
+            # a plausible but incomplete path.
+            if self.execution_mode == "python":
+                symbolic_candidates = self.symbolic_search.search(question, kg)
+                if symbolic_candidates:
+                    candidates.extend(symbolic_candidates)
+                    scored = self.evaluator.evaluate_all(candidates)
             # Symbolic graph search returns an already executed path rather than
             # a numerical program. Disable it for the IR ablation so the method
             # cannot silently fall back to a different execution formalism.
@@ -203,6 +212,18 @@ class OnlineKGPipeline:
 
             if best and best.score > float("-inf"):
                 answer = self.answerer.synthesize(question, best, kg)
+                source_types = {item.source_type for item in best.exec_result.evidence}
+                path_metrics = {
+                    "path_completed": True,
+                    "path_length": len(best.path.steps),
+                    "path_evidence_count": len(best.exec_result.evidence),
+                    "path_source_types": sorted(source_types),
+                    "cross_modal_path": "table" in source_types and "text" in source_types,
+                    "path_precision": (
+                        len(self.evaluator._direct_evidence(best.exec_result.value, best.exec_result.evidence))
+                        / max(best.exec_result.accessed_edges, 1)
+                    ),
+                }
                 return {
                     "answer": answer,
                     "executed_value": best.exec_result.value,
@@ -229,6 +250,14 @@ class OnlineKGPipeline:
                     "replans_used": attempt,
                     "execution_mode": self.execution_mode,
                     "retrieval_trace": retrieved.get("retrieval_trace", {}),
+                    "entity_anchor": retrieved.get("retrieval_trace", {}).get("entity_anchor", {}),
+                    "path_metrics": path_metrics,
+                    "answer_trace": {
+                        "answer": answer,
+                        "executed_value": best.exec_result.value,
+                        "supporting_sources": sorted({item.source_id for item in best.exec_result.evidence}),
+                        "confidence": round(min(max(best.score / 10.0, 0.0), 1.0), 4),
+                    },
                 }
             # không path nào khả dụng -> replan (vòng lặp tiếp theo sinh path mới)
 
@@ -243,6 +272,10 @@ class OnlineKGPipeline:
             "extraction_errors": kg.extraction_errors,
             "replans_used": max_replans,
             "retrieval_trace": retrieved.get("retrieval_trace", {}),
+            "entity_anchor": retrieved.get("retrieval_trace", {}).get("entity_anchor", {}),
+            "path_metrics": {"path_completed": False, "path_length": 0, "path_evidence_count": 0,
+                             "path_source_types": [], "cross_modal_path": False, "path_precision": 0.0},
+            "answer_trace": {"answer": None, "executed_value": None, "supporting_sources": [], "confidence": 0.0},
         }
 
 

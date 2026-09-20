@@ -24,6 +24,7 @@ class OnlineKGBuilder:
         for row_group in retrieved.get("table_rows", []):
             table_name = row_group.get("table_name", "unknown_table")
             rows = row_group.get("rows", [])
+            kg.register_table_structure(table_name, rows)
             try:
                 all_triples += self.extractor.extract_from_table(
                     table_name, rows,
@@ -40,6 +41,7 @@ class OnlineKGBuilder:
                     "error": f"{type(exc).__name__}: {exc}", "fallback": "deterministic_cells",
                 })
         for passage in retrieved.get("text_passages", []):
+            kg.register_passage(str(passage["id"]))
             try:
                 all_triples += self.extractor.extract_from_text(
                     passage["id"], passage["text"],

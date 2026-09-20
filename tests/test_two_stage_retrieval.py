@@ -30,3 +30,25 @@ def test_second_stage_zero_budget_preserves_first_stage_size():
     )
 
     assert len(result["text_passages"]) == 1
+
+
+def test_entity_anchor_recovers_passage_for_table_derived_bridge_entity():
+    passages = [
+        {"id": "p1", "text": "Barry Sanders was an NFL player."},
+        {"id": "p2", "text": "Jim Brown was an NFL player."},
+        {"id": "walter", "text": "Walter Jerry Payton was an NFL player."},
+    ]
+    result = two_stage_retrieve(
+        "What is the middle name of the player with the second most rushing yards?",
+        [{"table_name": "rushing", "rows": [
+            {"Rank": "1", "Player": "Emmitt Smith"},
+            {"Rank": "2", "Player": "Walter Payton"},
+        ]}],
+        passages,
+        [],
+        top_k=1,
+        second_stage_k=1,
+    )
+
+    assert result["retrieval_trace"]["entity_anchor"]["bridge_entities"] == ("Walter Payton",)
+    assert "walter" in [item["id"] for item in result["text_passages"]]

@@ -2,6 +2,7 @@
 
 from src.baselines.hybridqa_rag import HybridQARAGBaseline
 from src.baselines.path_consistency import PathConsistencyEvaluator
+from src.baselines.graph_retrieval import GraphRetrievalNoPathBaseline
 from src.baselines.online_kg_path_text import OnlineKGPathTextBaseline
 from src.baselines.rag_variants import (
     FlatTableBM25Baseline,
@@ -15,5 +16,6 @@ __all__ = [
     "OnlineKGPathTextBaseline",
     "OracleEvidenceBaseline",
     "PathConsistencyEvaluator",
+    "GraphRetrievalNoPathBaseline",
     "RAGConfig",
 ]

@@ -13,16 +13,27 @@ Arithmetic may combine values from disconnected graph components that share a
 report context.
 
 Retrieval precedes graph construction. A first stage ranks passages by BM25
-against $q$. A second stage supplements the selected passages with a bounded
-number of previously unselected items, using deterministic query expansions
-from question cues and table headers. The implementation uses budgets $k$ and
-$b$ for these stages, respectively, and deduplicates items by source identifier.
+against $q$. In parallel, a deterministic anchor reads a limited set of question
+constraints and table rows. Its current rules identify ordinal rank constraints,
+recognize a small set of entity-bearing columns, and resolve their matching row
+entity. For example, a question about the ``second'' player can yield the bridge
+entity \emph{Walter Payton} from a rank--player table row even though the name
+does not occur in the question. The second stage queries this bridge entity
+first, preferring exact normalized entity-token mentions, then supplements the
+selected passages with a bounded number of items from deterministic query
+expansions based on question cues and table headers. The implementation uses
+budgets $k$ and $b$ for these stages, respectively, and deduplicates items by
+source identifier.
 Up to two preceding passages are provided as antecedent-resolution context for
 supplementary items. Tables are retained from the supplied input up to the
 configured table limit; this step does not perform corpus-wide table search.
 The Python pipeline defaults to $k=10$ and $b=3$; experimental settings must
-record any runner overrides. Optional web snippets follow the same retrieval
-interface, but web access is not required by the benchmark setting.
+record any runner overrides. The anchor is deliberately rule-based and only
+supports the implemented constraints; a missing or wrong anchor leaves the
+second stage dependent on generic expansions. Optional web snippets follow the
+same retrieval interface, but web access is not required by the benchmark
+setting. Each run records the anchor fields, bridge-entity queries, expansion
+queries, and retrieval budgets in its retrieval trace.
 
 \subsection{Structural and Semantic Graph Construction}
 Let $G_q=(V_q,E_q)$ be a directed multigraph. An edge is represented as
@@ -33,6 +44,11 @@ where $h$ and $t$ are entity or literal nodes, $r$ is a normalized relation,
 and $\pi$ records provenance. Provenance includes a source type and identifier
 and, for structural table edges, row position, column name, and header path.
 Parallel edges retain alternative source records for the same relationship.
+Alongside $G_q$, the implementation stores a non-executable structural trace
+$H_q$: Table $\rightarrow$ Row $\rightarrow$ Cell $\rightarrow$ Column edges
+for each supplied table, plus Passage nodes for selected text. This trace retains
+table topology and cell locations without inserting implementation identifiers
+into $G_q$'s entity-centric query interface.
 
 \paragraph{Structural table edges.}
 Dataset adapters provide row dictionaries with qualified column names. The
@@ -62,7 +78,9 @@ The default similarity function compares normalized strings, with threshold
 $0.93$ for the final stage; it is not an embedding model. Resolution events are
 logged. Source identifiers are preserved, but identical row labels across
 multiple tables can still be ambiguous because source metadata is not itself
-a unique node identifier.
+a unique node identifier. Node-type metadata currently labels graph heads as
+entities and tails as attributes; it is descriptive trace metadata rather than
+a learned ontology or a type checker.
 
 \paragraph{Running example: dividend change.}
 Table~\ref{tab:dividend} and a short passage illustrate the representation.
@@ -266,7 +284,12 @@ or exhausted budget yields no answer and an error record.
 For a selected numeric scalar, answer production returns its executed value
 without LLM rewriting. Boolean values are rendered as yes/no. Other outputs
 can pass through a verbalizer, with a normalized scalar check and fallback to
-the preferred observed entity alias. The returned artifact includes the chosen
-program, its evidence, candidate diagnostics, and the per-query graph. Experiments
-must report $N$, $R$, retrieval budgets, execution mode, and fallback policy,
-since each changes either the candidate pool or computational cost.
+the preferred observed entity alias. The returned artifact includes the anchor,
+retrieval trace, executable and structural graph traces, chosen program,
+evidence, candidate diagnostics, and path metrics (completion, planned length,
+evidence count, observed source types, cross-modal flag, and direct-match
+ratio). The artifact also exports a score-derived value in $[0,1]$ under the
+field \texttt{confidence}; it is a rescaled selector score and is not a
+calibrated probability. Experiments must report $N$, $R$, retrieval budgets,
+execution mode, and fallback policy, since each changes either the candidate
+pool or computational cost.

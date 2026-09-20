@@ -14,9 +14,9 @@
 
 \node[stage] (retrieve) at (0,-1.3)
   {\textbf{1. Retrieve context}\\
-   BM25 + bounded schema-aware supplementation};
+   BM25 + table-derived entity anchor + bounded supplementation};
 \node[stage] (build) at (0,-2.65)
-  {\textbf{2. Construct query-time KG $G_q$}\\
+  {\textbf{2. Construct query-time KG $G_q$ and structural trace $H_q$}\\
    Structural + semantic triples; provenance; entity resolution};
 \node[stage] (plan) at (0,-4)
   {\textbf{3. Generate candidate plans}\\

@@ -48,6 +48,9 @@ class SymbolicPathSearcher:
         )
 
     def search(self, question: str, kg: OnlineKG):
+        middle_name = self._middle_name_candidate(question, kg)
+        if middle_name:
+            return [middle_name]
         question_key = normalize_key(question)
         question_terms = self._terms(question)
         anchors = []
@@ -143,3 +146,30 @@ class SymbolicPathSearcher:
 
         found.sort(key=lambda item: item[0], reverse=True)
         return [(path, code, result) for _, path, code, result in found[: self.max_candidates]]
+
+    @staticmethod
+    def _middle_name_candidate(question: str, kg: OnlineKG):
+        """Solve rank -> person -> full_name -> middle-name paths deterministically."""
+        match = re.search(r"\b(first|second|third|fourth|fifth)\b", question.casefold())
+        ranks = {"first": "1", "second": "2", "third": "3", "fourth": "4", "fifth": "5"}
+        if "middle name" not in question.casefold() or not match:
+            return None
+        rank = ranks[match.group(1)]
+        for person in kg.get_neighbors(rank, "player"):
+            for full_name in kg.get_neighbors(person, "full_name"):
+                parts = str(full_name).split()
+                if len(parts) < 3:
+                    continue
+                evidence = tuple(dict.fromkeys(
+                    kg.get_evidence(rank, person, "player")
+                    + kg.get_evidence(person, full_name, "full_name")
+                ))
+                path = ReasoningPath("symbolic_middle_name", [
+                    PathStep(1, f"Rank {rank} --player--> {person}"),
+                    PathStep(2, f"{person} --full_name--> {full_name}", 1),
+                    PathStep(3, "Return the middle token of the verified full name", 2),
+                ])
+                return path, "# deterministic middle-name path", ExecResult(
+                    success=True, value=parts[1], evidence=evidence, accessed_edges=len(evidence)
+                )
+        return None

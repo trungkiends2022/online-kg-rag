@@ -130,6 +130,22 @@ class EntityRelationExtractor:
         provenance = Provenance("text", passage_id, text[:200])
         triples = [_triple_from_item(it, provenance) for it in items]
 
+        # Biography passages commonly open with a three-token legal name, while
+        # the linked table uses only first + last name. Preserve this bridge
+        # deterministically so entity-centric paths can derive a middle name
+        # without depending on an extractor choosing the exact ``full_name``
+        # relation wording.
+        name_match = re.match(
+            r"\s*([A-Z][\w'’-]+\s+[A-Z][\w'’-]+\s+[A-Z][\w'’-]+)\s*\(", text
+        )
+        if name_match:
+            full_name = name_match.group(1)
+            parts = full_name.split()
+            triples.insert(0, Triple(
+                head=f"{parts[0]} {parts[-1]}", relation="full_name", tail=full_name,
+                provenance=provenance,
+            ))
+
         # Preserve a typed and scoped annual-interest fact independently of LLM
         # relation wording. FinQA often splits its subject and amount across two
         # adjacent sentences, which otherwise collapses several unrelated

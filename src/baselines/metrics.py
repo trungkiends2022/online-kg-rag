@@ -8,6 +8,8 @@ import math
 from collections import Counter
 from typing import Any
 
+from src.kg.normalization import DEFAULT_ENTITY_ALIASES, normalize_key
+
 
 def normalize_answer(value: Any) -> str:
     text = str(value).lower()
@@ -18,6 +20,24 @@ def normalize_answer(value: Any) -> str:
 
 def exact_match(gold: Any, prediction: Any) -> float:
     return float(normalize_answer(gold) == normalize_answer(prediction))
+
+
+def normalize_entity_answer(value: Any) -> str:
+    """Canonicalize explicit, audited entity aliases before semantic scoring.
+
+    ``exact_match`` remains the official HybridQA-compatible metric.  This
+    helper supports a *separately labelled* semantic score, e.g. ``Moroccan``
+    versus the table denotation ``Morocco``.  It never uses the gold answer to
+    rewrite a prediction.
+    """
+    key = normalize_key(str(value))
+    canonical = DEFAULT_ENTITY_ALIASES.get(key)
+    return normalize_answer(canonical if canonical is not None else value)
+
+
+def semantic_exact_match(gold: Any, prediction: Any) -> float:
+    """Alias-aware complement to strict benchmark EM; do not report as EM."""
+    return float(normalize_entity_answer(gold) == normalize_entity_answer(prediction))
 
 
 def token_f1(gold: Any, prediction: Any) -> float:

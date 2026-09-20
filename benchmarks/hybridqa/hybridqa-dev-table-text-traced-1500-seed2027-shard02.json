@@ -1,0 +1,6617 @@
+[
+  {
+    "question_id": "8a4beb018099ed24",
+    "question": "Who wrote the book basis of the movie Bolivia sent to the 68th Oscars ?",
+    "table_id": "List_of_Bolivian_submissions_for_the_Academy_Award_for_Best_Foreign_Language_Film_0",
+    "answer-text": "José Wolfango Montes Vannuci",
+    "question_postag": "WP VBD DT NN NN IN DT NN NNP VBD TO DT CD NNS .",
+    "answer-node": [
+      [
+        "Jonah and the Pink Whale",
+        [
+          0,
+          1
+        ],
+        "/wiki/Jonah_and_the_Pink_Whale",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "45f050ef11ba3213",
+    "question": "What was the last film in the Before romantic trilogy of the director of the 2011 film Bernie ?",
+    "table_id": "Ebertfest:_Roger_Ebert's_Film_Festival_4",
+    "answer-text": "Before Midnight",
+    "question_postag": "WP VBD DT JJ NN IN DT NNP JJ NN IN DT NN IN DT CD NN NNP .",
+    "answer-node": [
+      [
+        "Richard Linklater",
+        [
+          5,
+          1
+        ],
+        "/wiki/Richard_Linklater",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "7d2cbbdbecead98c",
+    "question": "What was the person who founded the Shamrock Hotel known to be the king of ?",
+    "table_id": "List_of_Texas_A&M_University_people_21",
+    "answer-text": "Wildcatter",
+    "question_postag": "WP VBD DT NN WP VBD DT NNP NNP VBN TO VB DT NN IN .",
+    "answer-node": [
+      [
+        "Winner of the Hoover Medal ; wildcatter",
+        [
+          4,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Wildcatter",
+        [
+          9,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Michael T. Halbouty",
+        [
+          4,
+          0
+        ],
+        "/wiki/Michael_T._Halbouty",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "8a0c9f5861500669",
+    "question": "What is the name of the club whose city/town is situated between Kgale and Oodi Hills ?",
+    "table_id": "Botswana_Premier_League_0",
+    "answer-text": "Gaborone United",
+    "question_postag": "WP VBZ DT NN IN DT NN WP$ NN VBZ VBN IN NNP CC NNP NNP .",
+    "answer-node": [
+      [
+        "Gaborone United",
+        [
+          3,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Township Rollers F.C.",
+        [
+          15,
+          0
+        ],
+        "/wiki/Township_Rollers_F.C.",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "40fda95a874e6fe5",
+    "question": "What is the name of the keyboardist in the band that formed in London in 2007 and had an album that spent 196 weeks in the UK album charts ?",
+    "table_id": "List_of_albums_which_have_spent_the_most_weeks_on_the_UK_Albums_Chart_1",
+    "answer-text": "Isabella Summers",
+    "question_postag": "WP VBZ DT NN IN DT NN IN DT NN WDT VBD IN NNP IN CD CC VBD DT NN WDT VBD CD NNS IN DT NNP NN NNS .",
+    "answer-node": [
+      [
+        "Lungs (album)",
+        [
+          0,
+          0
+        ],
+        "/wiki/Lungs_(album)",
+        "passage"
+      ],
+      [
+        "Florence and the Machine",
+        [
+          0,
+          1
+        ],
+        "/wiki/Florence_and_the_Machine",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ad50ce5a5cfdf5d5",
+    "question": "Of the winners in 2005 and 2006 which one was born second ?",
+    "table_id": "Leipzig_Marathon_0",
+    "answer-text": "Julius Kiptum Rop",
+    "question_postag": "IN DT NNS IN CD CC CD WDT CD VBD VBN JJ .",
+    "answer-node": [
+      [
+        "Julius Kiptum Rop",
+        [
+          14,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "aeefa79847be5d37",
+    "question": "What language is Eén , the counterpart of the Belgian TV channel that has 14.6 % of the watchers ?",
+    "table_id": "Television_in_Belgium_0",
+    "answer-text": "Flemish",
+    "question_postag": "WP NN VBZ NNP , DT NN IN DT JJ NN NN WDT VBZ CD NN IN DT NNS .",
+    "answer-node": [
+      [
+        "La Une",
+        [
+          2,
+          1
+        ],
+        "/wiki/La_Une",
+        "passage"
+      ],
+      [
+        "RTBF",
+        [
+          2,
+          2
+        ],
+        "/wiki/RTBF",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "d27ec782152ad273",
+    "question": "What is the alternative name for the historic place that is located in the township that was established in 1886 and that has the date listed # 14000426 ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Houghton_County,_Michigan_0",
+    "answer-text": "Portage Entry Light",
+    "question_postag": "WP VBZ DT JJ NN IN DT JJ NN WDT VBZ VBN IN DT NN WDT VBD VBN IN CD CC DT VBZ DT NN VBD # CD .",
+    "answer-node": [
+      [
+        "Keweenaw Waterway Lower Entrance Light",
+        [
+          19,
+          1
+        ],
+        "/wiki/Keweenaw_Waterway_Lower_Entrance_Light",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "91125ed5fbdba303",
+    "question": "Which plain is the city in Yugoslavia that had a GDP index of 172 located on ?",
+    "table_id": "Economy_of_the_Socialist_Federal_Republic_of_Yugoslavia_0",
+    "answer-text": "Pannonian",
+    "question_postag": "JJ NN VBZ DT NN IN NNP WDT VBD DT NNP NN IN CD VBN IN .",
+    "answer-node": [
+      [
+        "Belgrade",
+        [
+          0,
+          0
+        ],
+        "/wiki/Belgrade",
+        "passage"
+      ],
+      [
+        "Novi Sad",
+        [
+          5,
+          0
+        ],
+        "/wiki/Novi_Sad",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "da9984cf65ad6faa",
+    "question": "What is the scientific name of the species whose common name is a primate species categorized in its own genus Allenopithecus in the Old World monkey family ?",
+    "table_id": "List_of_Old_World_monkey_species_0",
+    "answer-text": "Allenopithecus nigroviridis",
+    "question_postag": "WP VBZ DT JJ NN IN DT NNS WP$ JJ NN VBZ DT JJ NNS VBN IN PRP$ JJ NN NNP IN DT NNP NNP NN NN .",
+    "answer-node": [
+      [
+        "Allenopithecus nigroviridis",
+        [
+          0,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Allen's swamp monkey",
+        [
+          0,
+          1
+        ],
+        "/wiki/Allen's_swamp_monkey",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "4b2c14918cc950b7",
+    "question": "How many inhabit the Northern Territory district which contains the Ltyentye Apurte suburb ?",
+    "table_id": "List_of_schools_in_the_Northern_Territory_5",
+    "answer-text": "6,863",
+    "question_postag": "WRB JJ VBP DT NNP NNP NN WDT VBZ DT NNP NNP NN .",
+    "answer-node": [
+      [
+        "MacDonnell Region",
+        [
+          2,
+          2
+        ],
+        "/wiki/MacDonnell_Region",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "4f6047b8db1c80b1",
+    "question": "between the members born January 22 , 1880 and March 20 , 1916 what is the name of the university holding the chapter of the one born earlier ?",
+    "table_id": "List_of_Alpha_Phi_Omega_members_6",
+    "answer-text": "University of Utah",
+    "question_postag": "IN DT NNS VBP NNP CD , CD CC NNP CD , CD WP VBZ DT NN IN DT NN VBG DT NN IN DT CD VBN JJR .",
+    "answer-node": [
+      [
+        "University of Utah",
+        [
+          0,
+          1
+        ],
+        "/wiki/University_of_Utah",
+        "passage"
+      ],
+      [
+        "University of Utah",
+        [
+          3,
+          1
+        ],
+        "/wiki/University_of_Utah",
+        "passage"
+      ],
+      [
+        "University of Utah",
+        [
+          7,
+          1
+        ],
+        "/wiki/University_of_Utah",
+        "passage"
+      ],
+      [
+        "University of Utah",
+        [
+          13,
+          1
+        ],
+        "/wiki/University_of_Utah",
+        "passage"
+      ],
+      [
+        "University of Utah",
+        [
+          18,
+          1
+        ],
+        "/wiki/University_of_Utah",
+        "passage"
+      ],
+      [
+        "Hamer Reiser",
+        [
+          13,
+          0
+        ],
+        "/wiki/Hamer_Reiser",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "1dce3877f261dfbc",
+    "question": "Which PNP member was elected to the Senate first ?",
+    "table_id": "25th_Senate_of_Puerto_Rico_0",
+    "answer-text": "Itzamar Peña",
+    "question_postag": "JJ NNP NN VBD VBN TO DT NNP RB .",
+    "answer-node": [
+      [
+        "Itzamar Peña",
+        [
+          18,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "4950879950bb5189",
+    "question": "What year of the member of the Hong Kong films entered the music industry ?",
+    "table_id": "List_of_Hong_Kong_films_of_2014_0",
+    "answer-text": "2007",
+    "question_postag": "WP NN IN DT NN IN DT NNP NNP NNS VBD DT NN NN .",
+    "answer-node": [
+      [
+        "Moses Chan",
+        [
+          7,
+          2
+        ],
+        "/wiki/Moses_Chan",
+        "passage"
+      ],
+      [
+        "Deep Ng",
+        [
+          11,
+          2
+        ],
+        "/wiki/Deep_Ng",
+        "passage"
+      ],
+      [
+        "Andy Lau",
+        [
+          13,
+          2
+        ],
+        "/wiki/Andy_Lau",
+        "passage"
+      ],
+      [
+        "Edison Chen",
+        [
+          13,
+          2
+        ],
+        "/wiki/Edison_Chen",
+        "passage"
+      ],
+      [
+        "Vincent Kok",
+        [
+          15,
+          1
+        ],
+        "/wiki/Vincent_Kok",
+        "passage"
+      ],
+      [
+        "Pakho Chau",
+        [
+          19,
+          2
+        ],
+        "/wiki/Pakho_Chau",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "08ceec05484b39ab",
+    "question": "What is the ICAO of the airport that is the only international airport in Sierra Leone ?",
+    "table_id": "List_of_airports_in_Sierra_Leone_0",
+    "answer-text": "GFLL",
+    "question_postag": "WP VBZ DT NNP IN DT NN WDT VBZ DT JJ JJ NN IN NNP NNP .",
+    "answer-node": [
+      [
+        "GFLL",
+        [
+          3,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Lungi International Airport",
+        [
+          3,
+          3
+        ],
+        "/wiki/Lungi_International_Airport",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c1f49af7526d9ef2",
+    "question": "Who established the school that was the 2nd place winner of the 2002 Head of the River ( Queensland ) ?",
+    "table_id": "Head_of_the_River_(Queensland)_13",
+    "answer-text": "Society of the Sacred Heart",
+    "question_postag": "WP VBD DT NN WDT VBD DT JJ NN NN IN DT CD NNP IN DT NNP ( NNP ) .",
+    "answer-node": [
+      [
+        "Stuartholme School",
+        [
+          8,
+          1
+        ],
+        "/wiki/Stuartholme_School",
+        "passage"
+      ],
+      [
+        "Stuartholme School",
+        [
+          11,
+          3
+        ],
+        "/wiki/Stuartholme_School",
+        "passage"
+      ],
+      [
+        "Stuartholme School",
+        [
+          12,
+          2
+        ],
+        "/wiki/Stuartholme_School",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "f7bbdf4a7ba0bd43",
+    "question": "What is the college of the person who was educated at Ruabon Grammar School ?",
+    "table_id": "List_of_University_of_Oxford_people_in_the_law_4",
+    "answer-text": "Regent 's Park",
+    "question_postag": "WP VBZ DT NN IN DT NN WP VBD VBN IN NNP NNP NNP .",
+    "answer-node": [
+      [
+        "Regent 's Park",
+        [
+          1,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Malcolm Bishop",
+        [
+          1,
+          0
+        ],
+        "/wiki/Malcolm_Bishop",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c21990dc1e6933b6",
+    "question": "Who composed the song performed by Al Jarreau ?",
+    "table_id": "Grammy_Award_for_Best_Jazz_Vocal_Performance,_Male_0",
+    "answer-text": "Dave Brubeck",
+    "question_postag": "WP VBD DT NN VBN IN NNP NNP .",
+    "answer-node": [
+      [
+        "Blue Rondo à la Turk",
+        [
+          1,
+          2
+        ],
+        "/wiki/Blue_Rondo_à_la_Turk",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "dd013edf891ef6b1",
+    "question": "Where were the Olympics held whem Jocelyn Joseph was the flag bearer for Antigua and Barbuda ?",
+    "table_id": "List_of_flag_bearers_for_Antigua_and_Barbuda_at_the_Olympics_0",
+    "answer-text": "Seoul",
+    "question_postag": "WRB VBD DT NNPS VBD JJ NNP NNP VBD DT NN NN IN NNP CC NNP .",
+    "answer-node": [
+      [
+        "2008 Summer Olympics",
+        [
+          2,
+          1
+        ],
+        "/wiki/2008_Summer_Olympics",
+        "passage"
+      ],
+      [
+        "1988 Summer Olympics",
+        [
+          6,
+          1
+        ],
+        "/wiki/1988_Summer_Olympics",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "cc03f30f5224d8bd",
+    "question": "The runner-up in the election with the smallest margin was the former minister of what ?",
+    "table_id": "Tamil_Nadu_legislative_assembly_election,_2001_0",
+    "answer-text": "revenue and housing in the Indian state of Tamil nadu",
+    "question_postag": "DT NN IN DT NN IN DT JJS NN VBD DT JJ NN IN WP .",
+    "answer-node": [
+      [
+        "I. Periyasamy",
+        [
+          17,
+          3
+        ],
+        "/wiki/I._Periyasamy",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "2e7e345278fb495e",
+    "question": "What town was the player born in who was recruited from South Adelaide Football Club to the Western Bulldogs ?",
+    "table_id": "2004_AFL_Draft_1",
+    "answer-text": "Goolwa",
+    "question_postag": "WP NN VBD DT NN VBN IN WP VBD VBN IN NNP NNP NNP NNP TO DT JJ NNP .",
+    "answer-node": [
+      [
+        "Ryan Griffen",
+        [
+          2,
+          2
+        ],
+        "/wiki/Ryan_Griffen",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "3d64b3277e3728d1",
+    "question": "What year did the alumni who was the first person to fly to the Moon twice receive notability ?",
+    "table_id": "List_of_United_States_Naval_Academy_alumni_1",
+    "answer-text": "1952",
+    "question_postag": "WP NN VBD DT NNS WP VBD DT JJ NN TO VB TO DT NNP RB VBP NN .",
+    "answer-node": [
+      [
+        "1952",
+        [
+          3,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "83cfa408f168a4b5",
+    "question": "How many recipients of the Nobel Prize have been linked with the university of Anne Treisman ?",
+    "table_id": "Golden_Brain_Award_0",
+    "answer-text": "68",
+    "question_postag": "WRB JJ NNS IN DT NNP NNP VBP VBN VBN IN DT NN IN NNP NNP .",
+    "answer-node": [
+      [
+        "Princeton University",
+        [
+          11,
+          2
+        ],
+        "/wiki/Princeton_University",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "5de3aed5acae413d",
+    "question": "How many clinical departments are contained in the post-secondary school attended by Charles Mann ?",
+    "table_id": "List_of_Washington_Redskins_players_12",
+    "answer-text": "16",
+    "question_postag": "WRB JJ JJ NNS VBP VBN IN DT JJ NN VBN IN NNP NNP .",
+    "answer-node": [
+      [
+        "16",
+        [
+          14,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "University of Alabama",
+        [
+          0,
+          3
+        ],
+        "/wiki/University_of_Alabama",
+        "passage"
+      ],
+      [
+        "University of Nevada, Reno",
+        [
+          7,
+          3
+        ],
+        "/wiki/University_of_Nevada,_Reno",
+        "passage"
+      ],
+      [
+        "Ron Marciniak",
+        [
+          10,
+          1
+        ],
+        "/wiki/Ron_Marciniak",
+        "passage"
+      ],
+      [
+        "Bud Marshall",
+        [
+          11,
+          1
+        ],
+        "/wiki/Bud_Marshall",
+        "passage"
+      ],
+      [
+        "University of Florida",
+        [
+          15,
+          3
+        ],
+        "/wiki/University_of_Florida",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "79efc1c2b3a0db44",
+    "question": "Who used to be married to the musician with the record Blunderbuss ?",
+    "table_id": "2012_in_Canadian_music_1",
+    "answer-text": "Meg White",
+    "question_postag": "WP VBD TO VB VBN TO DT NN IN DT NN NNP .",
+    "answer-node": [
+      [
+        "Jack White",
+        [
+          9,
+          1
+        ],
+        "/wiki/Jack_White",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "bb12ed7157ed6e59",
+    "question": "What are the dates of the church whose city , state is 150 miles ( 240 km ) west of Fort Worth ?",
+    "table_id": "List_of_Presbyterian_churches_in_the_United_States_39",
+    "answer-text": "1924 built 1992 NRHP-listed",
+    "question_postag": "WP VBP DT NNS IN DT NN WP$ NN , NN VBZ CD NNS ( CD NN ) NN IN NNP NNP .",
+    "answer-node": [
+      [
+        "1924 built 1992 NRHP-listed",
+        [
+          0,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "96071d9f3186a6d0",
+    "question": "What is the club whose previous MLS cup appearance was the inaugural season of Major League Soccer , and whose next MLS cup appearance was in 2010 ?",
+    "table_id": "List_of_MLS_club_post-season_droughts_10",
+    "answer-text": "Dallas Burn/FC Dallas",
+    "question_postag": "WP VBZ DT NN WP$ JJ NNP NN NN VBD DT JJ NN IN NNP NNP NNP , CC WP$ JJ NNP NN NN VBD IN CD .",
+    "answer-node": [
+      [
+        "Dallas Burn/FC Dallas",
+        [
+          2,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "1ac9822f92cc06aa",
+    "question": "How many boroughs does the 10th most populated metro area have ?",
+    "table_id": "Metropolitan_areas_of_Mexico_0",
+    "answer-text": "Seven",
+    "question_postag": "WRB JJ NN VBZ DT CD JJS JJ JJ NN VBP .",
+    "answer-node": [
+      [
+        "Santiago de Querétaro",
+        [
+          9,
+          1
+        ],
+        "/wiki/Santiago_de_Querétaro",
+        "passage"
+      ],
+      [
+        "San Luis Potosí",
+        [
+          10,
+          2
+        ],
+        "/wiki/San_Luis_Potosí",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "4ad1d3215fb69cd0",
+    "question": "What is the largest city of the home country of the sixth place finisher of the 2012 Chicago Marathon ?",
+    "table_id": "2012_Chicago_Marathon_1",
+    "answer-text": "Mombasa",
+    "question_postag": "WP VBZ DT JJS NN IN DT NN NN IN DT JJ NN NN IN DT CD NNP NNP .",
+    "answer-node": [
+      [
+        "Kenya",
+        [
+          1,
+          2
+        ],
+        "/wiki/Kenya",
+        "passage"
+      ],
+      [
+        "Kenya",
+        [
+          2,
+          2
+        ],
+        "/wiki/Kenya",
+        "passage"
+      ],
+      [
+        "Kenya",
+        [
+          4,
+          2
+        ],
+        "/wiki/Kenya",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "8a7c6b4af4051747",
+    "question": "When did the mens welterweight bronze medalist become a coach for wrestling ?",
+    "table_id": "Sweden_at_the_1964_Summer_Olympics_0",
+    "answer-text": "1973",
+    "question_postag": "WRB VBD DT NNS VBD JJ NN VB DT NN IN VBG .",
+    "answer-node": [
+      [
+        "Gösta Pettersson",
+        [
+          5,
+          1
+        ],
+        "/wiki/Gösta_Pettersson",
+        "passage"
+      ],
+      [
+        "Bertil Nyström",
+        [
+          6,
+          1
+        ],
+        "/wiki/Bertil_Nyström",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e302099f22fa351c",
+    "question": "What is the capital and largest city of the country whose student has an older sister , Princess Ashi Sonam Dechen Wangchuck ?",
+    "table_id": "List_of_University_of_Oxford_people_in_public_life_overseas_1",
+    "answer-text": "Thimphu",
+    "question_postag": "WP VBZ DT NN CC JJS NN IN DT NN WP$ NN VBZ DT JJR NN , NNP NNP NNP NNP NNP .",
+    "answer-node": [
+      [
+        "Bhutan",
+        [
+          1,
+          2
+        ],
+        "/wiki/Bhutan",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ccbdad20297be087",
+    "question": "The NAIA-affiliated Nebraska school is located how far ( in miles ) from the city of Lincoln ?",
+    "table_id": "List_of_NCCAA_institutions_0",
+    "answer-text": "50 miles",
+    "question_postag": "DT JJ NNP NN VBZ VBN WRB RB ( IN NNS ) IN DT NN IN NNP .",
+    "answer-node": [
+      [
+        "York College (Nebraska)",
+        [
+          10,
+          0
+        ],
+        "/wiki/York_College_(Nebraska)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "d25fb67c3ef630dc",
+    "question": "During Axis occupation , what was the name of the country that has a constitution named the Ustav Republike Hrvatske and a Turkish population recorded in the official census as under 500 but also estimated to be over 1,000 ?",
+    "table_id": "Turkish_population_2",
+    "answer-text": "The Independent State of Croatia",
+    "question_postag": "IN NNP NN , WP VBD DT NN IN DT NN WDT VBZ DT NN VBN DT NNP NNP NNP CC DT JJ NN VBN IN DT JJ NN IN IN CD CC RB VBD TO VB IN CD .",
+    "answer-node": [
+      [
+        "Croatia",
+        [
+          2,
+          0
+        ],
+        "/wiki/Croatia",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "6a0f818bd7158b0d",
+    "question": "What is the highest ranking achieved by the champion of recurve archery in 2007 at Dubai in archery ?",
+    "table_id": "FITA_Archery_World_Cup_0",
+    "answer-text": "number one",
+    "question_postag": "WP VBZ DT JJS NN VBN IN DT NN IN NN NN IN CD IN NNP IN NN .",
+    "answer-node": [
+      [
+        "Park Kyung-mo",
+        [
+          0,
+          1
+        ],
+        "/wiki/Park_Kyung-mo",
+        "passage"
+      ],
+      [
+        "Ilario Di Buò",
+        [
+          0,
+          2
+        ],
+        "/wiki/Ilario_Di_Buò",
+        "passage"
+      ],
+      [
+        "Baljinima Tsyrempilov",
+        [
+          1,
+          1
+        ],
+        "/wiki/Baljinima_Tsyrempilov",
+        "passage"
+      ],
+      [
+        "Im Dong-hyun",
+        [
+          2,
+          1
+        ],
+        "/wiki/Im_Dong-hyun",
+        "passage"
+      ],
+      [
+        "Im Dong-hyun",
+        [
+          4,
+          2
+        ],
+        "/wiki/Im_Dong-hyun",
+        "passage"
+      ],
+      [
+        "Im Dong-hyun",
+        [
+          11,
+          3
+        ],
+        "/wiki/Im_Dong-hyun",
+        "passage"
+      ],
+      [
+        "Viktor Ruban",
+        [
+          2,
+          2
+        ],
+        "/wiki/Viktor_Ruban",
+        "passage"
+      ],
+      [
+        "Marco Galiazzo",
+        [
+          3,
+          1
+        ],
+        "/wiki/Marco_Galiazzo",
+        "passage"
+      ],
+      [
+        "Kim Woo-jin",
+        [
+          6,
+          1
+        ],
+        "/wiki/Kim_Woo-jin",
+        "passage"
+      ],
+      [
+        "Kim Woo-jin",
+        [
+          9,
+          3
+        ],
+        "/wiki/Kim_Woo-jin",
+        "passage"
+      ],
+      [
+        "Kim Woo-jin",
+        [
+          11,
+          1
+        ],
+        "/wiki/Kim_Woo-jin",
+        "passage"
+      ],
+      [
+        "Kim Woo-jin",
+        [
+          12,
+          1
+        ],
+        "/wiki/Kim_Woo-jin",
+        "passage"
+      ],
+      [
+        "Oh Jin-hyek",
+        [
+          7,
+          1
+        ],
+        "/wiki/Oh_Jin-hyek",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "7fdab26324baf99b",
+    "question": "What is the 2011 population of the city that is an important centre of governance , administration , education , commerce , aerospace , finance , pharmaceuticals , technology , design , culture , tourism , music and poetry ?",
+    "table_id": "List_of_big_cities_in_North_East_India_0",
+    "answer-text": "2,317,105",
+    "question_postag": "WP VBZ DT CD NN IN DT NN WDT VBZ DT JJ NN IN NN , NN , NN , NN , NN , NN , NNS , NN , NN , NN , NN , NN CC NN .",
+    "answer-node": [
+      [
+        "2,317,105",
+        [
+          13,
+          2
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "2b9da4e384687fd3",
+    "question": "What event did a country debut in who had an athlete medal at the 2005 Jeux de la Francophonie ?",
+    "table_id": "Doping_at_the_Olympic_Games_10",
+    "answer-text": "equestrian",
+    "question_postag": "WP NN VBD DT NN NN IN WP VBD DT JJ NN IN DT CD NNP FW FW NNP .",
+    "answer-node": [
+      [
+        "Saudi Arabia at the 2012 Summer Olympics",
+        [
+          0,
+          1
+        ],
+        "/wiki/Saudi_Arabia_at_the_2012_Summer_Olympics",
+        "passage"
+      ],
+      [
+        "Syria at the 2012 Summer Olympics",
+        [
+          3,
+          1
+        ],
+        "/wiki/Syria_at_the_2012_Summer_Olympics",
+        "passage"
+      ],
+      [
+        "Morocco at the 2012 Summer Olympics",
+        [
+          8,
+          1
+        ],
+        "/wiki/Morocco_at_the_2012_Summer_Olympics",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "330785d81c36c0ed",
+    "question": "What 's the village name of the Anglican denomination location that straddles A29 ?",
+    "table_id": "List_of_places_of_worship_in_Mole_Valley_1",
+    "answer-text": "Ockley",
+    "question_postag": "WP VBZ DT NN NN IN DT NNP NN NN IN VBZ NNP .",
+    "answer-node": [
+      [
+        "Ockley 51°08′49″N 0°21′53″W / 51.1469°N 0.3646°W / 51.1469 ; -0.3646 ( Former St John 's Church , Ockley )",
+        [
+          12,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Built on Ockley Green in the early 1870s , this chapel of ease to St Margaret 's Church was consecrated by the Bishop of Winchester Samuel Wilberforce in December 1872 . The plain building has brickwork and stonework , and the roof supports a bell turret",
+        [
+          12,
+          4
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "252247a87e98feb0",
+    "question": "Who is the current person in the archbishop office held by Onesimo Gordoncillo ?",
+    "table_id": "List_of_University_of_Santo_Tomas_people_2",
+    "answer-text": "José Advincula",
+    "question_postag": "WP VBZ DT JJ NN IN DT NN NN VBN IN NNP NNP .",
+    "answer-node": [
+      [
+        "Roman Catholic Archdiocese of Capiz",
+        [
+          8,
+          2
+        ],
+        "/wiki/Roman_Catholic_Archdiocese_of_Capiz",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "7913b9d158c57cf6",
+    "question": "what is the sport of the silver medalist born 17 March 1973 ?",
+    "table_id": "China_at_the_2006_Winter_Olympics_0",
+    "answer-text": "Short track speed skating",
+    "question_postag": "WP VBZ DT NN IN DT JJ NN VBD CD NNP CD .",
+    "answer-node": [
+      [
+        "Short track speed skating",
+        [
+          0,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Short track speed skating",
+        [
+          5,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Short track speed skating",
+        [
+          6,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Short track speed skating",
+        [
+          9,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Short track speed skating",
+        [
+          10,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Short track speed skating at the 2006 Winter Olympics – Women's 500 metres",
+        [
+          0,
+          3
+        ],
+        "/wiki/Short_track_speed_skating_at_the_2006_Winter_Olympics_–_Women's_500_metres",
+        "passage"
+      ],
+      [
+        "Short track speed skating at the 2006 Winter Olympics – Women's 1000 metres",
+        [
+          5,
+          3
+        ],
+        "/wiki/Short_track_speed_skating_at_the_2006_Winter_Olympics_–_Women's_1000_metres",
+        "passage"
+      ],
+      [
+        "Short track speed skating at the 2006 Winter Olympics – Women's 1000 metres",
+        [
+          10,
+          3
+        ],
+        "/wiki/Short_track_speed_skating_at_the_2006_Winter_Olympics_–_Women's_1000_metres",
+        "passage"
+      ],
+      [
+        "Short track speed skating at the 2006 Winter Olympics – Men's 1500 metres",
+        [
+          6,
+          3
+        ],
+        "/wiki/Short_track_speed_skating_at_the_2006_Winter_Olympics_–_Men's_1500_metres",
+        "passage"
+      ],
+      [
+        "Short track speed skating at the 2006 Winter Olympics – Women's 1500 metres",
+        [
+          9,
+          3
+        ],
+        "/wiki/Short_track_speed_skating_at_the_2006_Winter_Olympics_–_Women's_1500_metres",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "42542320beed1e31",
+    "question": "In what year did the person in fourth place die ?",
+    "table_id": "1967_Gallaher_500_0",
+    "answer-text": "2004",
+    "question_postag": "IN WP NN VBD DT NN IN JJ NN NN .",
+    "answer-node": [
+      [
+        "Kevin Bartlett (race driver)",
+        [
+          2,
+          3
+        ],
+        "/wiki/Kevin_Bartlett_(race_driver)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "289de27327c03591",
+    "question": "What is Chris Austin 's city also known as ?",
+    "table_id": "Liberal_Party_of_Canada_candidates,_2011_Canadian_federal_election_8",
+    "answer-text": "The Gateway to the North",
+    "question_postag": "WP VBZ NNP NNP POS NN RB VBN IN .",
+    "answer-node": [
+      [
+        "Edmonton",
+        [
+          10,
+          3
+        ],
+        "/wiki/Edmonton",
+        "passage"
+      ],
+      [
+        "Edmonton",
+        [
+          11,
+          3
+        ],
+        "/wiki/Edmonton",
+        "passage"
+      ],
+      [
+        "Edmonton",
+        [
+          12,
+          3
+        ],
+        "/wiki/Edmonton",
+        "passage"
+      ],
+      [
+        "Edmonton",
+        [
+          13,
+          3
+        ],
+        "/wiki/Edmonton",
+        "passage"
+      ],
+      [
+        "Edmonton",
+        [
+          14,
+          3
+        ],
+        "/wiki/Edmonton",
+        "passage"
+      ],
+      [
+        "Edmonton",
+        [
+          15,
+          3
+        ],
+        "/wiki/Edmonton",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "64882b33b2a57b75",
+    "question": "In what year was the power station in Balloki completed ?",
+    "table_id": "List_of_power_stations_in_Pakistan_1",
+    "answer-text": "2018",
+    "question_postag": "IN WP NN VBD DT NN NN IN NNP VBD .",
+    "answer-node": [
+      [
+        "Haveli Bahadur Shah Power Plant",
+        [
+          16,
+          0
+        ],
+        "/wiki/Haveli_Bahadur_Shah_Power_Plant",
+        "passage"
+      ],
+      [
+        "Balloki Power Plant",
+        [
+          18,
+          0
+        ],
+        "/wiki/Balloki_Power_Plant",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "f5de2c3184919462",
+    "question": "Which governor who 's seat is up in 2020 is not a commander-in-chief ?",
+    "table_id": "Democratic_Governors_Association_0",
+    "answer-text": "Roy Cooper",
+    "question_postag": "JJ NN WP VBZ NN VBZ RP IN CD VBZ RB DT NN .",
+    "answer-node": [
+      [
+        "Roy Cooper",
+        [
+          17,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "List of Governors of North Carolina",
+        [
+          17,
+          2
+        ],
+        "/wiki/List_of_Governors_of_North_Carolina",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b457a25d15286377",
+    "question": "Which river flows through this city that has the largest football stadium in England ?",
+    "table_id": "List_of_rugby_league_stadiums_by_capacity_0",
+    "answer-text": "the River Thames",
+    "question_postag": "NNP NN VBZ IN DT NN WDT VBZ DT JJS NN NN IN NNP .",
+    "answer-node": [
+      [
+        "London",
+        [
+          1,
+          3
+        ],
+        "/wiki/London",
+        "passage"
+      ],
+      [
+        "London",
+        [
+          7,
+          3
+        ],
+        "/wiki/London",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b4c59444af6231ab",
+    "question": "How many people in 2010 lived in the city that is home to Deerbrook Mall ?",
+    "table_id": "List_of_shopping_malls_in_Texas_1",
+    "answer-text": "15,133",
+    "question_postag": "WRB JJ NNS IN CD VBD IN DT NN WDT VBZ NN TO VB NNP .",
+    "answer-node": [
+      [
+        "Humble, Texas",
+        [
+          5,
+          1
+        ],
+        "/wiki/Humble,_Texas",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "03b74593d042dc96",
+    "question": "In the village that was previously an isolated ranch that housed four families , what was the historic place also known as ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Mora_County,_New_Mexico_0",
+    "answer-text": "Chamblis Hotel",
+    "question_postag": "IN DT NN WDT VBD RB DT JJ NN WDT VBD CD NNS , WP VBD DT JJ NN RB VBN IN .",
+    "answer-node": [
+      [
+        "Santa Clara Hotel",
+        [
+          14,
+          1
+        ],
+        "/wiki/Santa_Clara_Hotel",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "9dc18a79368d991d",
+    "question": "Who is the player who played for the team that joined the NFL in 1976 as an expansion team and who are now coached by Pete Carroll ?",
+    "table_id": "List_of_National_Football_League_passing_yardage_leaders_1",
+    "answer-text": "Russell Wilson",
+    "question_postag": "WP VBZ DT NN WP VBD IN DT NN WDT VBD DT NNP IN CD IN DT NN NN CC WP VBP RB VBN IN NNP NNP .",
+    "answer-node": [
+      [
+        "Russell Wilson",
+        [
+          14,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Aaron Rodgers",
+        [
+          5,
+          1
+        ],
+        "/wiki/Aaron_Rodgers",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "9a496b3605b8a158",
+    "question": "What year did the clergy graduate who has ties to one of the thirteen historic counties , a vice-county and a former administrative county of Wales ?",
+    "table_id": "List_of_clergy_educated_at_Jesus_College,_Oxford_2",
+    "answer-text": "1724",
+    "question_postag": "WP NN VBD DT NN NN WP VBZ NNS TO CD IN DT JJ JJ NNS , DT NN CC DT JJ JJ NN IN NNP .",
+    "answer-node": [
+      [
+        "1724",
+        [
+          1,
+          2
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "4091dd5791ed1d78",
+    "question": "What is the call sign of the station licensed to a city formerly known as Henry 's Station ?",
+    "table_id": "Media_in_Colorado_Springs,_Colorado_0",
+    "answer-text": "KCBR",
+    "question_postag": "WP VBZ DT JJ NN IN DT NN VBD TO DT NN RB VBN IN NNP POS NNP .",
+    "answer-node": [
+      [
+        "KCBR",
+        [
+          2,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "KQSC",
+        [
+          7,
+          1
+        ],
+        "/wiki/KQSC",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "fda8b206d9074ed8",
+    "question": "What is the population as of 2017 of the location with 12 stands ?",
+    "table_id": "List_of_bus_stations_in_Wales_0",
+    "answer-text": "14,462",
+    "question_postag": "WP VBZ DT NN IN IN CD IN DT NN IN CD NNS .",
+    "answer-node": [
+      [
+        "Aberdare",
+        [
+          0,
+          1
+        ],
+        "/wiki/Aberdare",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b459c2cb2ef16781",
+    "question": "When the luchador also known to be a licensed Chiropractor won his prision fatal match , what wager did he took ?",
+    "table_id": "Prison_Fatal_(2013)_0",
+    "answer-text": "Hair",
+    "question_postag": "WRB DT NN RB VBN TO VB DT JJ NNP VBD PRP$ NN JJ NN , WP NN VBD PRP VBD .",
+    "answer-node": [
+      [
+        "Hair",
+        [
+          2,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Hair",
+        [
+          3,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Hair",
+        [
+          4,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Hair",
+        [
+          5,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Hair",
+        [
+          7,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Prisión Fatal (March 2013)",
+        [
+          2,
+          0
+        ],
+        "/wiki/Prisión_Fatal_(March_2013)",
+        "passage"
+      ],
+      [
+        "Prisión Fatal (June 2013)",
+        [
+          3,
+          0
+        ],
+        "/wiki/Prisión_Fatal_(June_2013)",
+        "passage"
+      ],
+      [
+        "Prisión Fatal (May 2014)",
+        [
+          4,
+          0
+        ],
+        "/wiki/Prisión_Fatal_(May_2014)",
+        "passage"
+      ],
+      [
+        "Prisión Fatal (August 2014)",
+        [
+          5,
+          0
+        ],
+        "/wiki/Prisión_Fatal_(August_2014)",
+        "passage"
+      ],
+      [
+        "Prisión Fatal (July 2017)",
+        [
+          7,
+          0
+        ],
+        "/wiki/Prisión_Fatal_(July_2017)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "1ca8ffcd3e20e498",
+    "question": "What is the historic place whose city or town is also a regional transportation center , located along U.S . Routes 20 and 65 and the Canadian National and Union Pacific Railroads ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Hardin_County,_Iowa_0",
+    "answer-text": "Edgewood School of Domestic Arts",
+    "question_postag": "WP VBZ DT JJ NN WP$ NN CC NN VBZ RB DT JJ NN NN , VBN IN NNP . VBZ CD CC CD CC DT NNP NNP CC NNP NNP NNP .",
+    "answer-node": [
+      [
+        "Edgewood School of Domestic Arts",
+        [
+          4,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "719 River St. 42°31′26″N 93°16′06″W / 42.523861°N 93.268333°W / 42.523861 ; -93.268333 ( Edgewood School of Domestic Arts )",
+        [
+          4,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "802fa4ca52b88e9a",
+    "question": "Who is governor of the area with a population of 348,110 in the West Bank ?",
+    "table_id": "Palestinian_National_Authority_0",
+    "answer-text": "Dr Laila Ghannam",
+    "question_postag": "WP VBZ NN IN DT NN IN DT NN IN CD IN DT NNP NNP .",
+    "answer-node": [
+      [
+        "Ramallah Governorate",
+        [
+          6,
+          0
+        ],
+        "/wiki/Ramallah_Governorate",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "74aea7a48604f353",
+    "question": "How many more goals did the player who debuted for Sweden , at age 17 , on 6 February 1996 have compared to Julie Fleeting ?",
+    "table_id": "UEFA_Women's_Champions_League_2",
+    "answer-text": "1",
+    "question_postag": "WRB JJ JJR NNS VBD DT NN WP VBD IN NNP , IN NN CD , IN CD NNP CD VBP VBN TO NNP NNP .",
+    "answer-node": [
+      [
+        "Conny Pohlers ( 1 . FFC Turbine Potsdam )",
+        [
+          14,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Ada Hegerberg",
+        [
+          1,
+          1
+        ],
+        "/wiki/Ada_Hegerberg",
+        "passage"
+      ],
+      [
+        "Ada Hegerberg",
+        [
+          3,
+          1
+        ],
+        "/wiki/Ada_Hegerberg",
+        "passage"
+      ],
+      [
+        "Célia Šašić",
+        [
+          4,
+          1
+        ],
+        "/wiki/Célia_Šašić",
+        "passage"
+      ],
+      [
+        "Laura Rus",
+        [
+          6,
+          1
+        ],
+        "/wiki/Laura_Rus",
+        "passage"
+      ],
+      [
+        "Camille Abily",
+        [
+          7,
+          1
+        ],
+        "/wiki/Camille_Abily",
+        "passage"
+      ],
+      [
+        "Eugénie Le Sommer",
+        [
+          7,
+          1
+        ],
+        "/wiki/Eugénie_Le_Sommer",
+        "passage"
+      ],
+      [
+        "Vanessa Bürki",
+        [
+          9,
+          1
+        ],
+        "/wiki/Vanessa_Bürki",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "82882205b91225ed",
+    "question": "Of the athletes that participated in the sport of field hockey , which Pakistani flag bearer participated in the Olympic games in 1968 , 1972 , and 1976 ?",
+    "table_id": "List_of_flag_bearers_for_Pakistan_at_the_Olympics_0",
+    "answer-text": "Abdul Rashid Jr",
+    "question_postag": "IN DT NNS WDT VBD IN DT NN IN NN NN , WDT NNP NN NN VBD IN DT NNP NNS IN CD , CD , CC CD .",
+    "answer-node": [
+      [
+        "Abdul Rashid Jr",
+        [
+          11,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "1553992ce59467a8",
+    "question": "What town was a band formed who had a single that peaked at number 68 in Australia ?",
+    "table_id": "Triple_J_Hottest_100,_2000_0",
+    "answer-text": "Geelong",
+    "question_postag": "WP NN VBD DT NN VBN WP VBD DT JJ WDT VBD IN NN CD IN NNP .",
+    "answer-node": [
+      [
+        "Magic Dirt",
+        [
+          11,
+          2
+        ],
+        "/wiki/Magic_Dirt",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ea69e6a660f77973",
+    "question": "Which road goes down the coast of the city that Project Runway contestant Ben Chmura resided in ?",
+    "table_id": "Project_Runway_(season_7)_0",
+    "answer-text": "Bayshore Boulevard",
+    "question_postag": "JJ NN VBZ RP DT NN IN DT NN WDT NNP NNP JJ NNP NNP VBD IN .",
+    "answer-node": [
+      [
+        "Tampa, Florida",
+        [
+          7,
+          3
+        ],
+        "/wiki/Tampa,_Florida",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "557d012523e6d6e7",
+    "question": "What color is the marble inset in the town with a population of 2,685 ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Haskell_County,_Oklahoma_0",
+    "answer-text": "green",
+    "question_postag": "WP NN VBZ DT JJ NN IN DT NN IN DT NN IN CD .",
+    "answer-node": [
+      [
+        "Green McCurtain House",
+        [
+          4,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Northeast of Kinta 35°07′43″N 95°09′25″W / 35.128611°N 95.156944°W / 35.128611 ; -95.156944 ( Green McCurtain House )",
+        [
+          4,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Haskell County Courthouse",
+        [
+          1,
+          1
+        ],
+        "/wiki/Haskell_County_Courthouse",
+        "passage"
+      ],
+      [
+        "Edmund McCurtain House",
+        [
+          3,
+          1
+        ],
+        "/wiki/Edmund_McCurtain_House",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "93ae174fd15b5315",
+    "question": "How many premierships in the AFL Women 's competition has the Club won who drafted a player who won the Brownlow Medal in 2008 ?",
+    "table_id": "2003_AFL_Draft_1",
+    "answer-text": "one",
+    "question_postag": "WRB JJ NNS IN DT NNP NNP POS NN VBZ DT NNP VBD WP VBD DT NN WP VBD DT NNP NNP IN CD .",
+    "answer-node": [
+      [
+        "Western Bulldogs",
+        [
+          0,
+          4
+        ],
+        "/wiki/Western_Bulldogs",
+        "passage"
+      ],
+      [
+        "Western Bulldogs",
+        [
+          3,
+          4
+        ],
+        "/wiki/Western_Bulldogs",
+        "passage"
+      ],
+      [
+        "Carlton Football Club",
+        [
+          1,
+          4
+        ],
+        "/wiki/Carlton_Football_Club",
+        "passage"
+      ],
+      [
+        "Essendon Football Club",
+        [
+          5,
+          4
+        ],
+        "/wiki/Essendon_Football_Club",
+        "passage"
+      ],
+      [
+        "Essendon Football Club",
+        [
+          12,
+          4
+        ],
+        "/wiki/Essendon_Football_Club",
+        "passage"
+      ],
+      [
+        "Geelong Football Club",
+        [
+          6,
+          4
+        ],
+        "/wiki/Geelong_Football_Club",
+        "passage"
+      ],
+      [
+        "Fremantle Football Club",
+        [
+          9,
+          4
+        ],
+        "/wiki/Fremantle_Football_Club",
+        "passage"
+      ],
+      [
+        "Fremantle Football Club",
+        [
+          11,
+          4
+        ],
+        "/wiki/Fremantle_Football_Club",
+        "passage"
+      ],
+      [
+        "Fremantle Football Club",
+        [
+          18,
+          4
+        ],
+        "/wiki/Fremantle_Football_Club",
+        "passage"
+      ],
+      [
+        "West Coast Eagles",
+        [
+          10,
+          4
+        ],
+        "/wiki/West_Coast_Eagles",
+        "passage"
+      ],
+      [
+        "West Coast Eagles",
+        [
+          19,
+          4
+        ],
+        "/wiki/West_Coast_Eagles",
+        "passage"
+      ],
+      [
+        "Northern Knights",
+        [
+          12,
+          3
+        ],
+        "/wiki/Northern_Knights",
+        "passage"
+      ],
+      [
+        "Sandringham Dragons",
+        [
+          13,
+          3
+        ],
+        "/wiki/Sandringham_Dragons",
+        "passage"
+      ],
+      [
+        "Troy Chaplin",
+        [
+          14,
+          2
+        ],
+        "/wiki/Troy_Chaplin",
+        "passage"
+      ],
+      [
+        "North Ballarat Rebels",
+        [
+          14,
+          3
+        ],
+        "/wiki/North_Ballarat_Rebels",
+        "passage"
+      ],
+      [
+        "Sydney Swans",
+        [
+          15,
+          4
+        ],
+        "/wiki/Sydney_Swans",
+        "passage"
+      ],
+      [
+        "Collingwood Football Club",
+        [
+          16,
+          4
+        ],
+        "/wiki/Collingwood_Football_Club",
+        "passage"
+      ],
+      [
+        "Brisbane Lions",
+        [
+          17,
+          4
+        ],
+        "/wiki/Brisbane_Lions",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ba8f22ab7933c4d9",
+    "question": "What written work was the 1998 film based on ?",
+    "table_id": "Adam_Beach_0",
+    "answer-text": "This is What it Means to Say Phoenix , Arizona",
+    "question_postag": "WP VBN NN VBD DT CD NN VBN IN .",
+    "answer-node": [
+      [
+        "Smoke Signals (film)",
+        [
+          6,
+          1
+        ],
+        "/wiki/Smoke_Signals_(film)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "04dae7533cca3989",
+    "question": "What is the name of the company is located in the seventh-largest country by area and the second-most populous country ?",
+    "table_id": "List_of_spacecraft_manufacturers_1",
+    "answer-text": "Dhruva Space",
+    "question_postag": "WP VBZ DT NN IN DT NN VBZ VBN IN DT JJ NN IN NN CC DT JJ JJ NN .",
+    "answer-node": [
+      [
+        "Dhruva Space",
+        [
+          16,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "1361db6f9abccb6c",
+    "question": "When was the porn actress born ?",
+    "table_id": "Sigma_Sigma_Sigma_0",
+    "answer-text": "February 26 , 1977",
+    "question_postag": "WRB VBD DT JJ NN VBN .",
+    "answer-node": [
+      [
+        "Calli Cox",
+        [
+          7,
+          0
+        ],
+        "/wiki/Calli_Cox",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "165d33037a93a87e",
+    "question": "How many meters horizontally has the person who obtained 6741 points in heptathon in Talence leaped ?",
+    "table_id": "Heptathlon_1",
+    "answer-text": "7.48",
+    "question_postag": "WRB JJ NNS RB VBZ DT NN WP VBD CD NNS IN NN IN NNP VBD .",
+    "answer-node": [
+      [
+        "Heike Drechsler",
+        [
+          14,
+          2
+        ],
+        "/wiki/Heike_Drechsler",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "1e911a9dd9d2677f",
+    "question": "what country submitted a not nominated film that had a director who born 1944 ?",
+    "table_id": "List_of_submissions_to_the_64th_Academy_Awards_for_Best_Foreign_Language_Film_0",
+    "answer-text": "Cuba",
+    "question_postag": "WP NN VBD DT RB VBN NN WDT VBD DT NN WP VBZ CD .",
+    "answer-node": [
+      [
+        "Cuba",
+        [
+          9,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "44a312d8788dcd2e",
+    "question": "In a sport that includes exercises requiring balance , strength , and flexibility , in what event did the youngest bronze medalist at the 2010 Commonwealth Games compete in ?",
+    "table_id": "India_at_the_2010_Commonwealth_Games_2",
+    "answer-text": "Men 's Floor",
+    "question_postag": "IN DT NN WDT VBZ NNS VBG NN , NN , CC NN , IN WP NN VBD DT JJS JJ NN IN DT CD NNP NNPS VB IN .",
+    "answer-node": [
+      [
+        "Men 's Floor",
+        [
+          6,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "fffae048bcb4308d",
+    "question": "In the year the Pro Tour event took place in Paris , on what date did the World Championship conclude ?",
+    "table_id": "Darwin_Kastle_0",
+    "answer-text": "17 August 1997",
+    "question_postag": "IN DT NN DT NNP NNP NN VBD NN IN NNP , IN WP NN VBD DT NNP NNP NN .",
+    "answer-node": [
+      [
+        "Magic: The Gathering Pro Tour season 1996–97",
+        [
+          1,
+          0
+        ],
+        "/wiki/Magic:_The_Gathering_Pro_Tour_season_1996–97",
+        "passage"
+      ],
+      [
+        "Magic: The Gathering Pro Tour season 1996–97",
+        [
+          2,
+          0
+        ],
+        "/wiki/Magic:_The_Gathering_Pro_Tour_season_1996–97",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c1c7d5f0fa849f3c",
+    "question": "What is the population of this city that has this large Ancient Egyptian temple complex built approximately 1400 BCE ?",
+    "table_id": "List_of_the_oldest_buildings_in_the_world_3",
+    "answer-text": "506,535",
+    "question_postag": "WP VBZ DT NN IN DT NN WDT VBZ DT JJ NNP JJ NN JJ VBN RB CD NNP .",
+    "answer-node": [
+      [
+        "Luxor",
+        [
+          2,
+          1
+        ],
+        "/wiki/Luxor",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "5728bdcb0bedc535",
+    "question": "What is the name of the airport in the city that is the most populous urban area in Central America ?",
+    "table_id": "List_of_the_busiest_airports_in_Central_America_4",
+    "answer-text": "La Aurora International Airport",
+    "question_postag": "WP VBZ DT NN IN DT NN IN DT NN WDT VBZ DT RBS JJ JJ NN IN NNP NNP .",
+    "answer-node": [
+      [
+        "La Aurora International Airport",
+        [
+          3,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Guatemala City",
+        [
+          3,
+          4
+        ],
+        "/wiki/Guatemala_City",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "2841126d304db8a9",
+    "question": "How many seasons did the orginal Steve McGarrett air on television ?",
+    "table_id": "List_of_United_States_Naval_Academy_alumni_32",
+    "answer-text": "12 seasons",
+    "question_postag": "WRB JJ NNS VBD DT JJ NNP NNP NN IN NN .",
+    "answer-node": [
+      [
+        "Hawaii Five-O (1968 TV series)",
+        [
+          0,
+          2
+        ],
+        "/wiki/Hawaii_Five-O_(1968_TV_series)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e50c0fc0644c1817",
+    "question": "What is the English title of the film whose director was born on 11 October 1961 ?",
+    "table_id": "List_of_Palestinian_submissions_for_the_Academy_Award_for_Best_Foreign_Language_Film_0",
+    "answer-text": "Omar",
+    "question_postag": "WP VBZ DT JJ NN IN DT NN WP$ NN VBD VBN IN CD NNP CD .",
+    "answer-node": [
+      [
+        "Omar",
+        [
+          5,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Hany Abu-Assad",
+        [
+          2,
+          3
+        ],
+        "/wiki/Hany_Abu-Assad",
+        "passage"
+      ],
+      [
+        "Hany Abu-Assad",
+        [
+          5,
+          3
+        ],
+        "/wiki/Hany_Abu-Assad",
+        "passage"
+      ],
+      [
+        "Hany Abu-Assad",
+        [
+          8,
+          3
+        ],
+        "/wiki/Hany_Abu-Assad",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "14630625ae470511",
+    "question": "What is the date listed for the church in the city that had a population of 1,465 in 2000 ?",
+    "table_id": "List_of_Catholic_churches_in_the_United_States_15",
+    "answer-text": "1856 built 1976 NRHP-listed",
+    "question_postag": "WP VBZ DT NN VBN IN DT NN IN DT NN WDT VBD DT NN IN CD IN CD .",
+    "answer-node": [
+      [
+        "1856 built 1976 NRHP-listed",
+        [
+          19,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "0ccec805fd3393f1",
+    "question": "Which author of the Kamakura period treasures died more recently ?",
+    "table_id": "List_of_National_Treasures_of_Japan_(writings:_Japanese_books)_0",
+    "answer-text": "Fujiwara no Teika",
+    "question_postag": "JJ NN IN DT NNP NN NNS VBD RBR RB .",
+    "answer-node": [
+      [
+        "Fujiwara no Teika transcription by Fujiwara no Teika",
+        [
+          7,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Fujiwara no Teika collated by Fujiwara no Teika",
+        [
+          13,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Fujiwara no Teika",
+        [
+          18,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Private anthology of 2,885 poems by Fujiwara no Teika",
+        [
+          18,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Kakinomoto no Hitomaro",
+        [
+          16,
+          2
+        ],
+        "/wiki/Kakinomoto_no_Hitomaro",
+        "passage"
+      ],
+      [
+        "Fujiwara no Shunzei",
+        [
+          19,
+          1
+        ],
+        "/wiki/Fujiwara_no_Shunzei",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "a8f21d5965180480",
+    "question": "What is the name of the temple whose place is a city and a union territory of India ?",
+    "table_id": "List_of_large_Hindu_temples_0",
+    "answer-text": "Akshardham",
+    "question_postag": "WP VBZ DT NN IN DT NN WP$ NN VBZ DT NN CC DT NN NN IN NNP .",
+    "answer-node": [
+      [
+        "Akshardham",
+        [
+          2,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Akshardham is a Hindu temple complex in Delhi , India . Also referred to as Delhi Akshardham or Swaminarayan Akshardham , the complex displays millennia of traditional Indian and Hindu culture , spirituality , and architecture . The building was inspired and moderated by Pramukh Swami Maharaj , the spiritual head of the Bochasanwasi Shri Akshar Purushottam Swaminarayan Sanstha , whose 3,000 volunteers helped 7,000 artisans construct Akshardham",
+        [
+          2,
+          5
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Hindu temple",
+        [
+          5,
+          5
+        ],
+        "/wiki/Hindu_temple",
+        "passage"
+      ],
+      [
+        "Hindu temple",
+        [
+          17,
+          5
+        ],
+        "/wiki/Hindu_temple",
+        "passage"
+      ],
+      [
+        "Hindu temple",
+        [
+          18,
+          5
+        ],
+        "/wiki/Hindu_temple",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "226e3e5cd7ec9f29",
+    "question": "What is the state population rank of the Bay Area city which contains the Charles M. Schulz Museum and Research Center ?",
+    "table_id": "List_of_museums_in_the_San_Francisco_Bay_Area_4",
+    "answer-text": "28th",
+    "question_postag": "WP VBZ DT NN NN NN IN DT NNP NNP NN WDT VBZ DT NNP NNP NNP NNP CC NNP NNP .",
+    "answer-node": [
+      [
+        "Santa Rosa, California",
+        [
+          9,
+          1
+        ],
+        "/wiki/Santa_Rosa,_California",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c4a73922b08b946a",
+    "question": "what is the No . of the team that plays in the the Kimpinen Sports Centre ?",
+    "table_id": "Kakkonen_0",
+    "answer-text": "10",
+    "question_postag": "WP VBZ DT NNP . IN DT NN WDT VBZ IN DT DT NNP NNP NNP .",
+    "answer-node": [
+      [
+        "10",
+        [
+          9,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "72192864e58282fe",
+    "question": "What city hosted the World Championship in the season that Shouta Yasooka ranked 5th twice ?",
+    "table_id": "Shouta_Yasooka_0",
+    "answer-text": "Chiba",
+    "question_postag": "WP NN VBD DT NNP NNP IN DT NN WDT NNP NNP VBD CD RB .",
+    "answer-node": [
+      [
+        "Magic: The Gathering Pro Tour season 2010",
+        [
+          11,
+          0
+        ],
+        "/wiki/Magic:_The_Gathering_Pro_Tour_season_2010",
+        "passage"
+      ],
+      [
+        "Magic: The Gathering Pro Tour season 2010",
+        [
+          12,
+          0
+        ],
+        "/wiki/Magic:_The_Gathering_Pro_Tour_season_2010",
+        "passage"
+      ],
+      [
+        "Magic: The Gathering Pro Tour season 2010",
+        [
+          13,
+          0
+        ],
+        "/wiki/Magic:_The_Gathering_Pro_Tour_season_2010",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "acfe4293fab8d45c",
+    "question": "How many national championships did the team that won the competition that is organised every year by EHF ?",
+    "table_id": "Sportsperson_of_the_Year_(Czechoslovakia)_1",
+    "answer-text": "30 national championships",
+    "question_postag": "WRB JJ JJ NNS VBD DT NN WDT VBD DT NN WDT VBZ VBN DT NN IN NNP .",
+    "answer-node": [
+      [
+        "HC Dukla Prague",
+        [
+          2,
+          1
+        ],
+        "/wiki/HC_Dukla_Prague",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ef9a740e6a5f5a1b",
+    "question": "What is the setting of the 1978 movie in which Celia Kaye played Bride of the Bear ?",
+    "table_id": "Celia_Kaye_1",
+    "answer-text": "Malibu",
+    "question_postag": "WP VBZ DT NN IN DT CD NN IN WDT NNP NNP VBD NNP IN DT NNP .",
+    "answer-node": [
+      [
+        "Big Wednesday",
+        [
+          6,
+          1
+        ],
+        "/wiki/Big_Wednesday",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c0b376caebe4cb89",
+    "question": "What was the birth month of the player that went from Carlton to West Coast during the 2007 AFL draft ?",
+    "table_id": "2007_AFL_Draft_0",
+    "answer-text": "August",
+    "question_postag": "WP VBD DT JJ NN IN DT NN WDT VBD IN NNP TO NNP NNP IN DT CD NNP NN .",
+    "answer-node": [
+      [
+        "Martin Mattner",
+        [
+          0,
+          0
+        ],
+        "/wiki/Martin_Mattner",
+        "passage"
+      ],
+      [
+        "Josh Kennedy (footballer, born 1987)",
+        [
+          2,
+          3
+        ],
+        "/wiki/Josh_Kennedy_(footballer,_born_1987)",
+        "passage"
+      ],
+      [
+        "Josh Kennedy (footballer, born 1987)",
+        [
+          3,
+          0
+        ],
+        "/wiki/Josh_Kennedy_(footballer,_born_1987)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "743fa36d53b80a75",
+    "question": "Consider the titles in 1929 what is the title name where John Ford directed and starred George OBrien ?",
+    "table_id": "List_of_sports_films_0",
+    "answer-text": "Salute",
+    "question_postag": "VB DT NNS IN CD WP VBZ DT NN NN WRB NNP NNP VBD CC VBD NNP NNP .",
+    "answer-node": [
+      [
+        "Salute",
+        [
+          8,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "9bafedf1eec75302",
+    "question": "What is CR 33 's notes location 's identity originated from ?",
+    "table_id": "List_of_county_routes_in_Suffolk_County,_New_York_1",
+    "answer-text": "Land overflowed by the sea",
+    "question_postag": "WP VBZ NNP CD POS NNS VBP POS NN VBN IN .",
+    "answer-node": [
+      [
+        "Napeague, New York",
+        [
+          11,
+          3
+        ],
+        "/wiki/Napeague,_New_York",
+        "passage"
+      ],
+      [
+        "Napeague, New York",
+        [
+          11,
+          4
+        ],
+        "/wiki/Napeague,_New_York",
+        "passage"
+      ],
+      [
+        "Napeague, New York",
+        [
+          12,
+          3
+        ],
+        "/wiki/Napeague,_New_York",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e9188b67cb402773",
+    "question": "How many people inhabit the metro area of the city that María José González Ginestre is from ?",
+    "table_id": "Miss_Venezuela_2009_1",
+    "answer-text": "1,827,165",
+    "question_postag": "WRB JJ NNS VBP DT JJ NN IN DT NN WDT NNP NNP NNP NNP VBZ IN .",
+    "answer-node": [
+      [
+        "Valencia, Venezuela",
+        [
+          6,
+          4
+        ],
+        "/wiki/Valencia,_Venezuela",
+        "passage"
+      ],
+      [
+        "Valencia, Venezuela",
+        [
+          8,
+          4
+        ],
+        "/wiki/Valencia,_Venezuela",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "1f7e1ba710ad54f2",
+    "question": "For whom was this neighborhood constructed in the 18th century located in the district whose name means old city in Catalan ?",
+    "table_id": "List_of_libraries_in_Barcelona_0",
+    "answer-text": "the Ribera neighborhood",
+    "question_postag": "IN WP VBD DT NN VBN IN DT JJ NN VBN IN DT NN WP$ NN VBZ JJ NN IN NNP .",
+    "answer-node": [
+      [
+        "Barceloneta, Barcelona",
+        [
+          1,
+          1
+        ],
+        "/wiki/Barceloneta,_Barcelona",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "aec16e01c40170ba",
+    "question": "Which wars serve as the backdrop of the 2005 film in which Alexander Siddig played Imad ad-Din al-Isfahani ?",
+    "table_id": "Alexander_Siddig_0",
+    "answer-text": "Crusades",
+    "question_postag": "JJ VBZ VBP IN DT NN IN DT CD NN IN WDT NNP NNP VBD NNP JJ NN .",
+    "answer-node": [
+      [
+        "Kingdom of Heaven (film)",
+        [
+          5,
+          1
+        ],
+        "/wiki/Kingdom_of_Heaven_(film)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "aa1d42444bf86284",
+    "question": "What was the sequel to the film distributed by the distributor owned by The Walt Disney Company ?",
+    "table_id": "1984_in_film_0",
+    "answer-text": "The Jewel of the Nile",
+    "question_postag": "WP VBD DT NN TO DT NN VBN IN DT NN VBN IN DT NNP NNP NNP .",
+    "answer-node": [
+      [
+        "Romancing the Stone",
+        [
+          7,
+          1
+        ],
+        "/wiki/Romancing_the_Stone",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "d7a13239863ff8e8",
+    "question": "Which two kingdoms came from three kingdoms being joined together in the homeland of Ki-Seong Kim ?",
+    "table_id": "2002_Aerobic_Gymnastics_World_Championships_4",
+    "answer-text": "Silla and Balhae",
+    "question_postag": "WDT CD NNS VBD IN CD NNS VBG VBN RB IN DT NN IN NNP NNP .",
+    "answer-node": [
+      [
+        "South Korea",
+        [
+          3,
+          2
+        ],
+        "/wiki/South_Korea",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "336b0c6eabe3b0ee",
+    "question": "What is the name of a third listed museum located in a municipality in the Bernina region in the canton of Grisons ?",
+    "table_id": "List_of_museums_in_the_Grisons_0",
+    "answer-text": "Fondazione Ernesto Conrad",
+    "question_postag": "WP VBZ DT NN IN DT JJ VBN NN VBN IN DT NN IN DT NNP NN IN DT NN IN NNP .",
+    "answer-node": [
+      [
+        "Fondazione Ernesto Conrad",
+        [
+          7,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "b1ef7348bcfd9d0c",
+    "question": "What type of political system is the government that awarded Shah Rukh Khan the BrandLaureate Legendary Award ?",
+    "table_id": "List_of_awards_and_nominations_received_by_Shahrukh_Khan_15",
+    "answer-text": "constitutional monarchy",
+    "question_postag": "WP NN IN JJ NN VBZ DT NN WDT VBD NNP NNP NNP DT NNP NNP NNP .",
+    "answer-node": [
+      [
+        "Government of Malaysia",
+        [
+          7,
+          2
+        ],
+        "/wiki/Government_of_Malaysia",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "f8c960a5746cf525",
+    "question": "For the film with the sama title Na Do-hyang , who is the director ?",
+    "table_id": "List_of_submissions_to_the_37th_Academy_Awards_for_Best_Foreign_Language_Film_0",
+    "answer-text": "Shin Sang-ok",
+    "question_postag": "IN DT NN IN DT NN NN NNP NNP , WP VBZ DT NN .",
+    "answer-node": [
+      [
+        "Shin Sang-ok",
+        [
+          10,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Deaf Sam-yong (1964 film)",
+        [
+          10,
+          1
+        ],
+        "/wiki/Deaf_Sam-yong_(1964_film)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "a64f0912761b299a",
+    "question": "What is the origin of the band that has released 10 studio albums , 12 compilations , four EPs , and 40 singles ?",
+    "table_id": "List_of_post-grunge_bands_6",
+    "answer-text": "Newport , Wales",
+    "question_postag": "WP VBZ DT NN IN DT NN WDT VBZ VBN CD NN NNS , CD NNS , CD NNP , CC CD NNS .",
+    "answer-node": [
+      [
+        "Newport , Wales",
+        [
+          3,
+          2
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "d051048cd7b013a3",
+    "question": "What is the system of the transmitter in Divis transmitting station in which the operator is wholly owned by ITV plc ?",
+    "table_id": "Divis_transmitting_station_0",
+    "answer-text": "DVB-T",
+    "question_postag": "WP VBZ DT NN IN DT NN IN NNP VBG NN IN WDT DT NN VBZ RB VBN IN NNP NN .",
+    "answer-node": [
+      [
+        "DVB-T",
+        [
+          0,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "DVB-T",
+        [
+          1,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "DVB-T",
+        [
+          3,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "DVB-T",
+        [
+          4,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "DVB-T",
+        [
+          5,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "DVB-T",
+        [
+          6,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "DVB-T",
+        [
+          7,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "DVB-T2",
+        [
+          2,
+          4
+        ],
+        "/wiki/DVB-T2",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "90a96e96bee8325f",
+    "question": "What type of aircraft does an Emmen Air Base-based squadron use that is an American business jet introduced in October , 1994 ?",
+    "table_id": "Swiss_Air_Force_aircraft_squadrons_1",
+    "answer-text": "Cessna Citation Excel ( Model 560XL )",
+    "question_postag": "WP NN IN NN VBZ DT NNP NNP JJ NN NN WDT VBZ DT JJ NN NN VBN IN NNP , CD .",
+    "answer-node": [
+      [
+        "Cessna Citation Excel",
+        [
+          1,
+          3
+        ],
+        "/wiki/Cessna_Citation_Excel",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "f0c414073dddf010",
+    "question": "What were the sales in millions of the song written and produced by The Smeezingtons ?",
+    "table_id": "List_of_best-selling_singles_8",
+    "answer-text": "10.2",
+    "question_postag": "WP VBD DT NNS IN NNS IN DT NN VBN CC VBN IN DT NNS .",
+    "answer-node": [
+      [
+        "10.2",
+        [
+          10,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "10.2",
+        [
+          11,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Grenade (song)",
+        [
+          10,
+          1
+        ],
+        "/wiki/Grenade_(song)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ad40926595d1d394",
+    "question": "What is the season year whose winner 's nickname is `` The Brazilians '' ?",
+    "table_id": "Botswana_Premier_League_1",
+    "answer-text": "1998-99",
+    "question_postag": "WP VBZ DT NN NN WP$ NN POS NN VBZ `` DT NNPS '' .",
+    "answer-node": [
+      [
+        "1998-99",
+        [
+          3,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "0828d6547108aeeb",
+    "question": "How many albums has this singer and song-writer sold , who won this award at the Staples Center in Los Angeles on September 13 , 2000 ?",
+    "table_id": "Mira_Quien_Baila_(U.S._season_1)_1",
+    "answer-text": "20 million albums",
+    "question_postag": "WRB JJ NNS VBZ DT NN CC NN VBN , WP VBD DT NN IN DT NNP NNP IN NNP NNP IN NNP CD , CD .",
+    "answer-node": [
+      [
+        "Jon Secada",
+        [
+          4,
+          1
+        ],
+        "/wiki/Jon_Secada",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "42c80d558887db58",
+    "question": "Of the places in the city that was listed as a town in the 2000 census , which was built for the director of Newberry Cotton Mills ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Newberry_County,_South_Carolina_0",
+    "answer-text": "George Mower House",
+    "question_postag": "IN DT NNS IN DT NN WDT VBD VBN IN DT NN IN DT CD NN , WDT VBD VBN IN DT NN IN NNP NNP NNP .",
+    "answer-node": [
+      [
+        "George Mower House",
+        [
+          17,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "1526 Boundary St. 34°16′25″N 81°35′38″W / 34.273611°N 81.593889°W / 34.273611 ; -81.593889 ( George Mower House )",
+        [
+          17,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "61bcf886e23ad52c",
+    "question": "What is the name of the player that plays for the club that entered the AIHL in 2002 ?",
+    "table_id": "Australia_men's_national_ice_hockey_team_1",
+    "answer-text": "Austin McKenzie",
+    "question_postag": "WP VBZ DT NN IN DT NN WDT VBZ IN DT NN WDT VBD DT NNP IN CD .",
+    "answer-node": [
+      [
+        "Austin McKenzie",
+        [
+          9,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "13ab4d043d9040bf",
+    "question": "who was the runner-up of the 34th Piala Sumbangsih ?",
+    "table_id": "Sultan_Haji_Ahmad_Shah_Cup_(Charity_Shield_Malaysia)_0",
+    "answer-text": "Perak",
+    "question_postag": "WP VBD DT NN IN DT CD NNP NNP .",
+    "answer-node": [
+      [
+        "Perak",
+        [
+          0,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Perak",
+        [
+          13,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Perak",
+        [
+          14,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Perak",
+        [
+          18,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "2019 Piala Sumbangsih",
+        [
+          0,
+          0
+        ],
+        "/wiki/2019_Piala_Sumbangsih",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "90e64441b6040b42",
+    "question": "Which island lies the university that established an architecture school in 1995 ?",
+    "table_id": "List_of_international_architecture_schools_2",
+    "answer-text": "Sicily",
+    "question_postag": "NNP NN VBZ DT NN WDT VBD DT NN NN IN CD .",
+    "answer-node": [
+      [
+        "Enna",
+        [
+          7,
+          0
+        ],
+        "/wiki/Enna",
+        "passage"
+      ],
+      [
+        "Kore University of Enna",
+        [
+          7,
+          1
+        ],
+        "/wiki/Kore_University_of_Enna",
+        "passage"
+      ],
+      [
+        "Palermo",
+        [
+          16,
+          0
+        ],
+        "/wiki/Palermo",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "4aba1de824dac53c",
+    "question": "What bus transit system operates in the county named from a Lenape word which means 'best flowing river of the hills ' ?",
+    "table_id": "List_of_bus_transit_systems_in_the_United_States_20",
+    "answer-text": "Allegany County Transit",
+    "question_postag": "WP VBD NN NN VBZ IN DT NN VBN IN DT NNP NN WDT VBZ JJS VBG NN IN DT NNS POS .",
+    "answer-node": [
+      [
+        "Allegany County Transit",
+        [
+          0,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "f7426693930a6ab2",
+    "question": "The ride opened in a park in 1995 by D. H. Morgan Manufacturing was in what state ?",
+    "table_id": "D._H._Morgan_Manufacturing_4",
+    "answer-text": "Tennessee",
+    "question_postag": "DT NN VBD IN DT NN IN CD IN NNP NNP NNP NNP VBD IN WP NN .",
+    "answer-node": [
+      [
+        "Dollywood",
+        [
+          5,
+          1
+        ],
+        "/wiki/Dollywood",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "91b711c591f2d172",
+    "question": "What is the address for the High School that has Green & Gold as their School Colors ?",
+    "table_id": "Southern_Connecticut_Conference_3",
+    "answer-text": "2040 Dixwell Avenue in Hamden , Connecticut",
+    "question_postag": "WP VBZ DT NN IN DT JJ NNP WDT VBZ NNP CC NNP IN PRP$ NN NNS .",
+    "answer-node": [
+      [
+        "Hamden High School",
+        [
+          1,
+          0
+        ],
+        "/wiki/Hamden_High_School",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e515f0ee646f09e5",
+    "question": "In 2013 , how many registered members were there in the First Nation that is the namesake of the town of Sooke and had land covered by the Douglas treaties North-west of Sooke Inlet ?",
+    "table_id": "Douglas_Treaties_0",
+    "answer-text": "251 registered members",
+    "question_postag": "IN CD , WRB JJ VBD NNS VBD RB IN DT JJ NN WDT VBZ DT NN IN DT NN IN NNP CC VBD NN VBN IN DT NNP VBZ NNP IN NNP NNP .",
+    "answer-node": [
+      [
+        "T'sou-ke Nation",
+        [
+          6,
+          1
+        ],
+        "/wiki/T'sou-ke_Nation",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "6e79490f409f2492",
+    "question": "Which event in which a Swedish competitor won an individual silver medal was contested by 24 competitors from 6 nations ?",
+    "table_id": "List_of_Swedish_Olympic_medalists_0",
+    "answer-text": "Men 's 10 m platform",
+    "question_postag": "JJ NN IN WDT DT JJ NN VBD DT JJ NN NN VBD VBN IN CD NNS IN CD NNS .",
+    "answer-node": [
+      [
+        "Men 's 10 m platform",
+        [
+          3,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Men 's 10 m platform",
+        [
+          10,
+          4
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "cda5ec98508e7bd8",
+    "question": "Who wrote Billy Ungers ' 2012 film ?",
+    "table_id": "Billy_Unger_0",
+    "answer-text": "Bill Muir",
+    "question_postag": "WP VBD NNP NNP POS CD NN .",
+    "answer-node": [
+      [
+        "The Lost Medallion: The Adventures of Billy Stone",
+        [
+          10,
+          1
+        ],
+        "/wiki/The_Lost_Medallion:_The_Adventures_of_Billy_Stone",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "30634b9b79129a46",
+    "question": "In what season was the first Spanish professional basketball player on this list a rising star ?",
+    "table_id": "Euroleague_Rising_Star_0",
+    "answer-text": "2006",
+    "question_postag": "IN WP NN VBD DT JJ JJ NN NN NN IN DT NN DT VBG NN .",
+    "answer-node": [
+      [
+        "2005–06 Euroleague",
+        [
+          1,
+          0
+        ],
+        "/wiki/2005–06_Euroleague",
+        "passage"
+      ],
+      [
+        "Andrea Bargnani",
+        [
+          1,
+          1
+        ],
+        "/wiki/Andrea_Bargnani",
+        "passage"
+      ],
+      [
+        "2006–07 Euroleague",
+        [
+          2,
+          0
+        ],
+        "/wiki/2006–07_Euroleague",
+        "passage"
+      ],
+      [
+        "Rudy Fernández (basketball)",
+        [
+          2,
+          1
+        ],
+        "/wiki/Rudy_Fernández_(basketball)",
+        "passage"
+      ],
+      [
+        "Ricky Rubio",
+        [
+          5,
+          1
+        ],
+        "/wiki/Ricky_Rubio",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "2bb97be294564fea",
+    "question": "What disease killed the person who played Maurice Lalonde in Highlander ?",
+    "table_id": "List_of_Highlander_cast_members_0",
+    "answer-text": "cancer",
+    "question_postag": "WP NN VBD DT NN WP VBD NNP NNP IN NNP .",
+    "answer-node": [
+      [
+        "Michel Modo",
+        [
+          6,
+          0
+        ],
+        "/wiki/Michel_Modo",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "481d9930f6124d2a",
+    "question": "Who built the bridge that is in the city that is located approximately halfway between Columbus and Tallahassee , Florida on U.S. Route 27 ?",
+    "table_id": "List_of_covered_bridges_in_Georgia_(U.S._state)_0",
+    "answer-text": "J.W . Baughman",
+    "question_postag": "WP VBD DT NN WDT VBZ IN DT NN WDT VBZ VBN RB JJ IN NNP CC NNP , NNP IN NNP NNP CD .",
+    "answer-node": [
+      [
+        "Coheelee Creek Covered Bridge",
+        [
+          3,
+          0
+        ],
+        "/wiki/Coheelee_Creek_Covered_Bridge",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "f5e41123f135a7e9",
+    "question": "The latest listed location in Childersberg date back to which war ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Talladega_County,_Alabama_0",
+    "answer-text": "American Civil War",
+    "question_postag": "DT JJS JJ NN IN NNP NN NN TO WDT NN .",
+    "answer-node": [
+      [
+        "Kymulga Mill & Covered Bridge",
+        [
+          12,
+          1
+        ],
+        "/wiki/Kymulga_Mill_&_Covered_Bridge",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "6250b3c37321c56b",
+    "question": "At which venue did Žana Novaković carry the flag for the second time ?",
+    "table_id": "List_of_flag_bearers_for_Bosnia_and_Herzegovina_at_the_Olympics_0",
+    "answer-text": "Sochi",
+    "question_postag": "IN WDT NN VBD NNP NNP VBP DT NN IN DT JJ NN .",
+    "answer-node": [
+      [
+        "2014 Winter Olympics",
+        [
+          2,
+          1
+        ],
+        "/wiki/2014_Winter_Olympics",
+        "passage"
+      ],
+      [
+        "2008 Summer Olympics",
+        [
+          5,
+          1
+        ],
+        "/wiki/2008_Summer_Olympics",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "eee83642b9efdbbe",
+    "question": "Why did a coach of the university that 1953 baseball all-American Gene Sheets attended take leave after something controversial ?",
+    "table_id": "1953_College_Baseball_All-America_Team_0",
+    "answer-text": "racially insensitive remarks",
+    "question_postag": "WRB VBD DT NN IN DT NN IN CD NN JJ NNP NNP VBD VB NN IN NN JJ .",
+    "answer-node": [
+      [
+        "Oklahoma Sooners baseball",
+        [
+          4,
+          2
+        ],
+        "/wiki/Oklahoma_Sooners_baseball",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "fbbc65b3949238ac",
+    "question": "How many times did the skater who finished 7th at 1996 Skate Canada International represent Italy at the Winter Olympics ?",
+    "table_id": "1996_Skate_Canada_International_1",
+    "answer-text": "Winter Olympics",
+    "question_postag": "WRB JJ NNS VBD DT NN WP VBD CD IN CD NNP NNP NNP NN NNP IN DT NN NNPS .",
+    "answer-node": [
+      [
+        "Julia Vorobieva",
+        [
+          3,
+          1
+        ],
+        "/wiki/Julia_Vorobieva",
+        "passage"
+      ],
+      [
+        "Jennifer Robinson (figure skater)",
+        [
+          4,
+          1
+        ],
+        "/wiki/Jennifer_Robinson_(figure_skater)",
+        "passage"
+      ],
+      [
+        "Susan Humphreys",
+        [
+          5,
+          1
+        ],
+        "/wiki/Susan_Humphreys",
+        "passage"
+      ],
+      [
+        "Silvia Fontana",
+        [
+          6,
+          1
+        ],
+        "/wiki/Silvia_Fontana",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "84f6d699be825fa8",
+    "question": "What is the name of the athlete whose sport featured 40 LCM events , split evenly between males and females ?",
+    "table_id": "France_at_the_2013_World_Aquatics_Championships_0",
+    "answer-text": "Camille Muffat",
+    "question_postag": "WP VBZ DT NN IN DT NN WP$ NN VBD CD NNP NNS , VBD RB IN NNS CC NNS .",
+    "answer-node": [
+      [
+        "Camille Muffat",
+        [
+          7,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Coralie Balmy Charlotte Bonnet Mylène Lazare Camille Muffat Isabelle Mabboux *",
+        [
+          8,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "0171bb0fbb6697b5",
+    "question": "In which year was this skier become an elected politician who won a medal at the Olympics Games that had 2,176 athletes from 72 nations ?",
+    "table_id": "Australia_at_the_Winter_Olympics_1",
+    "answer-text": "2019",
+    "question_postag": "IN WDT NN VBD DT NN VB DT JJ NN WP VBD DT NN IN DT NNPS NNPS WDT VBD CD NNS IN CD NNS .",
+    "answer-node": [
+      [
+        "Zali Steggall",
+        [
+          1,
+          1
+        ],
+        "/wiki/Zali_Steggall",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "9ee1522a253c8c51",
+    "question": "What is the nickname of the person from the class of 1951 ?",
+    "table_id": "List_of_United_States_Military_Academy_alumni_2",
+    "answer-text": "Dr. Rendezvous",
+    "question_postag": "WP VBZ DT NN IN DT NN IN DT NN IN CD .",
+    "answer-node": [
+      [
+        "Buzz Aldrin",
+        [
+          1,
+          0
+        ],
+        "/wiki/Buzz_Aldrin",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "2798b9525f42c47f",
+    "question": "When was the city that contains the summer home of Henry Gassaway Davis incorporated ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Randolph_County,_West_Virginia_0",
+    "answer-text": "1890",
+    "question_postag": "WRB VBD DT NN WDT VBZ DT NN NN IN NNP NNP NNP VBN .",
+    "answer-node": [
+      [
+        "Elkins, West Virginia",
+        [
+          0,
+          4
+        ],
+        "/wiki/Elkins,_West_Virginia",
+        "passage"
+      ],
+      [
+        "Elkins, West Virginia",
+        [
+          1,
+          4
+        ],
+        "/wiki/Elkins,_West_Virginia",
+        "passage"
+      ],
+      [
+        "Elkins, West Virginia",
+        [
+          6,
+          4
+        ],
+        "/wiki/Elkins,_West_Virginia",
+        "passage"
+      ],
+      [
+        "Elkins, West Virginia",
+        [
+          7,
+          4
+        ],
+        "/wiki/Elkins,_West_Virginia",
+        "passage"
+      ],
+      [
+        "Elkins, West Virginia",
+        [
+          9,
+          4
+        ],
+        "/wiki/Elkins,_West_Virginia",
+        "passage"
+      ],
+      [
+        "Elkins, West Virginia",
+        [
+          10,
+          4
+        ],
+        "/wiki/Elkins,_West_Virginia",
+        "passage"
+      ],
+      [
+        "Elkins, West Virginia",
+        [
+          11,
+          4
+        ],
+        "/wiki/Elkins,_West_Virginia",
+        "passage"
+      ],
+      [
+        "Elkins, West Virginia",
+        [
+          12,
+          4
+        ],
+        "/wiki/Elkins,_West_Virginia",
+        "passage"
+      ],
+      [
+        "Elkins, West Virginia",
+        [
+          15,
+          4
+        ],
+        "/wiki/Elkins,_West_Virginia",
+        "passage"
+      ],
+      [
+        "Elkins, West Virginia",
+        [
+          18,
+          4
+        ],
+        "/wiki/Elkins,_West_Virginia",
+        "passage"
+      ],
+      [
+        "Elkins, West Virginia",
+        [
+          19,
+          4
+        ],
+        "/wiki/Elkins,_West_Virginia",
+        "passage"
+      ],
+      [
+        "Beverly Historic District",
+        [
+          2,
+          1
+        ],
+        "/wiki/Beverly_Historic_District",
+        "passage"
+      ],
+      [
+        "Beverly, West Virginia",
+        [
+          2,
+          4
+        ],
+        "/wiki/Beverly,_West_Virginia",
+        "passage"
+      ],
+      [
+        "Beverly, West Virginia",
+        [
+          3,
+          4
+        ],
+        "/wiki/Beverly,_West_Virginia",
+        "passage"
+      ],
+      [
+        "Beverly, West Virginia",
+        [
+          4,
+          4
+        ],
+        "/wiki/Beverly,_West_Virginia",
+        "passage"
+      ],
+      [
+        "Senator Stephen Benton Elkins House",
+        [
+          11,
+          1
+        ],
+        "/wiki/Senator_Stephen_Benton_Elkins_House",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e5537f254c94bdea",
+    "question": "What district is the city in Austria that hosted the Diplomacy Tournament located in ?",
+    "table_id": "International_prize_list_of_Diplomacy_0",
+    "answer-text": "Oberpullendorf",
+    "question_postag": "WP NN VBZ DT NN IN NNP WDT VBD DT NNP NNP VBN IN .",
+    "answer-node": [
+      [
+        "Lockenhaus",
+        [
+          17,
+          1
+        ],
+        "/wiki/Lockenhaus",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "857ba79b2fe601be",
+    "question": "What was the time of the runner that participated in the Olympics the most number of times ?",
+    "table_id": "1996_IAAF_World_Half_Marathon_Championships_1",
+    "answer-text": "1:10:57",
+    "question_postag": "WP VBD DT NN IN DT NN WDT VBD IN DT NNPS DT RBS NN IN NNS .",
+    "answer-node": [
+      [
+        "1:10:57",
+        [
+          1,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "90234fbe891e7da5",
+    "question": "What was the fastest time recorded by the athlete nicknamed The Jarrow Arrow ?",
+    "table_id": "800_metres_0",
+    "answer-text": "1:43.61",
+    "question_postag": "WP VBD DT JJS NN VBN IN DT NN VBD DT NNP NNP .",
+    "answer-node": [
+      [
+        "1:43.61",
+        [
+          13,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "c72a7f0a28ddd48a",
+    "question": "Who governs this prefecture whose capital has Axmin Mining Camp ?",
+    "table_id": "Prefectures_of_the_Central_African_Republic_0",
+    "answer-text": "Pierrette Benguere",
+    "question_postag": "WP VBZ DT NN WP$ NN VBZ NNP NNP NNP .",
+    "answer-node": [
+      [
+        "Mbomou",
+        [
+          1,
+          1
+        ],
+        "/wiki/Mbomou",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "6526d5135d5d0fa4",
+    "question": "What was the score when the runner up was a Romanian sports society , based in Bucharest ?",
+    "table_id": "Trofeo_Ciudad_de_Alicante_0",
+    "answer-text": "5-2",
+    "question_postag": "WP VBD DT NN WRB DT NN RP VBD DT JJ NNS NN , VBN IN NNP .",
+    "answer-node": [
+      [
+        "5-2",
+        [
+          18,
+          2
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "416f5a3a2bc22917",
+    "question": "What is the register number of the inmate who won seven terms as a Democrat , never receiving less than 60 % of the vote ?",
+    "table_id": "Federal_Medical_Center,_Devens_1",
+    "answer-text": "79112-054",
+    "question_postag": "WP VBZ DT JJ NN IN DT NN WP VBD CD NNS IN DT NNP , RB VBG JJR IN CD NN IN DT NN .",
+    "answer-node": [
+      [
+        "79112-054",
+        [
+          10,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "a3358c79d88cdad3",
+    "question": "In what year was the university in the 196th highest population city in the US formally adopted by the state ?",
+    "table_id": "List_of_Beta_Upsilon_Chi_chapters_0",
+    "answer-text": "1901",
+    "question_postag": "IN WP NN VBD DT NN IN DT CD JJS NN NN IN DT NNP RB VBN IN DT NN .",
+    "answer-node": [
+      [
+        "Denton, Texas",
+        [
+          7,
+          2
+        ],
+        "/wiki/Denton,_Texas",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "d56e994748500b6a",
+    "question": "How many total episodes was the show in which Amanda Bynes played Holly Tyler from 2002-2006 ?",
+    "table_id": "Amanda_Bynes_1",
+    "answer-text": "86 episodes",
+    "question_postag": "WRB JJ JJ NNS VBD DT NN IN WDT NNP NNPS VBD NNP NNP IN CD .",
+    "answer-node": [
+      [
+        "What I Like About You (TV series)",
+        [
+          10,
+          1
+        ],
+        "/wiki/What_I_Like_About_You_(TV_series)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "a53420d5447c662d",
+    "question": "What is the name of the bridge whose country is a country located mostly in the southern half of South America ?",
+    "table_id": "Transporter_bridge_1",
+    "answer-text": "Puente Transbordador Presidente Sáenz Peña",
+    "question_postag": "WP VBZ DT NN IN DT NN WP$ NN VBZ DT NN VBN RB IN DT JJ NN IN NNP NNP .",
+    "answer-node": [
+      [
+        "Puente Transbordador Presidente Sáenz Peña",
+        [
+          7,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "006f88e5b2adf06c",
+    "question": "What place was achieved by the person who finished the Berlin marathon in 2:13.32 in 2011 the first time he competed in a marathon ?",
+    "table_id": "2011_Berlin_Marathon_0",
+    "answer-text": "sixth",
+    "question_postag": "WP NN VBD VBN IN DT NN WP VBD DT NNP NN IN CD IN CD DT JJ NN PRP VBD IN DT NN .",
+    "answer-node": [
+      [
+        "Ricardo Serrano (athlete)",
+        [
+          5,
+          1
+        ],
+        "/wiki/Ricardo_Serrano_(athlete)",
+        "passage"
+      ],
+      [
+        "Spain",
+        [
+          5,
+          2
+        ],
+        "/wiki/Spain",
+        "passage"
+      ],
+      [
+        "Spain",
+        [
+          6,
+          2
+        ],
+        "/wiki/Spain",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "84e5c28a3dea0842",
+    "question": "What Academy Award winning director created Daibosatsu tōge : dai-ippen - Kōgen itto-ryū no maki , an actress who appeared in more than 190 films between 1931 and 1961 ?",
+    "table_id": "List_of_Asian_historical_drama_films_4",
+    "answer-text": "Hiroshi Inagaki",
+    "question_postag": "WP NNP NNP VBG NN VBD NNP NN : JJ : NNP JJ DT NN , DT NN WP VBD IN JJR IN CD NNS IN CD CC CD .",
+    "answer-node": [
+      [
+        "Hiroshi Inagaki",
+        [
+          12,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Hiroshi Inagaki",
+        [
+          14,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Hiroshi Inagaki , Masahiro Makino",
+        [
+          16,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "fc32dc6ee5eeea22",
+    "question": "Who was the oldest player to win 3 times at the Lexus Cup ?",
+    "table_id": "2005_Lexus_Cup_0",
+    "answer-text": "Sophie Gustafson",
+    "question_postag": "WP VBD DT JJS NN TO VB CD NNS IN DT NNP NNP .",
+    "answer-node": [
+      [
+        "Sophie Gustafson",
+        [
+          1,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "aef0b40f7ee083c6",
+    "question": "What is the mascot of the school of catcher Alan Hall ?",
+    "table_id": "1960_College_Baseball_All-America_Team_0",
+    "answer-text": "Wildcats",
+    "question_postag": "WP VBZ DT NN IN DT NN IN NN NNP NNP .",
+    "answer-node": [
+      [
+        "Arizona Wildcats baseball",
+        [
+          2,
+          2
+        ],
+        "/wiki/Arizona_Wildcats_baseball",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "40ce4d51c0518488",
+    "question": "Where is the series which is currently running filmed ?",
+    "table_id": "Danneel_Harris_1",
+    "answer-text": "Vancouver , British Columbia",
+    "question_postag": "WRB VBZ DT NN WDT VBZ RB VBG VBN .",
+    "answer-node": [
+      [
+        "Supernatural (U.S. TV series)",
+        [
+          17,
+          1
+        ],
+        "/wiki/Supernatural_(U.S._TV_series)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "73192f09f21c8b72",
+    "question": "What was the population in July 2018 of the city that is home to the soccer stadium opened the earliest ?",
+    "table_id": "Soccer-specific_stadium_3",
+    "answer-text": "649,021",
+    "question_postag": "WP VBD DT NN IN NNP CD IN DT NN WDT VBZ NN TO DT NN NN VBD DT JJS .",
+    "answer-node": [
+      [
+        "Oklahoma City",
+        [
+          17,
+          2
+        ],
+        "/wiki/Oklahoma_City",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "939d0c8bd0e11dcc",
+    "question": "What is the chef-lieu of the region with the most communes among the 20 most populous ?",
+    "table_id": "List_of_communes_in_France_with_over_20,000_inhabitants_(2010_census)_0",
+    "answer-text": "Lyon",
+    "question_postag": "WP VBZ DT NN IN DT NN IN DT RBS NNS IN DT CD JJS JJ .",
+    "answer-node": [
+      [
+        "Lyon",
+        [
+          2,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Marseille",
+        [
+          1,
+          0
+        ],
+        "/wiki/Marseille",
+        "passage"
+      ],
+      [
+        "Auvergne-Rhône-Alpes",
+        [
+          2,
+          2
+        ],
+        "/wiki/Auvergne-Rhône-Alpes",
+        "passage"
+      ],
+      [
+        "Auvergne-Rhône-Alpes",
+        [
+          13,
+          2
+        ],
+        "/wiki/Auvergne-Rhône-Alpes",
+        "passage"
+      ],
+      [
+        "Auvergne-Rhône-Alpes",
+        [
+          15,
+          2
+        ],
+        "/wiki/Auvergne-Rhône-Alpes",
+        "passage"
+      ],
+      [
+        "Auvergne-Rhône-Alpes",
+        [
+          19,
+          2
+        ],
+        "/wiki/Auvergne-Rhône-Alpes",
+        "passage"
+      ],
+      [
+        "Toulouse",
+        [
+          3,
+          0
+        ],
+        "/wiki/Toulouse",
+        "passage"
+      ],
+      [
+        "Bordeaux",
+        [
+          8,
+          0
+        ],
+        "/wiki/Bordeaux",
+        "passage"
+      ],
+      [
+        "Lille",
+        [
+          9,
+          0
+        ],
+        "/wiki/Lille",
+        "passage"
+      ],
+      [
+        "Nord (French department)",
+        [
+          9,
+          1
+        ],
+        "/wiki/Nord_(French_department)",
+        "passage"
+      ],
+      [
+        "Saint-Étienne",
+        [
+          13,
+          0
+        ],
+        "/wiki/Saint-Étienne",
+        "passage"
+      ],
+      [
+        "Dijon",
+        [
+          16,
+          0
+        ],
+        "/wiki/Dijon",
+        "passage"
+      ],
+      [
+        "Villeurbanne",
+        [
+          19,
+          0
+        ],
+        "/wiki/Villeurbanne",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "0489f0ea296a2450",
+    "question": "What is the name of the area where the station with a UHF of 45- is located ?",
+    "table_id": "Preseli_transmitting_station_5",
+    "answer-text": "Crawley Court",
+    "question_postag": "WP VBZ DT NN IN DT NN WRB DT NN IN DT NNP IN NNP VBZ VBN .",
+    "answer-node": [
+      [
+        "Arqiva",
+        [
+          5,
+          3
+        ],
+        "/wiki/Arqiva",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "bc4238f3b67aae5a",
+    "question": "What is the Southern Hemisphere of the festival in which people dodge churchyards , stiles , and crossroads , since spirits are thought to convene there ?",
+    "table_id": "Neo-Druidism_0",
+    "answer-text": "30 April , or 1 May",
+    "question_postag": "WP VBZ DT NNP NNP IN DT NN IN WDT NNS VBP NNS , NNS , CC NNS , IN NNS VBP VBN TO VB RB .",
+    "answer-node": [
+      [
+        "30 April , or 1 May",
+        [
+          0,
+          2
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "247f15347d58e54a",
+    "question": "For the owner who made the cover of TIME magazine on May 7 , 1934 , what was the horse name ?",
+    "table_id": "American_Champion_Two-Year-Old_Filly_2",
+    "answer-text": "Busher",
+    "question_postag": "IN DT NN WP VBD DT NN IN NNP NN IN NNP CD , CD , WP VBD DT NN NN .",
+    "answer-node": [
+      [
+        "Busher",
+        [
+          5,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "James W. Smith",
+        [
+          1,
+          2
+        ],
+        "/wiki/James_W._Smith",
+        "passage"
+      ],
+      [
+        "James W. Smith",
+        [
+          5,
+          2
+        ],
+        "/wiki/James_W._Smith",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b96a6a7c2a76aec7",
+    "question": "Duchy of one of the constituent states of the German Confederation , the husband of what Grand Duchess of Russia gave up her Russian title to marry him ?",
+    "table_id": "List_of_grandchildren_of_Paul_I_of_Russia_0",
+    "answer-text": "Grand Duchess Elena Pavlovna of Russia",
+    "question_postag": "NNP IN CD IN DT JJ NNS IN DT JJ NNP , DT NN IN WP NNP NNP IN NNP VBD RP PRP$ JJ NN TO VB PRP .",
+    "answer-node": [
+      [
+        "Grand Duchess Elena Pavlovna of Russia",
+        [
+          0,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "f0fcd04f72473d63",
+    "question": "The player who would go on to hold the NCAA record for most consecutive double-doubles , won the McDonald 's MVP after graduating from a high school in what California county ?",
+    "table_id": "McDonald's_All-American_Game_2",
+    "answer-text": "Alameda County",
+    "question_postag": "DT NN WP MD VB IN TO VB DT NNP NN IN JJS JJ NNS , VBD DT NNP POS NNP IN VBG IN DT JJ NN IN WP NNP NN .",
+    "answer-node": [
+      [
+        "Piedmont, California",
+        [
+          4,
+          2
+        ],
+        "/wiki/Piedmont,_California",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "2533b8545f309e03",
+    "question": "Who is the +71.5 kg winner when the 66.5 kg winner is the one who was born on October 14 , 1990 ?",
+    "table_id": "World_Nogi_Brazilian_Jiu-Jitsu_Championship_1",
+    "answer-text": "Talita Nogueira",
+    "question_postag": "WP VBZ DT JJ NN NN WRB DT CD NN NN VBZ DT NN WP VBD VBN IN NNP CD , CD .",
+    "answer-node": [
+      [
+        "Talita Nogueira ( 1/3 )",
+        [
+          6,
+          6
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Talita Nogueira ( 2/3 )",
+        [
+          6,
+          7
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Talita Nogueira ( 3/3 )",
+        [
+          13,
+          6
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "d6afa10d69410b0b",
+    "question": "On the July 22 episode , which guest is Canadian ?",
+    "table_id": "Live_with_Regis_and_Kelly_(season_20)_10",
+    "answer-text": "Caroline Rhea",
+    "question_postag": "IN DT NNP CD NN , WDT JJS VBZ JJ .",
+    "answer-node": [
+      [
+        "Will Ferrell , Caroline Rhea",
+        [
+          15,
+          2
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "02e3ebd215153d9b",
+    "question": "What is the name of the actor in the top three listed on the chart and was born 1951 , in Bombay , India ?",
+    "table_id": "Indian_Television_Academy_Awards_1",
+    "answer-text": "Shahid Kapoor",
+    "question_postag": "WP VBZ DT NN IN DT NN IN DT JJ CD VBN IN DT NN CC VBD VBN CD , IN NNP , NNP .",
+    "answer-node": [
+      [
+        "Shahid Kapoor",
+        [
+          8,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "4cc8921ceb30db48",
+    "question": "Where is the headquarters of the stock symbol LON ?",
+    "table_id": "List_of_companies_traded_on_the_JSE_11",
+    "answer-text": "Johannesburg , South Africa",
+    "question_postag": "WRB VBZ DT NN IN DT NN NN NNP .",
+    "answer-node": [
+      [
+        "Liberty Holdings Limited",
+        [
+          3,
+          1
+        ],
+        "/wiki/Liberty_Holdings_Limited",
+        "passage"
+      ],
+      [
+        "Lonmin",
+        [
+          6,
+          1
+        ],
+        "/wiki/Lonmin",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "1038a369bfdb7a65",
+    "question": "When did the season the winner club was the one established on 20 July 2013 commence ?",
+    "table_id": "I-League_0",
+    "answer-text": "9 January 2016",
+    "question_postag": "WRB VBD DT NN DT NN NN VBD DT CD VBN IN CD NNP CD NN .",
+    "answer-node": [
+      [
+        "2015–16 I-League",
+        [
+          8,
+          0
+        ],
+        "/wiki/2015–16_I-League",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "31bd95f3859f11e2",
+    "question": "What is the medical practice the subject of the 2005 show in which Britanny Snow played Ariel Alderman ?",
+    "table_id": "Brittany_Snow_1",
+    "answer-text": "plastic surgery",
+    "question_postag": "WP VBZ DT JJ NN DT NN IN DT CD NN IN WDT NNP NNP VBD NNP NNP .",
+    "answer-node": [
+      [
+        "Nip/Tuck",
+        [
+          3,
+          1
+        ],
+        "/wiki/Nip/Tuck",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "0cb757e23992a56f",
+    "question": "What is the agricultural center in the region in Chile where 39.7 % have at least one computer in the household ?",
+    "table_id": "Ranked_lists_of_Chilean_regions_28",
+    "answer-text": "Ovalle",
+    "question_postag": "WP VBZ DT JJ NN IN DT NN IN NNP WRB CD NN VBP IN JJS CD NN IN DT NN .",
+    "answer-node": [
+      [
+        "Coquimbo Region",
+        [
+          4,
+          0
+        ],
+        "/wiki/Coquimbo_Region",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "0587e5b090016e0b",
+    "question": "What is the population , as of the 2010 census , of the city where a site is also where the Eastern Prairie Fringed Orchid is found ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Bay_County,_Michigan_0",
+    "answer-text": "34,932",
+    "question_postag": "WP VBZ DT NN , IN IN DT CD NN , IN DT NN WRB DT NN VBZ RB WRB DT NNP NNP NNP NNP VBZ VBN .",
+    "answer-node": [
+      [
+        "Bay City, Michigan",
+        [
+          0,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          1,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          2,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          3,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          4,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          5,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          6,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          7,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          8,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          9,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          10,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          11,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          12,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          13,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          14,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ],
+      [
+        "Bay City, Michigan",
+        [
+          15,
+          4
+        ],
+        "/wiki/Bay_City,_Michigan",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "984fa890db28c452",
+    "question": "Where is this rugby team based in that was the runners-up during the last season of the expanded Super 14 format ?",
+    "table_id": "Super_Rugby_1",
+    "answer-text": "Cape Town",
+    "question_postag": "WRB VBZ DT NN NN VBN IN DT VBD DT NN IN DT JJ NN IN DT VBN NNP CD NN .",
+    "answer-node": [
+      [
+        "Stormers",
+        [
+          11,
+          1
+        ],
+        "/wiki/Stormers",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "666ec7fff6cd9cb2",
+    "question": "What was the event held at the home grounds of Central United ?",
+    "table_id": "Northern_League_(New_Zealand)_0",
+    "answer-text": "2007 Chatham Cup final",
+    "question_postag": "WP VBD DT NN VBD IN DT NN NNS IN NNP NNP .",
+    "answer-node": [
+      [
+        "Kiwitea Street",
+        [
+          1,
+          2
+        ],
+        "/wiki/Kiwitea_Street",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c56c44beba6becf2",
+    "question": "How many listeners does the station with the frequency of 95.3 MHz have ?",
+    "table_id": "Blaenplwyf_transmitting_station_13",
+    "answer-text": "316,000 listeners",
+    "question_postag": "WRB JJ NNS VBZ DT NN IN DT NN IN CD NNS VBP .",
+    "answer-node": [
+      [
+        "BBC Radio Wales",
+        [
+          3,
+          2
+        ],
+        "/wiki/BBC_Radio_Wales",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e5b60ab4e9c380e5",
+    "question": "What was the year of birth of the gymnast who scored 9.712 at the 1996 World Artistic Gymnastics Championships ?",
+    "table_id": "1996_World_Artistic_Gymnastics_Championships_5",
+    "answer-text": "1970",
+    "question_postag": "WP VBD DT NN IN NN IN DT NN WP VBD CD IN DT CD NNP NNP NNP NNP .",
+    "answer-node": [
+      [
+        "Chainey Umphrey",
+        [
+          4,
+          1
+        ],
+        "/wiki/Chainey_Umphrey",
+        "passage"
+      ],
+      [
+        "Zoltán Supola (gymnast)",
+        [
+          6,
+          1
+        ],
+        "/wiki/Zoltán_Supola_(gymnast)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "08205f09fb779e71",
+    "question": "What are the notes for the player that is now an assistant coach at North Melbourne , having previously been an assistant coach at the Carlton Football Club from 2013 to 2015 ?",
+    "table_id": "2012_AFL_Draft_1",
+    "answer-text": "Retirement , effective end of season",
+    "question_postag": "WP VBP DT NNS IN DT NN WDT VBZ RB DT JJ NN IN NNP NNP , VBG RB VBN DT JJ NN IN DT NNP NNP NNP IN CD TO CD .",
+    "answer-node": [
+      [
+        "Retirement , effective end of season",
+        [
+          2,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "4fbda71f56b9cb8e",
+    "question": "How many seasons has the team that last made the Finals in 2011 played ?",
+    "table_id": "List_of_NBA_franchise_post-season_droughts_0",
+    "answer-text": "36",
+    "question_postag": "WRB JJ NNS VBZ DT NN IN JJ VBD DT NNS IN CD NN .",
+    "answer-node": [
+      [
+        "List of Dallas Mavericks seasons",
+        [
+          6,
+          1
+        ],
+        "/wiki/List_of_Dallas_Mavericks_seasons",
+        "passage"
+      ],
+      [
+        "List of San Antonio Spurs seasons",
+        [
+          18,
+          1
+        ],
+        "/wiki/List_of_San_Antonio_Spurs_seasons",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ea7abdbe09da70de",
+    "question": "Which movie got the person who directed the 1974 movie All Screwed Up an Oscar nod for Best Director in 1977 ?",
+    "table_id": "List_of_Italian_films_of_1974_0",
+    "answer-text": "Seven Beauties",
+    "question_postag": "JJ NN VBD DT NN WP VBD DT CD NN DT NNP NNP DT NNP NN IN NNP NNP IN CD .",
+    "answer-node": [
+      [
+        "Lina Wertmüller",
+        [
+          2,
+          1
+        ],
+        "/wiki/Lina_Wertmüller",
+        "passage"
+      ],
+      [
+        "Giancarlo Giannini",
+        [
+          15,
+          2
+        ],
+        "/wiki/Giancarlo_Giannini",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "18c8dec4d251069f",
+    "question": "The Pleiku Stadium is in what province of Vietnam ?",
+    "table_id": "2011_V-League_0",
+    "answer-text": "Gia Lai",
+    "question_postag": "DT NNP NNP VBZ IN WP NN IN NNP .",
+    "answer-node": [
+      [
+        "Hoàng Anh Gia Lai",
+        [
+          5,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "2004 V-League",
+        [
+          0,
+          4
+        ],
+        "/wiki/2004_V-League",
+        "passage"
+      ],
+      [
+        "2004 V-League",
+        [
+          3,
+          4
+        ],
+        "/wiki/2004_V-League",
+        "passage"
+      ],
+      [
+        "2003 V-League",
+        [
+          1,
+          4
+        ],
+        "/wiki/2003_V-League",
+        "passage"
+      ],
+      [
+        "2003 V-League",
+        [
+          4,
+          4
+        ],
+        "/wiki/2003_V-League",
+        "passage"
+      ],
+      [
+        "2003 V-League",
+        [
+          5,
+          4
+        ],
+        "/wiki/2003_V-League",
+        "passage"
+      ],
+      [
+        "Pleiku",
+        [
+          5,
+          1
+        ],
+        "/wiki/Pleiku",
+        "passage"
+      ],
+      [
+        "Pleiku Stadium",
+        [
+          5,
+          2
+        ],
+        "/wiki/Pleiku_Stadium",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "0f833e3694953c83",
+    "question": "What is the Date ( s ) & Architect for the armoury for which the Duke of York , as a member of the Canadian Royal Family , acts as Colonel-in-Chief ?",
+    "table_id": "David_Ewart_1",
+    "answer-text": "1914-5 David Ewart",
+    "question_postag": "WP VBZ DT NNP ( NN ) CC NNP IN DT NN IN WDT DT NNP IN NNP , IN DT NN IN DT NNP NNP NNP , VBZ IN NNP .",
+    "answer-node": [
+      [
+        "1914-5 David Ewart",
+        [
+          11,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "a1b0c95f119b18e9",
+    "question": "In which year was this historic Methodist church added to the National Register that was built about 1840-1850 in a city of 2,084 residents as of 2010 ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Dorchester_County,_South_Carolina_0",
+    "answer-text": "1840",
+    "question_postag": "IN WDT NN VBD DT JJ NNP NN VBD TO DT NNP NNP WDT VBD VBN IN JJ IN DT NN IN CD NNS IN IN CD .",
+    "answer-node": [
+      [
+        "Appleby's Methodist Church",
+        [
+          0,
+          1
+        ],
+        "/wiki/Appleby's_Methodist_Church",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "5b5c2e3cec81d1bf",
+    "question": "What product is produced in the place of the community when translated in Hawaiian means abruptly or sharp break ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Hawaii_7",
+    "answer-text": "Sugar",
+    "question_postag": "WP NN VBZ VBN IN DT NN IN DT NN WRB VBN IN JJ NNS RB CC JJ NN .",
+    "answer-node": [
+      [
+        "Kahului, Hawaii",
+        [
+          4,
+          4
+        ],
+        "/wiki/Kahului,_Hawaii",
+        "passage"
+      ],
+      [
+        "Kahului, Hawaii",
+        [
+          17,
+          4
+        ],
+        "/wiki/Kahului,_Hawaii",
+        "passage"
+      ],
+      [
+        "Haiku Mill",
+        [
+          6,
+          1
+        ],
+        "/wiki/Haiku_Mill",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "34c3f25112c0d074",
+    "question": "The building in Upstate New York at 391 feet has been suggested as the inspiration of what building ?",
+    "table_id": "List_of_tallest_buildings_in_Upstate_New_York_1",
+    "answer-text": "Empire State Building",
+    "question_postag": "DT NN IN NNP NNP NNP IN CD NNS VBZ VBN VBN IN DT NN IN WP NN .",
+    "answer-node": [
+      [
+        "Rand Building",
+        [
+          7,
+          1
+        ],
+        "/wiki/Rand_Building",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "bedec99a504fe36d",
+    "question": "Which party had won the general election prior to this meeting that resulted in the constitution with five articles ?",
+    "table_id": "List_of_Irish_constitutional_conventions_0",
+    "answer-text": "Sinn Féin",
+    "question_postag": "NNP NN VBD VBN DT JJ NN RB TO DT NN WDT VBD IN DT NN IN CD NNS .",
+    "answer-node": [
+      [
+        "Played a subsidiary role in the Northern Ireland peace process , as Sinn Féin boycotted the Forum but not the talks that led to the Good Friday Agreement",
+        [
+          6,
+          5
+        ],
+        null,
+        "table"
+      ],
+      [
+        "First Dáil",
+        [
+          1,
+          0
+        ],
+        "/wiki/First_Dáil",
+        "passage"
+      ],
+      [
+        "Democratic Programme",
+        [
+          1,
+          5
+        ],
+        "/wiki/Democratic_Programme",
+        "passage"
+      ],
+      [
+        "Irish Republic",
+        [
+          1,
+          5
+        ],
+        "/wiki/Irish_Republic",
+        "passage"
+      ],
+      [
+        "New Ireland Forum",
+        [
+          5,
+          0
+        ],
+        "/wiki/New_Ireland_Forum",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "f227f54a03795a22",
+    "question": "The driver who held the record for most Grand Prix victories until 2001 finished in what position ?",
+    "table_id": "1984_Dallas_Grand_Prix_0",
+    "answer-text": "7",
+    "question_postag": "DT NN WP VBD DT NN IN JJS NNP NNP NNS IN CD VBD IN WP NN .",
+    "answer-node": [
+      [
+        "7",
+        [
+          6,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "7",
+        [
+          6,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "3f6677989bae2fa6",
+    "question": "How many points were scored by the team from the country whose northernmost point is Cape Angela ?",
+    "table_id": "1965_International_Cross_Country_Championships_3",
+    "answer-text": "80",
+    "question_postag": "WRB JJ NNS VBD VBN IN DT NN IN DT NN WP$ JJ NN VBZ NNP NNP .",
+    "answer-node": [
+      [
+        "80",
+        [
+          6,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "610e3e5d00b5d538",
+    "question": "Who primarily wrote the lyrics for this Spanish pop band that won the Best Pop Album award at the 7th Annual Latin Grammy Awards ?",
+    "table_id": "Latin_Grammy_Award_for_Best_Pop_Album_by_a_Duo_or_Group_with_Vocals_0",
+    "answer-text": "Xabi San Martín",
+    "question_postag": "WP RB VBD DT NNS IN DT JJ NN NN WDT VBD DT JJS NNP NNP NN IN DT CD NNP NNP NNP NNP .",
+    "answer-node": [
+      [
+        "La Oreja de Van Gogh",
+        [
+          4,
+          4
+        ],
+        "/wiki/La_Oreja_de_Van_Gogh",
+        "passage"
+      ],
+      [
+        "La Oreja de Van Gogh",
+        [
+          6,
+          1
+        ],
+        "/wiki/La_Oreja_de_Van_Gogh",
+        "passage"
+      ],
+      [
+        "La Oreja de Van Gogh",
+        [
+          9,
+          4
+        ],
+        "/wiki/La_Oreja_de_Van_Gogh",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "32222ab2ecfc3a05",
+    "question": "To whom does Elemental ( software ) 's developer supply software ?",
+    "table_id": "Molecule_editor_0",
+    "answer-text": "Half of the world 's 20 largest drugmakers",
+    "question_postag": "TO WP VBZ NNP ( NN ) POS NN NN NN .",
+    "answer-node": [
+      [
+        "Dotmatics",
+        [
+          12,
+          1
+        ],
+        "/wiki/Dotmatics",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "7b889fb1c48ad896",
+    "question": "What stadium does the team whose captain is Ridwansyah call home ?",
+    "table_id": "2013_Indonesian_Premier_League_1",
+    "answer-text": "Mulawarman",
+    "question_postag": "WP NN VBZ DT NN WP$ NN VBZ NNP NN NN .",
+    "answer-node": [
+      [
+        "Bontang F.C.",
+        [
+          1,
+          0
+        ],
+        "/wiki/Bontang_F.C.",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e8235a5e4b538a03",
+    "question": "Who was the star of the movie directed by Wilson Yip ?",
+    "table_id": "List_of_action_films_of_the_2010s_7",
+    "answer-text": "Louis Koo",
+    "question_postag": "WP VBD DT NN IN DT NN VBN IN NNP NNP .",
+    "answer-node": [
+      [
+        "Louis Koo , Gordon Lam , Wu Yue , Tony Jaa",
+        [
+          16,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Paradox (2017 film)",
+        [
+          16,
+          0
+        ],
+        "/wiki/Paradox_(2017_film)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b44d1ea74073f3a6",
+    "question": "What is the English meaning of the name of the settlement in the Attica region associated with the football club that was established in 1924 by Greek refugees from Constantinople ?",
+    "table_id": "List_of_football_clubs_in_Greece_0",
+    "answer-text": "New Philadelphia",
+    "question_postag": "WP VBZ DT JJ NN IN DT NN IN DT NN IN DT NNP NN VBN IN DT NN NN WDT VBD VBN IN CD IN JJ NNS IN NNP .",
+    "answer-node": [
+      [
+        "Nea Filadelfeia",
+        [
+          0,
+          2
+        ],
+        "/wiki/Nea_Filadelfeia",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "044096c45b19980e",
+    "question": "The college that opened in 1981 is located on how many acres of land ?",
+    "table_id": "List_of_schools_in_Perth,_Western_Australia_7",
+    "answer-text": "47 acres",
+    "question_postag": "DT NN WDT VBD IN CD VBZ VBN IN WRB JJ NNS IN NN .",
+    "answer-node": [
+      [
+        "All Saints' College, Perth",
+        [
+          0,
+          0
+        ],
+        "/wiki/All_Saints'_College,_Perth",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e636da27d52e0b7d",
+    "question": "what year was the nomination for the film that was a three-act romantic comedy by French playwright Marivaux ?",
+    "table_id": "Daniel_Auteuil_2",
+    "answer-text": "1988",
+    "question_postag": "WP NN VBD DT NN IN DT NN WDT VBD DT JJ JJ NN IN JJ NN NNP .",
+    "answer-node": [
+      [
+        "1988",
+        [
+          2,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Quelques jours avec moi",
+        [
+          3,
+          3
+        ],
+        "/wiki/Quelques_jours_avec_moi",
+        "passage"
+      ],
+      [
+        "European Film Award",
+        [
+          7,
+          1
+        ],
+        "/wiki/European_Film_Award",
+        "passage"
+      ],
+      [
+        "European Film Award",
+        [
+          17,
+          1
+        ],
+        "/wiki/European_Film_Award",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "02bcd829bff0be92",
+    "question": "For the army that conflicted with the `` lashkars '' , what year did its soldier die ?",
+    "table_id": "Param_Vir_Chakra_0",
+    "answer-text": "3 November 1947",
+    "question_postag": "IN DT NN WDT VBD IN DT `` NNS '' , WP NN VBD PRP$ NN NN .",
+    "answer-node": [
+      [
+        "3 November 1947 *",
+        [
+          0,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Somnath Sharma",
+        [
+          0,
+          0
+        ],
+        "/wiki/Somnath_Sharma",
+        "passage"
+      ],
+      [
+        "Battle of Badgam",
+        [
+          0,
+          4
+        ],
+        "/wiki/Battle_of_Badgam",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "3a423902ba53b086",
+    "question": "Who owned the team who had a replaced player who made his first class debut in November 2006 ?",
+    "table_id": "List_of_2011_Indian_Premier_League_personnel_changes_1",
+    "answer-text": "Reliance Industries",
+    "question_postag": "WP VBD DT NN WP VBD DT VBN NN WP VBD PRP$ JJ NN NN IN NNP CD .",
+    "answer-node": [
+      [
+        "Mumbai Indians",
+        [
+          8,
+          2
+        ],
+        "/wiki/Mumbai_Indians",
+        "passage"
+      ],
+      [
+        "Mumbai Indians",
+        [
+          9,
+          2
+        ],
+        "/wiki/Mumbai_Indians",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "bbff05702511d184",
+    "question": "What number pick was the player born on February 28 , 1999 ?",
+    "table_id": "Atlanta_Hawks_draft_history_0",
+    "answer-text": "3",
+    "question_postag": "WP NN NN VBD DT NN VBN IN NNP CD , CD .",
+    "answer-node": [
+      [
+        "3",
+        [
+          0,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Real Madrid Baloncesto",
+        [
+          0,
+          5
+        ],
+        "/wiki/Real_Madrid_Baloncesto",
+        "passage"
+      ],
+      [
+        "Kansas Jayhawks men's basketball",
+        [
+          3,
+          5
+        ],
+        "/wiki/Kansas_Jayhawks_men's_basketball",
+        "passage"
+      ],
+      [
+        "Kansas Jayhawks men's basketball",
+        [
+          10,
+          5
+        ],
+        "/wiki/Kansas_Jayhawks_men's_basketball",
+        "passage"
+      ],
+      [
+        "2017 NBA draft",
+        [
+          4,
+          0
+        ],
+        "/wiki/2017_NBA_draft",
+        "passage"
+      ],
+      [
+        "2017 NBA draft",
+        [
+          5,
+          0
+        ],
+        "/wiki/2017_NBA_draft",
+        "passage"
+      ],
+      [
+        "2017 NBA draft",
+        [
+          6,
+          0
+        ],
+        "/wiki/2017_NBA_draft",
+        "passage"
+      ],
+      [
+        "2016 NBA draft",
+        [
+          7,
+          0
+        ],
+        "/wiki/2016_NBA_draft",
+        "passage"
+      ],
+      [
+        "2016 NBA draft",
+        [
+          8,
+          0
+        ],
+        "/wiki/2016_NBA_draft",
+        "passage"
+      ],
+      [
+        "2016 NBA draft",
+        [
+          9,
+          0
+        ],
+        "/wiki/2016_NBA_draft",
+        "passage"
+      ],
+      [
+        "Edy Tavares",
+        [
+          14,
+          3
+        ],
+        "/wiki/Edy_Tavares",
+        "passage"
+      ],
+      [
+        "Basketball Bundesliga",
+        [
+          15,
+          5
+        ],
+        "/wiki/Basketball_Bundesliga",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "46f2d77f8de1586c",
+    "question": "How many new competitions were at the games where an athlete competed who was the gold medalist at 2017 Hochfilzen in 7.5 km sprint ?",
+    "table_id": "Czech_Republic_at_the_Olympics_1",
+    "answer-text": "twelve",
+    "question_postag": "WRB JJ JJ NNS VBD IN DT NNS WRB DT NN VBD WP VBD DT JJ NN IN CD NNP IN CD NNS NN .",
+    "answer-node": [
+      [
+        "2014 Winter Olympics",
+        [
+          16,
+          2
+        ],
+        "/wiki/2014_Winter_Olympics",
+        "passage"
+      ],
+      [
+        "2014 Winter Olympics",
+        [
+          17,
+          2
+        ],
+        "/wiki/2014_Winter_Olympics",
+        "passage"
+      ],
+      [
+        "2014 Winter Olympics",
+        [
+          18,
+          2
+        ],
+        "/wiki/2014_Winter_Olympics",
+        "passage"
+      ],
+      [
+        "2014 Winter Olympics",
+        [
+          19,
+          2
+        ],
+        "/wiki/2014_Winter_Olympics",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "6fdf7bb29965f93a",
+    "question": "In what league does the team that has the highest capacity play in ?",
+    "table_id": "2013_RFL_Championship_0",
+    "answer-text": "League 1",
+    "question_postag": "IN WP NN VBZ DT NN WDT VBZ DT JJS NN NN IN .",
+    "answer-node": [
+      [
+        "Barrow Raiders",
+        [
+          0,
+          0
+        ],
+        "/wiki/Barrow_Raiders",
+        "passage"
+      ],
+      [
+        "Doncaster R.L.F.C.",
+        [
+          3,
+          0
+        ],
+        "/wiki/Doncaster_R.L.F.C.",
+        "passage"
+      ],
+      [
+        "Hunslet R.L.F.C.",
+        [
+          6,
+          0
+        ],
+        "/wiki/Hunslet_R.L.F.C.",
+        "passage"
+      ],
+      [
+        "Keighley Cougars",
+        [
+          7,
+          0
+        ],
+        "/wiki/Keighley_Cougars",
+        "passage"
+      ],
+      [
+        "Whitehaven R.L.F.C.",
+        [
+          11,
+          0
+        ],
+        "/wiki/Whitehaven_R.L.F.C.",
+        "passage"
+      ],
+      [
+        "Workington Town",
+        [
+          12,
+          0
+        ],
+        "/wiki/Workington_Town",
+        "passage"
+      ],
+      [
+        "Derwent Park",
+        [
+          12,
+          1
+        ],
+        "/wiki/Derwent_Park",
+        "passage"
+      ],
+      [
+        "York City Knights",
+        [
+          13,
+          0
+        ],
+        "/wiki/York_City_Knights",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "5a8006b811d6d431",
+    "question": "What is the gestation period of the monkey belonging to the family that is the smallest of the simian primates ?",
+    "table_id": "List_of_Panamanian_monkey_species_0",
+    "answer-text": "145 days",
+    "question_postag": "WP VBZ DT NN NN IN DT NN NN TO DT NN WDT VBZ DT JJS IN DT JJ NNS .",
+    "answer-node": [
+      [
+        "Saguinus geoffroyi",
+        [
+          7,
+          0
+        ],
+        "/wiki/Saguinus_geoffroyi",
+        "passage"
+      ],
+      [
+        "Geoffroy's tamarin",
+        [
+          7,
+          1
+        ],
+        "/wiki/Geoffroy's_tamarin",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "583d7d2b3b3f7351",
+    "question": "What league was the team that Neil Hlavaty joined on the first of January in 2013 previously a member of ?",
+    "table_id": "2013_Minnesota_United_FC_season_1",
+    "answer-text": "North American Soccer League",
+    "question_postag": "WP NN VBD DT NN WDT NNP NNP VBD IN DT JJ IN NNP IN CD RB DT NN IN .",
+    "answer-node": [
+      [
+        "FC Edmonton",
+        [
+          0,
+          2
+        ],
+        "/wiki/FC_Edmonton",
+        "passage"
+      ],
+      [
+        "Tampa Bay Rowdies",
+        [
+          1,
+          2
+        ],
+        "/wiki/Tampa_Bay_Rowdies",
+        "passage"
+      ],
+      [
+        "Tampa Bay Rowdies",
+        [
+          2,
+          2
+        ],
+        "/wiki/Tampa_Bay_Rowdies",
+        "passage"
+      ],
+      [
+        "Tampa Bay Rowdies",
+        [
+          7,
+          2
+        ],
+        "/wiki/Tampa_Bay_Rowdies",
+        "passage"
+      ],
+      [
+        "Devin Del Do",
+        [
+          2,
+          1
+        ],
+        "/wiki/Devin_Del_Do",
+        "passage"
+      ],
+      [
+        "Kyle Altman",
+        [
+          3,
+          1
+        ],
+        "/wiki/Kyle_Altman",
+        "passage"
+      ],
+      [
+        "Kyle Altman",
+        [
+          5,
+          1
+        ],
+        "/wiki/Kyle_Altman",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b7b230475f4c3332",
+    "question": "What is the name of the current label manager of the label who released the 1953 album of the artist who holds a record of 80 Grammy nominations ?",
+    "table_id": "Art_Farmer_discography_2",
+    "answer-text": "Island Records",
+    "question_postag": "WP VBZ DT NN IN DT JJ NN NN IN DT NN WP VBD DT CD NN IN DT NN WP VBZ DT NN IN CD NNP NNS .",
+    "answer-node": [
+      [
+        "EmArcy Records",
+        [
+          3,
+          3
+        ],
+        "/wiki/EmArcy_Records",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ab2f2db9e8eba2fe",
+    "question": "Who directed the film title with the cast member who met her demise on January 14 , 1957 ?",
+    "table_id": "Nicholas_Ray_0",
+    "answer-text": "Nicholas Ray",
+    "question_postag": "WP VBD DT NN NN IN DT NN NN WP VBD PRP NN IN NNP CD , CD .",
+    "answer-node": [
+      [
+        "They Live by Night",
+        [
+          0,
+          1
+        ],
+        "/wiki/They_Live_by_Night",
+        "passage"
+      ],
+      [
+        "Knock on Any Door",
+        [
+          1,
+          1
+        ],
+        "/wiki/Knock_on_Any_Door",
+        "passage"
+      ],
+      [
+        "A Woman's Secret",
+        [
+          2,
+          1
+        ],
+        "/wiki/A_Woman's_Secret",
+        "passage"
+      ],
+      [
+        "In a Lonely Place",
+        [
+          4,
+          1
+        ],
+        "/wiki/In_a_Lonely_Place",
+        "passage"
+      ],
+      [
+        "Born to Be Bad (1950 film)",
+        [
+          5,
+          1
+        ],
+        "/wiki/Born_to_Be_Bad_(1950_film)",
+        "passage"
+      ],
+      [
+        "Flying Leathernecks",
+        [
+          6,
+          1
+        ],
+        "/wiki/Flying_Leathernecks",
+        "passage"
+      ],
+      [
+        "The Racket (1951 film)",
+        [
+          7,
+          1
+        ],
+        "/wiki/The_Racket_(1951_film)",
+        "passage"
+      ],
+      [
+        "On Dangerous Ground",
+        [
+          8,
+          1
+        ],
+        "/wiki/On_Dangerous_Ground",
+        "passage"
+      ],
+      [
+        "Macao (film)",
+        [
+          9,
+          1
+        ],
+        "/wiki/Macao_(film)",
+        "passage"
+      ],
+      [
+        "The Lusty Men (film)",
+        [
+          10,
+          1
+        ],
+        "/wiki/The_Lusty_Men_(film)",
+        "passage"
+      ],
+      [
+        "Johnny Guitar",
+        [
+          12,
+          1
+        ],
+        "/wiki/Johnny_Guitar",
+        "passage"
+      ],
+      [
+        "Run for Cover (film)",
+        [
+          13,
+          1
+        ],
+        "/wiki/Run_for_Cover_(film)",
+        "passage"
+      ],
+      [
+        "Rebel Without a Cause",
+        [
+          14,
+          1
+        ],
+        "/wiki/Rebel_Without_a_Cause",
+        "passage"
+      ],
+      [
+        "Hot Blood (1956 film)",
+        [
+          15,
+          1
+        ],
+        "/wiki/Hot_Blood_(1956_film)",
+        "passage"
+      ],
+      [
+        "Bigger Than Life",
+        [
+          16,
+          1
+        ],
+        "/wiki/Bigger_Than_Life",
+        "passage"
+      ],
+      [
+        "The True Story of Jesse James",
+        [
+          17,
+          1
+        ],
+        "/wiki/The_True_Story_of_Jesse_James",
+        "passage"
+      ],
+      [
+        "Bitter Victory",
+        [
+          18,
+          1
+        ],
+        "/wiki/Bitter_Victory",
+        "passage"
+      ],
+      [
+        "Wind Across the Everglades",
+        [
+          19,
+          1
+        ],
+        "/wiki/Wind_Across_the_Everglades",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b26b70b6e106086a",
+    "question": "What is the official name of the waterfall with the 18 m ( 59 ft ) artificially created drop ?",
+    "table_id": "List_of_waterfalls_of_Canada_8",
+    "answer-text": "The Prince of Wales Falls",
+    "question_postag": "WP VBZ DT JJ NN IN DT NN IN DT CD NN ( CD NN ) RB VBN NN .",
+    "answer-node": [
+      [
+        "Hog's Back Falls",
+        [
+          9,
+          0
+        ],
+        "/wiki/Hog's_Back_Falls",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "3083024fbaf37edb",
+    "question": "Which languages have the works of the worst dancer of samba in Let 's Dance 2011 been translated into ?",
+    "table_id": "Let's_Dance_2011_2",
+    "answer-text": "French , English , German , Norwegian and Finnish",
+    "question_postag": "JJ NNS VBP DT NNS IN DT JJS NN IN NN IN NNP POS NNP CD VBN VBN IN .",
+    "answer-node": [
+      [
+        "Björn Ranelid",
+        [
+          1,
+          3
+        ],
+        "/wiki/Björn_Ranelid",
+        "passage"
+      ],
+      [
+        "Björn Ranelid",
+        [
+          2,
+          3
+        ],
+        "/wiki/Björn_Ranelid",
+        "passage"
+      ],
+      [
+        "Björn Ranelid",
+        [
+          5,
+          3
+        ],
+        "/wiki/Björn_Ranelid",
+        "passage"
+      ],
+      [
+        "Björn Ranelid",
+        [
+          6,
+          3
+        ],
+        "/wiki/Björn_Ranelid",
+        "passage"
+      ],
+      [
+        "Björn Ranelid",
+        [
+          8,
+          3
+        ],
+        "/wiki/Björn_Ranelid",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "9cee894057e868da",
+    "question": "How far from Alberta is the airport with the code CEF4 ?",
+    "table_id": "List_of_airports_in_the_Calgary_area_0",
+    "answer-text": "2.6 nautical miles",
+    "question_postag": "WRB RB IN NNP VBZ DT NN IN DT NN NNP .",
+    "answer-node": [
+      [
+        "Airdrie Aerodrome",
+        [
+          0,
+          0
+        ],
+        "/wiki/Airdrie_Aerodrome",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "65f7e37a42f61766",
+    "question": "For how many years did the politician associated with Dillard University serve in the House of Representatives ?",
+    "table_id": "List_of_Alpha_Phi_Alpha_brothers_14",
+    "answer-text": "4",
+    "question_postag": "IN WRB JJ NNS VBD DT NN VBN IN NNP NNP VBP IN DT NNP IN NNPS .",
+    "answer-node": [
+      [
+        "C. O. Simpkins, Sr.",
+        [
+          8,
+          0
+        ],
+        "/wiki/C._O._Simpkins,_Sr.",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "6cb136a60e6330a5",
+    "question": "What was this SuperLiga season called when the team based in the second largest city in Serbia was the runners-up ?",
+    "table_id": "Serbian_SuperLiga_1",
+    "answer-text": "Jelen SuperLiga",
+    "question_postag": "WP VBD DT NNP NN VBD WRB DT NN VBN IN DT JJ JJS NN IN NNP VBD DT NN .",
+    "answer-node": [
+      [
+        "2007–08 Serbian SuperLiga",
+        [
+          1,
+          0
+        ],
+        "/wiki/2007–08_Serbian_SuperLiga",
+        "passage"
+      ],
+      [
+        "2008–09 Serbian SuperLiga",
+        [
+          2,
+          0
+        ],
+        "/wiki/2008–09_Serbian_SuperLiga",
+        "passage"
+      ],
+      [
+        "2009–10 Serbian SuperLiga",
+        [
+          3,
+          0
+        ],
+        "/wiki/2009–10_Serbian_SuperLiga",
+        "passage"
+      ],
+      [
+        "2010–11 Serbian SuperLiga",
+        [
+          4,
+          0
+        ],
+        "/wiki/2010–11_Serbian_SuperLiga",
+        "passage"
+      ],
+      [
+        "2011–12 Serbian SuperLiga",
+        [
+          5,
+          0
+        ],
+        "/wiki/2011–12_Serbian_SuperLiga",
+        "passage"
+      ],
+      [
+        "2012–13 Serbian SuperLiga",
+        [
+          6,
+          0
+        ],
+        "/wiki/2012–13_Serbian_SuperLiga",
+        "passage"
+      ],
+      [
+        "2013–14 Serbian SuperLiga",
+        [
+          7,
+          0
+        ],
+        "/wiki/2013–14_Serbian_SuperLiga",
+        "passage"
+      ],
+      [
+        "2014–15 Serbian SuperLiga",
+        [
+          8,
+          0
+        ],
+        "/wiki/2014–15_Serbian_SuperLiga",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "13a49175ef5515ee",
+    "question": "Suresh Gopi played Vinayachandran IAS in a 1998 film of what genre ?",
+    "table_id": "Suresh_Gopi_filmography_2",
+    "answer-text": "romantic",
+    "question_postag": "NNP NNP VBD NNP NNP IN DT CD NN IN WP NN .",
+    "answer-node": [
+      [
+        "Pranayavarnangal",
+        [
+          7,
+          1
+        ],
+        "/wiki/Pranayavarnangal",
+        "passage"
+      ],
+      [
+        "Summer in Bethlehem",
+        [
+          9,
+          1
+        ],
+        "/wiki/Summer_in_Bethlehem",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "0bf55eeef837fa9c",
+    "question": "What is the event of the athlete who accomplished a then-World Youth Best of 23.23 m. in 2010 ?",
+    "table_id": "Poland_at_the_2010_Summer_Youth_Olympics_0",
+    "answer-text": "Boys ' Shot Put",
+    "question_postag": "WP VBZ DT NN IN DT NN WP VBD DT JJ NNP NNP IN CD NNS IN CD .",
+    "answer-node": [
+      [
+        "Boys ' Shot Put",
+        [
+          1,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "6b3dd1e8c3720e61",
+    "question": "Where did the best selling artist in 1994 grow up ?",
+    "table_id": "Best-selling_albums_by_year_in_the_United_States_4",
+    "answer-text": "Pinner area of London",
+    "question_postag": "WRB VBD DT JJS NN NN IN CD VB RP .",
+    "answer-node": [
+      [
+        "Elton John",
+        [
+          4,
+          1
+        ],
+        "/wiki/Elton_John",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e42ab4501e3f1c4b",
+    "question": "The most recent musical is based on a movie from what year ?",
+    "table_id": "Grammy_Award_for_Best_Musical_Theater_Album_4",
+    "answer-text": "1994",
+    "question_postag": "DT RBS JJ NN VBZ VBN IN DT NN IN WP NN .",
+    "answer-node": [
+      [
+        "1994",
+        [
+          4,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Crazy for You (musical)",
+        [
+          3,
+          3
+        ],
+        "/wiki/Crazy_for_You_(musical)",
+        "passage"
+      ],
+      [
+        "Crazy for You (musical)",
+        [
+          5,
+          3
+        ],
+        "/wiki/Crazy_for_You_(musical)",
+        "passage"
+      ],
+      [
+        "Beauty and the Beast (musical)",
+        [
+          5,
+          3
+        ],
+        "/wiki/Beauty_and_the_Beast_(musical)",
+        "passage"
+      ],
+      [
+        "Bill Whelan",
+        [
+          7,
+          1
+        ],
+        "/wiki/Bill_Whelan",
+        "passage"
+      ],
+      [
+        "Riverdance",
+        [
+          7,
+          2
+        ],
+        "/wiki/Riverdance",
+        "passage"
+      ],
+      [
+        "The Lion King (musical)",
+        [
+          9,
+          2
+        ],
+        "/wiki/The_Lion_King_(musical)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "8b5f97a47681ff1f",
+    "question": "What is the nickname of the club that Bob Cheek played for ?",
+    "table_id": "1975_Knockout_Carnival_1",
+    "answer-text": "The Kangaroos",
+    "question_postag": "WP VBZ DT NN IN DT NN WDT NNP NNP VBD IN .",
+    "answer-node": [
+      [
+        "Clarence Football Club",
+        [
+          2,
+          3
+        ],
+        "/wiki/Clarence_Football_Club",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "0aab25d0bbb41210",
+    "question": "When was the first portable game in the franchise released ?",
+    "table_id": "List_of_roller_coaster_related_video_games_0",
+    "answer-text": "2012",
+    "question_postag": "WRB VBD DT JJ JJ NN IN DT NN VBN .",
+    "answer-node": [
+      [
+        "2012",
+        [
+          18,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "2012",
+        [
+          19,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Mac OS",
+        [
+          1,
+          2
+        ],
+        "/wiki/Mac_OS",
+        "passage"
+      ],
+      [
+        "Mac OS",
+        [
+          4,
+          2
+        ],
+        "/wiki/Mac_OS",
+        "passage"
+      ],
+      [
+        "Mac OS X",
+        [
+          6,
+          2
+        ],
+        "/wiki/Mac_OS_X",
+        "passage"
+      ],
+      [
+        "Mac OS X",
+        [
+          13,
+          2
+        ],
+        "/wiki/Mac_OS_X",
+        "passage"
+      ],
+      [
+        "Frontier Developments",
+        [
+          13,
+          3
+        ],
+        "/wiki/Frontier_Developments",
+        "passage"
+      ],
+      [
+        "Frontier Developments",
+        [
+          13,
+          4
+        ],
+        "/wiki/Frontier_Developments",
+        "passage"
+      ],
+      [
+        "Frontier Developments",
+        [
+          18,
+          3
+        ],
+        "/wiki/Frontier_Developments",
+        "passage"
+      ],
+      [
+        "Frontier Developments",
+        [
+          18,
+          4
+        ],
+        "/wiki/Frontier_Developments",
+        "passage"
+      ],
+      [
+        "N-Space",
+        [
+          19,
+          3
+        ],
+        "/wiki/N-Space",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "d5712ff57caa71c2",
+    "question": "Where is the park featuring the Steadman Heritage Farmstead Museum located ?",
+    "table_id": "List_of_nature_centers_in_Tennessee_0",
+    "answer-text": "Kingsport",
+    "question_postag": "WRB VBZ DT NN VBG DT NNP NNP NNP NNP VBN .",
+    "answer-node": [
+      [
+        "Kingsport",
+        [
+          0,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Bays Mountain Park",
+        [
+          0,
+          0
+        ],
+        "/wiki/Bays_Mountain_Park",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "f57e916e8dc5a57e",
+    "question": "What is the address of the church that was designed by Lewis Vulliamy in the Early Gothic Revival architectural style ?",
+    "table_id": "Richmond,_London_0",
+    "answer-text": "Kew Road , Richmond TW9 2TN",
+    "question_postag": "WP VBZ DT NN IN DT NN WDT VBD VBN IN NNP NNP IN DT JJ NNP NNP JJ NN .",
+    "answer-node": [
+      [
+        "Kew Road , Richmond TW9 2TN",
+        [
+          13,
+          2
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "c27678a00387d484",
+    "question": "The train Valley Express that road on an American Class I railroad network , ended in what state ?",
+    "table_id": "List_of_named_passenger_trains_of_the_United_States_(S-Z)_2",
+    "answer-text": "California",
+    "question_postag": "DT NN NNP NNP WDT NN IN DT JJ NN PRP VBP NN , VBN IN WP NN .",
+    "answer-node": [
+      [
+        "Utah and California Express",
+        [
+          4,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Los Angeles , California - Cheyenne , Wyoming [ 1947 ]",
+        [
+          7,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Denver , Colorado - Grand Junction , Colorado ( with through cars to California ) [ 1903 ]",
+        [
+          8,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "San Francisco , California - Los Angeles , California [ 1910 ]",
+        [
+          14,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Oakland , California - Bakersfield , California",
+        [
+          16,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Oakland , California - Fresno , California [ 1921 ]",
+        [
+          17,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Valley Flyer",
+        [
+          16,
+          0
+        ],
+        "/wiki/Valley_Flyer",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c1e3a043a66570cb",
+    "question": "Which group has ownership of the park that earned Best Landscaping in 2002 from Amusement Today ?",
+    "table_id": "Amusement_Today_17",
+    "answer-text": "SeaWorld Entertainment",
+    "question_postag": "NNP NN VBZ NN IN DT NN WDT VBD NNP NNP IN CD IN NNP NNP .",
+    "answer-node": [
+      [
+        "Busch Gardens Williamsburg",
+        [
+          7,
+          1
+        ],
+        "/wiki/Busch_Gardens_Williamsburg",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "13c3dc9bfd1ad43b",
+    "question": "How many years after being formed did the LA kings win the Stanley Cup ?",
+    "table_id": "2014_in_sports_5",
+    "answer-text": "47",
+    "question_postag": "WRB JJ NNS IN VBG VBN VBD DT NNP NNS VBP DT NNP NNP .",
+    "answer-node": [
+      [
+        "Kenya",
+        [
+          3,
+          4
+        ],
+        "/wiki/Kenya",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "660c1eba8d8be45c",
+    "question": "The person whose nickname is Watto was appointed head coach in which year ?",
+    "table_id": "Super_League_0",
+    "answer-text": "2015",
+    "question_postag": "DT NN WP$ NN VBZ NNP VBD VBN NN NN IN WDT NN .",
+    "answer-node": [
+      [
+        "3 September 2015",
+        [
+          6,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Brian McDermott (rugby league)",
+        [
+          8,
+          0
+        ],
+        "/wiki/Brian_McDermott_(rugby_league)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "9be52c95a06e2fb4",
+    "question": "What is the team name of the college attended by the 2007-08 winner of the Bob Cousy Award ?",
+    "table_id": "Bob_Cousy_Award_0",
+    "answer-text": "Longhorns",
+    "question_postag": "WP VBZ DT NN NN IN DT NN VBN IN DT JJ NN IN DT NNP NNP NNP .",
+    "answer-node": [
+      [
+        "Acie Law",
+        [
+          3,
+          1
+        ],
+        "/wiki/Acie_Law",
+        "passage"
+      ],
+      [
+        "D. J. Augustin",
+        [
+          4,
+          1
+        ],
+        "/wiki/D._J._Augustin",
+        "passage"
+      ],
+      [
+        "Texas Longhorns men's basketball",
+        [
+          4,
+          2
+        ],
+        "/wiki/Texas_Longhorns_men's_basketball",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "906642bd0ef5c13c",
+    "question": "Who is the alumni with the notability from the private graduate college that consists of one of the nation 's top-ranked public policy schools ?",
+    "table_id": "List_of_University_of_Texas_at_Austin_alumni_0",
+    "answer-text": "W. Page Keeton",
+    "question_postag": "WP VBZ DT NNS IN DT NN IN DT JJ NN NN IN VBZ IN CD IN DT NN POS JJ JJ NN NNS .",
+    "answer-node": [
+      [
+        "W. Page Keeton",
+        [
+          8,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "d28d7c05e335146a",
+    "question": "Which series is associated with a company founded in Foster City ?",
+    "table_id": "SCE_Foster_City_Studio_0",
+    "answer-text": "Sly Cooper",
+    "question_postag": "JJ NN VBZ VBN IN DT NN VBN IN NNP NNP .",
+    "answer-node": [
+      [
+        "Sly Cooper series",
+        [
+          3,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "8a93731bc6d377ff",
+    "question": "In what province is the city with a digital launch date of December 9 , 2011 ?",
+    "table_id": "CBC_Television_0",
+    "answer-text": "Manitoba",
+    "question_postag": "IN WP NN VBZ DT NN IN DT JJ NN NN IN NNP CD , CD .",
+    "answer-node": [
+      [
+        "Winnipeg , Manitoba",
+        [
+          12,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "CBWT-DT",
+        [
+          12,
+          1
+        ],
+        "/wiki/CBWT-DT",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "8e404d3460f1c017",
+    "question": "In which year was coach of the team whose shareholders are three real estate companies , named as the most perspective coach of his country ?",
+    "table_id": "2013_Chinese_Super_League_0",
+    "answer-text": "2010",
+    "question_postag": "IN WDT NN VBD NN IN DT NN WP$ NNS VBP CD JJ NN NNS , VBN IN DT RBS JJ NN IN PRP$ NN .",
+    "answer-node": [
+      [
+        "Aleksandar Stanojević",
+        [
+          0,
+          1
+        ],
+        "/wiki/Aleksandar_Stanojević",
+        "passage"
+      ],
+      [
+        "Beijing",
+        [
+          0,
+          2
+        ],
+        "/wiki/Beijing",
+        "passage"
+      ],
+      [
+        "Changchun Yatai",
+        [
+          1,
+          0
+        ],
+        "/wiki/Changchun_Yatai",
+        "passage"
+      ],
+      [
+        "Changchun",
+        [
+          1,
+          2
+        ],
+        "/wiki/Changchun",
+        "passage"
+      ],
+      [
+        "Marcello Lippi",
+        [
+          3,
+          1
+        ],
+        "/wiki/Marcello_Lippi",
+        "passage"
+      ],
+      [
+        "Guangzhou R&F",
+        [
+          4,
+          0
+        ],
+        "/wiki/Guangzhou_R&F",
+        "passage"
+      ],
+      [
+        "Guiyang",
+        [
+          5,
+          2
+        ],
+        "/wiki/Guiyang",
+        "passage"
+      ],
+      [
+        "Guiyang Olympic Sports Center",
+        [
+          5,
+          3
+        ],
+        "/wiki/Guiyang_Olympic_Sports_Center",
+        "passage"
+      ],
+      [
+        "Hangzhou Greentown",
+        [
+          6,
+          0
+        ],
+        "/wiki/Hangzhou_Greentown",
+        "passage"
+      ],
+      [
+        "Hangzhou",
+        [
+          6,
+          2
+        ],
+        "/wiki/Hangzhou",
+        "passage"
+      ],
+      [
+        "Shenyang",
+        [
+          8,
+          2
+        ],
+        "/wiki/Shenyang",
+        "passage"
+      ],
+      [
+        "Shandong Luneng",
+        [
+          10,
+          0
+        ],
+        "/wiki/Shandong_Luneng",
+        "passage"
+      ],
+      [
+        "Jinan",
+        [
+          10,
+          2
+        ],
+        "/wiki/Jinan",
+        "passage"
+      ],
+      [
+        "Shanghai Shenxin",
+        [
+          12,
+          0
+        ],
+        "/wiki/Shanghai_Shenxin",
+        "passage"
+      ],
+      [
+        "Tianjin Teda F.C.",
+        [
+          14,
+          0
+        ],
+        "/wiki/Tianjin_Teda_F.C.",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e2ef1b958e7c8ef5",
+    "question": "What is the original chapter of the sister whose notability elected Tijjani Muhammad-Bande of Nigeria on June 4 , 2019 ?",
+    "table_id": "List_of_Alpha_Kappa_Alpha_sisters_15",
+    "answer-text": "Honorary",
+    "question_postag": "WP VBZ DT JJ NN IN DT NN WP$ NN VBD NNP NNP IN NNP IN NNP CD , CD .",
+    "answer-node": [
+      [
+        "Honorary",
+        [
+          1,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Honorary",
+        [
+          2,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Honorary",
+        [
+          5,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Honorary",
+        [
+          8,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Honorary",
+        [
+          9,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Honorary",
+        [
+          10,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Honorary",
+        [
+          11,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Honorary",
+        [
+          12,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Honorary",
+        [
+          13,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Honorary",
+        [
+          14,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "daa6e17ad8c5c495",
+    "question": "What famous person was born at the site where the church is , in the city on the list with a population of 286 ?",
+    "table_id": "List_of_Baptist_churches_15",
+    "answer-text": "Jefferson Davis",
+    "question_postag": "WP JJ NN VBD VBN IN DT NN WRB DT NN VBZ , IN DT NN IN DT NN IN DT NN IN CD .",
+    "answer-node": [
+      [
+        "Bethel Baptist Church (Fairview, Kentucky)",
+        [
+          8,
+          0
+        ],
+        "/wiki/Bethel_Baptist_Church_(Fairview,_Kentucky)",
+        "passage"
+      ],
+      [
+        "Fairview, Christian County, Kentucky",
+        [
+          8,
+          2
+        ],
+        "/wiki/Fairview,_Christian_County,_Kentucky",
+        "passage"
+      ]
+    ]
+  }
+]

@@ -12,6 +12,9 @@ import re
 
 from rank_bm25 import BM25Okapi
 
+from src.kg.normalization import normalize_key
+from src.planning.entity_anchor import anchor_question
+
 
 def _tokenize(text: str) -> list[str]:
     return text.lower().split()
@@ -63,6 +66,18 @@ def _item_id(item: dict) -> str:
     return str(item.get("id") or item.get("url") or item.get("text", ""))
 
 
+def _entity_topk(entity: str, items: list[dict], top_k: int) -> list[dict]:
+    """Rank exact entity mentions ahead of BM25 ties and short documents."""
+    entity_tokens = set(normalize_key(entity).split())
+    direct = [
+        item for item in items
+        if entity_tokens and entity_tokens.issubset(set(normalize_key(item.get("text", "")).split()))
+    ]
+    direct_ids = {_item_id(item) for item in direct}
+    fallback = _bm25_topk(entity, [item for item in items if _item_id(item) not in direct_ids], "text", top_k)
+    return (direct + fallback)[:top_k]
+
+
 def two_stage_retrieve(
     question: str,
     table_rows: list[dict],
@@ -76,14 +91,25 @@ def two_stage_retrieve(
         question, table_rows, text_passages, web_snippets, top_k=top_k
     )
     expansions = _query_expansions(question, table_rows)
+    anchor = anchor_question(question, table_rows)
+    entity_queries = list(anchor.bridge_entities)
 
     def supplement(items: list[dict], selected: list[dict]) -> list[dict]:
         selected_ids = {_item_id(item) for item in selected}
         remaining = [item for item in items if _item_id(item) not in selected_ids]
         positions = {_item_id(item): index for index, item in enumerate(items)}
         added: list[dict] = []
-        for query in expansions:
-            for item in _bm25_topk(query, remaining, "text", second_stage_k):
+        # A table can identify an entity that is absent from the question.  For
+        # example, HybridQA's Walter Payton item requires rank=2 -> Walter
+        # Payton (table) -> Walter Payton passage -> middle name.  Prioritise
+        # these bridge-entity queries over generic header/schema expansions.
+        for query in entity_queries + expansions:
+            ranked = (
+                _entity_topk(query, remaining, second_stage_k)
+                if query in entity_queries
+                else _bm25_topk(query, remaining, "text", second_stage_k)
+            )
+            for item in ranked:
                 item_id = _item_id(item)
                 if item_id not in selected_ids:
                     enriched = dict(item)
@@ -110,6 +136,8 @@ def two_stage_retrieve(
             "stage1_top_k": top_k,
             "stage2_budget": second_stage_k,
             "expansion_queries": expansions,
+            "entity_anchor": anchor.to_dict(),
+            "entity_queries": entity_queries,
         },
     }
 

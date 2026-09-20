@@ -1,6 +1,8 @@
 import json
 import sys
 
+import pytest
+
 from src import run_baselines
 from src.datasets.schema import DatasetExample
 
@@ -36,3 +38,25 @@ def test_one_pipeline_exception_is_recorded_instead_of_stopping(monkeypatch, tmp
     assert records[0]["execution_accuracy"] == 0
     assert records[0]["error_category"] == "serialization_schema"
     assert records[1]["execution_accuracy"] == 1
+
+
+def test_fail_fast_does_not_record_failed_example(monkeypatch, tmp_path):
+    output = tmp_path / "results.jsonl"
+    monkeypatch.setattr(run_baselines, "_examples", lambda args: [
+        DatasetExample("bad", "question", [], [], answer="answer")
+    ])
+    monkeypatch.setattr(run_baselines, "_make_method", lambda args: object())
+    monkeypatch.setattr(
+        run_baselines, "_run_method",
+        lambda method, example, args: (_ for _ in ()).throw(RuntimeError("provider unavailable")),
+    )
+    monkeypatch.setattr(sys, "argv", [
+        "run_baselines", "--dataset", "hybridqa", "--method", "direct_llm",
+        "--input", str(tmp_path / "unused.json"), "--output", str(output),
+        "--fail-fast",
+    ])
+
+    with pytest.raises(RuntimeError, match="provider unavailable"):
+        run_baselines.main()
+
+    assert output.read_text() == ""

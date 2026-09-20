@@ -14,11 +14,13 @@ from src.baselines import (
     OnlineKGPathTextBaseline,
     OracleEvidenceBaseline,
     PathConsistencyEvaluator,
+    GraphRetrievalNoPathBaseline,
     RAGConfig,
 )
 from src.baselines.hybridqa_rag import BaselineConfig
 from src.baselines.metrics import (
     exact_match,
+    semantic_exact_match,
     finqa_execution_match,
     finqa_ratio_percentage_match,
     hitab_denotation_match,
@@ -38,6 +40,7 @@ METHODS = (
     "oracle_evidence",
     "path_consistency",
     "numerical_ir",
+    "graph_retrieval_no_path",
     "online_kg",
 )
 
@@ -73,6 +76,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="Use FinQA table (official) or table_ori (raw hierarchical input).",
     )
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument(
+        "--fail-fast", action="store_true",
+        help="stop before recording a failed example; useful for resumable long server runs",
+    )
     return parser
 
 
@@ -82,6 +89,7 @@ def _examples(args):
             args.input,
             tables_dir=args.tables_dir,
             passages_dir=args.passages_dir,
+            example_id=args.example_id,
         )
     if args.dataset == "finqa":
         return load_finqa(args.input, table_format=args.finqa_table_format)
@@ -107,6 +115,8 @@ def _make_method(args):
         ))
     if args.method == "flat_table_bm25":
         return FlatTableBM25Baseline(rag_config)
+    if args.method == "graph_retrieval_no_path":
+        return GraphRetrievalNoPathBaseline(rag_config)
     if args.method == "online_kg_path_text":
         return OnlineKGPathTextBaseline(rag_config, n_paths=args.n_paths)
     if args.method == "oracle_evidence":
@@ -175,6 +185,8 @@ def main() -> None:
                 try:
                     prediction = _run_method(method, example, args)
                 except Exception as exc:  # one bad model response must not stop a dataset run
+                    if args.fail_fast:
+                        raise
                     prediction = {
                         "answer": None,
                         "executed_value": None,
@@ -207,6 +219,9 @@ def main() -> None:
             }
             if args.dataset == "hybridqa":
                 record["exact_match"] = exact_match(example.answer, answer)
+                # Keep official EM strict.  This separate score exposes benign
+                # entity-alias mismatches such as Moroccan/Morocco.
+                record["semantic_exact_match"] = semantic_exact_match(example.answer, answer)
                 record["f1"] = token_f1(example.answer, answer)
                 executed = prediction.get("executed_value")
                 record["execution_exact_match"] = (
@@ -319,6 +334,8 @@ def main() -> None:
         em = sum(row["exact_match"] for row in records) / len(records) if records else 0.0
         f1 = sum(row["f1"] for row in records) / len(records) if records else 0.0
         summary.update(exact_match=em, f1=f1, exact_match_percent=100 * em, f1_percent=100 * f1)
+        semantic_em = sum(row["semantic_exact_match"] for row in records) / len(records) if records else 0.0
+        summary.update(semantic_exact_match=semantic_em, semantic_exact_match_percent=100 * semantic_em)
     elif args.dataset == "finqa":
         execution = (
             sum(row["execution_accuracy"] for row in records) / len(records)
