@@ -1,5 +1,7 @@
 import json
 import sys
+import threading
+import time
 
 import pytest
 
@@ -60,3 +62,32 @@ def test_fail_fast_does_not_record_failed_example(monkeypatch, tmp_path):
         run_baselines.main()
 
     assert output.read_text() == ""
+
+
+def test_max_workers_runs_samples_concurrently_and_keeps_input_order(monkeypatch, tmp_path):
+    examples = [
+        DatasetExample("first", "q1", [], [], answer="a"),
+        DatasetExample("second", "q2", [], [], answer="a"),
+    ]
+    output = tmp_path / "results.jsonl"
+    monkeypatch.setattr(run_baselines, "_examples", lambda args: examples)
+    monkeypatch.setattr(run_baselines, "_make_method", lambda args: object())
+    started = threading.Event()
+
+    def fake_run(method, example, args):
+        started.set()
+        time.sleep(0.05)
+        return {"answer": "a", "executed_value": None, "method": args.method}
+
+    monkeypatch.setattr(run_baselines, "_run_method", fake_run)
+    monkeypatch.setattr(sys, "argv", [
+        "run_baselines", "--dataset", "hybridqa", "--method", "direct_llm",
+        "--input", str(tmp_path / "unused.json"), "--output", str(output),
+        "--max-workers", "2",
+    ])
+
+    began = time.perf_counter()
+    run_baselines.main()
+    assert time.perf_counter() - began < 0.1
+    records = [json.loads(line) for line in output.read_text().splitlines()]
+    assert [record["id"] for record in records] == ["first", "second"]

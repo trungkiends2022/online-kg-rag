@@ -6,6 +6,7 @@
 \usepackage{url}
 \usepackage{tikz}
 \usepackage{listings}
+\usepackage{multirow}
 \lstset{basicstyle=\ttfamily\small,breaklines=true,frame=single,columns=fullflexible,captionpos=b}
 
 \begin{document}
@@ -124,11 +125,53 @@ The paper develops four methodological contributions:
 % Finalize empirical contribution claims only after evaluating matched runs.
 
 \section{Related Work}
-\textbf{To complete:} review and cite primary papers on table--text QA,
-retrieval-augmented generation with graphs, program-aided reasoning, and
-execution-based candidate selection. Compare graph construction time, evidence
-representation, execution interface, and evaluation setting. Do not infer
-novelty from an implementation difference alone.
+\label{sec:related}
+\paragraph{Table--text and table retrieval.}
+HybridQA established a setting in which a question requires a Wikipedia table
+and passages linked from table entities~\cite{hybridqa}. FinQA couples financial
+tables, report text, and executable gold programs~\cite{finqa}; HiTab tests
+hierarchical tables with nested row and column headers~\cite{hitab}. These
+benchmarks expose a limitation of flattening a table into a text prompt: a cell
+can lose its row, column, and header context. TableRAG for large-scale table
+understanding retrieves schemas and cells after query expansion, reducing the
+prompt footprint for very large tables~\cite{chen2024tablerag}. A different
+TableRAG formulation uses text retrieval, SQL generation and execution, and
+intermediate-answer composition for heterogeneous documents~\cite{yu2025tablerag}.
+Our method shares their premise that table structure should influence retrieval
+and reasoning. It differs in scope: it constructs a compact per-query graph
+from supplied benchmark context, preserves structural provenance in a parallel
+trace, and evaluates several executable graph-path candidates rather than using
+SQL as the sole table interface. This is a design comparison, not a claim of
+superiority; the experiments in Section~\ref{sec:experiments} control the
+available context and model configuration.
+
+\paragraph{Graph-enhanced RAG.}
+Graph-based retrieval can expose multi-hop relations that text similarity alone
+may miss. HydraRAG combines pre-existing KG, Wikipedia, and web sources through
+agentic exploration and tri-factor verification based on source trustworthiness,
+cross-source corroboration, and entity-path alignment~\cite{tan2025hydrarag}.
+Its evidence graph is assembled from external Freebase/Wikidata services and
+documents during exploration. Online-KG instead creates its executable graph
+from the table and passage context for the current question. It consequently
+does not require a global KG service, but it also does not provide HydraRAG's
+coverage over external sources or its source-trustworthiness model. The two
+systems share the use of provenance and multi-source evidence, while their graph
+construction time, source assumptions, and verification mechanisms differ.
+
+\paragraph{Executable reasoning and candidate selection.}
+Program-aided language models delegate deterministic computation to an
+interpreter after an LM generates code~\cite{gao2023pal}; program-of-thought
+prompting similarly separates numerical computation from natural-language
+reasoning~\cite{chen2022pot}. For table QA, executable representations such as
+SQL~\cite{yu2025tablerag} or the programs annotated in FinQA~\cite{finqa} make
+operations inspectable. These approaches motivate executing rather than merely
+describing an arithmetic plan. Online-KG adds two restrictions that matter for
+the present setting: generated code can only access a limited graph API, and
+the executor records the KG edges returned by those calls. The system then ranks
+multiple executed candidates using source support and output agreement. Execution
+removes arithmetic errors conditional on selected operands, but it cannot show
+that those operands or the operation answer the question; the contrasting paths
+in Figure~\ref{fig:kg-paths} make this limitation explicit.
 
 \section{Problem Formulation}
 Given a question $q$, a table $T$, and associated passages $D$, the system
@@ -141,26 +184,29 @@ open-domain retrieval. The graph $G_q$ is constructed separately for each query.
 \input{method}
 
 \section{Experimental Protocol}
+\label{sec:experiments}
 \subsection{Datasets and Metrics}
-Use HybridQA for table--text QA, FinQA for table--text numerical reasoning, and
-HiTab for cross-domain hierarchical-table reasoning. Add verified
-dataset citations, versions, split sizes, and sample identifiers. Report
-HybridQA exact match and token F1. For FinQA, prioritize the official execution
-metric and separately label any relaxed ratio/percentage metric. Do not report
-Python program accuracy as equivalence to the official FinQA program metric.
-Keep normalized official tables and raw-table parsing experiments separate.
+We use the fixed development splits of HybridQA, FinQA, and HiTab, with versions,
+file hashes, and exact example identifiers recorded in the released run manifest.
+HybridQA evaluates table--text answer extraction with exact match (EM) and token
+F1. FinQA reports its strict five-decimal execution metric as the primary score;
+we report a ratio/percentage-equivalent metric only as a separately labelled
+diagnostic. HiTab reports strict denotation accuracy on its original scale and,
+separately, a ratio/percentage-normalized diagnostic. Python-path correctness is
+not presented as official FinQA program accuracy. FinQA experiments using its
+normalized official table and its raw hierarchical table are separate protocols.
 
 \subsection{Baselines and Ablations}
-Compare direct answering from the same context, flattened-table retrieval,
-graph paths without execution, agreement-only selection, and the full system.
-Evaluate typed numerical programs separately. Planned construction ablations
-include structural-only and semantic-only triples and removal of header
-hierarchy. Add a retrieval ablation that sets the second-stage budget to zero,
-and compare
-generic schema expansion with bridge-entity supplementation where anchorable
-questions are available. Report anchor coverage, bridge-entity retrieval recall,
-and answer metrics separately; retrieving a bridge entity does not ensure a
-correct final answer. Verify that each ablation is implemented before running it.
+The benchmark suite compares direct LLM answering, flattened-table BM25,
+Online-KG path text without code, path-consistency selection, typed numerical
+IR, and the full Python Online-KG pipeline. All methods use the same supplied
+context, model, decoding configuration, and answer budget within each run.
+Our ablations remove the second retrieval stage, bridge-entity queries,
+structural table triples, semantic enrichment, header hierarchy, or
+evidence-aware selection. Each configuration is run only after its implementation
+is verified. We report anchor coverage and bridge-entity passage recall on the
+subset where an anchor applies; retrieving a bridge entity does not ensure a
+correct final answer.
 
 \subsection{Controls and Cost}
 Fix example identifiers, model version, decoding settings, context limits, and
@@ -174,17 +220,75 @@ diagnostic; do not evaluate it as calibrated confidence without a dedicated
 calibration study.
 
 \section{Results and Error Analysis}
-\textbf{Pending benchmark evaluation.} The currently inspected development
-artifact contains one FinQA example with execution accuracy 0, 14 logical model
-calls, and wall time 173.55 seconds. This is a debugging observation, not an
-estimate of benchmark performance. It does not contain the official execution
-metric. Model identity must be checked in run metadata rather than inferred
-from the filename. Record the repository revision for future experiments.
+\label{sec:results}
+This section is a camera-ready results scaffold. Cells marked \texttt{TBD} must
+be replaced only from completed, fixed-configuration runs; no conclusions should
+be drawn until Table~\ref{tab:main-results} is filled. Each reported row must
+name the dataset split, model identifier, repository revision, prompt version,
+and decoding configuration in the accompanying run manifest.
 
-Analyze errors in table parsing, evidence retrieval, entity resolution,
-operator selection, arithmetic, units, and answer rendering. Distinguish code
-execution success from answer correctness. Add a case study showing the exact
-question, source cells, graph edges, generated program, and executed result.
+\begin{table}[t]
+\caption{Main benchmark results. Fill one block per dataset from the fixed run
+manifest. Report mean latency and logical LLM calls per example on the same
+evaluation records used for accuracy. Higher is better for all accuracy metrics.}
+\label{tab:main-results}
+\centering
+\scriptsize
+\begin{tabular}{llrrrr}
+\toprule
+Dataset & Method & Primary metric & Secondary metric & Calls & Latency (s) \\
+\midrule
+HybridQA & Direct LLM & \texttt{TBD} EM & \texttt{TBD} F1 & \texttt{TBD} & \texttt{TBD} \\
+         & Flat-table BM25 & \texttt{TBD} EM & \texttt{TBD} F1 & \texttt{TBD} & \texttt{TBD} \\
+         & Online-KG path text & \texttt{TBD} EM & \texttt{TBD} F1 & \texttt{TBD} & \texttt{TBD} \\
+         & Online-KG (Python) & \texttt{TBD} EM & \texttt{TBD} F1 & \texttt{TBD} & \texttt{TBD} \\
+\midrule
+FinQA    & Direct LLM & \texttt{TBD} official exec. & \texttt{TBD} ratio/\% & \texttt{TBD} & \texttt{TBD} \\
+         & Numerical IR & \texttt{TBD} official exec. & \texttt{TBD} ratio/\% & \texttt{TBD} & \texttt{TBD} \\
+         & Online-KG (Python) & \texttt{TBD} official exec. & \texttt{TBD} ratio/\% & \texttt{TBD} & \texttt{TBD} \\
+\midrule
+HiTab    & Numerical IR & \texttt{TBD} strict den. & \texttt{TBD} normalized & \texttt{TBD} & \texttt{TBD} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\caption{Ablation and audit template. Evaluate all rows on the same anchorable
+subset for bridge retrieval, and use the same completed examples for answer
+metrics. ``Bridge recall'' is not applicable to a table-only dataset.}
+\label{tab:ablations}
+\centering
+\scriptsize
+\begin{tabular}{lrrrr}
+\toprule
+Configuration & Primary metric & Anchor coverage & Bridge recall & Cross-modal paths \\
+\midrule
+Full Online-KG & \texttt{TBD} & \texttt{TBD} & \texttt{TBD} & \texttt{TBD} \\
+No second stage ($b=0$) & \texttt{TBD} & \texttt{TBD} & \texttt{TBD} & \texttt{TBD} \\
+No bridge-entity query & \texttt{TBD} & \texttt{TBD} & \texttt{TBD} & \texttt{TBD} \\
+No structural triples & \texttt{TBD} & \texttt{TBD} & \texttt{TBD} & \texttt{TBD} \\
+Agreement-only selector & \texttt{TBD} & \texttt{TBD} & \texttt{TBD} & \texttt{TBD} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Analysis protocol.}
+After filling the tables, report paired bootstrap confidence intervals for the
+difference between the full system and its strongest matched baseline. Partition
+failures into retrieval/anchor, table parsing or header interpretation, entity
+resolution, program syntax or schema, operand selection, operator composition,
+arithmetic execution, unit/scale, and answer rendering. For numerical IR, also
+report parse validity, schema validity, execution success, operator accuracy,
+step accuracy, and grounding precision/recall where gold annotations permit.
+Do not merge unavailable metrics into an error category.
+
+\paragraph{Case-study template.}
+Select one correct and one incorrect held-out example after evaluation. For each,
+show the question, retrieved sources and anchor, relevant structural cells,
+executable graph edges, candidate programs, executed values, selected-path
+score, and final answer. State whether the trace explains an error or merely
+records access. The constructed example in Figure~\ref{fig:kg-paths} illustrates
+the presentation format and is not a substitute for held-out evidence.
 
 \section{Limitations}
 The current experiments assume dataset-supplied tables and, for FinQA, the

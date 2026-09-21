@@ -17,8 +17,9 @@ import re
 import json
 import time
 import threading
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
-from contextvars import ContextVar
+from contextvars import ContextVar, copy_context
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -30,6 +31,9 @@ from src.llm.base import LLMProvider
 load_dotenv()
 
 _provider: LLMProvider | None = None
+_provider_lock = threading.Lock()
+_log_lock = threading.Lock()
+_metrics_lock = threading.Lock()
 _metrics_context: ContextVar[dict | None] = ContextVar("llm_metrics", default=None)
 _rate_lock = threading.Lock()
 _last_request_at: dict[str, float] = {}
@@ -73,15 +77,16 @@ def _capture_call(record: dict) -> None:
     metrics = _metrics_context.get()
     if metrics is None:
         return
-    metrics["llm_calls"] += 1
-    metrics["llm_api_attempts"] += int(record.get("api_attempts", 1))
-    metrics["llm_prompt_chars"] += int(record.get("prompt_chars", 0))
-    metrics["llm_response_chars"] += int(record.get("response_chars", 0))
-    metrics["llm_latency_ms"] += float(record.get("duration_ms", 0.0))
-    if record.get("status") == "ok":
-        metrics["llm_successful_calls"] += 1
-    else:
-        metrics["llm_failed_calls"] += 1
+    with _metrics_lock:
+        metrics["llm_calls"] += 1
+        metrics["llm_api_attempts"] += int(record.get("api_attempts", 1))
+        metrics["llm_prompt_chars"] += int(record.get("prompt_chars", 0))
+        metrics["llm_response_chars"] += int(record.get("response_chars", 0))
+        metrics["llm_latency_ms"] += float(record.get("duration_ms", 0.0))
+        if record.get("status") == "ok":
+            metrics["llm_successful_calls"] += 1
+        else:
+            metrics["llm_failed_calls"] += 1
 
 
 def _env_enabled(name: str) -> bool:
@@ -94,8 +99,11 @@ def _write_call_log(record: dict) -> None:
         return
     path = Path(os.environ.get("LLM_LOG_PATH", "logs/llm_calls.jsonl"))
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("a", encoding="utf-8") as stream:
-        stream.write(json.dumps(record, ensure_ascii=False) + "\n")
+    # Multiple benchmark workers can finish at the same time.  One locked write
+    # keeps JSONL records intact without serializing the provider requests.
+    with _log_lock:
+        with path.open("a", encoding="utf-8") as stream:
+            stream.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
 def get_provider(force_reload: bool = False) -> LLMProvider:
@@ -103,8 +111,10 @@ def get_provider(force_reload: bool = False) -> LLMProvider:
     giữa chừng (VD trong test, hoặc khi muốn so sánh nhiều model cho cùng 1 câu hỏi)."""
     global _provider
     if _provider is None or force_reload:
-        name = os.environ.get("LLM_PROVIDER", "anthropic")
-        _provider = create_provider(name)
+        with _provider_lock:
+            if _provider is None or force_reload:
+                name = os.environ.get("LLM_PROVIDER", "anthropic")
+                _provider = create_provider(name)
     return _provider
 
 
@@ -223,6 +233,44 @@ def llm_call_json(
         f"LLM ({get_provider().name}) không trả JSON list hợp lệ sau "
         f"{retries + 1} lần:\n{last_raw}"
     ) from last_error
+
+
+def llm_call_many(
+    prompts: list[str],
+    *,
+    max_workers: int = 1,
+    json_mode: bool = False,
+    max_tokens: int = 1024,
+    temperature: float | None = None,
+) -> list[str]:
+    """Complete several independent prompts concurrently, preserving order.
+
+    Providers in this project expose blocking HTTP calls.  Threads overlap that
+    network wait efficiently; this is intentionally not a CPU parallelism API.
+    Rate pacing and retries remain enforced by :func:`llm_call`.
+    """
+    if max_workers < 1:
+        raise ValueError("max_workers must be at least 1")
+    if not prompts:
+        return []
+
+    def call(prompt: str) -> str:
+        return llm_call(
+            prompt,
+            json_mode=json_mode,
+            max_tokens=max_tokens,
+            temperature=temperature,
+        )
+
+    # ContextVars do not cross threads automatically.  Copy the caller's
+    # metrics context so capture_llm_metrics() also works for batched calls.
+    contexts = [copy_context() for _ in prompts]
+
+    def call_in_context(index: int) -> str:
+        return contexts[index].run(call, prompts[index])
+
+    with ThreadPoolExecutor(max_workers=min(max_workers, len(prompts))) as executor:
+        return list(executor.map(call_in_context, range(len(prompts))))
 
 
 def _parse_json_list(raw: str) -> list:

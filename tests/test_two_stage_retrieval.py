@@ -52,3 +52,39 @@ def test_entity_anchor_recovers_passage_for_table_derived_bridge_entity():
 
     assert result["retrieval_trace"]["entity_anchor"]["bridge_entities"] == ("Walter Payton",)
     assert "walter" in [item["id"] for item in result["text_passages"]]
+
+
+def test_table_literal_constraint_prioritizes_candidate_passages_and_does_not_misread_whose():
+    passages = [
+        {"id": "angles", "text": "English was named after the Angles."},
+        {"id": "belgium", "text": "Belgium is a country in Europe."},
+        {"id": "latvia", "text": "Latvia is a Baltic country."},
+        {"id": "lithuania", "text": "Lithuania is commonly linked to the Lietava river."},
+    ]
+    question = (
+        "Which jurisdiction whose standard tax rate was 21 % is mostly credited "
+        "to be named after a river?"
+    )
+    result = two_stage_retrieve(
+        question,
+        [{"table_name": "tax", "rows": [
+            {"Jurisdiction": "Belgium", "Rate Standard": "21%"},
+            {"Jurisdiction": "Latvia", "Rate Standard": "21%"},
+            {"Jurisdiction": "Lithuania", "Rate Standard": "21%"},
+        ]}],
+        passages,
+        [],
+        top_k=1,
+        second_stage_k=1,
+    )
+
+    trace = result["retrieval_trace"]
+    assert trace["entity_anchor"]["target_attribute"] is None
+    assert trace["table_constraints"] == [{
+        "column": "Rate Standard",
+        "value": "21 %",
+        "entity_column": "Jurisdiction",
+        "candidates": ("Belgium", "Latvia", "Lithuania"),
+        "enforce_output": True,
+    }]
+    assert "lithuania" in [item["id"] for item in result["text_passages"]]

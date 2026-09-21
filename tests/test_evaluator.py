@@ -106,3 +106,43 @@ def test_text_only_beats_web_only_with_same_other_signals():
     ]
     scored = PathEvaluator().evaluate_all(candidates)
     assert scored[0].path.path_id == "text"
+
+
+def test_table_constraint_rejects_unrelated_text_path():
+    candidates = [
+        (_path("unrelated"), "code", _result("Angles", "text", "english")),
+        (_path("candidate-no-table"), "code", _result("Lithuania", "text", "lithuania")),
+        (_path("candidate-grounded"), "code", _result("Lithuania", "table", "vat")),
+    ]
+    scored = PathEvaluator().evaluate_all(candidates, {
+        "allowed_output_values": ["Belgium", "Lithuania"],
+        "require_table_evidence": True,
+    })
+
+    assert scored[0].exec_result.value == "Lithuania"
+    assert scored[-1].score == float("-inf")
+    assert any("violates_table_candidate_constraint" in item.reasons for item in scored)
+    assert any("missing_required_table_evidence" in item.reasons for item in scored)
+
+
+def test_explicit_target_relation_rejects_evidence_for_wrong_attribute():
+    wrong = ExecResult(
+        True, "Barry Sanders", is_empty=False,
+        evidence=(EvidenceRef("2", "player", "Barry Sanders", "table", "leaders"),),
+        accessed_edges=1,
+    )
+    correct = ExecResult(
+        True, "Jerry", is_empty=False,
+        evidence=(EvidenceRef(
+            "Walter Payton", "full_name", "Walter Jerry Payton", "text", "payton"
+        ),),
+        accessed_edges=1,
+    )
+
+    scored = PathEvaluator().evaluate_all(
+        [(_path("wrong"), "code", wrong), (_path("correct"), "code", correct)],
+        question="What is the middle name of the player with the second most rushing yards?",
+    )
+
+    assert scored[0].exec_result.value == "Jerry"
+    assert scored[-1].reasons == ["missing_target_relation_evidence"]

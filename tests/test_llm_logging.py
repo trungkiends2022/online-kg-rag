@@ -1,4 +1,5 @@
 import json
+import time
 
 from src.llm import client
 
@@ -90,3 +91,20 @@ def test_rate_limit_retry_counts_api_attempts(monkeypatch):
     assert metrics["llm_calls"] == 1
     assert metrics["llm_api_attempts"] == 2
     assert metrics["llm_successful_calls"] == 1
+
+
+def test_llm_call_many_runs_independent_prompts_concurrently(monkeypatch):
+    class SlowProvider:
+        name = "fake"
+        model = "fake-model"
+
+        def complete(self, prompt, *, max_tokens):
+            time.sleep(0.04)
+            return prompt.upper()
+
+    monkeypatch.setattr(client, "_provider", SlowProvider())
+    started = time.perf_counter()
+    with client.capture_llm_metrics() as metrics:
+        assert client.llm_call_many(["one", "two", "three"], max_workers=3) == ["ONE", "TWO", "THREE"]
+    assert time.perf_counter() - started < 0.1
+    assert metrics["llm_calls"] == 3

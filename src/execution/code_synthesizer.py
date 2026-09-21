@@ -41,6 +41,7 @@ _API_SIGNATURES = {
 # Generated programs are normally only a few lines. Keeping this below the
 # extraction/planning budget avoids wasting reasoning tokens and large TPM bursts.
 CODE_MAX_TOKENS = 2048
+KG_CONTEXT_EDGE_LIMIT = 72
 
 
 class CodeSynthesizer:
@@ -153,6 +154,7 @@ class CodeSynthesizer:
         question: str,
         kg: "OnlineKG | None" = None,
         retries: int = 1,
+        constraint_context: dict | None = None,
     ) -> str:
         kg_context = ""
         operation_guidance = ""
@@ -165,10 +167,31 @@ class CodeSynthesizer:
                 scoped_bonus = 3 if data["relation"] == "annual_interest_amount" else 0
                 ranked.append((overlap + scoped_bonus, -position, head, tail, data))
             ranked.sort(key=lambda item: item[:2], reverse=True)
-            edges = [
-                {"head": head, "relation": data["relation"], "tail": tail}
-                for _, _, head, tail, data in ranked[:100]
+            table_constraints = (constraint_context or {}).get("table_constraints", [])
+            constrained_entities = {
+                entity for constraint in table_constraints
+                for entity in constraint.get("candidates", [])
+            }
+            # Candidate entities must be visible to synthesis, but adding every
+            # incident edge can exceed provider TPM limits on large Wikipedia
+            # passages. Keep the highest question-overlap candidate edges first,
+            # then fill the remaining bounded context with global high-overlap
+            # edges.
+            candidate_ranked = [
+                item for item in ranked
+                if item[2] in constrained_entities or item[3] in constrained_entities
             ]
+            edges = []
+            seen_edges = set()
+            for _, _, head, tail, data in candidate_ranked + ranked:
+                edge = {"head": head, "relation": data["relation"], "tail": tail}
+                edge_key = (head, data["relation"], tail)
+                if edge_key in seen_edges:
+                    continue
+                seen_edges.add(edge_key)
+                edges.append(edge)
+                if len(edges) >= KG_CONTEXT_EDGE_LIMIT:
+                    break
             operation_guidance = format_operation_intent(
                 infer_operation_intent(question, kg)
             )
@@ -177,6 +200,11 @@ class CodeSynthesizer:
                 f"\nRelations hợp lệ: {kg.summary()['relations']}"
                 f"\nCác edge mẫu: {json.dumps(edges, ensure_ascii=False)}\n"
             )
+            if table_constraints:
+                kg_context += (
+                    "Ràng buộc bảng bắt buộc (không được bỏ qua khi chọn result): "
+                    f"{json.dumps(table_constraints, ensure_ascii=False)}\n"
+                )
         base_prompt = f"""
         Question: {question}
         Reasoning path: {json.dumps([s.__dict__ for s in path.steps], ensure_ascii=False)}

@@ -76,7 +76,7 @@ def test_online_kg_path_text_answers_without_program_execution(monkeypatch):
             return kg
 
     class Planner:
-        def generate_candidates(self, question, graph, n):
+        def generate_candidates(self, question, graph, n, constraint_context=None):
             return [ReasoningPath("p1", [PathStep(1, "Follow Alice --club--> answer")])]
 
     prompts = []
@@ -97,6 +97,72 @@ def test_online_kg_path_text_answers_without_program_execution(monkeypatch):
     assert result["code_generated"] is False
     assert result["program_executed"] is False
     assert "Alice --club--> answer" in prompts[0]
+
+
+def test_online_kg_path_text_ranks_relevant_late_edge_and_keeps_json_context(monkeypatch):
+    kg = OnlineKG()
+    kg.add_triple(Triple("Noise", "unrelated", "Ignore", Provenance("text", "noise")))
+    kg.add_triple(Triple("Lithuania", "named_after", "Lietava river", Provenance("text", "lt")))
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    class Planner:
+        def generate_candidates(self, question, graph, n, constraint_context=None):
+            return [ReasoningPath("p1", [PathStep(1, "Find Lithuania named after river")])]
+
+    prompts = []
+    monkeypatch.setattr(
+        "src.baselines.online_kg_path_text.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "m"})(),
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_kg_path_text.llm_call",
+        lambda prompt, **kwargs: prompts.append(prompt) or "Lithuania",
+    )
+    baseline = OnlineKGPathTextBaseline(
+        RAGConfig(top_k=1, max_context_chars=600), n_paths=1,
+        kg_builder=Builder(), planner=Planner(),
+    )
+    example = _example()
+    example.question = "Which jurisdiction is named after a river?"
+    result = baseline.run(example)
+
+    assert result["answer"] == "Lithuania"
+    assert '"kg_edges"' in prompts[0]
+    assert "Lietava river" in prompts[0]
+
+
+def test_online_kg_path_text_canonicalizes_resolved_entity_alias(monkeypatch):
+    kg = OnlineKG()
+    kg.add_triple(Triple(
+        "Opponent", "home_arena", "Vazgen Sargsyan Republican Stadium",
+        Provenance("text", "match"),
+    ))
+    kg.entity_aliases["Republican Stadium"] = "Vazgen Sargsyan Republican Stadium"
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    class Planner:
+        def generate_candidates(self, question, graph, n, constraint_context=None):
+            return [ReasoningPath("p1", [PathStep(1, "Find home arena")])]
+
+    monkeypatch.setattr(
+        "src.baselines.online_kg_path_text.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "m"})(),
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_kg_path_text.llm_call",
+        lambda prompt, **kwargs: "Vazgen Sargsyan Republican Stadium",
+    )
+    result = OnlineKGPathTextBaseline(
+        RAGConfig(top_k=1), n_paths=1, kg_builder=Builder(), planner=Planner()
+    ).run(_example())
+
+    assert result["answer"] == "Republican Stadium"
 
 
 def test_oracle_evidence_uses_finqa_gold_facts_only(monkeypatch):
@@ -140,7 +206,11 @@ def test_path_consistency_votes_without_requiring_evidence():
         (path("c"), "", ExecResult(True, "Arsenal")),
     ]
 
-    scored = PathConsistencyEvaluator().evaluate_all(candidates)
+    scored = PathConsistencyEvaluator().evaluate_all(
+        candidates,
+        constraint_policy={"allowed_output_values": ["Liverpool"]},
+        question="What is the nationality?",
+    )
 
     assert scored[0].exec_result.value == "Liverpool"
     assert scored[0].score == 2.0

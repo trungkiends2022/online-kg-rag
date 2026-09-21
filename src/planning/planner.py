@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import uuid
 from dataclasses import dataclass
 from typing import Optional
@@ -32,15 +33,28 @@ class PathPlanner:
         self.max_output_tokens = max_output_tokens
         self.last_error: str | None = None
 
-    def generate_candidates(self, question: str, kg: OnlineKG, n: int = 5) -> list[ReasoningPath]:
+    def generate_candidates(
+        self, question: str, kg: OnlineKG, n: int = 5,
+        constraint_context: dict | None = None,
+    ) -> list[ReasoningPath]:
         summary = kg.summary()
         operation_intent = infer_operation_intent(question, kg)
+        constraint_prompt = ""
+        table_constraints = (constraint_context or {}).get("table_constraints", [])
+        if table_constraints:
+            constraint_prompt = (
+                "\nRàng buộc bảng BẮT BUỘC: "
+                f"{json.dumps(table_constraints, ensure_ascii=False)}\n"
+                "Đáp án phải là một candidate trong ràng buộc bảng và mỗi path phải "
+                "giữ evidence bảng, rồi kiểm tra mọi điều kiện còn lại bằng text/KG.\n"
+            )
         prompt = f"""
         Question: {question}
         Entities có trong KG tạm (mẫu, tối đa 50): {list(kg.graph.nodes())[:50]}
         Relations có trong KG tạm: {summary["relations"][:50]}
         Numerical operation intent inferred from question and KG schema only:
         {format_operation_intent(operation_intent)}
+        {constraint_prompt}
 
         Sinh {n} reasoning path KHÁC NHAU (không phải code, chỉ là kế hoạch các bước).
         Mỗi path tối đa 3 step; mỗi goal tối đa 20 từ. Không diễn giải phép tính

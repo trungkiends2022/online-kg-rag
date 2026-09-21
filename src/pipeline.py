@@ -96,6 +96,7 @@ class OnlineKGPipeline:
             for row_group in retrieved.get("table_rows", []):
                 row_group["deterministic_only"] = True
         kg = self.kg_builder.build(retrieved)
+        constraint_context = retrieved.get("retrieval_trace", {})
         operation_intent = infer_operation_intent(question, kg)
         last_diagnostics = []
 
@@ -108,7 +109,12 @@ class OnlineKGPipeline:
                 if self.execution_mode == "numerical_ir" else []
             )
             try:
-                paths = self.planner.generate_candidates(question, kg, n=n_paths) if n_paths > 0 else []
+                paths = (
+                    self.planner.generate_candidates(
+                        question, kg, n=n_paths, constraint_context=constraint_context,
+                    )
+                    if n_paths > 0 else []
+                )
             except Exception as error:
                 # Planning is optional: templates and symbolic search can still
                 # solve a case.  Keep a diagnostic instead of failing the whole
@@ -141,7 +147,9 @@ class OnlineKGPipeline:
                         result = self.ir_executor.run(program, kg)
                         ir_validation[path.path_id] = (True, True)
                     else:
-                        code = self.code_synth.synthesize(path, question, kg)
+                        code = self.code_synth.synthesize(
+                            path, question, kg, constraint_context=constraint_context,
+                        )
                         result = self.executor.run(code, kg)
                 except Exception as exc:
                     # A malformed candidate is an expected model failure.  Keep it
@@ -160,7 +168,10 @@ class OnlineKGPipeline:
                         )
                 candidates.append((path, code, result))
 
-            scored = self.evaluator.evaluate_all(candidates)
+            constraint_policy = constraint_context.get("constraint_policy", {})
+            scored = self.evaluator.evaluate_all(
+                candidates, constraint_policy, question=question
+            )
             # Deterministic entity-centric paths complement, rather than only
             # rescue, LLM-generated programs. This makes table -> bridge entity
             # -> linked passage patterns available even when a planner returns
@@ -169,7 +180,9 @@ class OnlineKGPipeline:
                 symbolic_candidates = self.symbolic_search.search(question, kg)
                 if symbolic_candidates:
                     candidates.extend(symbolic_candidates)
-                    scored = self.evaluator.evaluate_all(candidates)
+                    scored = self.evaluator.evaluate_all(
+                        candidates, constraint_policy, question=question
+                    )
             # Symbolic graph search returns an already executed path rather than
             # a numerical program. Disable it for the IR ablation so the method
             # cannot silently fall back to a different execution formalism.
@@ -180,7 +193,9 @@ class OnlineKGPipeline:
                 symbolic_candidates = self.symbolic_search.search(question, kg)
                 if symbolic_candidates:
                     candidates.extend(symbolic_candidates)
-                    scored = self.evaluator.evaluate_all(candidates)
+                    scored = self.evaluator.evaluate_all(
+                        candidates, constraint_policy, question=question
+                    )
             last_diagnostics = [
                 {
                     "path_id": item.path.path_id,

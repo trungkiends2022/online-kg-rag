@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from typing import Any
@@ -26,8 +27,18 @@ class PathEvaluator:
     """Prefer outputs supported by diverse, independent executed evidence."""
 
     def evaluate_all(
-        self, candidates: list[tuple[ReasoningPath, str, ExecResult]]
+        self,
+        candidates: list[tuple[ReasoningPath, str, ExecResult]],
+        constraint_policy: dict | None = None,
+        question: str | None = None,
     ) -> list[ScoredPath]:
+        constraint_policy = constraint_policy or {}
+        allowed_outputs = {
+            normalize_key(str(value))
+            for value in constraint_policy.get("allowed_output_values", [])
+        }
+        require_table_evidence = bool(constraint_policy.get("require_table_evidence"))
+        target_relation_groups = self._target_relation_groups(question)
         valid = [item for item in candidates if item[2].success and not item[2].is_empty]
         value_counts = Counter(self._normalize(result.value) for _, _, result in valid)
         total_valid = sum(value_counts.values()) or 1
@@ -57,6 +68,36 @@ class PathEvaluator:
             if result.is_empty:
                 scored.append(ScoredPath(path, code, result, float("-inf"),
                                          ["empty result (dead-end)"]))
+                continue
+
+            value_key = normalize_key(str(result.value))
+            if allowed_outputs and value_key not in allowed_outputs:
+                scored.append(ScoredPath(
+                    path, code, result, float("-inf"),
+                    ["violates_table_candidate_constraint"],
+                ))
+                continue
+            if require_table_evidence and not any(
+                item.source_type == "table" for item in result.evidence
+            ):
+                scored.append(ScoredPath(
+                    path, code, result, float("-inf"),
+                    ["missing_required_table_evidence"],
+                ))
+                continue
+
+            # A well-grounded path can still answer the wrong *attribute*.
+            # For explicit entity-relation questions, require a supporting edge
+            # whose semantic relation matches that target. This prevents a
+            # table->person path from winning a question asking for a middle
+            # name just because it carries more provenance.
+            if target_relation_groups and not self._has_target_relation(
+                result.evidence, target_relation_groups
+            ):
+                scored.append(ScoredPath(
+                    path, code, result, float("-inf"),
+                    ["missing_target_relation_evidence"],
+                ))
                 continue
 
             direct = directly_grounded.get(id(result), set())
@@ -115,6 +156,31 @@ class PathEvaluator:
             scored.append(ScoredPath(path, code, result, score, reasons))
 
         return sorted(scored, key=lambda item: item.score, reverse=True)
+
+    @staticmethod
+    def _target_relation_groups(question: str | None) -> tuple[tuple[str, ...], ...]:
+        """Strict relation contracts for unambiguous entity-relation questions."""
+        text = normalize_key(question or "")
+        if "middle name" in text:
+            return (("middle", "name"), ("full", "name"))
+        if "most populous city" in text:
+            return (("most", "populous", "city"),)
+        if "nationality" in text:
+            return (("nationality",),)
+        if "place of birth" in text:
+            return (("place", "birth"), ("born", "in"))
+        return ()
+
+    @staticmethod
+    def _has_target_relation(
+        evidence: tuple[EvidenceRef, ...],
+        target_relation_groups: tuple[tuple[str, ...], ...],
+    ) -> bool:
+        for item in evidence:
+            relation_terms = set(re.findall(r"[a-z0-9]+", normalize_key(item.relation)))
+            if any(set(group).issubset(relation_terms) for group in target_relation_groups):
+                return True
+        return False
 
     @staticmethod
     def _normalize(value: Any) -> str:

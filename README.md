@@ -431,6 +431,62 @@ một record có `run_status="failed"`, accuracy bằng 0 và error category tư
 ứng, flush JSONL rồi chuyển sang câu kế tiếp. `--resume` bỏ qua cả record đúng
 lẫn record sai đã được ghi, bảo đảm không lặp API call ngoài ý muốn.
 
+### Chạy FinQA theo batch song song và theo dõi tiến độ
+
+Runner chạy các sample độc lập song song bằng thread (phù hợp với LLM HTTP
+I/O). Cấu hình số worker bằng `--max-workers` hoặc biến môi trường
+`BENCHMARK_MAX_WORKERS`; giá trị CLI được ưu tiên. `tqdm` hiển thị số sample đã
+xong, throughput và ETA khi chạy trong terminal. Không truyền `--no-progress`
+nếu muốn xem progress bar.
+
+Ví dụ chạy batch đầu 50 câu của shard 02 trên OpenRouter/DeepSeek:
+
+```bash
+LLM_PROVIDER=openrouter \
+OPENROUTER_MODEL=deepseek/deepseek-v4-flash \
+OPENROUTER_REASONING_ENABLED=false \
+BENCHMARK_MAX_WORKERS=8 \
+.venv/bin/python -m src.run_baselines \
+  --dataset finqa \
+  --method online_kg \
+  --input benchmarks/finqa/finqa-dev-1to2step-core-100-seed2027-shard02.json \
+  --output data/results/finqa-shard02-online-kg.jsonl \
+  --limit 50 \
+  --max-workers 8 \
+  --n-paths 3 \
+  --max-replans 1 \
+  --top-k 5 \
+  --second-stage-k 3 \
+  --max-output-tokens 1024
+```
+
+Để chạy batch 50 tiếp theo, giữ nguyên `--output`, thêm `--resume` và tiếp tục
+giữ `--limit 50`. Runner sẽ đọc các ID đã có trong JSONL rồi chỉ xử lý 50 ID
+chưa chạy; kết quả và `*.summary.json` được cập nhật nối tiếp.
+
+```bash
+LLM_PROVIDER=openrouter \
+OPENROUTER_MODEL=deepseek/deepseek-v4-flash \
+OPENROUTER_REASONING_ENABLED=false \
+BENCHMARK_MAX_WORKERS=8 \
+.venv/bin/python -m src.run_baselines \
+  --dataset finqa \
+  --method online_kg \
+  --input benchmarks/finqa/finqa-dev-1to2step-core-100-seed2027-shard02.json \
+  --output data/results/finqa-shard02-online-kg.jsonl \
+  --limit 50 \
+  --resume \
+  --max-workers 8 \
+  --n-paths 3 \
+  --max-replans 1 \
+  --top-k 5 \
+  --second-stage-k 3 \
+  --max-output-tokens 1024
+```
+
+Khởi đầu với 6--8 worker, rồi tăng dần nếu provider không trả 429/timeout.
+Rate pacing, retry và JSONL logging vẫn được áp dụng cho từng LLM call.
+
 Mỗi output JSONL có metric theo dataset và một file `*.summary.json`. HybridQA
 dùng EM/token-F1; FinQA dùng numeric execution accuracy. `program_accuracy`
 hiện để `null` vì code Python path chưa được canonicalize sang DSL chính thức

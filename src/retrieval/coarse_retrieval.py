@@ -78,6 +78,26 @@ def _entity_topk(entity: str, items: list[dict], top_k: int) -> list[dict]:
     return (direct + fallback)[:top_k]
 
 
+def _constraint_topk(
+    entities: list[str], items: list[dict], question: str, top_k: int,
+) -> list[dict]:
+    """Rank one linked passage per table-derived candidate by the full question.
+
+    This avoids spending the whole stage-two budget on candidates merely because
+    they appear first in a table.  It remains deterministic and does not add an
+    LLM call.
+    """
+    candidates: list[dict] = []
+    seen: set[str] = set()
+    for entity in entities:
+        for item in _entity_topk(entity, items, top_k=1):
+            item_id = _item_id(item)
+            if item_id not in seen:
+                candidates.append(item)
+                seen.add(item_id)
+    return _bm25_topk(question, candidates, "text", top_k)
+
+
 def two_stage_retrieve(
     question: str,
     table_rows: list[dict],
@@ -93,6 +113,10 @@ def two_stage_retrieve(
     expansions = _query_expansions(question, table_rows)
     anchor = anchor_question(question, table_rows)
     entity_queries = list(anchor.bridge_entities)
+    table_constraints = list(anchor.table_constraints)
+    constrained_candidates = list(dict.fromkeys(
+        entity for constraint in table_constraints for entity in constraint["candidates"]
+    ))
 
     def supplement(items: list[dict], selected: list[dict]) -> list[dict]:
         selected_ids = {_item_id(item) for item in selected}
@@ -103,6 +127,23 @@ def two_stage_retrieve(
         # example, HybridQA's Walter Payton item requires rank=2 -> Walter
         # Payton (table) -> Walter Payton passage -> middle name.  Prioritise
         # these bridge-entity queries over generic header/schema expansions.
+        if constrained_candidates and second_stage_k > 0:
+            for item in _constraint_topk(
+                constrained_candidates, remaining, question, second_stage_k
+            ):
+                item_id = _item_id(item)
+                if item_id in selected_ids:
+                    continue
+                enriched = dict(item)
+                position = positions[item_id]
+                enriched["context_before"] = " ".join(
+                    str(previous.get("text", ""))
+                    for previous in items[max(0, position - 2):position]
+                )
+                added.append(enriched)
+                selected_ids.add(item_id)
+                if len(added) >= second_stage_k:
+                    return selected + added
         for query in entity_queries + expansions:
             ranked = (
                 _entity_topk(query, remaining, second_stage_k)
@@ -138,6 +179,15 @@ def two_stage_retrieve(
             "expansion_queries": expansions,
             "entity_anchor": anchor.to_dict(),
             "entity_queries": entity_queries,
+            "table_constraints": table_constraints,
+            "constraint_policy": {
+                "allowed_output_values": list(dict.fromkeys(
+                    entity for constraint in table_constraints
+                    if constraint.get("enforce_output")
+                    for entity in constraint["candidates"]
+                )),
+                "require_table_evidence": bool(table_constraints),
+            },
         },
     }
 
