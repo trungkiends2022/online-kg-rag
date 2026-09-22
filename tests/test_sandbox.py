@@ -1,5 +1,4 @@
-import platform
-import pytest
+from concurrent.futures import ThreadPoolExecutor
 
 from src.kg.online_kg import OnlineKG
 from src.kg.schema import Triple, Provenance
@@ -85,10 +84,34 @@ def test_import_blocked():
     assert not res.success  # __import__ không có trong SAFE_BUILTINS
 
 
-@pytest.mark.skipif(platform.system() == "Windows", reason="signal.SIGALRM not available on Windows")
 def test_timeout():
     kg = _make_kg()
     code = "while True:\n    pass"
     res = SandboxExecutor().run(code, kg, timeout_sec=1)
+    assert not res.success
+    assert "timed out" in res.error
+
+
+def test_execution_from_worker_thread():
+    """Benchmark execution uses a thread pool and must not install SIGALRM."""
+    kg = _make_kg()
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        future = executor.submit(
+            SandboxExecutor().run,
+            "result = kg.get_neighbors('Alpha Tech', 'sector')",
+            kg,
+        )
+        res = future.result(timeout=2)
+
+    assert res.success
+    assert res.value == ["Technology"]
+
+
+def test_timeout_from_worker_thread():
+    kg = _make_kg()
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        future = executor.submit(SandboxExecutor().run, "while True:\n    pass", kg, 1)
+        res = future.result(timeout=3)
+
     assert not res.success
     assert "timed out" in res.error

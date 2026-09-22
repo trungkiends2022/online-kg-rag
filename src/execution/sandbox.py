@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-import signal
 import contextlib
-import platform
+import signal
+import sys
+import threading
+import time
 from dataclasses import dataclass
 from typing import Any
-from concurrent.futures import ThreadPoolExecutor, TimeoutError
 
 from src.kg.online_kg import OnlineKG
 from src.kg.schema import EvidenceRef
@@ -19,12 +20,19 @@ class TimeoutException(Exception):
 
 @contextlib.contextmanager
 def _time_limit(seconds: int):
-    """Timeout context manager - use signal on Unix/Linux, threading on Windows."""
-    if platform.system() == "Windows":
-        # Windows doesn't support signal.SIGALRM, use threading instead
-        yield
-    else:
-        # Unix/Linux: use signal.SIGALRM
+    """Limit generated code without installing signals from worker threads.
+
+    ``signal.signal`` is only legal in the main interpreter thread. Benchmark
+    examples are evaluated in a thread pool, so using SIGALRM unconditionally
+    made every otherwise-valid candidate fail before it could execute. Keep the
+    efficient signal timeout where it is supported and use a per-thread Python
+    trace deadline everywhere else.
+    """
+    use_signal = (
+        hasattr(signal, "SIGALRM")
+        and threading.current_thread() is threading.main_thread()
+    )
+    if use_signal:
         def handler(signum, frame):
             raise TimeoutException("Code execution timed out")
 
@@ -35,6 +43,21 @@ def _time_limit(seconds: int):
         finally:
             signal.alarm(0)
             signal.signal(signal.SIGALRM, old)
+        return
+
+    deadline = time.monotonic() + seconds
+    previous_trace = sys.gettrace()
+
+    def check_deadline(frame, event, arg):
+        if time.monotonic() >= deadline:
+            raise TimeoutException("Code execution timed out")
+        return check_deadline
+
+    sys.settrace(check_deadline)
+    try:
+        yield
+    finally:
+        sys.settrace(previous_trace)
 
 
 @dataclass
@@ -108,26 +131,14 @@ class SandboxExecutor:
         def failed(error: str) -> ExecResult:
             evidence = tracing_kg.evidence
             return ExecResult(False, error=error, evidence=evidence, accessed_edges=len(evidence))
-        
-        if platform.system() == "Windows":
-            # Windows: use ThreadPoolExecutor for timeout
-            try:
-                with ThreadPoolExecutor(max_workers=1) as executor:
-                    future = executor.submit(exec, code, exec_env, exec_env)  # noqa: S102
-                    future.result(timeout=timeout_sec)
-            except TimeoutError:
-                return failed("Code execution timed out")
-            except Exception as e:  # noqa: BLE001 -- bắt mọi lỗi runtime của code sinh ra
-                return failed(f"{type(e).__name__}: {e}")
-        else:
-            # Unix/Linux: use signal.SIGALRM
-            try:
-                with _time_limit(timeout_sec):
-                    exec(code, exec_env, exec_env)  # noqa: S102 -- sandboxed builtins only
-            except TimeoutException as e:
-                return failed(str(e))
-            except Exception as e:  # noqa: BLE001 -- bắt mọi lỗi runtime của code sinh ra
-                return failed(f"{type(e).__name__}: {e}")
+
+        try:
+            with _time_limit(timeout_sec):
+                exec(code, exec_env, exec_env)  # noqa: S102 -- sandboxed builtins only
+        except TimeoutException as e:
+            return failed(str(e))
+        except Exception as e:  # noqa: BLE001 -- bắt mọi lỗi runtime của code sinh ra
+            return failed(f"{type(e).__name__}: {e}")
 
         result = exec_env.get("result")
         is_empty = result is None or (hasattr(result, "__len__") and len(result) == 0)
