@@ -1,0 +1,40 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad="0.25", nodesep="0.28", ranksep="0.45", fontname="DejaVu Sans", compound=true];
+  node [shape=box, style="rounded,filled", fontname="DejaVu Sans", fontsize=10.5, color="#24445F", penwidth=1.2, margin="0.12,0.08"];
+  edge [fontname="DejaVu Sans", fontsize=8.8, color="#5A6D7F", penwidth=1.15, arrowsize=0.72];
+
+  q [label="Question q", fillcolor="#EAF2FF"];
+  table [label="TABLE\nrow / cell / header path", fillcolor="#DCEBFF"];
+  text [label="TEXT\npassage / sentence", fillcolor="#FFF0D6"];
+  web [label="WEB (tuỳ chọn)\nsnippet / URL", fillcolor="#F1E5FF"];
+  retrieve [label="Coarse retrieval\nTop-k context", fillcolor="#F5F7FA"];
+
+  struct [label="Deterministic structural extraction\n(row entity, column path, cell value)", fillcolor="#DCEBFF"];
+  semantic [label="LLM semantic extraction\n(head, relation, tail)", fillcolor="#FFF0D6"];
+  prov [label="Gắn provenance lên từng edge\nsource_type, source_id, raw_snippet\nrow_index, column_name, header_path", fillcolor="#FFF8C9"];
+
+  lex [label="1. Lexical\nUnicode / case / spacing", fillcolor="#E7F6EF"];
+  onto [label="2. Ontology / alias\nrelation + entity aliases", fillcolor="#E7F6EF"];
+  struc [label="3. Structural\ncontrolled name affixes", fillcolor="#E7F6EF"];
+  sem [label="4. Semantic ≥ 0.93\nsame role; skip dates/numbers", fillcolor="#E7F6EF"];
+  merge [label="Merge audit log\ntier · alias · canonical · score", shape=note, fillcolor="#F2F7F4", color="#4F7D68"];
+
+  kg [label="QUERY-TIME DIRECTED MULTIGRAPH Gq\nNode = canonical entity / literal\nEdge = relation + provenance\nLifetime = một câu hỏi", fillcolor="#DDF4F1", fontsize=12, penwidth=1.7];
+  planner [label="Path planner + executable reasoning", fillcolor="#FCE7E7"];
+
+  q -> retrieve;
+  table -> retrieve;
+  text -> retrieve;
+  web -> retrieve;
+  retrieve -> struct [label="table rows"];
+  retrieve -> semantic [label="table/text/web"];
+  struct -> prov;
+  semantic -> prov;
+  prov -> lex -> onto -> struc -> sem -> kg;
+  lex -> merge [style=dashed, arrowhead=none];
+  onto -> merge [style=dashed, arrowhead=none];
+  struc -> merge [style=dashed, arrowhead=none];
+  sem -> merge [style=dashed, arrowhead=none];
+  merge -> kg [style=dashed, label="audit"];
+  kg -> planner;
+}

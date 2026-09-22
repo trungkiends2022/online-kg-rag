@@ -1,0 +1,26 @@
+digraph G {
+  graph [rankdir=TB, bgcolor="white", pad="0.25", nodesep="0.24", ranksep="0.34", fontname="DejaVu Sans"];
+  node [shape=box, style="rounded,filled", fontname="DejaVu Sans", fontsize=12, color="#1E3A5F", penwidth=1.4, margin="0.15,0.10"];
+  edge [fontname="DejaVu Sans", fontsize=9, color="#52677D", penwidth=1.3, arrowsize=0.75];
+
+  q [label="CÂU HỎI q", fillcolor="#EAF2FF", width=2.0];
+  ctx [label="TABLE + TEXT\n(context được cung cấp)", fillcolor="#EAF2FF", width=2.4];
+
+  s1 [label="1. COARSE RETRIEVAL\nBM25 + lọc context", fillcolor="#F4F8FC", width=4.7];
+  s2 [label="2. ENTITY / RELATION EXTRACTOR\nStructural triples + semantic triples", fillcolor="#F4F8FC", width=4.7];
+  s3 [label="3. ONLINE KG BUILDER\nProvenance + entity resolution + audit log", fillcolor="#DDF4F1", width=4.7];
+  s4 [label="4. PATH PLANNER\nSinh N candidate reasoning paths", fillcolor="#F4F8FC", width=4.7];
+  s5 [label="5. PROGRAM SYNTHESIZER\nRestricted Python hoặc Typed Numerical IR", fillcolor="#FFF3D9", width=4.7];
+  s6 [label="6. SANDBOX EXECUTOR\nExecute → value + traced evidence", fillcolor="#FFF3D9", width=4.7];
+  s7 [label="7. PATH EVALUATOR\nGrounding gate + provenance + agreement", fillcolor="#FCE7E7", width=4.7];
+  s8 [label="8. ANSWER SYNTHESIZER\nAnswer + program + evidence + diagnostics", fillcolor="#E6F4DF", width=4.7];
+
+  reject [label="Không có candidate hợp lệ\n→ replan trên cùng KG\n→ hết budget: no answer + error record", shape=note, fillcolor="#FFF0F0", color="#A94442", fontsize=10];
+
+  {rank=same; q; ctx}
+  q -> s1;
+  ctx -> s1;
+  s1 -> s2 -> s3 -> s4 -> s5 -> s6 -> s7 -> s8;
+  s7 -> reject [label="reject tất cả", color="#A94442"];
+  reject -> s4 [label="còn replan budget", style=dashed, color="#A94442", constraint=false];
+}

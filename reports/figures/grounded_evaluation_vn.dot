@@ -1,0 +1,22 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad="0.25", nodesep="0.25", ranksep="0.42", fontname="DejaVu Sans"];
+  node [shape=box, style="rounded,filled", fontname="DejaVu Sans", fontsize=10.5, color="#24445F", penwidth=1.2, margin="0.12,0.08"];
+  edge [fontname="DejaVu Sans", fontsize=8.8, color="#5A6D7F", penwidth=1.15, arrowsize=0.72];
+
+  paths [label="N reasoning paths\np1 … pN", fillcolor="#EAF2FF"];
+  synth [label="Program synthesis\nPython / Typed IR", fillcolor="#FFF3D9"];
+  static [label="Static validation\nsyntax · API allowlist\nrelation/direction · no hard-code", fillcolor="#FFF8C9"];
+  exec [label="Sandbox execution\nno import / I-O / network\ntimeout", fillcolor="#FFF3D9"];
+  trace [label="TracingKG\nvalue yi + evidence Ei\nchỉ edge đã truy vấn", fillcolor="#DDF4F1"];
+
+  gate [label="ADMISSIBILITY GATE\nsuccess ∧ non-empty ∧ grounded\n+ constraints / target relation", shape=diamond, fillcolor="#FCE7E7", width=2.3, height=1.25];
+  reject [label="Loại candidate\n(error / empty / ungrounded)", fillcolor="#FFF0F0", color="#A94442"];
+  score [label="GROUNDED SCORE\nsource support + provenance\n+ triple support + agreement\n+ precision − path length", fillcolor="#E7F6EF"];
+  select [label="Chọn path điểm cao nhất", fillcolor="#DDF4F1"];
+  answer [label="Grounded answer\n+ executable trace\n+ provenance audit", fillcolor="#E6F4DF", penwidth=1.7];
+
+  paths -> synth -> static -> exec -> trace -> gate;
+  gate -> reject [label="không đạt", color="#A94442"];
+  gate -> score [label="đạt"];
+  score -> select -> answer;
+}
