@@ -1,288 +1,163 @@
 \section{Method}
 \label{sec:method}
-\subsection{Overview and Retrieval Context}
-Figure~\ref{fig:pipeline} summarizes the complete pipeline and the bounded
-replanning loop.
+
+\subsection{Overview}
 Given a question $q$, supplied tables $\mathcal{T}$, and an associated passage
-pool $\mathcal{D}$, Online-KG returns an answer together with its selected
-program and recorded graph evidence. The pipeline constructs one graph per
-question, proposes candidate plans, executes their programs, and ranks the
-resulting candidates. A reasoning path here is a sequence of goals and step
-dependencies; it need not correspond to a single simple path in the graph.
-Arithmetic may combine values from disconnected graph components that share a
-report context.
+pool $\mathcal{D}$, the method constructs a bounded knowledge graph specifically
+for $q$. The graph is an intermediate reasoning structure rather than a
+persistent database. The pipeline is
+\[
+q \rightarrow \text{row and passage retrieval}
+\rightarrow \text{local KG construction}
+\rightarrow \text{grounded text paths}
+\rightarrow \text{path ranking}
+\rightarrow \text{answer}.
+\]
+No program generation or execution is required by the primary method. Python
+and typed numerical programs remain separate experimental variants.
 
-Retrieval precedes graph construction. A first stage ranks passages by BM25
-against $q$. In parallel, a deterministic anchor reads a limited set of question
-constraints and table rows. Its current rules identify ordinal rank constraints,
-recognize a small set of entity-bearing columns, and resolve their matching row
-entity. For example, a question about the ``second'' player can yield the bridge
-entity \emph{Walter Payton} from a rank--player table row even though the name
-does not occur in the question. The second stage queries this bridge entity
-first, preferring exact normalized entity-token mentions, then supplements the
-selected passages with a bounded number of items from deterministic query
-expansions based on question cues and table headers. The implementation uses
-budgets $k$ and $b$ for these stages, respectively, and deduplicates items by
-source identifier.
-Up to two preceding passages are provided as antecedent-resolution context for
-supplementary items. Tables are retained from the supplied input up to the
-configured table limit; this step does not perform corpus-wide table search.
-The Python pipeline defaults to $k=10$ and $b=3$; experimental settings must
-record any runner overrides. The anchor is deliberately rule-based and only
-supports the implemented constraints; a missing or wrong anchor leaves the
-second stage dependent on generic expansions. Optional web snippets follow the
-same retrieval interface, but web access is not required by the benchmark
-setting. Each run records the anchor fields, bridge-entity queries, expansion
-queries, and retrieval budgets in its retrieval trace.
+\subsection{Query-Driven Context Retrieval}
+A deterministic anchor first inspects the question and table schema. Its current
+rules recognize ordinal constraints, exact numerical table constraints, and a
+small set of entity-bearing columns. An ordinal such as \emph{second} can
+therefore identify a bridge entity from a rank--entity row even when that entity
+does not occur in the question.
 
-\subsection{Structural and Semantic Graph Construction}
-Let $G_q=(V_q,E_q)$ be a directed multigraph. An edge is represented as
-\begin{equation}
- e=(h,r,t,\pi),
-\end{equation}
-where $h$ and $t$ are entity or literal nodes, $r$ is a normalized relation,
-and $\pi$ records provenance. Provenance includes a source type and identifier
-and, for structural table edges, row position, column name, and header path.
-Parallel edges retain alternative source records for the same relationship.
-Alongside $G_q$, the implementation stores a non-executable structural trace
-$H_q$: Table $\rightarrow$ Row $\rightarrow$ Cell $\rightarrow$ Column edges
-for each supplied table, plus Passage nodes for selected text. This trace retains
-table topology and cell locations without inserting implementation identifiers
-into $G_q$'s entity-centric query interface.
+Table retrieval forms a union of anchor-matched rows and BM25-ranked rows, with a
+global row budget $k$. Original row indices are retained after filtering. This
+is important because the same label can occur in several rows and because
+provenance must refer to the source table rather than the filtered position.
+Passage retrieval first applies BM25 to $q$, then adds at most $b$ passages using
+bridge-entity queries and deterministic schema expansions. Duplicate passages
+are removed by source identifier. The current defaults are $k=5$ and $b=3$ in
+the benchmark runner; experiments record any override.
 
-\paragraph{Structural table edges.}
-Dataset adapters provide row dictionaries with qualified column names. The
-extractor uses the first field as the row identifier and converts each remaining
-nonempty cell into an edge:
-\begin{equation}
- e_{ij}=\bigl(u_i,\operatorname{norm}(H_j),v_{ij},\pi_{ij}\bigr),
-\end{equation}
-where $u_i$ identifies row $i$, $H_j$ is the qualified header for column $j$,
-and $v_{ij}$ is its cell value. For hierarchical input, the adapter must retain
-the relevant header levels before extraction. For example,
-\texttt{2002 / Dividend} becomes \texttt{2002\_dividend}, distinguishing it
-from \texttt{2002\_high}. The extractor records header components from this
-qualified name. Empty row identifiers and empty cell values are skipped;
-normalized self-loops are rejected by the graph layer. Consequently, preservation
-is conditional on the adapter representation and these insertion rules, rather
-than a claim that every original cell is always retained.
+The benchmark setting supplies an oracle table and its associated passage pool.
+Retrieval is therefore query-local within supplied context, not open-domain
+table or web search.
 
-\paragraph{Semantic enrichment and resolution.}
-An LLM optionally extracts additional table relationships and extracts triples
-from selected passages. Structural and semantic edges are inserted into the
-same graph. If optional table enrichment fails, construction falls back to
-structural extraction for that table; a failed passage extraction is logged and
-that source is skipped. Entity resolution applies lexical normalization,
-configured aliases, structural name rules, and a conservative similarity stage.
-The default similarity function compares normalized strings, with threshold
-$0.93$ for the final stage; it is not an embedding model. Resolution events are
-logged. Source identifiers are preserved, but identical row labels across
-multiple tables can still be ambiguous because source metadata is not itself
-a unique node identifier. Node-type metadata currently labels graph heads as
-entities and tails as attributes; it is descriptive trace metadata rather than
-a learned ontology or a type checker.
+\subsection{Schema-Preserving Online KG Construction}
+For each question, the system creates a directed multigraph
+$G_q=(V_q,E_q)$. A semantic edge is
+\[
+e=(h,r,t,\pi),
+\]
+where $h$ and $t$ are entity or literal labels, $r$ is a normalized relation,
+and $\pi$ stores source type, source identifier, and optional row, column, and
+header-path metadata. A multigraph retains separate provenance records when
+several sources express the same fact.
 
-\paragraph{Running example: dividend change.}
-Table~\ref{tab:dividend} and a short passage illustrate the representation.
-All examples in this section are constructed demonstrations, not reported
-benchmark predictions. Suppose the question is: \emph{What is the percentage
-increase from the March dividend to the newly declared dividend?} The associated
-passage states: ``Acme declared a new dividend of 0.455 dollars per share.''
-The earlier value is $0.450$, whereas $26.50$ is a price and must not be used
-as a dividend operand.
-\begin{table}[t]
-\caption{Illustrative input with a two-level column header. The passage supplies
-an additional dividend value for the same report context.}
-\label{tab:dividend}
-\centering
-\begin{tabular}{lrrr}
-\toprule
- & \multicolumn{3}{c}{2002} \\
-\cmidrule(lr){2-4}
-Quarter ended & High & Low & Dividend \\
-\midrule
-March 31 & 26.50 & 22.92 & 0.450 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\paragraph{Deterministic table edges.}
+Dataset adapters convert a selected row into a dictionary with a row label and
+qualified column names. The first nonempty field supplies the row subject
+$u_i$; every other nonempty cell produces
+\[
+(u_i,\operatorname{norm}(H_j),v_{ij},\pi_{ij}).
+\]
+Hierarchical headers are qualified before graph construction. For example,
+\texttt{2002 / Dividend} becomes \texttt{2002\_dividend}, preventing a
+dividend from being confused with \texttt{2002\_high}.
 
-\subsection{Candidate Planning and Executable Programs}
-The planner receives the question, a bounded graph summary, and numerical
-operation hints inferred from the question and graph schema. The current
-summary includes up to 50 node names and 50 relations. It requests $N$
-distinct candidate plans, each with step goals and optional dependencies.
-These plans are jointly generated candidates, not statistically independent
-samples. The code synthesizer then translates each plan $p_i$ into a program
-$c_i$ using the available graph schema and query interface.
+Direct subject--value edges are convenient for entity lookup but do not by
+themselves preserve which values co-occur in one row. The path-text reasoning
+view therefore adds a record node $\rho_i$:
+\[
+u_i \xrightarrow{\mathrm{has\_record}} \rho_i, \qquad
+\rho_i \xrightarrow{\operatorname{norm}(H_j)} v_{ij}.
+\]
+For two records of the same company, this representation prevents a year from
+one row being paired with a revenue from another. Record identifiers are local
+implementation nodes and do not alter the legacy executable entity interface.
 
-Forward lookup, \texttt{get\_neighbors}, returns objects of matching outgoing
-edges; reverse lookup, \texttt{get\_sources}, returns matching subjects.
-Programs may also inspect relations and filter entity lists. The synthesizer
-validates generated Python, including import rejection and checks on recognized
-API calls. The executor exposes a restricted set of built-ins and enforces a
-five-second default timeout. Its output is read from the variable
-\texttt{result}. These restrictions are implementation safeguards, not a
-formally verified isolation boundary.
+In parallel, an audit trace stores
+Table $\rightarrow$ Row $\rightarrow$ Cell $\rightarrow$ Column topology.
+Thus the implementation exposes an entity-centric semantic graph, a
+record-aware path view, and a complete structural trace without conflating their
+roles.
 
-For the illustrative graph, the following program reads both operands from
-edges rather than embedding the answer:
-\begin{lstlisting}[caption={Illustrative Python program for the dividend graph.},label={lst:dividend}]
-old = float(kg.get_neighbors(
-    "March 31", "2002_dividend")[0])
-new = float(kg.get_neighbors(
-    "Acme", "declared_dividend")[0])
-result = (new - old) / old * 100
-\end{lstlisting}
-This example assumes each lookup has one matching value and the operands share
-a unit. Its result is
-\begin{equation}
- 100\frac{0.455-0.450}{0.450}=1.111\ldots\ \text{percent}.
-\end{equation}
-The multiplier $100$ is an operation constant. Missing values, multiple
-conflicting values, zero denominators, and incompatible units require explicit
-handling in a generated program; the illustrative indexing is not a general
-ambiguity-resolution procedure.
+\paragraph{Text edges and entity resolution.}
+An LLM extracts semantic triples from each retrieved passage. A small set of
+deterministic extractors preserves recurrent numerical and name facts when the
+model response is malformed. Failed optional table enrichment falls back to
+deterministic cells; a failed passage is logged and skipped. Entity resolution
+then applies lexical normalization, configured aliases, structural name rules,
+and conservative string similarity. Resolution events and rejected self-loops
+are included in the trace.
 
-\paragraph{Contrasting executable candidates.}
-Figure~\ref{fig:kg-paths} extends the running example with three constructed
-plans and their programs. A uses the dividend values with the intended
-operation, B reverses the subtraction, and C substitutes the high-price cell
-for the earlier dividend. Executing the programs produces different answers,
-but each accesses two edges from the same two source types. When evaluated
-together, all three receive score $7.25$: their agreement term is $1/3$,
-and the remaining support and length terms are identical. Candidate order
-breaks the tie; this is not evidence that the evaluator detects either error.
-The single-candidate score reported below instead uses agreement $1$.
-\input{figures/kg-paths}
+The graph metadata distinguishes entity-oriented nodes, literal attributes, and
+record structure operationally. It is not presented as a learned ontology or
+a general semantic type system.
 
-\paragraph{Example: relational composition.}
-For an illustrative question asking which country a club's player was born in,
-consider the triples $(\mathrm{Lina},\mathrm{club},\mathrm{Orion\ FC})$
-from a table and $(\mathrm{Lina},\mathrm{born\_in},\mathrm{Porto})$ and
-$(\mathrm{Porto},\mathrm{country},\mathrm{Portugal})$ from a passage.
-A program first uses reverse lookup to find Lina from Orion FC, then follows
-\texttt{born\_in} and \texttt{country}. This example requires a join and a
-relation chain rather than arithmetic. The terminal answer, Portugal, occurs
-directly as an edge endpoint, unlike the derived percentage in the first example.
+\subsection{Grounded Text-Path Generation}
+The reasoning edge set $E_q^*$ is the union of semantic edges and row-record
+edges. Candidate generation never invents an edge: every emitted path step
+contains an edge identifier from $E_q^*$ together with direction and provenance.
+Traversal may follow an edge forward or backward, but its stored factual
+direction remains unchanged.
 
-\subsection{Execution Traces and Typed Numerical Variant}
-Execution produces $x_i=(s_i,y_i,\mathcal{E}_i)$: a success indicator, output,
-and set of recorded evidence references. A tracing wrapper records provenance
-for edges returned by forward and reverse lookups. Returned neighbor values
-are deduplicated, while their parallel supporting edges remain in the trace.
-The trace covers returned edges even if subsequent Python computation discards
-some of them. Thus, $\mathcal{E}_i$ records access, not full operand-level
-causal dependence.
+Seeds are graph nodes that match a question phrase, a bridge entity, or an
+explicit table constraint. When no node is matched, endpoints of relations
+sharing terms with the question provide fallback seeds. From each seed, bounded
+search enumerates simple connected paths of at most three edges. Branching and
+the total enumerated candidates are capped. The implementation additionally
+creates a row bundle containing
+$u_i\rightarrow\rho_i$ and the most question-relevant outgoing cell edges.
+A row bundle is a connected evidence subgraph rather than a forced linear chain;
+this allows a year constraint and requested value to remain attached to the same
+record.
 
-The numerical variant replaces Python generation with a JSON program
-containing ordered steps $(\mathrm{id},\mathrm{operator},\mathrm{arguments},
-\mathrm{unit})$ and a result reference. Validation checks the operator set,
-step identifiers, and references to earlier steps. Lookup and constant steps
-supply inputs to arithmetic, comparison, aggregation, and label-selection
-operators. For the dividend example, its conceptual sequence is
-\begin{equation}
+Each candidate is verbalized directly from its verified edges, for example
+\[
+\texttt{A --has\_record--> row:7 --year--> 2022}
+\]
+together with a sibling edge
+\[
+\texttt{row:7 --revenue--> 10M}.
+\]
+This differs from asking a language model to propose plausible relation names
+from a list of nodes and relations.
+
+\subsection{Text-Path Scoring}
+All candidates pass a hard groundedness gate because generation only accepts
+registered edge identifiers. The implemented heuristic score is
+\[
 \begin{split}
- v_1&=\operatorname{lookup}(\mathrm{March\ 31},\mathrm{2002\_dividend}),\\
- v_2&=\operatorname{lookup}(\mathrm{Acme},\mathrm{declared\_dividend}),\\
- v_3&=\operatorname{subtract}(v_2,v_1),\quad
- v_4=\operatorname{divide}(v_3,v_1),\\
- v_5&=\operatorname{multiply}(v_4,100).
+S(p)={}&G+Q_e+Q_r+Q_c+C+M+R+B+A\\
+      &-0.35\max(|E_p|-1,0),
 \end{split}
-\end{equation}
-This notation illustrates dependencies rather than the literal JSON schema.
-The interpreter records intermediate values and operators. Unit annotations
-and explicit conversions aid inspection but do not constitute a general
-proof of dimensional correctness. Hierarchical-table questions can additionally
-use label--value selection: for values $(\mathrm{North},12)$ and
-$(\mathrm{South},18)$, an argmax operation returns South, rather than only 18.
-The operator vocabulary also includes count, range, threshold filters, and
-rank-based selection; support for an operator does not ensure correct operand
-selection.
+\]
+where $G=1$ is grounded-edge validity; $Q_e$ and $Q_r$ are question overlap
+with path nodes and relations, each capped at 2; and $Q_c$ is question-term
+coverage, also capped at 2. The constraint term $C=2$ when the path includes
+an anchored table value or allowed output candidate.
 
-\subsection{Evidence-Aware Candidate Selection}
-\label{sec:selection}
-The implemented selector first rejects execution failures, empty outputs, and
-candidates without evidence. A direct-support heuristic matches normalized
-output terms to evidence endpoints using equality, token membership, or
-substring containment. Let $\mathcal{D}_i\subseteq\mathcal{E}_i$ denote the
-matched references. An output with $\mathcal{D}_i\ne\varnothing$ is classified
-as directly supported. Numeric or Boolean outputs with nonempty evidence may
-instead be admitted as derived results. This latter gate does not verify that
-every operand was obtained from the trace.
+The cross-modal completeness term $M=1.5$ when a path uses both table and text
+evidence. This is not called agreement: different sources may supply different
+hops. Same-fact corroboration $A=1$ is awarded only when normalized
+$(h,r,t)$ is supported by both table and text. Row consistency $R=1$ requires
+at least two record-aware edges from one source row, and entity binding $B=1$
+additionally requires the \texttt{has\_record} edge. These weights are fixed
+heuristics rather than learned probabilities.
 
-Outputs are grouped by the evaluator's serialization key: scalar values use
-JSON serialization, and sequence-like values use sorted string elements.
-Grouping is not general semantic or numeric-tolerance equivalence. For an
-admissible output group $y$, evidence is pooled across its admitted candidates:
-\begin{equation}
- \mathcal{E}(y)=\bigcup_{i:\,\operatorname{key}(y_i)=\operatorname{key}(y)}
- \mathcal{E}_i.
-\end{equation}
-Let $n_s(y)$ count distinct $(\mathrm{source\ type},\mathrm{source\ id})$
-pairs and $n_t(y)$ count distinct $(h,r,t)$ triples in this union. Their
-saturated support terms are
-\begin{equation}
- U(y)=\min\{n_s(y)/3,1\},\qquad
- T(y)=\min\{n_t(y)/4,1\}.
-\end{equation}
-Let $I_{\rm tab},I_{\rm txt},I_{\rm web}$ indicate which source types occur
-in the group. The provenance bonus is
-\begin{equation}
- B(y)=2I_{\rm tab}+I_{\rm txt}+0.25I_{\rm web}
-       +1.5I_{\rm tab}I_{\rm txt}.
-\end{equation}
-These are fixed heuristic weights in the current implementation, not learned
-probabilities or guarantees of source independence.
+The top $N$ distinct paths are serialized with their score components, nodes,
+edges, source identifiers, row indices, columns, and header paths. Supporting
+edges are packed within a character budget, with selected path edges receiving
+priority. Context packing does not change the path scores.
 
-Agreement $A(y)$ is the fraction of successful, nonempty candidates with the
-same output key. In the implementation this denominator is formed before the
-evidence gate, so it can include candidates subsequently rejected for lacking
-evidence. The per-candidate direct-match term is
-\begin{equation}
- P_i=\begin{cases}
- |\mathcal{D}_i|/\max\{a_i,|\mathcal{E}_i|,1\}, & \text{direct support},\\
- 0.5, & \text{derived numeric or Boolean output},
- \end{cases}
-\end{equation}
-where $a_i$ is the recorded accessed-edge count. Although the implementation
-labels this quantity ``evidence precision,'' it is a matching heuristic rather
-than precision against annotated gold evidence. With $L_i$ planned steps,
-the final score is
-\begin{equation}
- S_i=4U(y_i)+B(y_i)+1.5T(y_i)+A(y_i)+P_i-0.5L_i.
-\end{equation}
-Rejected candidates receive $-\infty$. The highest-scoring admitted candidate
-is selected; ties follow candidate order. Because support is pooled by output,
-a selected candidate can benefit from evidence accessed by another candidate
-with the same answer. Its own returned trace remains $\mathcal{E}_i$.
+\subsection{Answer Production and Audit Record}
+The answer model receives only the ranked paths, supporting KG edges, table
+constraints, and the question. It reasons over this evidence as text and returns
+a short answer span; it is explicitly instructed not to generate or execute a
+program. The output is canonicalized to a resolved KG alias and, when a table
+constraint defines an allowed candidate set, to the corresponding exact table
+value.
 
-For the dividend example, assume one admitted three-step plan accesses exactly
-the two operand edges, one table source and one text source. Then $U=2/3$,
-$T=1/2$, $B=4.5$, $A=1$, and $P=0.5$, giving $S\approx7.92$.
-This calculated score illustrates the rule, not a measured model prediction.
-Reversing the subtraction while accessing the same edges could obtain the same
-score. The example makes explicit why evidence-aware selection cannot alone
-establish semantic correctness.
+Each prediction records the retrieved row count, passage retrieval decisions,
+entity anchor, KG summary, ranked paths, score decomposition, and selected path
+identifier. Empty graphs or an empty candidate set produce an explicit failure
+record rather than an unsupported answer.
 
-\subsection{Failure Handling and Answer Production}
-A synthesis or execution failure rejects the affected candidate while allowing
-other candidates to compete. If the Python mode yields no admissible candidate,
-a symbolic graph-search fallback may supply additional executed candidates.
-This fallback is disabled in the numerical-IR variant. If selection still
-fails, the pipeline generates a fresh set of plans over the same graph, up to
-$R$ replanning rounds. It does not retrieve again or rebuild the graph during
-these rounds, and candidates are not accumulated across rounds. An empty graph
-or exhausted budget yields no answer and an error record.
-
-For a selected numeric scalar, answer production returns its executed value
-without LLM rewriting. Boolean values are rendered as yes/no. Other outputs
-can pass through a verbalizer, with a normalized scalar check and fallback to
-the preferred observed entity alias. The returned artifact includes the anchor,
-retrieval trace, executable and structural graph traces, chosen program,
-evidence, candidate diagnostics, and path metrics (completion, planned length,
-evidence count, observed source types, cross-modal flag, and direct-match
-ratio). The artifact also exports a score-derived value in $[0,1]$ under the
-field \texttt{confidence}; it is a rescaled selector score and is not a
-calibrated probability. Experiments must report $N$, $R$, retrieval budgets,
-execution mode, and fallback policy, since each changes either the candidate
-pool or computational cost.
+The trace establishes that path edges exist in the constructed graph. It does
+not prove that LLM-extracted text triples are factually correct, that the
+retriever found all required evidence, or that the top-ranked grounded path is
+semantically sufficient for the question.

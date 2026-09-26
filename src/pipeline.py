@@ -35,14 +35,12 @@ class OnlineKGPipeline:
         execution_mode: str = "python",
         finqa_canonical_ratio: bool = False,
         max_output_tokens: int = 4096,
-        table_llm_enrichment: bool = True,
     ):
         if execution_mode not in {"python", "numerical_ir"}:
             raise ValueError(f"unsupported execution mode: {execution_mode}")
         self.execution_mode = execution_mode
         self.finqa_canonical_ratio = finqa_canonical_ratio
         self.max_output_tokens = max_output_tokens
-        self.table_llm_enrichment = table_llm_enrichment
         self.kg_builder = OnlineKGBuilder(
             EntityRelationExtractor(
                 temperature=temperature, max_output_tokens=max_output_tokens
@@ -72,6 +70,7 @@ class OnlineKGPipeline:
             "row_index": item.row_index,
             "column_name": item.column_name,
             "header_path": item.header_path,
+            "text_context": item.text_context,
         }
 
     def run(
@@ -89,12 +88,6 @@ class OnlineKGPipeline:
             question, table_rows, text_passages, web_snippets,
             top_k=retrieval_top_k, second_stage_k=retrieval_second_stage_k,
         )
-        # FinQA already supplies a normalized table.  Its deterministic cell
-        # triples retain every value and header, while skipping optional table
-        # paraphrasing avoids the largest and least reliable OpenRouter calls.
-        if not self.table_llm_enrichment:
-            for row_group in retrieved.get("table_rows", []):
-                row_group["deterministic_only"] = True
         kg = self.kg_builder.build(retrieved)
         constraint_context = retrieved.get("retrieval_trace", {})
         operation_intent = infer_operation_intent(question, kg)

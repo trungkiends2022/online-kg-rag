@@ -51,7 +51,9 @@ class EntityRelationExtractor:
         return llm_call_json(prompt, **kwargs)
 
     def extract_from_table(
-        self, table_name: str, rows: list[dict], *, use_llm_enrichment: bool = True,
+        self, table_name: str, rows: list[dict], *,
+        use_llm_enrichment: bool = False,
+        row_indices: list[int] | None = None,
     ) -> list[Triple]:
         # HybridQA tables commonly contain 5-20 rows. Asking for every cell as
         # triples in one response can exceed the model's output-token budget and
@@ -67,7 +69,6 @@ class EntityRelationExtractor:
             # Preserve the table schema deterministically. The first column is
             # the row entity and every remaining column becomes a qualified
             # relation (e.g. 2002_dividend), independent of LLM extraction.
-            row_offset = batch_index * self.table_batch_size
             for local_row_index, row in enumerate(batch):
                 cells = list(row.items())
                 if not cells:
@@ -75,6 +76,12 @@ class EntityRelationExtractor:
                 _, head = cells[0]
                 if str(head).strip() == "":
                     continue
+                selected_index = batch_index * self.table_batch_size + local_row_index
+                original_row_index = (
+                    row_indices[selected_index]
+                    if row_indices is not None and selected_index < len(row_indices)
+                    else selected_index
+                )
                 for relation, tail in cells[1:]:
                     if str(tail).strip() == "":
                         continue
@@ -85,7 +92,7 @@ class EntityRelationExtractor:
                         "table",
                         table_name,
                         str(tail)[:200],
-                        row_index=row_offset + local_row_index,
+                        row_index=original_row_index,
                         column_name=str(relation),
                         header_path=header_path,
                     )

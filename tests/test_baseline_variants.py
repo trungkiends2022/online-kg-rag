@@ -165,6 +165,33 @@ def test_online_kg_path_text_canonicalizes_resolved_entity_alias(monkeypatch):
     assert result["answer"] == "Republican Stadium"
 
 
+def test_online_kg_path_text_rejects_empty_grounded_path_set(monkeypatch):
+    kg = OnlineKG()
+    kg.add_triple(Triple("Alice", "club", "Liverpool", Provenance("table", "Managers")))
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    class Planner:
+        def generate_candidates(self, question, graph, n, constraint_context=None):
+            return []
+
+    monkeypatch.setattr(
+        "src.baselines.online_kg_path_text.llm_call",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            AssertionError("answer model must not be called without a grounded path")
+        ),
+    )
+    result = OnlineKGPathTextBaseline(
+        RAGConfig(top_k=1), n_paths=1, kg_builder=Builder(), planner=Planner()
+    ).run(_example())
+
+    assert result["answer"] is None
+    assert result["reasoning_paths"] == []
+    assert "No grounded text path" in result["error"]
+
+
 def test_oracle_evidence_uses_finqa_gold_facts_only(monkeypatch):
     example = _example({
         "dataset": "finqa",

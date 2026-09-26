@@ -66,6 +66,71 @@ def _item_id(item: dict) -> str:
     return str(item.get("id") or item.get("url") or item.get("text", ""))
 
 
+def _row_text(table_name: str, row: dict) -> str:
+    cells = " ".join(f"{column} {value}" for column, value in row.items())
+    return f"{table_name} {cells}"
+
+
+def _select_table_rows(
+    question: str,
+    table_groups: list[dict],
+    *,
+    top_k: int,
+    anchor,
+) -> list[dict]:
+    """Select a bounded union of anchored and lexically relevant table rows."""
+    candidates = []
+    for table_index, group in enumerate(table_groups):
+        table_name = str(group.get("table_name", f"table_{table_index}"))
+        for row_index, row in enumerate(group.get("rows", [])):
+            candidates.append({
+                "table_index": table_index,
+                "row_index": row_index,
+                "row": row,
+                "text": _row_text(table_name, row),
+            })
+    if len(candidates) <= top_k:
+        selected = candidates
+    else:
+        corpus = [_tokenize(item["text"]) for item in candidates]
+        scores = BM25Okapi(corpus).get_scores(_tokenize(question))
+        ranked = sorted(
+            zip(candidates, scores),
+            key=lambda item: (-item[1], item[0]["table_index"], item[0]["row_index"]),
+        )
+        required_values = {
+            normalize_key(value)
+            for value in anchor.bridge_entities
+            if str(value).strip()
+        }
+        for constraint in anchor.table_constraints:
+            required_values.update(
+                normalize_key(value) for value in constraint.get("candidates", ())
+                if str(value).strip()
+            )
+        anchored, remaining = [], []
+        for item, score in ranked:
+            row_values = {normalize_key(value) for value in item["row"].values()}
+            (anchored if required_values & row_values else remaining).append((item, score))
+        selected = [item for item, _ in (anchored + remaining)[:top_k]]
+
+    by_table: dict[int, list[dict]] = {}
+    for item in selected:
+        by_table.setdefault(item["table_index"], []).append(item)
+    output = []
+    for table_index, items in sorted(by_table.items()):
+        original = table_groups[table_index]
+        ordered = sorted(items, key=lambda item: item["row_index"])
+        group = {
+            key: value for key, value in original.items()
+            if key not in {"rows", "row_indices"}
+        }
+        group["rows"] = [item["row"] for item in ordered]
+        group["row_indices"] = [item["row_index"] for item in ordered]
+        output.append(group)
+    return output
+
+
 def _entity_topk(entity: str, items: list[dict], top_k: int) -> list[dict]:
     """Rank exact entity mentions ahead of BM25 ties and short documents."""
     entity_tokens = set(normalize_key(entity).split())
@@ -107,11 +172,14 @@ def two_stage_retrieve(
     second_stage_k: int = 3,
 ) -> dict:
     """Add a bounded schema-aware stage to ordinary question BM25 retrieval."""
+    anchor = anchor_question(question, table_rows)
     first = coarse_retrieve(
         question, table_rows, text_passages, web_snippets, top_k=top_k
     )
+    first["table_rows"] = _select_table_rows(
+        question, table_rows, top_k=top_k, anchor=anchor,
+    )
     expansions = _query_expansions(question, table_rows)
-    anchor = anchor_question(question, table_rows)
     entity_queries = list(anchor.bridge_entities)
     table_constraints = list(anchor.table_constraints)
     constrained_candidates = list(dict.fromkeys(
@@ -175,6 +243,9 @@ def two_stage_retrieve(
         "retrieval_trace": {
             "strategy": "two_stage_bm25_schema",
             "stage1_top_k": top_k,
+            "selected_table_rows": sum(
+                len(group.get("rows", [])) for group in first["table_rows"]
+            ),
             "stage2_budget": second_stage_k,
             "expansion_queries": expansions,
             "entity_anchor": anchor.to_dict(),

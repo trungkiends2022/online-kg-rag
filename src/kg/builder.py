@@ -24,24 +24,20 @@ class OnlineKGBuilder:
         for row_group in retrieved.get("table_rows", []):
             table_name = row_group.get("table_name", "unknown_table")
             rows = row_group.get("rows", [])
-            kg.register_table_structure(table_name, rows)
-            try:
-                all_triples += self.extractor.extract_from_table(
-                    table_name, rows,
-                    use_llm_enrichment=not row_group.get("deterministic_only", False),
-                )
-            except Exception as exc:
-                # Cell triples do not depend on model output; retain them when
-                # optional LLM table enrichment is malformed.
-                all_triples += self.extractor.extract_from_table(
-                    table_name, rows, use_llm_enrichment=False,
-                )
-                kg.extraction_errors.append({
-                    "source_type": "table", "source_id": table_name,
-                    "error": f"{type(exc).__name__}: {exc}", "fallback": "deterministic_cells",
-                })
+            row_indices = row_group.get("row_indices")
+            kg.register_table_structure(table_name, rows, row_indices=row_indices)
+            # Tables preserve their schema deterministically; semantic
+            # enrichment comes exclusively from retrieved text passages.
+            all_triples += self.extractor.extract_from_table(
+                table_name, rows, use_llm_enrichment=False,
+                row_indices=row_indices,
+            )
         for passage in retrieved.get("text_passages", []):
-            kg.register_passage(str(passage["id"]))
+            kg.register_passage(
+                str(passage["id"]),
+                str(passage["text"]),
+                context_before=str(passage.get("context_before", "")),
+            )
             try:
                 all_triples += self.extractor.extract_from_text(
                     passage["id"], passage["text"],

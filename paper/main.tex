@@ -10,34 +10,32 @@
 \lstset{basicstyle=\ttfamily\small,breaklines=true,frame=single,columns=fullflexible,captionpos=b}
 
 \begin{document}
-\title{Traceable Executable Reasoning over Query-Time Knowledge Graphs for Table--Text Question Answering}
+\title{Schema-Preserving Query-Time Knowledge Graphs for Grounded Table--Text Question Answering}
 \author{Author Names to Be Added}
 \institute{Affiliations and corresponding author email to be added}
 \maketitle
 
 \begin{abstract}
-Answering questions over tables and text requires preserving structural context,
-connecting evidence across sources, and applying the correct operations to
-retrieved values. A plausible reasoning path does not establish that its
-computation is correct or supported by the available evidence. We present
-Online-KG, a retrieval-augmented question answering framework that constructs
-a knowledge graph at query time and evaluates candidate reasoning paths through
-program execution. A deterministic entity anchor resolves a table-derived
-bridge entity from question constraints and uses it to supplement first-stage
-passage retrieval. The framework maintains an executable entity--relation graph
-and a parallel typed structural trace for tables and passages. Candidate paths
-are translated into Python programs or typed numerical programs and executed
-through a restricted graph interface that records evidence access. An
-evidence-aware selector combines execution outcomes, source support, and
-agreement among candidate answers. Each prediction exports retrieval decisions,
-the selected program, evidence, and path-level diagnostics for audit. We design
-a controlled evaluation on HybridQA, FinQA, and HiTab to examine retrieval,
-table structure, executable reasoning, and candidate selection alongside their
-computational cost. Execution success, evidence access, and the exported
-score-derived confidence remain diagnostic signals rather than guarantees of
-answer correctness.
+Answering questions over tables and text requires preserving row context while
+connecting evidence expressed in different forms. Flattening a table can detach
+a value from its hierarchical header, whereas a plausible language-model plan
+can mention relations that are absent from the available evidence. We present
+Online-KG, a retrieval-augmented framework that constructs a bounded knowledge
+graph for each question. A deterministic anchor retrieves relevant table rows
+and bridge-entity passages. Deterministic cell edges retain qualified headers,
+while record nodes preserve same-row bindings and semantic triples represent
+retrieved text. Candidate paths are then enumerated from registered graph edges,
+verbalized, and ranked using question coverage, table constraints, row
+consistency, cross-modal completeness, corroboration, and length. The primary
+method reasons over the ranked paths as text and does not generate or execute a
+program. Each prediction exports retrieval decisions, graph provenance, verified
+path edges, and score components for audit. We define controlled comparisons on
+HybridQA, with FinQA and HiTab used to examine numerical and hierarchical-table
+behavior. Groundedness here means that a path uses edges present in the
+constructed graph; it does not guarantee that extraction, retrieval, or the
+final answer is correct.
 % Add a quantitative findings sentence after completing controlled experiments.
-\keywords{Knowledge graphs \and Retrieval-augmented generation \and Executable reasoning \and Table question answering}
+\keywords{Knowledge graphs \and Retrieval-augmented generation \and Grounded reasoning \and Table question answering}
 \end{abstract}
 
 \section{Introduction}
@@ -64,18 +62,16 @@ the wrong operation. This example separates three requirements: preserving
 source context, composing evidence, and checking the resulting computation.
 
 A retrieval-augmented system that passes evidence to a language model must
-still determine how the evidence supports the answer. If table cells are
-serialized without their full header context, their intended meaning can
-become ambiguous. A graph provides an explicit representation of relationships,
-but graph connectivity alone does not specify how to calculate a percentage
-change, aggregate values, or compare alternatives. Similarly, agreement among
-several generated answers can reflect repeated use of the same mistaken
-operand. These considerations motivate candidate evaluation that examines both
-execution behavior and the evidence consulted during execution.
+still determine how that evidence supports the answer. If table cells are
+serialized without their row and header context, their intended meaning can
+become ambiguous. Conversely, giving a planner only a list of node and relation
+names permits plausible but nonexistent paths. These considerations motivate
+query-bounded graph construction, explicit record structure, and candidate
+generation from verified edges.
 
 We present Online-KG, a framework organized around the sequence
-\emph{construct, plan, execute, and select}. For each question, the system
-constructs a graph from the supplied table and retrieved passages.
+\emph{retrieve, construct, enumerate, rank, and answer}. For each question, the
+system constructs a graph from selected table rows and retrieved passages.
 Deterministic structural triples retain row identities and column context,
 including hierarchical header paths where available. Before passage enrichment,
 a deterministic anchor can resolve a bridge entity from a table constraint, such
@@ -86,17 +82,13 @@ and passage topology for audit without changing the executable graph API.
 Here, ``online'' refers to construction at query time; it does not imply
 continual training or access to live web information.
 
-The system then generates multiple candidate reasoning paths and translates
-them into executable Python programs. Programs access the graph through a
-restricted interface, allowing the executor to record the graph edges they
-consult. Candidate selection uses execution outcomes, evidence support, source
-diversity, and answer agreement. The central design choice is to evaluate
-candidate computations after execution, with access to their outputs and
-recorded evidence, instead of choosing solely from textual plans. A typed
-numerical intermediate representation provides a complementary execution
-variant with explicit lookup and arithmetic operations. Neither successful
-execution nor a record of evidence access is treated as proof that a candidate
-correctly answers the question.
+The system then performs bounded search over semantic and row-record edges.
+Every candidate step stores an existing edge identifier, traversal direction,
+and provenance. A deterministic scorer favors question and constraint coverage,
+same-row bindings, cross-modal evidence, and genuine same-fact corroboration
+while penalizing longer paths. The highest-ranked paths and their supporting
+edges are passed to the answer model as text. Executable Python and typed
+numerical representations are retained only as secondary comparison variants.
 
 Our study asks whether this combination improves answer quality under matched
 context and model settings, which components account for any observed changes,
@@ -116,11 +108,10 @@ The paper develops four methodological contributions:
     \item A query-time graph construction procedure combining structural table
     triples and semantic evidence, with a parallel typed topology trace and
     edge provenance available for audit.
-    \item An executable reasoning pipeline that converts candidate graph paths
-    into programs and records their outputs and consulted graph evidence.
-    \item An evidence-aware candidate selection mechanism and prediction trace
-    that expose source support, executed paths, and answer diagnostics for
-    controlled comparison with selection based on agreement alone.
+    \item A record-aware reasoning view that prevents values from different
+    rows being joined solely because they share the same subject.
+    \item A grounded text-path generator and transparent heuristic scorer whose
+    candidates contain only registered graph edges and auditable provenance.
 \end{itemize}
 % Finalize empirical contribution claims only after evaluating matched runs.
 
@@ -139,11 +130,9 @@ TableRAG formulation uses text retrieval, SQL generation and execution, and
 intermediate-answer composition for heterogeneous documents~\cite{yu2025tablerag}.
 Our method shares their premise that table structure should influence retrieval
 and reasoning. It differs in scope: it constructs a compact per-query graph
-from supplied benchmark context, preserves structural provenance in a parallel
-trace, and evaluates several executable graph-path candidates rather than using
-SQL as the sole table interface. This is a design comparison, not a claim of
-superiority; the experiments in Section~\ref{sec:experiments} control the
-available context and model configuration.
+from supplied benchmark context, preserves structural provenance and same-row
+bindings, and ranks verified textual graph paths rather than using SQL as the
+sole table interface. This is a design comparison, not a claim of superiority.
 
 \paragraph{Graph-enhanced RAG.}
 Graph-based retrieval can expose multi-hop relations that text similarity alone
@@ -151,31 +140,29 @@ may miss. HydraRAG combines pre-existing KG, Wikipedia, and web sources through
 agentic exploration and tri-factor verification based on source trustworthiness,
 cross-source corroboration, and entity-path alignment~\cite{tan2025hydrarag}.
 Its evidence graph is assembled from external Freebase/Wikidata services and
-documents during exploration. Online-KG instead creates its executable graph
+documents during exploration. Online-KG instead creates its reasoning graph
 from the table and passage context for the current question. It consequently
 does not require a global KG service, but it also does not provide HydraRAG's
 coverage over external sources or its source-trustworthiness model. The two
 systems share the use of provenance and multi-source evidence, while their graph
 construction time, source assumptions, and verification mechanisms differ.
 
-\paragraph{Executable reasoning and candidate selection.}
+\paragraph{Grounded paths and executable reasoning.}
 Program-aided language models delegate deterministic computation to an
 interpreter after an LM generates code~\cite{gao2023pal}; program-of-thought
 prompting similarly separates numerical computation from natural-language
 reasoning~\cite{chen2022pot}. For table QA, executable representations such as
 SQL~\cite{yu2025tablerag} or the programs annotated in FinQA~\cite{finqa} make
-operations inspectable. These approaches motivate executing rather than merely
-describing an arithmetic plan. Online-KG adds two restrictions that matter for
-the present setting: generated code can only access a limited graph API, and
-the executor records the KG edges returned by those calls. The system then ranks
-multiple executed candidates using source support and output agreement. Execution
-removes arithmetic errors conditional on selected operands, but it cannot show
-that those operands or the operation answer the question; the contrasting paths
-in Figure~\ref{fig:kg-paths} make this limitation explicit.
+operations inspectable. These approaches motivate explicit representations for
+numerical operations. The present primary method addresses an earlier
+representational question: whether a textual reasoning path is composed only of
+retrieved graph edges and preserves table-row context. Executable variants
+remain useful comparisons for arithmetic questions, but are not required by the
+proposed path-text method.
 
 \section{Problem Formulation}
 Given a question $q$, a table $T$, and associated passages $D$, the system
-produces an answer $a$ and an execution trace. In the initial benchmark setting,
+produces an answer $a$ and a ranked path trace. In the initial benchmark setting,
 $T$ and the associated passage pool are provided by the dataset. Passage ranking
 therefore operates within supplied context; this is not an evaluation of
 open-domain retrieval. The graph $G_q$ is constructed separately for each query.
@@ -197,10 +184,11 @@ not presented as official FinQA program accuracy. FinQA experiments using its
 normalized official table and its raw hierarchical table are separate protocols.
 
 \subsection{Baselines and Ablations}
-The benchmark suite compares direct LLM answering, flattened-table BM25,
-Online-KG path text without code, path-consistency selection, typed numerical
-IR, and the full Python Online-KG pipeline. All methods use the same supplied
-context, model, decoding configuration, and answer budget within each run.
+The primary comparison includes direct LLM answering, flattened-table BM25,
+unordered graph triples, and the proposed grounded Online-KG path-text method.
+Typed numerical IR and the Python pipeline are reported as secondary variants
+rather than components of the primary method. All matched methods use the same
+supplied context, model, decoding configuration, and answer budget.
 Our ablations remove the second retrieval stage, bridge-entity queries,
 structural table triples, semantic enrichment, header hierarchy, or
 evidence-aware selection. Each configuration is run only after its implementation
@@ -240,7 +228,7 @@ Dataset & Method & Primary metric & Secondary metric & Calls & Latency (s) \\
 \midrule
 HybridQA & Direct LLM & \texttt{TBD} EM & \texttt{TBD} F1 & \texttt{TBD} & \texttt{TBD} \\
          & Flat-table BM25 & \texttt{TBD} EM & \texttt{TBD} F1 & \texttt{TBD} & \texttt{TBD} \\
-         & Online-KG path text & \texttt{TBD} EM & \texttt{TBD} F1 & \texttt{TBD} & \texttt{TBD} \\
+         & Grounded Online-KG path text (ours) & \texttt{TBD} EM & \texttt{TBD} F1 & \texttt{TBD} & \texttt{TBD} \\
          & Online-KG (Python) & \texttt{TBD} EM & \texttt{TBD} F1 & \texttt{TBD} & \texttt{TBD} \\
 \midrule
 FinQA    & Direct LLM & \texttt{TBD} official exec. & \texttt{TBD} ratio/\% & \texttt{TBD} & \texttt{TBD} \\
@@ -284,11 +272,10 @@ Do not merge unavailable metrics into an error category.
 
 \paragraph{Case-study template.}
 Select one correct and one incorrect held-out example after evaluation. For each,
-show the question, retrieved sources and anchor, relevant structural cells,
-executable graph edges, candidate programs, executed values, selected-path
-score, and final answer. State whether the trace explains an error or merely
-records access. The constructed example in Figure~\ref{fig:kg-paths} illustrates
-the presentation format and is not a substitute for held-out evidence.
+show the question, retrieved rows and passages, entity anchor, relevant record
+edges, ranked textual paths, score components, and final answer. State whether
+the trace exposes the cause of an error or only records the evidence presented
+to the answer model.
 
 \section{Limitations}
 The current experiments assume dataset-supplied tables and, for FinQA, the
@@ -299,7 +286,7 @@ provenance diversity. The deterministic table graph preserves row and column
 header paths, but graph size grows with the number of cells, while optional LLM
 enrichment can introduce redundant parallel edges or noisy relations.
 
-The numerical IR currently covers a practical but incomplete operator set.
+The secondary numerical IR variant covers a practical but incomplete operator set.
 Questions involving ranking, ranges, dates, complex percentages, implicit unit
 conversion, or domain-specific financial operators may require additional
 operators or repair. A successfully executed program is not necessarily a
@@ -310,17 +297,17 @@ operator, step, and grounding accuracy. Step-level evaluation also depends on
 the availability and alignment of gold programs and is not directly comparable
 across datasets with different annotation conventions.
 
-Planning and graph enrichment still require multiple model calls, increasing
-latency and exposing results to provider failures and model variance. Source
-counts are only an approximation of independence because different passages or
-edges may repeat the same underlying fact. Full graph traces improve
-auditability but can become visually dense and should not be treated as proof
-that every extracted edge is correct. Finally, restricted Python execution is
-an engineering sandbox rather than a formally verified security boundary.
+Graph enrichment still requires model calls, increasing latency and exposing
+results to provider failures and model variance. Grounded path generation itself
+is deterministic, but its output depends on the retrieved and extracted graph.
+Source counts are only an approximation of independence because passages may
+repeat the same underlying fact. Full traces improve auditability but do not
+prove that every extracted edge is correct.
 
 \section{Conclusion}
-This draft defines a study of executable reasoning over query-time table--text
-graphs. Final conclusions will depend on controlled benchmark and ablation results.
+This draft defines a study of schema-preserving, query-time table--text graph
+construction and grounded textual path reasoning. Final conclusions will depend
+on controlled benchmark and ablation results.
 
 \bibliographystyle{splncs04}
 \bibliography{refs}

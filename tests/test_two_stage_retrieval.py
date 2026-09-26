@@ -88,3 +88,23 @@ def test_table_literal_constraint_prioritizes_candidate_passages_and_does_not_mi
         "enforce_output": True,
     }]
     assert "lithuania" in [item["id"] for item in result["text_passages"]]
+
+
+def test_query_local_table_retrieval_keeps_anchored_row_and_original_index():
+    result = two_stage_retrieve(
+        "What is the middle name of the player with the second most rushing yards?",
+        [{"table_name": "rushing", "rows": [
+            {"Rank": "1", "Player": "Emmitt Smith"},
+            {"Rank": "2", "Player": "Walter Payton"},
+            {"Rank": "3", "Player": "Barry Sanders"},
+        ]}],
+        [],
+        [],
+        top_k=1,
+        second_stage_k=0,
+    )
+
+    group = result["table_rows"][0]
+    assert group["rows"] == [{"Rank": "2", "Player": "Walter Payton"}]
+    assert group["row_indices"] == [1]
+    assert result["retrieval_trace"]["selected_table_rows"] == 1

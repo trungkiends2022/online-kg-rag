@@ -117,6 +117,7 @@ def _examples(args):
 def _make_method(args):
     rag_config = RAGConfig(
         top_k=args.top_k,
+        second_stage_k=args.second_stage_k,
         max_context_chars=args.max_context_chars,
         max_output_tokens=args.max_output_tokens,
         temperature=args.temperature,
@@ -141,9 +142,6 @@ def _make_method(args):
         execution_mode="numerical_ir" if args.method == "numerical_ir" else "python",
         finqa_canonical_ratio=(args.dataset == "finqa" and args.method == "numerical_ir"),
         max_output_tokens=args.max_output_tokens,
-        table_llm_enrichment=not (
-            args.dataset == "finqa" and args.method == "numerical_ir"
-        ),
     )
     if args.method == "path_consistency":
         pipeline.evaluator = PathConsistencyEvaluator()

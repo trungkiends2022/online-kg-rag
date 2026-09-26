@@ -198,3 +198,31 @@ def test_multigraph_provenance_does_not_duplicate_lookup_values():
     assert kg.graph.number_of_edges() == 2
     assert kg.get_neighbors("revenue", "2015") == ["45"]
     assert len(kg.get_evidence("revenue", "45", "2015")) == 2
+
+
+def test_record_edges_preserve_same_row_binding_for_path_text():
+    kg = OnlineKG()
+    kg.register_table_structure(
+        "revenue",
+        [{"Company": "A", "Year": "2022", "Revenue": "10M"}],
+        row_indices=[7],
+    )
+
+    records = kg.path_edge_records()
+    row_id = "table:revenue:row:7"
+    assert any(
+        edge["head"] == "A"
+        and edge["relation"] == "has_record"
+        and edge["tail"] == row_id
+        for edge in records
+    )
+    assert {
+        (edge["relation"], edge["tail"])
+        for edge in records
+        if edge["head"] == row_id
+    } == {("year", "2022"), ("revenue", "10M")}
+    assert all(
+        edge["row_index"] == 7
+        for edge in records
+        if edge.get("structural")
+    )

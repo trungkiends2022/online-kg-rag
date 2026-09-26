@@ -14,6 +14,7 @@ from src.llm.client import get_provider, llm_call
 @dataclass(frozen=True)
 class RAGConfig:
     top_k: int = 5
+    second_stage_k: int = 3
     max_context_chars: int = 24_000
     max_output_tokens: int = 1024
     temperature: float = 0.0
@@ -21,6 +22,8 @@ class RAGConfig:
     def validate(self) -> None:
         if self.top_k < 1:
             raise ValueError("top_k must be positive")
+        if self.second_stage_k < 0:
+            raise ValueError("second_stage_k must be non-negative")
         if self.max_context_chars < 1 or self.max_output_tokens < 1:
             raise ValueError("context and output limits must be positive")
 

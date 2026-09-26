@@ -11,7 +11,7 @@ from src.datasets.schema import DatasetExample
 from src.extraction.extractor import EntityRelationExtractor
 from src.kg.builder import OnlineKGBuilder
 from src.llm.client import get_provider, llm_call
-from src.planning.planner import PathPlanner
+from src.planning.grounded_paths import GroundedPathPlanner
 from src.retrieval.coarse_retrieval import two_stage_retrieve
 
 
@@ -39,10 +39,7 @@ class OnlineKGPathTextBaseline:
                 max_output_tokens=self.config.max_output_tokens,
             )
         )
-        self.planner = planner or PathPlanner(
-            temperature=self.config.temperature,
-            max_output_tokens=self.config.max_output_tokens,
-        )
+        self.planner = planner or GroundedPathPlanner()
 
     @staticmethod
     def _terms(value: str) -> set[str]:
@@ -69,8 +66,18 @@ class OnlineKGPathTextBaseline:
             for entity in constraint.get("candidates", [])
         }
         ranked = []
-        for index, (head, tail, data) in enumerate(kg.graph.edges(data=True)):
-            rendered = f"{head} {data.get('relation', '')} {tail}"
+        selected_edge_ids = {
+            edge.get("edge_id")
+            for path in path_records
+            for edge in path.get("edges", [])
+        }
+        for index, edge in enumerate(kg.path_edge_records()):
+            head, tail = edge["head"], edge["tail"]
+            context_text = " ".join(
+                str(context.get("text", ""))
+                for context in edge.get("contexts", [])
+            )
+            rendered = f"{head} {edge.get('relation', '')} {tail} {context_text}"
             edge_terms = self._terms(rendered)
             candidate_bonus = 6 if (
                 str(head).casefold() in candidate_entities
@@ -80,14 +87,20 @@ class OnlineKGPathTextBaseline:
                 4 * len(question_terms & edge_terms)
                 + 2 * len(path_terms & edge_terms)
                 + candidate_bonus
+                + (12 if edge.get("edge_id") in selected_edge_ids else 0)
             )
-            provenance = data.get("provenance")
             ranked.append((score, -index, {
+                "edge_id": edge.get("edge_id"),
                 "head": head,
-                "relation": data.get("relation"),
+                "relation": edge.get("relation"),
                 "tail": tail,
-                "source_type": getattr(provenance, "source_type", None),
-                "source_id": getattr(provenance, "source_id", None),
+                "source_type": edge.get("source_type"),
+                "source_id": edge.get("source_id"),
+                "row_index": edge.get("row_index"),
+                "column_name": edge.get("column_name"),
+                "header_path": edge.get("header_path"),
+                "structural": bool(edge.get("structural")),
+                "contexts": edge.get("contexts", []),
             }))
         ranked.sort(key=lambda item: item[:2], reverse=True)
         payload = {
@@ -163,7 +176,7 @@ class OnlineKGPathTextBaseline:
             example.text_passages,
             example.web_snippets,
             top_k=self.config.top_k,
-            second_stage_k=3,
+            second_stage_k=self.config.second_stage_k,
         )
         kg = self.kg_builder.build(retrieved)
         if kg.is_empty():
@@ -177,9 +190,26 @@ class OnlineKGPathTextBaseline:
         paths = self.planner.generate_candidates(
             example.question, kg, n=self.n_paths, constraint_context=retrieval_trace,
         )
+        if not paths:
+            return {
+                "answer": None,
+                "error": "No grounded text path could be generated.",
+                "method": self.method_name,
+                "kg_summary": kg.summary(),
+                "entity_anchor": retrieval_trace.get("entity_anchor", {}),
+                "retrieval_trace": retrieval_trace,
+                "reasoning_paths": [],
+                "execution_mode": "path_text",
+                "code_generated": False,
+                "program_executed": False,
+            }
         path_records = [
             {
                 "path_id": path.path_id,
+                "score": getattr(path, "score", 0.0),
+                "score_components": getattr(path, "score_components", {}),
+                "nodes": getattr(path, "nodes", []),
+                "edges": getattr(path, "edges", []),
                 "steps": [
                     {"step": step.step, "goal": step.goal, "depends_on": step.depends_on}
                     for step in path.steps
@@ -190,8 +220,10 @@ class OnlineKGPathTextBaseline:
         context = self._bounded_kg_context(
             example.question, path_records, kg, retrieval_trace,
         )
-        prompt = f"""Answer the question using only the Online KG edges and the
-proposed reasoning paths below. Reason over the paths as text. Do not generate
+        prompt = f"""Answer the question using only the ranked, grounded Online KG
+paths and supporting edges below. Every explicit path edge exists in the local
+graph; a goal without explicit edges is only a proposal and must be checked
+against the supporting edges. Reason over the paths as text. Do not generate
 or execute Python, JSON IR, or any other program. Return only the shortest answer
 span or numeric answer, without explanation.
 {self._constraint_instruction(retrieval_trace)}
@@ -223,6 +255,8 @@ Answer:"""
             "entity_anchor": retrieval_trace.get("entity_anchor", {}),
             "retrieval_trace": retrieval_trace,
             "reasoning_paths": path_records,
+            "best_path_id": path_records[0]["path_id"] if path_records else None,
+            "best_path_score": path_records[0]["score"] if path_records else None,
             "execution_mode": "path_text",
             "code_generated": False,
             "program_executed": False,

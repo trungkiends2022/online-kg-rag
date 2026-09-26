@@ -31,6 +31,7 @@ class EvidenceRef:
     row_index: int | None = None
     column_name: str | None = None
     header_path: tuple[str, ...] | None = None
+    text_context: str | None = None
 
 
 @dataclass

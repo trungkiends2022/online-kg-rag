@@ -14,25 +14,25 @@
 
 \node[stage] (retrieve) at (0,-1.3)
   {\textbf{1. Retrieve context}\\
-   BM25 + table-derived entity anchor + bounded supplementation};
+   Anchored top-$k$ rows + BM25 passages + bounded supplementation};
 \node[stage] (build) at (0,-2.65)
-  {\textbf{2. Construct query-time KG $G_q$ and structural trace $H_q$}\\
-   Structural + semantic triples; provenance; entity resolution};
+  {\textbf{2. Construct query-time KG and reasoning view}\\
+   Semantic edges + row records + provenance + structural trace};
 \node[stage] (plan) at (0,-4)
-  {\textbf{3. Generate candidate plans}\\
-   Question + graph summary $\longrightarrow p_1,\ldots,p_N$};
+  {\textbf{3. Enumerate grounded text paths}\\
+   Seed matching + bounded edge traversal + row bundles};
 \node[stage] (synth) at (0,-5.35)
-  {\textbf{4. Synthesize executable candidates}\\
-   Each plan $p_i\longrightarrow c_i$: Python or typed numerical IR};
+  {\textbf{4. Score candidate paths}\\
+   Query coverage + constraints + row and cross-modal support};
 \node[stage] (execute) at (0,-6.7)
-  {\textbf{5. Execute against $G_q$ and trace evidence}\\
-   Each $c_i\longrightarrow$ status $s_i$, output $y_i$, evidence $\mathcal{E}_i$};
+  {\textbf{5. Pack bounded path context}\\
+   Verified edges + source, row, column, and header provenance};
 \node[stage] (select) at (0,-8.05)
-  {\textbf{6. Evaluate and select}\\
-   Admissibility gate; source support; output agreement};
+  {\textbf{6. Text-only answer generation}\\
+   Reason over ranked paths; no program generation or execution};
 \node[stage] (answer) at (0,-9.65)
   {\textbf{7. Produce answer and audit record}\\
-   Selected value, program, evidence, and candidate diagnostics};
+   Answer, selected path, score components, and provenance};
 
 \draw[flow] (question.south) -- ++(0,-0.18) -| (retrieve.north);
 \draw[flow] (sources.south) -- ++(0,-0.18) -| (retrieve.north);
@@ -43,9 +43,6 @@
 \draw[flow] (execute) -- (select);
 \draw[flow] (select) -- node[note,right] {Admissible candidate} (answer);
 
-\draw[flow,dashed] (select.east) -- (5.05,-8.05)
-  -- node[note,rotate=90,above] {No admissible candidate: replan on the same KG}
-  (5.05,-4) -- (plan.east);
 \node[note] at (0,-10.55)
-  {Empty KG or exhausted replanning budget $\longrightarrow$ no answer + error record};
+  {Empty KG or no grounded candidate $\longrightarrow$ no answer + error record};
 \end{tikzpicture}
