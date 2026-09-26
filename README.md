@@ -146,9 +146,11 @@ GEMINI_MODEL=gemini-3.8-flash
 ```
 
 Đối với benchmark chính thức, không đổi provider giữa các câu trong cùng một
-run. Nếu provider lỗi quota, dừng và tiếp tục bằng `--resume`, hoặc tạo một run
-mới có tên provider/model rõ ràng. `openrouter/free` chỉ phù hợp smoke test vì
-model thực tế và availability có thể thay đổi.
+run. `--resume` chỉ được dùng với đúng JSONL có manifest cùng fingerprint
+(model/provider, code revision, input checksum, resource revision và cấu hình);
+nếu provider lỗi quota, giữ nguyên mọi tham số rồi resume, hoặc tạo run mới với
+`RUN_TAG`/output mới có tên provider-model rõ ràng. `openrouter/free` chỉ phù hợp
+smoke test vì model thực tế và availability có thể thay đổi.
 
 Ví dụ dùng DeepSeek V4 Flash qua OpenRouter, với reasoning của OpenRouter:
 
@@ -310,9 +312,10 @@ python -m src.run_hybridqa_baseline \
 ```
 
 Khi chạy toàn bộ dev split, bỏ `--limit`. Có thể thêm `--resume` để tiếp tục từ
-file JSONL đang có; khi đó `--limit` là số câu mới cần chạy. Script tạo thêm file
-`*.summary.json` chứa EM và token-F1 theo cách chuẩn hóa của evaluation script
-HybridQA, cả dạng tỷ lệ và phần trăm.
+file JSONL đang có; khi đó `--limit` là số câu mới cần chạy. Lần chạy đầu tạo
+`*.jsonl.manifest.json`; resume chỉ được phép khi fingerprint của model, code,
+input, resource và cấu hình khớp. Runner cũng tạo `*.summary.json` chứa EM và
+token-F1 theo cách chuẩn hóa của evaluation script HybridQA, cả dạng tỷ lệ và phần trăm.
 
 Để chạy lại đúng một câu đã biết, thêm `--example-id <question_id>`.
 
@@ -562,7 +565,9 @@ BENCHMARK_MAX_WORKERS=8 \
 Khởi đầu với 6--8 worker, rồi tăng dần nếu provider không trả 429/timeout.
 Rate pacing, retry và JSONL logging vẫn được áp dụng cho từng LLM call.
 
-Mỗi output JSONL có metric theo dataset và một file `*.summary.json`. HybridQA
+Mỗi output JSONL có metric theo dataset, một `*.summary.json` và một
+`*.jsonl.manifest.json`. Manifest ghi provider/model, code revision, checksum
+input, revision resource, configuration và fingerprint để audit/resume. HybridQA
 dùng EM/token-F1; FinQA dùng numeric execution accuracy. `program_accuracy`
 hiện để `null` vì code Python path chưa được canonicalize sang DSL chính thức
 của FinQA. Annotation `answer-node` của HybridQA là weak/approximate label, nên

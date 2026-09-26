@@ -4,14 +4,39 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
-# Determine Python binary
-if [[ -n "${PYTHON_BIN:-}" && -x "$PYTHON_BIN" ]]; then
-  python_bin="$PYTHON_BIN"
-elif [[ -x "$repo_root/.venv/bin/python" ]]; then
-  python_bin="$repo_root/.venv/bin/python"
-else
-  python_bin="$(command -v python3)"
-fi
+resolve_python() {
+  local candidate resolved
+  local candidates=()
+
+  if [[ -n "${PYTHON_BIN:-}" ]]; then
+    candidates=("$PYTHON_BIN")
+  else
+    candidates=("$repo_root/.venv/bin/python" "python3")
+  fi
+
+  for candidate in "${candidates[@]}"; do
+    if [[ "$candidate" == */* ]]; then
+      resolved="$candidate"
+    else
+      resolved="$(command -v "$candidate" 2>/dev/null || true)"
+    fi
+    [[ -n "$resolved" && -x "$resolved" ]] || continue
+    if "$resolved" -c "import src.run_baselines" >/dev/null 2>&1; then
+      printf '%s\n' "$resolved"
+      return 0
+    fi
+    if [[ -n "${PYTHON_BIN:-}" ]]; then
+      echo "PYTHON_BIN cannot import src.run_baselines: $resolved" >&2
+      return 1
+    fi
+    echo "Skipping unusable Python interpreter: $resolved" >&2
+  done
+
+  echo "No usable Python interpreter found. Set PYTHON_BIN to an environment with project dependencies." >&2
+  return 1
+}
+
+python_bin="$(resolve_python)"
 
 # Default configuration
 SHARD="01"

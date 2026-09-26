@@ -3,6 +3,19 @@
 This directory contains small, version-controlled evaluation subsets. Raw
 datasets remain under `data/` and are intentionally ignored by Git.
 
+## Python for benchmark commands
+
+Set a known-good interpreter once in the terminal. The direct commands below use
+this variable; the two HybridQA runner scripts perform the same import check and
+automatically fall back from a broken `.venv` to `python3`.
+
+```bash
+PYTHON_BIN="${PYTHON_BIN:-python3}"
+"$PYTHON_BIN" -c 'import src.run_baselines'
+```
+
+To use a different environment explicitly, set `PYTHON_BIN=/path/to/python`.
+
 ## FinQA
 
 The `finqa/` subsets are sampled from the official FinQA development split with
@@ -19,19 +32,19 @@ the source split, seed, distributions, and selected example IDs.
 Regenerate the checked-in pilot subsets:
 
 ```bash
-.venv/bin/python -m src.sample_finqa \
+"$PYTHON_BIN" -m src.sample_finqa \
   --input data/FinQA/dataset/dev.json \
   --output benchmarks/finqa/finqa-dev-balanced-20-seed2027.json \
   --report benchmarks/finqa/finqa-dev-balanced-20-seed2027.distribution.json \
   --size 20 --seed 2027
 
-.venv/bin/python -m src.sample_finqa \
+"$PYTHON_BIN" -m src.sample_finqa \
   --input data/FinQA/dataset/dev.json \
   --output benchmarks/finqa/finqa-dev-balanced-50-seed2027.json \
   --report benchmarks/finqa/finqa-dev-balanced-50-seed2027.distribution.json \
   --size 50 --seed 2027
 
-.venv/bin/python -m src.sample_finqa \
+"$PYTHON_BIN" -m src.sample_finqa \
   --input data/FinQA/dataset/dev.json \
   --output benchmarks/finqa/finqa-dev-balanced-100-seed2027.json \
   --report benchmarks/finqa/finqa-dev-balanced-100-seed2027.distribution.json \
@@ -43,7 +56,7 @@ per question and only uses the four well-supported primitive operators
 `add`, `subtract`, `multiply`, and `divide`. Regenerate it with:
 
 ```bash
-.venv/bin/python -m src.sample_finqa \
+"$PYTHON_BIN" -m src.sample_finqa \
   --input data/FinQA/dataset/dev.json \
   --output benchmarks/finqa/finqa-dev-2step-core-30-seed2027.json \
   --report benchmarks/finqa/finqa-dev-2step-core-30-seed2027.distribution.json \
@@ -53,7 +66,7 @@ per question and only uses the four well-supported primitive operators
 Run this focused subset with Numerical IR:
 
 ```bash
-LLM_PROVIDER=openai_compatible .venv/bin/python -m src.run_baselines \
+LLM_PROVIDER=openai_compatible "$PYTHON_BIN" -m src.run_baselines \
   --dataset finqa \
   --method numerical_ir \
   --input benchmarks/finqa/finqa-dev-2step-core-30-seed2027.json \
@@ -67,7 +80,7 @@ Run the 100-example Numerical IR benchmark with an OpenAI-compatible internal
 model configured in `.env`:
 
 ```bash
-LLM_PROVIDER=openai_compatible .venv/bin/python -m src.run_baselines \
+LLM_PROVIDER=openai_compatible "$PYTHON_BIN" -m src.run_baselines \
   --dataset finqa \
   --method numerical_ir \
   --input benchmarks/finqa/finqa-dev-balanced-100-seed2027.json \
@@ -88,7 +101,7 @@ FinQA dev. Every gold program has one or two operations and only uses `add`,
 `subtract`, `multiply`, or `divide`.
 
 ```bash
-.venv/bin/python -m src.sample_finqa \
+"$PYTHON_BIN" -m src.sample_finqa \
   --input data/FinQA/dataset/dev.json \
   --output benchmarks/finqa/finqa-dev-1to2step-core-100-seed2027.json \
   --size 100 --seed 2027 --min-steps 1 --max-steps 2 \
@@ -98,7 +111,7 @@ FinQA dev. Every gold program has one or two operations and only uses `add`,
 Run shards sequentially by replacing `shard01` with `shard02` through `shard05`:
 
 ```bash
-LLM_PROVIDER=openrouter .venv/bin/python -m src.run_baselines \
+LLM_PROVIDER=openrouter "$PYTHON_BIN" -m src.run_baselines \
   --dataset finqa --method numerical_ir \
   --input benchmarks/finqa/finqa-dev-1to2step-core-100-seed2027-shard01.json \
   --output data/results/finqa-dev-1to2step-core-shard01.jsonl \
@@ -113,7 +126,7 @@ This subset contains 100 dev examples with a verified table file, non-empty
 linked passage file, answer, and unique table ID.
 
 ```bash
-.venv/bin/python -m src.sample_hybridqa \
+"$PYTHON_BIN" -m src.sample_hybridqa \
   --input data/HybridQA/released_data/dev.json \
   --tables-dir data/WikiTables-WithLinks/tables_tok \
   --passages-dir data/WikiTables-WithLinks/request_tok \
@@ -124,7 +137,7 @@ linked passage file, answer, and unique table ID.
 Run the HybridQA set with both table and linked-text sources:
 
 ```bash
-LLM_PROVIDER=openrouter .venv/bin/python -m src.run_baselines \
+LLM_PROVIDER=openrouter "$PYTHON_BIN" -m src.run_baselines \
   --dataset hybridqa --method online_kg \
   --input benchmarks/hybridqa/hybridqa-dev-table-text-100-seed2027.json \
   --tables-dir data/WikiTables-WithLinks/tables_tok \
@@ -145,7 +158,7 @@ cues. Each shard is shuffled deterministically. The result is seven balanced
 the master split and all eight shards with:
 
 ```bash
-.venv/bin/python -m src.sample_hybridqa \
+"$PYTHON_BIN" -m src.sample_hybridqa \
   --input data/HybridQA/released_data/dev.traced.json \
   --tables-dir data/WikiTables-WithLinks/tables_tok \
   --passages-dir data/WikiTables-WithLinks/request_tok \
@@ -154,15 +167,24 @@ the master split and all eight shards with:
   --stratify-reasoning
 ```
 
-Run all eight shards through the six controlled HybridQA methods. The runner is
-sequential and every output uses `--resume`, so restarting it is safe:
+Run all eight shards through the six controlled HybridQA methods. Each JSONL
+also receives a `.jsonl.manifest.json` sidecar containing the model/provider,
+code revision, input checksum, resource revisions, configuration, and a
+fingerprint. `--resume` is allowed only when that fingerprint is identical;
+use a new `RUN_TAG` after any model, prompt/code, data, or configuration change.
 
 ```bash
+RUN_TAG=openrouter-deepseek-v4-flash-seed2027 \
 scripts/run_hybridqa_1500.sh
 ```
 
-To run only selected shards, pass their two-digit indices, for example:
+Use the same `RUN_TAG` only to resume the exact same run. Without it, the
+runner creates a UTC timestamped result directory. To run selected shards:
 
 ```bash
+RUN_TAG=openrouter-deepseek-v4-flash-seed2027 \
 scripts/run_hybridqa_1500.sh 01 02
 ```
+
+This is a controlled, trace-eligible unique-table subset, not the complete
+HybridQA development split; state that scope when reporting results.

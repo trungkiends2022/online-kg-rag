@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
+import subprocess
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -33,7 +35,7 @@ from src.baselines.metrics import (
 )
 from src.datasets import load_finqa, load_hitab, load_hybridqa
 from src.pipeline import OnlineKGPipeline
-from src.llm.client import capture_llm_metrics
+from src.llm.client import capture_llm_metrics, get_provider
 from src.evaluation.ir_metrics import numerical_ir_metrics
 
 
@@ -47,6 +49,159 @@ METHODS = (
     "graph_retrieval_no_path",
     "online_kg",
 )
+
+MANIFEST_SCHEMA_VERSION = 1
+
+
+def _file_sha256(path: Path) -> str | None:
+    """Return a content hash for a regular file, without loading it all at once."""
+    if not path.is_file():
+        return None
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1_048_576), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _git_revision(path: Path | None = None) -> str | None:
+    """Best-effort revision for code or a checked-out dataset; never raises."""
+    command = ["git"]
+    if path is not None:
+        command.extend(["-C", str(path)])
+    command.extend(["rev-parse", "HEAD"])
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, check=True)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return result.stdout.strip() or None
+
+
+
+def _git_worktree_diff_sha256(path: Path | None = None) -> str | None:
+    """Hash tracked staged/unstaged changes so uncommitted code cannot mix runs."""
+    command = ["git"]
+    if path is not None:
+        command.extend(["-C", str(path)])
+    command.extend(["diff", "--binary", "HEAD"])
+    try:
+        result = subprocess.run(command, capture_output=True, check=True)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return hashlib.sha256(result.stdout).hexdigest()
+
+
+def _provider_identity() -> dict[str, str | None]:
+    """Capture the effective provider/model without exposing any credentials."""
+    configured_name = os.environ.get("LLM_PROVIDER", "anthropic")
+    try:
+        provider = get_provider()
+    except Exception:
+        # This keeps local/unit-test runs inspectable. A real model run will
+        # still fail later if its provider is not correctly configured.
+        return {"provider": configured_name, "model": None}
+    return {
+        "provider": getattr(provider, "name", configured_name),
+        "model": getattr(provider, "model", None),
+    }
+
+
+def _provider_options() -> dict[str, str | None]:
+    """Record non-secret provider switches that can alter a model response."""
+    option_names = (
+        "COMPAT_BASE_URL",
+        "OPENROUTER_REASONING_ENABLED",
+        "LLM_RATE_LIMIT_RETRIES",
+    )
+    return {name: os.environ.get(name) for name in option_names}
+
+
+def _build_run_manifest(args, *, max_workers: int) -> dict:
+    """Describe every prediction-affecting input used by one output JSONL."""
+    provider = _provider_identity()
+    resources = {
+        "tables_dir": str(args.tables_dir) if args.tables_dir else None,
+        "tables_revision": _git_revision(args.tables_dir) if args.tables_dir else None,
+        "tables_worktree_diff_sha256": (
+            _git_worktree_diff_sha256(args.tables_dir) if args.tables_dir else None
+        ),
+        "passages_dir": str(args.passages_dir) if args.passages_dir else None,
+        "passages_revision": _git_revision(args.passages_dir) if args.passages_dir else None,
+        "passages_worktree_diff_sha256": (
+            _git_worktree_diff_sha256(args.passages_dir) if args.passages_dir else None
+        ),
+        "hitab_tables_dir": str(args.hitab_tables_dir) if args.hitab_tables_dir else None,
+        "hitab_tables_revision": (
+            _git_revision(args.hitab_tables_dir) if args.hitab_tables_dir else None
+        ),
+        "hitab_tables_worktree_diff_sha256": (
+            _git_worktree_diff_sha256(args.hitab_tables_dir) if args.hitab_tables_dir else None
+        ),
+    }
+    config = {
+        "top_k": args.top_k,
+        "second_stage_k": args.second_stage_k,
+        "max_context_chars": args.max_context_chars,
+        "max_output_tokens": args.max_output_tokens,
+        "temperature": args.temperature,
+        "n_paths": args.n_paths,
+        "max_replans": args.max_replans,
+        "finqa_table_format": args.finqa_table_format,
+        "llm_timeout_seconds": args.llm_timeout_seconds,
+        "llm_sdk_retries": args.llm_sdk_retries,
+        "max_workers": max_workers,
+        "llm_max_concurrent_requests": int(
+            os.environ.get(
+                f"{os.environ.get('LLM_PROVIDER', '').strip().upper()}_MAX_CONCURRENT_REQUESTS",
+                os.environ.get("LLM_MAX_CONCURRENT_REQUESTS", "8"),
+            )
+        ),
+    }
+    manifest = {
+        "schema_version": MANIFEST_SCHEMA_VERSION,
+        "dataset": args.dataset,
+        "method": args.method,
+        "code_worktree_diff_sha256": _git_worktree_diff_sha256(),
+        "input": {"path": str(args.input), "sha256": _file_sha256(args.input)},
+        "resources": resources,
+        "provider": provider,
+        "provider_options": _provider_options(),
+        "code_revision": _git_revision(),
+        "config": config,
+    }
+    canonical = json.dumps(manifest, sort_keys=True, separators=(",", ":"))
+    manifest["fingerprint"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return manifest
+
+
+def _manifest_path(output: Path) -> Path:
+    return output.with_suffix(output.suffix + ".manifest.json")
+
+
+def _prepare_run_manifest(args, *, max_workers: int) -> tuple[dict, Path]:
+    """Write a new manifest or reject a resume whose immutable inputs differ."""
+    manifest = _build_run_manifest(args, max_workers=max_workers)
+    path = _manifest_path(args.output)
+    should_resume = args.resume and (args.output.exists() or path.exists())
+    if should_resume:
+        if not path.is_file():
+            raise ValueError(
+                f"Cannot safely resume {args.output}: missing run manifest {path}. "
+                "Use a new --output path for this legacy result."
+            )
+        try:
+            existing = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"Cannot safely resume: invalid manifest {path}") from exc
+        if existing.get("fingerprint") != manifest["fingerprint"]:
+            raise ValueError(
+                f"Cannot safely resume {args.output}: model, code, input, dataset resource, "
+                "or configuration differs from its manifest. Use a new --output path."
+            )
+    else:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return manifest, path
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -334,6 +489,8 @@ def main() -> None:
     if max_workers < 1:
         raise ValueError("--max-workers and BENCHMARK_MAX_WORKERS must be at least 1")
     completed, mode = set(), "w"
+    run_manifest, manifest_path = _prepare_run_manifest(args, max_workers=max_workers)
+
     if args.resume and args.output.exists():
         mode = "a"
         completed = {
@@ -392,6 +549,14 @@ def main() -> None:
     ]
     summary = {"method": args.method, "dataset": args.dataset, "num_examples": len(records)}
     summary["failed_examples"] = sum(row.get("run_status") == "failed" for row in records)
+    summary.update(
+        run_manifest=str(manifest_path),
+        run_fingerprint=run_manifest["fingerprint"],
+        provider=run_manifest["provider"]["provider"],
+        model=run_manifest["provider"]["model"],
+        code_revision=run_manifest["code_revision"],
+        input_sha256=run_manifest["input"]["sha256"],
+    )
     if args.dataset == "hybridqa":
         em = sum(row["exact_match"] for row in records) / len(records) if records else 0.0
         f1 = sum(row["f1"] for row in records) / len(records) if records else 0.0

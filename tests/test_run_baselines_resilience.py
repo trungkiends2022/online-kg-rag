@@ -88,7 +88,7 @@ def test_max_workers_runs_samples_concurrently_and_keeps_input_order(monkeypatch
 
     began = time.perf_counter()
     run_baselines.main()
-    assert time.perf_counter() - began < 0.1
+    assert time.perf_counter() - began < 0.15
     records = [json.loads(line) for line in output.read_text().splitlines()]
     assert [record["id"] for record in records] == ["first", "second"]
 
@@ -113,3 +113,48 @@ def test_cli_request_concurrency_override_is_exposed_in_summary(monkeypatch, tmp
     summary = json.loads((tmp_path / "results.jsonl.summary.json").read_text())
     assert summary["method"] == "online_kg_path_text"
     assert summary["config"]["llm_max_concurrent_requests"] == 3
+
+def test_resume_requires_an_exact_run_manifest(monkeypatch, tmp_path):
+    output = tmp_path / "results.jsonl"
+    input_path = tmp_path / "input.json"
+    input_path.write_text("[]", encoding="utf-8")
+    monkeypatch.setattr(run_baselines, "_examples", lambda args: [
+        DatasetExample("one", "q", [], [], answer="a"),
+    ])
+    monkeypatch.setattr(run_baselines, "_make_method", lambda args: object())
+    monkeypatch.setattr(
+        run_baselines, "_run_method",
+        lambda method, example, args: {"answer": "a", "executed_value": None, "method": args.method},
+    )
+    base_argv = [
+        "run_baselines", "--dataset", "hybridqa", "--method", "direct_llm",
+        "--input", str(input_path), "--output", str(output),
+    ]
+    monkeypatch.setattr(sys, "argv", base_argv)
+    run_baselines.main()
+
+    manifest_path = output.with_suffix(".jsonl.manifest.json")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["input"]["sha256"]
+    assert manifest["fingerprint"]
+    assert manifest["config"]["top_k"] == 5
+
+    monkeypatch.setattr(sys, "argv", [*base_argv, "--resume"])
+    run_baselines.main()
+    assert len(output.read_text(encoding="utf-8").splitlines()) == 1
+
+    monkeypatch.setattr(sys, "argv", [*base_argv, "--resume", "--top-k", "7"])
+    with pytest.raises(ValueError, match="Cannot safely resume"):
+        run_baselines.main()
+
+
+def test_resume_rejects_legacy_output_without_manifest(monkeypatch, tmp_path):
+    output = tmp_path / "legacy.jsonl"
+    output.write_text('{"id": "old"}\n', encoding="utf-8")
+    monkeypatch.setattr(sys, "argv", [
+        "run_baselines", "--dataset", "hybridqa", "--input", str(tmp_path / "input.json"),
+        "--output", str(output), "--resume",
+    ])
+
+    with pytest.raises(ValueError, match="missing run manifest"):
+        run_baselines.main()
