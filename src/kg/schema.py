@@ -15,6 +15,10 @@ class Provenance:
     row_index: int | None = None
     column_name: str | None = None
     header_path: tuple[str, ...] | None = None
+    # A conservative relation expansion may create a navigable edge from an
+    # explicitly extracted compound fact. Keep this visible to audits instead
+    # of presenting the derived direction as a separate LLM claim.
+    derived_from_compound: bool = False
 
 
 @dataclass(frozen=True)
@@ -32,6 +36,7 @@ class EvidenceRef:
     column_name: str | None = None
     header_path: tuple[str, ...] | None = None
     text_context: str | None = None
+    derived_from_compound: bool = False
 
 
 @dataclass

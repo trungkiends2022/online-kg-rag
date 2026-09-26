@@ -117,6 +117,7 @@ class OnlineKGPipeline:
 
             candidates = []
             ir_validation: dict[str, tuple[bool, bool]] = {}
+            early_exit_path_id: str | None = None
             # High-confidence table templates use the exact same typed IR and
             # executor as model programs. They are included as candidates rather
             # than replacing planning, so the evidence-aware evaluator can still
@@ -160,25 +161,25 @@ class OnlineKGPipeline:
                             bool(getattr(exc, "schema_valid", False)),
                         )
                 candidates.append((path, code, result))
+                # Code synthesis and sandbox execution are the expensive part
+                # of the legacy branch. Stop this attempt as soon as one path
+                # passes the same grounded evaluator used for final selection.
+                provisional = self.evaluator.evaluate_all(
+                    [(path, code, result)],
+                    constraint_context.get("constraint_policy", {}),
+                    question=question,
+                )
+                if provisional and provisional[0].score > float("-inf"):
+                    early_exit_path_id = path.path_id
+                    break
 
             constraint_policy = constraint_context.get("constraint_policy", {})
             scored = self.evaluator.evaluate_all(
                 candidates, constraint_policy, question=question
             )
-            # Deterministic entity-centric paths complement, rather than only
-            # rescue, LLM-generated programs. This makes table -> bridge entity
-            # -> linked passage patterns available even when a planner returns
-            # a plausible but incomplete path.
-            if self.execution_mode == "python":
-                symbolic_candidates = self.symbolic_search.search(question, kg)
-                if symbolic_candidates:
-                    candidates.extend(symbolic_candidates)
-                    scored = self.evaluator.evaluate_all(
-                        candidates, constraint_policy, question=question
-                    )
-            # Symbolic graph search returns an already executed path rather than
-            # a numerical program. Disable it for the IR ablation so the method
-            # cannot silently fall back to a different execution formalism.
+            # Deterministic entity-centric paths are a fallback when planned
+            # paths do not yield a grounded value. Do not execute extra paths
+            # after an already valid candidate.
             if (
                 self.execution_mode == "python"
                 and not any(item.score > float("-inf") for item in scored)
@@ -256,6 +257,7 @@ class OnlineKGPipeline:
                     "planner_error": self.planner.last_error,
                     "extraction_errors": kg.extraction_errors,
                     "replans_used": attempt,
+                    "early_exit_path_id": early_exit_path_id,
                     "execution_mode": self.execution_mode,
                     "retrieval_trace": retrieved.get("retrieval_trace", {}),
                     "entity_anchor": retrieved.get("retrieval_trace", {}).get("entity_anchor", {}),

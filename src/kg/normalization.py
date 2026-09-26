@@ -87,6 +87,15 @@ ENTITY_SUFFIX_DESIGNATORS = (
     ("futbol", "club"),
 )
 
+# A leading "new" is not normally an alias: New York and York are distinct.
+# It becomes safe only when a text-derived merger relation explicitly creates
+# the former and the base entity occurs in the same retrieved source.
+MERGER_RESULT_RELATIONS = frozenset({
+    "merged_to_form",
+    "merged_to_create",
+    "merged_to_become",
+})
+
 
 def normalize_entity_core(value: str) -> str:
     """Return a deterministic key without a known sports-club designator."""
@@ -144,6 +153,54 @@ class EntityResolver:
         has_incoming = next(iter(kg.graph.in_edges(node)), None) is not None
         return (has_outgoing, has_incoming)
 
+    @staticmethod
+    def _new_entity_base(node: str) -> str | None:
+        key = normalize_key(node)
+        for prefix in ("the new ", "new "):
+            if key.startswith(prefix) and len(key) > len(prefix):
+                return key[len(prefix):]
+        return None
+
+    @staticmethod
+    def _text_source_ids(kg: "OnlineKG", node: str) -> set[str]:
+        sources = set()
+        adjacent = list(kg.graph.in_edges(node, data=True)) + list(kg.graph.out_edges(node, data=True))
+        for _, _, data in adjacent:
+            provenance = data.get("provenance")
+            if provenance and provenance.source_type == "text":
+                sources.add(str(provenance.source_id))
+        return sources
+
+    @staticmethod
+    def _is_explicit_merger_result(kg: "OnlineKG", node: str) -> bool:
+        return any(
+            data.get("provenance").source_type == "text"
+            and data.get("relation") in MERGER_RESULT_RELATIONS
+            for _, _, data in kg.graph.in_edges(node, data=True)
+            if data.get("provenance") is not None
+        )
+
+    def _resolve_contextual_merger_aliases(self, kg: "OnlineKG") -> None:
+        """Merge ``new X`` into ``X`` only for an explicit, local merger fact."""
+        for node in list(kg.graph.nodes()):
+            if node not in kg.graph or not self._is_explicit_merger_result(kg, node):
+                continue
+            base = self._new_entity_base(node)
+            if not base:
+                continue
+            candidates = [
+                other for other in kg.graph.nodes()
+                if other != node and normalize_key(other) == base
+            ]
+            if len(candidates) != 1:
+                continue
+            canonical = candidates[0]
+            if not (self._text_source_ids(kg, node) & self._text_source_ids(kg, canonical)):
+                continue
+            kg.merge_entities(
+                canonical, [node], tier="contextual_merger_alias", score=1.0,
+            )
+
     def resolve(self, kg: "OnlineKG") -> None:
         # Tier 1: exact match after normalization.
         buckets: dict[str, list[str]] = defaultdict(list)
@@ -159,6 +216,11 @@ class EntityResolver:
             canonical = self.aliases.get(normalize_key(node))
             if canonical and node != canonical:
                 kg.merge_entities(canonical, [node], tier="alias", score=1.0)
+
+        # Tier 2.5: resolve a merger-created "new X" to an exact same-source
+        # base entity. This is stricter than lexical similarity and avoids
+        # treating ordinary place names such as New York as aliases of York.
+        self._resolve_contextual_merger_aliases(kg)
 
         # Tier 3: deterministic organization-name variants.  This handles e.g.
         # "Cerro Porteño" and "Club Cerro Porteño" without an embedding call.

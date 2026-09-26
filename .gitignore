@@ -23,6 +23,9 @@ data/*
 # OS
 .DS_Store
 
+# Scratch / temporary run outputs
+scratch/
+
 # Notebook checkpoints
 .ipynb_checkpoints/
 logs/

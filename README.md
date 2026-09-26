@@ -343,6 +343,73 @@ Runner `src.run_baselines` hỗ trợ các phương án:
 | `numerical_ir` | Online-KG + typed numerical IR có operator đóng và provenance |
 | `online_kg` | Pipeline đầy đủ với grounded consistency |
 
+### Benchmark HybridQA 1500: Chia Shard, Theo dõi Tqdm & Đối sánh Direct LLM
+
+Tập benchmark 1500 mẫu phân tầng của HybridQA được lưu trữ trong [`benchmarks/hybridqa/`](benchmarks/hybridqa/):
+* **Tập tổng:** `benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027.json` (1500 mẫu từ `dev.traced.json`).
+* **Các Shard:** Chia đều thành 8 shard cân bằng phân tầng (*stratified reasoning*):
+  * `shard01` đến `shard07`: Mỗi shard gồm **200 mẫu**.
+  * `shard08`: Gồm **100 mẫu**.
+
+Tái tạo hoặc xuất mới bộ dữ liệu và các shard bằng lệnh:
+```bash
+python3 -m src.sample_hybridqa \
+  --input data/HybridQA/released_data/dev.traced.json \
+  --tables-dir data/WikiTables-WithLinks/tables_tok \
+  --passages-dir data/WikiTables-WithLinks/request_tok \
+  --output benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027.json \
+  --size 1500 \
+  --shard-size 200 \
+  --seed 2027 \
+  --require-answer-node \
+  --stratify-reasoning
+```
+
+#### Chạy benchmark từ Shard bằng script runner `scripts/run_hybridqa_shard.sh`
+
+Script [`scripts/run_hybridqa_shard.sh`](scripts/run_hybridqa_shard.sh) hỗ trợ:
+1. **Cấu hình số luồng chạy song song:** Qua `--workers <1..8>` (hoặc `-w`), tối đa là 8 luồng (nếu truyền > 8 sẽ tự động điều chỉnh về 8).
+2. **Theo dõi tiến độ trực quan bằng `tqdm`:** Tích hợp thanh tiến trình sạch sẽ (`--quiet-records`), cập nhật tức thời EM% và số lượt gọi LLM trung bình.
+3. **Tự động đối sánh với `direct_llm`:** Chạy phương pháp được chọn song song đối chứng với `direct_llm` trên cùng shard, sau đó xuất bảng Markdown so sánh chi tiết.
+4. **Ghi log đầy đủ:** Ghi nhận Exact Match (EM), Semantic Exact Match (ACC), F1, số lần gọi LLM (`total_llm_calls`, `mean_llm_calls`), thời gian chạy (`wall_time_ms`, `llm_latency_ms`) vào các file `.jsonl` và `.summary.json`.
+
+**Các câu lệnh mẫu:**
+
+* Chạy Shard 01 với 8 luồng song song, đối sánh `online_kg_path_text` với `direct_llm`:
+  ```bash
+  ./scripts/run_hybridqa_shard.sh --shard 01 --workers 8
+  ```
+
+* Chạy thử nhanh 5 mẫu đầu của Shard 02 với 4 luồng:
+  ```bash
+  ./scripts/run_hybridqa_shard.sh --shard 02 --workers 4 --limit 5
+  ```
+
+* Chạy phương pháp Full Online KG (`online_kg`) trên Shard 01 với 8 luồng:
+  ```bash
+  ./scripts/run_hybridqa_shard.sh --shard 01 --workers 8 --method online_kg
+  ```
+
+* Chạy tuần tự toàn bộ 8 Shard (1500 mẫu) với 8 luồng:
+  ```bash
+  ./scripts/run_hybridqa_shard.sh --shard all --workers 8
+  ```
+
+* Chạy trực tiếp qua Python module `src.run_baselines`:
+  ```bash
+  python3 -m src.run_baselines \
+    --dataset hybridqa \
+    --method online_kg_path_text \
+    --input benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard01.json \
+    --tables-dir data/WikiTables-WithLinks/tables_tok \
+    --passages-dir data/WikiTables-WithLinks/request_tok \
+    --output data/results/shard01_online_kg_path_text.jsonl \
+    --top-k 5 --second-stage-k 3 --n-paths 3 \
+    --max-workers 8 --llm-max-concurrent-requests 8 \
+    --quiet-records --force-progress --resume
+  ```
+
+
 Các phương án thực thi Online-KG dùng retrieval hai giai đoạn: BM25 theo câu hỏi,
 sau đó bổ sung tối đa `--second-stage-k` passage bằng query expansion deterministic
 từ numerical intent, thời gian và schema bảng. Stage 2 không gọi thêm LLM; tải API
@@ -439,13 +506,20 @@ I/O). Cấu hình số worker bằng `--max-workers` hoặc biến môi trườn
 xong, throughput và ETA khi chạy trong terminal. Không truyền `--no-progress`
 nếu muốn xem progress bar.
 
-Ví dụ chạy batch đầu 50 câu của shard 02 trên OpenRouter/DeepSeek:
+Số worker và số request LLM đang bay là hai giới hạn tách biệt. Mặc định đều là
+8: worker vẫn có thể dựng KG/retrieval đồng thời, còn client chỉ cho tối đa 8
+HTTP request tới cùng provider. Đặt `LLM_MAX_CONCURRENT_REQUESTS` cho mọi
+provider hoặc, ví dụ, `GROQ_MAX_CONCURRENT_REQUESTS=12` cho riêng Groq. Cờ
+`--llm-max-concurrent-requests` có độ ưu tiên cao nhất. Hạ giới hạn này khi có
+429/timeout; không cần hạ `--max-workers` trước.
 
+Ví dụ chạy batch đầu 50 câu của shard 02 trên OpenRouter/DeepSeek:
 ```bash
 LLM_PROVIDER=openrouter \
 OPENROUTER_MODEL=deepseek/deepseek-v4-flash \
 OPENROUTER_REASONING_ENABLED=false \
 BENCHMARK_MAX_WORKERS=8 \
+LLM_MAX_CONCURRENT_REQUESTS=8 \
 .venv/bin/python -m src.run_baselines \
   --dataset finqa \
   --method online_kg \
@@ -453,6 +527,7 @@ BENCHMARK_MAX_WORKERS=8 \
   --output data/results/finqa-shard02-online-kg.jsonl \
   --limit 50 \
   --max-workers 8 \
+  --llm-max-concurrent-requests 8 \
   --n-paths 3 \
   --max-replans 1 \
   --top-k 5 \

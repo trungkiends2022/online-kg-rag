@@ -29,20 +29,26 @@ class EntityRelationExtractor:
     def __init__(
         self,
         table_batch_size: int = 5,
+        text_batch_size: int = 5,
         json_retries: int = 2,
         temperature: float | None = None,
         max_output_tokens: int = 4096,
+        use_llm_text_enrichment: bool = True,
     ):
         if table_batch_size < 1:
             raise ValueError("table_batch_size must be at least 1")
+        if text_batch_size < 1:
+            raise ValueError("text_batch_size must be at least 1")
         if json_retries < 0:
             raise ValueError("json_retries must be non-negative")
         if max_output_tokens < 1:
             raise ValueError("max_output_tokens must be positive")
         self.table_batch_size = table_batch_size
+        self.text_batch_size = text_batch_size
         self.json_retries = json_retries
         self.temperature = temperature
         self.max_output_tokens = max_output_tokens
+        self.use_llm_text_enrichment = use_llm_text_enrichment
 
     def _call_json(self, prompt: str, max_tokens: int):
         kwargs = {"max_tokens": max_tokens, "retries": self.json_retries}
@@ -127,15 +133,91 @@ class EntityRelationExtractor:
         Trích xuất các triple (head, relation, tail) thể hiện fact trong đoạn văn.
         {_EXTRACT_INSTRUCTION}
         """
-        # Deterministic numerical facts below remain useful even when a provider
-        # returns malformed JSON.  Do not discard the whole passage merely
-        # because optional semantic enrichment failed.
-        try:
-            items = self._call_json(prompt, max_tokens=self.max_output_tokens)
-        except Exception:
-            items = []
         provenance = Provenance("text", passage_id, text[:200])
+        items = []
+        if self.use_llm_text_enrichment:
+            # Deterministic facts below remain useful even when optional LLM
+            # enrichment returns malformed JSON.
+            try:
+                items = self._call_json(prompt, max_tokens=self.max_output_tokens)
+            except Exception:
+                items = []
         triples = [_triple_from_item(it, provenance) for it in items]
+        return [
+            *triples,
+            *self._deterministic_text_triples(passage_id, text, context_before=context_before),
+        ]
+
+    def extract_from_text_batch(self, passages: list[dict]) -> list[Triple]:
+        """Extract text facts in bounded batches, preserving passage provenance.
+
+        A batch of five is one request for the ordinary HybridQA first-stage
+        retrieval set. Each returned fact must carry ``source_id`` so a batch
+        cannot accidentally attribute a fact to the wrong passage.
+        """
+        if not passages:
+            return []
+        # Keep custom test/domain extractors that override the single-passage
+        # hook compatible; production uses the batched base implementation.
+        if type(self).extract_from_text is not EntityRelationExtractor.extract_from_text:
+            return [
+                triple
+                for passage in passages
+                for triple in self.extract_from_text(
+                    str(passage["id"]), str(passage["text"]),
+                    context_before=str(passage.get("context_before", "")),
+                )
+            ]
+
+        triples = []
+        for start in range(0, len(passages), self.text_batch_size):
+            batch = passages[start:start + self.text_batch_size]
+            if self.use_llm_text_enrichment:
+                payload = [
+                    {
+                        "source_id": str(passage["id"]),
+                        "text": str(passage["text"]),
+                        "context_before": str(passage.get("context_before", "")),
+                    }
+                    for passage in batch
+                ]
+                prompt = f"""
+Passages (JSON): {json.dumps(payload, ensure_ascii=False)}
+
+Trích xuất fact trong từng passage. Mỗi item PHẢI giữ đúng source_id của
+passage chứa fact; không suy luận fact giữa các passage.
+Trả về JSON list dạng [{{"source_id": ..., "head": ..., "relation": ..., "tail": ...}}, ...].
+Chỉ trả JSON, không giải thích, không markdown fence.
+"""
+                try:
+                    items = self._call_json(prompt, max_tokens=self.max_output_tokens)
+                except Exception:
+                    items = []
+                allowed = {str(passage["id"]): passage for passage in batch}
+                for item in items:
+                    if not isinstance(item, dict):
+                        continue
+                    source_id = str(item.get("source_id", ""))
+                    if source_id not in allowed or not {"head", "relation", "tail"} <= item.keys():
+                        continue
+                    passage = allowed[source_id]
+                    triples.append(_triple_from_item(
+                        item, Provenance("text", source_id, str(passage["text"])[:200]),
+                    ))
+            for passage in batch:
+                triples.extend(self._deterministic_text_triples(
+                    str(passage["id"]), str(passage["text"]),
+                    context_before=str(passage.get("context_before", "")),
+                ))
+        return triples
+
+    @staticmethod
+    def _deterministic_text_triples(
+        passage_id: str, text: str, *, context_before: str = "",
+    ) -> list[Triple]:
+        """Facts retained even when text LLM enrichment is disabled or fails."""
+        provenance = Provenance("text", passage_id, text[:200])
+        triples = []
 
         # Biography passages commonly open with a three-token legal name, while
         # the linked table uses only first + last name. Preserve this bridge

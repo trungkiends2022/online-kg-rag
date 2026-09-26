@@ -16,6 +16,9 @@ from src.kg.normalization import normalize_key
 from src.planning.entity_anchor import anchor_question
 
 
+SHORT_TABLE_ROW_LIMIT = 30
+
+
 def _tokenize(text: str) -> list[str]:
     return text.lower().split()
 
@@ -89,14 +92,32 @@ def _select_table_rows(
                 "row": row,
                 "text": _row_text(table_name, row),
             })
-    if len(candidates) <= top_k:
-        selected = candidates
-    else:
+    # HybridQA tables are commonly one short list whose answer row may have no
+    # lexical overlap with the question. Retain each short table in full before
+    # applying BM25 to larger tables, so table-to-text links are not discarded.
+    short_table_indexes = {
+        index for index, group in enumerate(table_groups)
+        if len(group.get("rows", [])) <= SHORT_TABLE_ROW_LIMIT
+    }
+    selected = [
+        item for item in candidates if item["table_index"] in short_table_indexes
+    ]
+    remaining_candidates = [
+        item for item in candidates if item["table_index"] not in short_table_indexes
+    ]
+    if remaining_candidates:
         corpus = [_tokenize(item["text"]) for item in candidates]
-        scores = BM25Okapi(corpus).get_scores(_tokenize(question))
+        all_scores = BM25Okapi(corpus).get_scores(_tokenize(question))
+        score_by_key = {
+            (item["table_index"], item["row_index"]): score
+            for item, score in zip(candidates, all_scores)
+        }
         ranked = sorted(
-            zip(candidates, scores),
-            key=lambda item: (-item[1], item[0]["table_index"], item[0]["row_index"]),
+            remaining_candidates,
+            key=lambda item: (
+                -score_by_key[(item["table_index"], item["row_index"])],
+                item["table_index"], item["row_index"],
+            ),
         )
         required_values = {
             normalize_key(value)
@@ -108,11 +129,17 @@ def _select_table_rows(
                 normalize_key(value) for value in constraint.get("candidates", ())
                 if str(value).strip()
             )
+        witness_row_keys = {
+            int(r_idx)
+            for w in getattr(anchor, "table_witnesses", ())
+            for r_idx in w.get("row_indices", ())
+        }
         anchored, remaining = [], []
-        for item, score in ranked:
+        for item in ranked:
             row_values = {normalize_key(value) for value in item["row"].values()}
-            (anchored if required_values & row_values else remaining).append((item, score))
-        selected = [item for item, _ in (anchored + remaining)[:top_k]]
+            is_witness = item["row_index"] in witness_row_keys
+            (anchored if is_witness or (required_values & row_values) else remaining).append(item)
+        selected.extend((anchored + remaining)[:top_k])
 
     by_table: dict[int, list[dict]] = {}
     for item in selected:
@@ -123,10 +150,16 @@ def _select_table_rows(
         ordered = sorted(items, key=lambda item: item["row_index"])
         group = {
             key: value for key, value in original.items()
-            if key not in {"rows", "row_indices"}
+            if key not in {"rows", "row_indices", "cell_links"}
         }
         group["rows"] = [item["row"] for item in ordered]
         group["row_indices"] = [item["row_index"] for item in ordered]
+        selected_indices = {item["row_index"] for item in ordered}
+        if "cell_links" in original:
+            group["cell_links"] = [
+                dict(link) for link in original["cell_links"]
+                if link.get("row_index") in selected_indices
+            ]
         output.append(group)
     return output
 
@@ -172,7 +205,7 @@ def two_stage_retrieve(
     second_stage_k: int = 3,
 ) -> dict:
     """Add a bounded schema-aware stage to ordinary question BM25 retrieval."""
-    anchor = anchor_question(question, table_rows)
+    anchor = anchor_question(question, table_rows, text_passages)
     first = coarse_retrieve(
         question, table_rows, text_passages, web_snippets, top_k=top_k
     )
@@ -182,6 +215,7 @@ def two_stage_retrieve(
     expansions = _query_expansions(question, table_rows)
     entity_queries = list(anchor.bridge_entities)
     table_constraints = list(anchor.table_constraints)
+    table_witnesses = list(getattr(anchor, "table_witnesses", ()))
     constrained_candidates = list(dict.fromkeys(
         entity for constraint in table_constraints for entity in constraint["candidates"]
     ))
@@ -191,6 +225,33 @@ def two_stage_retrieve(
         remaining = [item for item in items if _item_id(item) not in selected_ids]
         positions = {_item_id(item): index for index, item in enumerate(items)}
         added: list[dict] = []
+
+        # Controlled passage expansion: if witness has hyperlinks, prioritize them directly
+        witness_links = [
+            link
+            for witness in table_witnesses
+            for link in witness.get("hyperlinks", ())
+            if link
+        ]
+        if witness_links:
+            for link in witness_links:
+                clean_link = str(link).strip()
+                clean_target = clean_link.removeprefix("/wiki/").removeprefix("passage:").casefold()
+                for item in remaining:
+                    item_id_val = str(item.get("id") or item.get("url") or "").casefold()
+                    if clean_target in item_id_val or item_id_val.endswith(clean_target):
+                        item_id = _item_id(item)
+                        if item_id not in selected_ids:
+                            enriched = dict(item)
+                            position = positions.get(item_id, 0)
+                            enriched["context_before"] = " ".join(
+                                str(previous.get("text", ""))
+                                for previous in items[max(0, position - 2):position]
+                            )
+                            added.append(enriched)
+                            selected_ids.add(item_id)
+                            break
+
         # A table can identify an entity that is absent from the question.  For
         # example, HybridQA's Walter Payton item requires rank=2 -> Walter
         # Payton (table) -> Walter Payton passage -> middle name.  Prioritise
@@ -223,9 +284,6 @@ def two_stage_retrieve(
                 if item_id not in selected_ids:
                     enriched = dict(item)
                     position = positions[item_id]
-                    # Adjacent prose commonly carries the antecedent (e.g.
-                    # "2025 notes") for a following numerical sentence. Supply
-                    # it as resolution-only context without another API call.
                     enriched["context_before"] = " ".join(
                         str(previous.get("text", ""))
                         for previous in items[max(0, position - 2):position]
@@ -251,6 +309,7 @@ def two_stage_retrieve(
             "entity_anchor": anchor.to_dict(),
             "entity_queries": entity_queries,
             "table_constraints": table_constraints,
+            "table_witnesses": table_witnesses,
             "constraint_policy": {
                 "allowed_output_values": list(dict.fromkeys(
                     entity for constraint in table_constraints

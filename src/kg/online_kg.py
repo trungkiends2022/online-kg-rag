@@ -6,6 +6,9 @@ trong SandboxExecutor -- xem src/execution/sandbox.py.
 
 from __future__ import annotations
 
+import re
+from urllib.parse import unquote
+
 from typing import Callable, Optional
 
 import networkx as nx
@@ -31,6 +34,7 @@ class OnlineKG:
         # Row-record edges form the path-text reasoning view. They preserve
         # same-row bindings without changing the legacy executable graph API.
         self.record_edges: list[dict] = []
+        self._passage_mention_keys: set[tuple[str, str]] = set()
         self.entity_aliases: dict[str, str] = {}
         self.entity_key_aliases: dict[str, str] = {}
         self.resolution_log: list[dict] = []
@@ -57,6 +61,14 @@ class OnlineKG:
             if context is not None:
                 self._add_node_context(str(triple.head), context)
                 self._add_node_context(str(triple.tail), context)
+                self._register_passage_mentions(
+                    str(triple.provenance.source_id), str(triple.head), str(triple.tail), context,
+                )
+        elif self.normalize_relation(triple.relation) == "linked_passage":
+            context = self.text_contexts.get(str(triple.tail))
+            if context is not None:
+                self._add_node_context(str(triple.head), context)
+
         self.graph.add_edge(
             triple.head, triple.tail,
             relation=self.normalize_relation(triple.relation),
@@ -73,12 +85,68 @@ class OnlineKG:
         ):
             contexts.append(dict(context))
 
+    def _register_passage_mentions(
+        self, passage_id: str, head: str, tail: str, context: dict,
+    ) -> None:
+        """Expose a text passage as a structural bridge for linked table cells."""
+        passage_node = f"passage:{passage_id}"
+        for entity in (head, tail):
+            key = (passage_id, entity)
+            if key in self._passage_mention_keys:
+                continue
+            self._passage_mention_keys.add(key)
+            self.record_edges.append({
+                "head": passage_node,
+                "relation": "mentions",
+                "tail": entity,
+                "source_type": "text",
+                "source_id": passage_id,
+                "row_index": None,
+                "column_name": None,
+                "header_path": None,
+                "structural": True,
+                "contexts": [dict(context)],
+            })
+
+
+    @staticmethod
+    def split_cell_entities(value: str, urls: list[str] | tuple[str, ...] = ()) -> list[str]:
+        """Return atomic entities explicitly encoded in a multi-value cell.
+
+        Tokenized HybridQA cells can collapse several people into one display
+        value. Separators are safe evidence; linked Wikipedia URLs add the
+        original entity labels when whitespace has already been flattened.
+        """
+        raw = str(value).strip()
+        members = [
+            part.strip()
+            for part in re.split(r"\s*(?:/|;|\||\n)\s*", raw)
+            if part.strip() and re.search(r"[A-Za-z]", part)
+        ]
+        for url in urls:
+            suffix = unquote(str(url).rstrip("/").rsplit("/", 1)[-1])
+            label = re.sub(r"\s*\([^)]*\)\s*$", "", suffix.replace("_", " ")).strip()
+            if label and re.search(r"[A-Za-z]", label):
+                members.append(label)
+        unique = list(dict.fromkeys(members))
+        return unique if len(unique) > 1 or any(urls) else []
+
     def register_table_structure(
         self, table_name: str, rows: list[dict], *, row_indices: list[int] | None = None,
+        cell_links: list[dict] | None = None,
     ) -> None:
         """Record Table/Row/Column/Cell structure in the provenance trace."""
         table_id = f"table:{table_name}"
         self.structural_nodes.setdefault(table_id, {"id": table_id, "type": "Table", "label": table_name})
+        links_by_cell: dict[tuple[str, str, str], list[str]] = {}
+        for link in cell_links or []:
+            key = (
+                str(link.get("row_index")),
+                str(link.get("column_name", "")),
+                str(link.get("cell_value", "")),
+            )
+            links_by_cell.setdefault(key, []).append(str(link.get("url", "")))
+
         for selected_index, row in enumerate(rows):
             row_index = (
                 row_indices[selected_index]
@@ -130,6 +198,66 @@ class OnlineKG:
                         ),
                         "structural": True,
                     })
+                    for member in self.split_cell_entities(
+                        str(value),
+                        links_by_cell.get((str(row_index), str(column), str(value)), []),
+                    ):
+                        if member == str(value):
+                            continue
+                        self.record_edges.append({
+                            "head": row_id,
+                            "relation": self.normalize_relation(str(column)),
+                            "tail": member,
+                            "source_type": "table",
+                            "source_id": table_name,
+                            "row_index": row_index,
+                            "column_name": str(column),
+                            "header_path": (str(column),),
+                            "structural": True,
+                            "derived_from_cell_split": True,
+                        })
+        for link in cell_links or []:
+            value, url = str(link.get("cell_value", "")), str(link.get("url", ""))
+            if not value.strip() or not url.strip():
+                continue
+            row_index = link.get("row_index")
+            column_name = link.get("column_name")
+            passage_id = f"passage:{url}"
+            self.structural_nodes.setdefault(passage_id, {
+                "id": passage_id, "type": "PassageReference", "label": url,
+            })
+            self.structural_edges.append({
+                "head": value, "relation": "linked_passage", "tail": passage_id,
+            })
+            self.record_edges.append({
+                "head": value,
+                "relation": "linked_passage",
+                "tail": passage_id,
+                "source_type": "table",
+                "source_id": table_name,
+                "row_index": row_index,
+                "column_name": column_name,
+                "header_path": (str(column_name),) if column_name else None,
+                "structural": True,
+            })
+            for member in self.split_cell_entities(value, [url]):
+                if member == value:
+                    continue
+                self.structural_edges.append({
+                    "head": member, "relation": "linked_passage", "tail": passage_id,
+                })
+                self.record_edges.append({
+                    "head": member,
+                    "relation": "linked_passage",
+                    "tail": passage_id,
+                    "source_type": "table",
+                    "source_id": table_name,
+                    "row_index": row_index,
+                    "column_name": column_name,
+                    "header_path": (str(column_name),) if column_name else None,
+                    "structural": True,
+                    "derived_from_cell_split": True,
+                })
 
     def register_passage(
         self, passage_id: str, text: str = "", *, context_before: str = "",
@@ -141,12 +269,24 @@ class OnlineKG:
         }
         self.text_contexts[str(passage_id)] = context
         node_id = f"passage:{passage_id}"
-        self.structural_nodes.setdefault(node_id, {
+        self.structural_nodes[node_id] = {
             "id": node_id,
             "type": "Passage",
             "label": passage_id,
             "context": dict(context),
-        })
+        }
+        # A table cell can deterministically point to this source before the
+        # passage is registered. Attach its text to that bridge so path-text
+        # reasoning can read it without requiring a text-extraction LLM call.
+        for record in self.record_edges:
+            if (
+                record.get("relation") == "linked_passage"
+                and record.get("tail") == node_id
+            ):
+                record["contexts"] = [dict(context)]
+        for _, _, data in self.graph.in_edges(str(passage_id), data=True):
+            if data.get("relation") == "linked_passage":
+                data["contexts"] = [dict(context)]
 
     def path_edge_records(self) -> list[dict]:
         """Return semantic and row-record edges for grounded text-path search."""
@@ -321,6 +461,7 @@ class OnlineKG:
                     str(edge_contexts[0].get("text", ""))
                     if edge_contexts else None
                 ),
+                derived_from_compound=provenance.derived_from_compound,
             ))
         return evidence
 
@@ -370,6 +511,7 @@ class OnlineKG:
                     "row_index": provenance.row_index,
                     "column_name": provenance.column_name,
                     "header_path": provenance.header_path,
+                    "derived_from_compound": provenance.derived_from_compound,
                 },
                 "contexts": [dict(item) for item in data.get("contexts", [])],
             })

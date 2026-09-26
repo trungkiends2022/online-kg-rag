@@ -57,9 +57,20 @@ def render(trace: dict, *, focused: bool) -> str:
         f"text context on {summary.get('num_contextualized_edges', 0)} full-KG edges"
     )
     if focused:
-        label += (
-            "\\nGreen edge = answer fact. Dashed clusters expose the current "
+        merger_linked = trace.get("aliases", {}).get("new Dazu District") == "Dazu District"
+        merger_cluster_label = (
+            "Merged-county evidence (linked through Dazu District)"
+            if merger_linked else "Merged-county evidence (separate component)"
+        )
+        focus_note = (
+            "Green edge = answer fact. The merger result is canonically linked "
+            "to Dazu District."
+            if merger_linked else
+            "Green edge = answer fact. Dashed clusters expose the current "
             "unresolved gap between 'new Dazu District' and 'Dazu District'."
+        )
+        label += (
+            f"\\n{focus_note}"
         )
     lines = [
         "digraph OnlineKG {",
@@ -70,12 +81,15 @@ def render(trace: dict, *, focused: bool) -> str:
         '  edge [fontname="Helvetica", fontsize=8, arrowsize=0.7];',
     ]
     if focused:
+        def cluster_nodes(*names: str) -> str:
+            return " ".join(ids[name] for name in names if name in ids) + ";"
+
         lines.extend([
             '  subgraph cluster_site { label="Site and dating evidence"; color="#F59E0B"; style="rounded,dashed";',
-            f'    {ids.get("Dazu Rock Carvings", "")}; {ids.get("7th century AD", "")}; {ids.get("Dazu District", "")};',
+            f'    {cluster_nodes("Dazu Rock Carvings", "7th century AD", "Dazu District")}',
             '  }',
-            '  subgraph cluster_admin { label="Merged-county evidence (separate component)"; color="#A855F7"; style="rounded,dashed";',
-            f'    {ids.get("Dazu County", "")}; {ids.get("Shuangqiao District", "")}; {ids.get("Dazu County and Shuangqiao District", "")}; {ids.get("new Dazu District", "")};',
+            f'  subgraph cluster_admin {{ label="{merger_cluster_label}"; color="#A855F7"; style="rounded,dashed";',
+            f'    {cluster_nodes("Dazu County", "Shuangqiao District", "Dazu County and Shuangqiao District", "new Dazu District")}',
             '  }',
         ])
     for name in nodes:

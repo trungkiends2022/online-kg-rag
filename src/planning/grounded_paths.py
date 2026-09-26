@@ -33,6 +33,18 @@ def _context_text(edge: dict) -> str:
     )
 
 
+def _edge_evidence_types(edge: dict) -> set[str]:
+    """Include passage context as text evidence even on a table hyperlink."""
+    kinds = {str(edge.get("source_type", ""))}
+    if any(str(context.get("text", "")).strip() for context in edge.get("contexts", [])):
+        kinds.add("text")
+    return kinds - {""}
+
+
+def _compact_digits(value: str) -> str:
+    return re.sub(r"\D", "", str(value))
+
+
 class GroundedPathPlanner:
     """Enumerate short connected evidence paths and score their text forms."""
 
@@ -68,6 +80,49 @@ class GroundedPathPlanner:
         )
         return {normalize_key(value) for value in values if value.strip()}
 
+
+    @staticmethod
+    def _path_constraints(question: str, records: list[dict]) -> dict:
+        """Find question literals that are actually evidenced in this KG."""
+        rendered = [f"{edge['head']} {edge['relation']} {edge['tail']} {_context_text(edge)}" for edge in records]
+        numeric = tuple(
+            literal for literal in re.findall(r"(?<!\d)\d[\d,]*(?:\.\d+)?", question)
+            if any(_compact_digits(literal) in _compact_digits(text) for text in rendered)
+        )
+        text_term_sources: dict[str, set[str]] = defaultdict(set)
+        for edge in records:
+            for context in edge.get("contexts", []):
+                source_id = str(context.get("source_id", edge.get("source_id", "")))
+                for term in _terms(f"{context.get('context_before', '')} {context.get('text', '')}"):
+                    text_term_sources[term].add(source_id)
+        ignored = {"what", "which", "where", "when", "who", "whose", "how", "team", "club", "stadium", "republic"}
+        keywords = tuple(
+            term.casefold() for term in re.findall(r"\b[A-Z][A-Za-z'-]{3,}\b", question)
+            if term.casefold() not in ignored and len(text_term_sources.get(term.casefold(), set())) == 1
+        )
+
+        team_entities = {
+            normalize_key(edge["head"])
+            for edge in records
+            if edge.get("relation") == "has_record"
+            and re.search(r"\b(team|club)\b", str(edge.get("column_name", "")), re.I)
+        }
+        row_link_counts: dict[tuple[str, int], set[str]] = defaultdict(set)
+        for edge in records:
+            if edge.get("relation") == "linked_passage" and edge.get("row_index") is not None \
+                    and re.search(r"ground|stadium|venue|home", str(edge.get("column_name", "")), re.I):
+                key = (str(edge.get("source_id")), int(edge["row_index"]))
+                row_link_counts[key].add(normalize_key(str(edge.get("tail", "")).removeprefix("passage:")))
+
+        return {
+            "numeric": tuple(dict.fromkeys(numeric)),
+            "keywords": tuple(dict.fromkeys(keywords)),
+            "requires_team_or_club": bool(re.search(r"\bwho\s+plays\b", question, re.I)),
+            "team_entities": team_entities,
+            "single_venue_question": bool(re.search(r"\bthe\s+stadium\b", question, re.I)),
+            "row_link_counts": {key: len(value) for key, value in row_link_counts.items()},
+        }
+
     def _seeds(
         self,
         question: str,
@@ -82,7 +137,17 @@ class GroundedPathPlanner:
             for edge in records
             for value in (edge["head"], edge["tail"])
         ))
-        seeds = []
+        witness_seeds = []
+        for witness in (constraint_context or {}).get("table_witnesses", []):
+            for entity in witness.get("bridge_entities", ()):
+                if entity:
+                    witness_seeds.append(str(entity))
+            for link in witness.get("hyperlinks", ()):
+                if link:
+                    witness_seeds.append(f"passage:{link}")
+                    witness_seeds.append(str(link))
+
+        seeds = [node for node in dict.fromkeys(witness_seeds) if node in nodes]
         for node in nodes:
             if node.startswith("table:") and ":row:" in node:
                 continue
@@ -93,7 +158,8 @@ class GroundedPathPlanner:
                 or (len(key) >= 2 and key in question_key)
                 or len(terms & question_terms) >= 2
             ):
-                seeds.append(node)
+                if node not in seeds:
+                    seeds.append(node)
         if seeds:
             return seeds[:30]
 
@@ -163,7 +229,7 @@ class GroundedPathPlanner:
         constrained = self._constraint_values(constraint_context)
         path_keys = {normalize_key(node) for node in nodes}
         constraint_coverage = 2.0 if constrained & path_keys else 0.0
-        source_types = {str(edge.get("source_type")) for edge in edges}
+        source_types = set().union(*(_edge_evidence_types(edge) for edge in edges))
         cross_modal = 1.5 if {"table", "text"} <= source_types else 0.0
         rows = {
             (edge.get("source_id"), edge.get("row_index"))
@@ -177,6 +243,36 @@ class GroundedPathPlanner:
             if row_context and any(edge["relation"] == "has_record" for edge in edges)
             else 0.0
         )
+        scoring = (constraint_context or {}).get("_path_scoring", {})
+        path_text = " ".join(
+            f"{edge['head']} {edge['relation']} {edge['tail']} {_context_text(edge)}"
+            for edge in edges
+        )
+        numeric = tuple(scoring.get("numeric", ()))
+        numeric_hit = sum(_compact_digits(value) in _compact_digits(path_text) for value in numeric)
+        numeric_score = 4.0 * numeric_hit - 3.0 * (len(numeric) - numeric_hit)
+        keywords = set(scoring.get("keywords", ()))
+        keyword_hit = len(keywords & _terms(path_text))
+        keyword_score = 2.5 * keyword_hit - 1.5 * (len(keywords) - keyword_hit)
+        linked_with_context = [
+            edge for edge in edges
+            if edge.get("relation") == "linked_passage" and edge.get("contexts")
+        ]
+        bridge_bonus = (
+            2.0 if linked_with_context and any(edge.get("row_index") is not None for edge in edges)
+            else 0.0
+        )
+        team_score = 0.0
+        if scoring.get("requires_team_or_club"):
+            team_score = 2.0 if path_keys & set(scoring.get("team_entities", ())) else -2.0
+        venue_score = 0.0
+        if scoring.get("single_venue_question"):
+            row_counts = scoring.get("row_link_counts", {})
+            path_rows = {(str(edge.get("source_id")), int(edge["row_index"])) for edge in edges if edge.get("row_index") is not None}
+            if path_rows:
+                linked_count = min(row_counts.get(row, 99) for row in path_rows)
+                venue_score = 2.5 if linked_count <= 1 else -0.5 * (linked_count - 1)
+
         corroboration = 0.0
         for edge in edges:
             fact = (
@@ -187,6 +283,34 @@ class GroundedPathPlanner:
             if {"table", "text"} <= fact_sources.get(fact, set()):
                 corroboration = 1.0
                 break
+        table_witnesses = (constraint_context or {}).get("table_witnesses", [])
+        witness_bonus = 0.0
+        is_witness_grounded = False
+        for witness in table_witnesses:
+            w_rows = set(witness.get("row_indices", ()))
+            w_links = {
+                str(link).removeprefix("/wiki/").removeprefix("passage:").casefold()
+                for link in witness.get("hyperlinks", ())
+            }
+            w_entities = {normalize_key(str(e)) for e in witness.get("bridge_entities", ())}
+            path_rows = {edge.get("row_index") for edge in edges if edge.get("row_index") is not None}
+            path_nodes_norm = {normalize_key(node) for node in nodes}
+            touches_row = bool(w_rows & path_rows)
+            touches_link = any(
+                any(w_link in str(edge.get("tail", "")).casefold() or w_link in str(edge.get("head", "")).casefold() for w_link in w_links)
+                for edge in edges
+            )
+            touches_entity = bool(w_entities & path_nodes_norm)
+            if touches_row and (touches_link or touches_entity):
+                witness_bonus = max(witness_bonus, 8.0)
+                is_witness_grounded = True
+            elif touches_row or touches_link:
+                witness_bonus = max(witness_bonus, 5.0)
+                is_witness_grounded = True
+
+        if is_witness_grounded and numeric_score < 0:
+            numeric_score = 0.0
+
         length_penalty = 0.35 * max(len(edges) - 1, 0)
         components = {
             "grounded_edges": 1.0,
@@ -194,10 +318,16 @@ class GroundedPathPlanner:
             "relation_match": round(relation_match, 4),
             "text_context_match": round(text_context_match, 4),
             "query_coverage": round(coverage, 4),
+            "single_venue_specificity": venue_score,
             "constraint_coverage": constraint_coverage,
             "cross_modal_completeness": cross_modal,
             "row_context": row_context,
             "row_entity_binding": row_entity_binding,
+            "numeric_literal_coverage": numeric_score,
+            "strong_keyword_coverage": keyword_score,
+            "hyperlink_passage_bridge": bridge_bonus,
+            "table_witness_match": witness_bonus,
+            "answer_type_path_filter": team_score,
             "same_fact_corroboration": corroboration,
             "length_penalty": round(length_penalty, 4),
         }
@@ -243,6 +373,8 @@ class GroundedPathPlanner:
         records = kg.path_edge_records()
         if not records:
             return []
+        scoring_context = {**(constraint_context or {}), "_path_scoring": self._path_constraints(question, records)}
+
 
         fact_sources: dict[tuple[str, str, str], set[str]] = defaultdict(set)
         adjacency: dict[str, list[tuple[str, dict]]] = defaultdict(list)
@@ -291,7 +423,23 @@ class GroundedPathPlanner:
                 ),
                 reverse=True,
             )
-            bundle = [record_link, *attributes[: max(self.max_hops - 1, 1)]]
+            bridged_attributes = [
+                (attribute, link)
+                for attribute in attributes
+                for link in records
+                if link.get("relation") == "linked_passage"
+                and normalize_key(link["head"]) == normalize_key(attribute["tail"])
+            ]
+            bridged_attributes.sort(
+                key=lambda pair: (bool(pair[1].get("contexts")), str(pair[1].get("tail", "")).startswith("passage:")),
+                reverse=True,
+            )
+            if bridged_attributes and self.max_hops >= 3:
+                attribute, link = bridged_attributes[0]
+                bundle = [record_link, attribute, link]
+            else:
+                bundle = [record_link, *attributes[: max(self.max_hops - 1, 1)]]
+
             traversed = [
                 self._traversal(edge, str(edge["head"]), str(edge["tail"]))
                 for edge in bundle
@@ -302,10 +450,29 @@ class GroundedPathPlanner:
             ))
             raw_paths.append(self._make_path(
                 f"row_{record_link.get('row_index')}_{len(raw_paths) + 1}",
-                question, nodes, traversed, constraint_context, fact_sources,
+                question, nodes, traversed, scoring_context, fact_sources,
             ))
+            if bridged_attributes and self.max_hops >= 3:
+                for target in attributes:
+                    if target is attribute:
+                        continue
+                    answer_traversed = [
+                        self._traversal(link, str(link["tail"]), str(link["head"])),
+                        self._traversal(attribute, str(attribute["tail"]), str(attribute["head"])),
+                        self._traversal(target, str(target["head"]), str(target["tail"])),
+                    ]
+                    answer_nodes = list(dict.fromkeys(
+                        value for edge in answer_traversed
+                        for value in (edge["traversal_from"], edge["traversal_to"])
+                    ))
+                    raw_paths.append(self._make_path(
+                        f"row_bridge_{record_link.get('row_index')}_{len(raw_paths) + 1}",
+                        question, answer_nodes, answer_traversed,
+                        scoring_context, fact_sources,
+                    ))
 
-        seeds = self._seeds(question, records, constraint_context)
+
+        seeds = self._seeds(question, records, scoring_context)
         enumerated = 0
         for seed in seeds:
             stack = [(seed, [seed], [], set())]
@@ -314,7 +481,7 @@ class GroundedPathPlanner:
                 if edges:
                     raw_paths.append(self._make_path(
                         f"grounded_{len(raw_paths) + 1}",
-                        question, nodes, edges, constraint_context, fact_sources,
+                        question, nodes, edges, scoring_context, fact_sources,
                     ))
                     enumerated += 1
                 if len(edges) >= self.max_hops:
@@ -331,7 +498,35 @@ class GroundedPathPlanner:
                     ))
 
         raw_paths.sort(key=lambda path: (-path.score, len(path.edges), path.path_id))
+        if scoring_context["_path_scoring"].get("requires_team_or_club"):
+            typed = [
+                path for path in raw_paths
+                if path.score_components.get("answer_type_path_filter", 0.0) >= 0
+            ]
+            if typed:
+                raw_paths = typed
+
+        table_witnesses = scoring_context.get("table_witnesses", [])
+        reserved_witness_paths: list[ReasoningPath] = []
+        for witness in table_witnesses:
+            w_paths = [
+                path for path in raw_paths
+                if path.score_components.get("table_witness_match", 0.0) >= 5.0
+            ]
+            if w_paths:
+                best_w = max(w_paths, key=lambda p: (p.score, -len(p.edges)))
+                if best_w not in reserved_witness_paths:
+                    reserved_witness_paths.append(best_w)
+
         selected, seen = [], set()
+        for path in reserved_witness_paths:
+            signature = tuple(
+                (edge["edge_id"], edge["direction"]) for edge in path.edges
+            )
+            if signature not in seen:
+                seen.add(signature)
+                selected.append(path)
+
         for path in raw_paths:
             signature = tuple(
                 (edge["edge_id"], edge["direction"]) for edge in path.edges
@@ -342,4 +537,27 @@ class GroundedPathPlanner:
             selected.append(path)
             if len(selected) >= n:
                 break
+
+        if selected:
+            def evidence_strength(path: ReasoningPath) -> float:
+                components = path.score_components
+                return sum(components.get(name, 0.0) for name in (
+                    "numeric_literal_coverage", "strong_keyword_coverage",
+                    "hyperlink_passage_bridge",
+                ))
+
+            best_selected_strength = max(evidence_strength(path) for path in selected)
+            for candidate in raw_paths:
+                if candidate in selected:
+                    continue
+                candidate_strength = evidence_strength(candidate)
+                has_text = any("text" in _edge_evidence_types(edge) for edge in candidate.edges)
+                if (
+                    has_text
+                    and candidate.score >= selected[-1].score - 2.0
+                    and candidate_strength > best_selected_strength
+                ):
+                    selected[-1] = candidate
+                    selected.sort(key=lambda path: (-path.score, len(path.edges), path.path_id))
+                    break
         return selected

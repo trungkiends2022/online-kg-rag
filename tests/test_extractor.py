@@ -75,6 +75,46 @@ def test_text_extraction_scopes_annual_interest_to_context_note(monkeypatch):
     }
 
 
+def test_text_batch_extraction_groups_five_passages_into_one_llm_request(monkeypatch):
+    calls = []
+
+    def fake_llm_call_json(prompt, *, max_tokens, retries):
+        calls.append((prompt, max_tokens, retries))
+        return [
+            {"source_id": "p0", "head": "Alpha", "relation": "born_in", "tail": "Hanoi"},
+            {"source_id": "p4", "head": "Beta", "relation": "born_in", "tail": "Hue"},
+        ]
+
+    monkeypatch.setattr(extractor_module, "llm_call_json", fake_llm_call_json)
+    triples = EntityRelationExtractor(text_batch_size=5, max_output_tokens=777).extract_from_text_batch([
+        {"id": f"p{index}", "text": f"Passage {index}."} for index in range(5)
+    ])
+
+    assert len(calls) == 1
+    assert calls[0][1:] == (777, 2)
+    assert '"source_id": "p0"' in calls[0][0]
+    assert {(triple.head, triple.relation, triple.tail, triple.provenance.source_id) for triple in triples} == {
+        ("Alpha", "born_in", "Hanoi", "p0"),
+        ("Beta", "born_in", "Hue", "p4"),
+    }
+
+
+def test_text_batch_extraction_can_disable_llm_and_keep_deterministic_facts(monkeypatch):
+    monkeypatch.setattr(
+        extractor_module, "llm_call_json",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("LLM must not be called")),
+    )
+    triples = EntityRelationExtractor(use_llm_text_enrichment=False).extract_from_text_batch([{
+        "id": "p1",
+        "text": "Interest of approximately $9 million per year is payable annually.",
+        "context_before": "The net proceeds of the 2025 notes were used for refinancing.",
+    }])
+
+    assert ("2025 notes", "annual_interest_amount", "$9 million per year") in {
+        (triple.head, triple.relation, triple.tail) for triple in triples
+    }
+
+
 def test_text_extraction_preserves_later_value_and_prior_year_change(monkeypatch):
     monkeypatch.setattr(extractor_module, "llm_call_json", lambda *args, **kwargs: [])
     triples = EntityRelationExtractor().extract_from_text(
@@ -179,3 +219,68 @@ def test_text_enriches_nodes_and_edges_with_context_after_entity_resolution():
     assert founded["contexts"] == node_contexts
     assert trace["summary"]["num_contextualized_nodes"] == 2
     assert trace["summary"]["num_contextualized_edges"] == 1
+
+
+def test_builder_expands_compound_merger_and_links_evidenced_new_entity_alias():
+    class MergeExtractor(EntityRelationExtractor):
+        def extract_from_text(self, passage_id, text, **kwargs):
+            provenance = Provenance("text", passage_id, text[:200])
+            return [
+                Triple(
+                    "Dazu County and Shuangqiao District", "merged_to_form",
+                    "new Dazu District", provenance,
+                ),
+                Triple(
+                    "Dazu Rock Carvings", "located_in", "Dazu District", provenance,
+                ),
+            ]
+
+    passage = "Dazu County and Shuangqiao District were merged to form the new Dazu District."
+    kg = OnlineKGBuilder(MergeExtractor()).build({
+        "text_passages": [{"id": "dazu", "text": passage}],
+    })
+
+    assert "new Dazu District" not in kg.graph
+    assert set(kg.get_neighbors("Dazu District", "formed_from")) == {
+        "Dazu County", "Shuangqiao District",
+    }
+    assert kg.get_neighbors("Dazu Rock Carvings", "located_in") == ["Dazu District"]
+    merger_edges = [
+        edge for edge in kg.to_trace()["edges"]
+        if edge["relation"] == "formed_from"
+    ]
+    assert len(merger_edges) == 2
+    assert all(edge["provenance"]["derived_from_compound"] for edge in merger_edges)
+    assert all(edge["contexts"][0]["text"] == passage for edge in merger_edges)
+    assert any(event["tier"] == "contextual_merger_alias" for event in kg.resolution_log)
+
+
+def test_builder_preserves_table_cell_hyperlinks_as_grounded_text_bridges():
+    class LinkedPassageExtractor(EntityRelationExtractor):
+        def extract_from_text(self, passage_id, text, **kwargs):
+            return [Triple("Alpha", "born_in", "Hanoi", Provenance("text", passage_id, text))]
+
+    kg = OnlineKGBuilder(LinkedPassageExtractor()).build({
+        "table_rows": [{
+            "table_name": "people",
+            "rows": [{"Name": "Alpha", "Year": "2020"}],
+            "cell_links": [{
+                "row_index": 0, "column_name": "Name", "cell_value": "Alpha",
+                "url": "/wiki/Alpha",
+            }],
+        }],
+        "text_passages": [{"id": "/wiki/Alpha", "text": "Alpha was born in Hanoi."}],
+    })
+
+    assert kg.get_neighbors("Alpha", "linked_passage") == ["/wiki/Alpha"]
+    records = kg.path_edge_records()
+    assert any(
+        edge["head"] == "Alpha" and edge["relation"] == "linked_passage"
+        and edge["tail"] == "passage:/wiki/Alpha" and edge["structural"]
+        for edge in records
+    )
+    assert any(
+        edge["head"] == "passage:/wiki/Alpha" and edge["relation"] == "mentions"
+        and edge["tail"] == "Hanoi" and edge["source_type"] == "text"
+        for edge in records
+    )

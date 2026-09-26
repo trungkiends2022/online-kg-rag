@@ -226,3 +226,33 @@ def test_record_edges_preserve_same_row_binding_for_path_text():
         for edge in records
         if edge.get("structural")
     )
+
+
+def test_new_name_is_not_merged_without_an_explicit_same_source_merger():
+    kg = OnlineKG()
+    kg.add_triple(_triple("New York", "is_in", "United States"))
+    kg.add_triple(_triple("York", "is_in", "England"))
+
+    EntityResolver().resolve(kg)
+
+    assert "New York" in kg.graph
+    assert "York" in kg.graph
+
+def test_cell_multi_entity_splitter_creates_atomic_row_and_link_edges():
+    kg = OnlineKG()
+    value = "Tommy Dunne / Stuart Ashton"
+    kg.register_table_structure("league", [{"Team": "Cork City", "Manager": value}], cell_links=[
+        {"row_index": 0, "column_name": "Manager", "cell_value": value, "url": "/wiki/Tommy_Dunne"},
+        {"row_index": 0, "column_name": "Manager", "cell_value": value, "url": "/wiki/Stuart_Ashton"},
+    ])
+    records = kg.path_edge_records()
+    manager_members = {
+        edge["tail"] for edge in records
+        if edge["head"] == "table:league:row:0" and edge["relation"] == "manager"
+    }
+    assert {"Tommy Dunne", "Stuart Ashton"} <= manager_members
+    linked_members = {
+        edge["head"] for edge in records
+        if edge["relation"] == "linked_passage" and edge["tail"] == "passage:/wiki/Tommy_Dunne"
+    }
+    assert "Tommy Dunne" in linked_members

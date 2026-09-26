@@ -1,4 +1,4 @@
-"""Run a small benchmark slice through the online-KG pipeline."""
+"""Run a small benchmark slice; default to the no-code path-text flow."""
 
 from __future__ import annotations
 
@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from src.datasets import load_finqa, load_hybridqa
+from src.baselines import OnlineKGPathTextBaseline, RAGConfig
 from src.pipeline import OnlineKGPipeline
 
 
@@ -20,6 +21,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output", type=Path, help="Write JSONL here instead of stdout")
     parser.add_argument("--n-paths", type=int, default=5)
     parser.add_argument("--max-replans", type=int, default=2)
+    parser.add_argument(
+        "--method", choices=("online_kg_path_text", "online_kg"),
+        default="online_kg_path_text",
+        help="Default avoids code synthesis and sandbox execution.",
+    )
     parser.add_argument(
         "--finqa-table-format", choices=("official", "raw"), default="official"
     )
@@ -40,16 +46,22 @@ def main() -> None:
             args.input, limit=args.limit, table_format=args.finqa_table_format
         )
 
-    pipeline = OnlineKGPipeline()
+    method = (
+        OnlineKGPathTextBaseline(RAGConfig(), n_paths=args.n_paths)
+        if args.method == "online_kg_path_text" else OnlineKGPipeline()
+    )
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
     output_handle = args.output.open("w", encoding="utf-8") if args.output else None
     try:
         for example in examples:
-            prediction = pipeline.run(
-                **example.pipeline_inputs(),
-                n_paths=args.n_paths,
-                max_replans=args.max_replans,
+            prediction = (
+                method.run(example)
+                if args.method == "online_kg_path_text" else method.run(
+                    **example.pipeline_inputs(),
+                    n_paths=args.n_paths,
+                    max_replans=args.max_replans,
+                )
             )
             record = {
                 "id": example.example_id,

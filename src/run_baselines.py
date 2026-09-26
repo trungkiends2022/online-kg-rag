@@ -52,7 +52,10 @@ METHODS = (
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", choices=("hybridqa", "finqa", "hitab"), required=True)
-    parser.add_argument("--method", choices=METHODS, required=True)
+    parser.add_argument(
+        "--method", choices=METHODS, default="online_kg_path_text",
+        help="Default: online_kg_path_text (direct text context; no code/sandbox).",
+    )
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--tables-dir", type=Path)
     parser.add_argument("--passages-dir", type=Path)
@@ -79,8 +82,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--max-workers", type=int,
         help=(
             "Concurrent independent samples. Defaults to BENCHMARK_MAX_WORKERS "
-            "or 1; provider rate limits still apply."
+            "or 8; LLM request concurrency is separately bounded."
         ),
+    )
+    parser.add_argument(
+        "--llm-max-concurrent-requests", type=int,
+        help="Override the effective provider request limit (default: 8; CLI wins).",
     )
     parser.add_argument(
         "--finqa-table-format", choices=("official", "raw"), default="official",
@@ -90,6 +97,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--no-progress", action="store_true",
         help="Disable the tqdm progress bar (useful for machine-readable logs).",
+    )
+    parser.add_argument(
+        "--force-progress", action="store_true",
+        help="Force tqdm progress bar even in non-tty environments.",
+    )
+    parser.add_argument(
+        "--quiet-records", action="store_true",
+        help="Do not print raw example JSON to stdout (keeps tqdm progress bar clean).",
     )
     parser.add_argument(
         "--fail-fast", action="store_true",
@@ -302,9 +317,20 @@ def main() -> None:
         if args.llm_sdk_retries < 0:
             raise ValueError("--llm-sdk-retries must be non-negative")
         os.environ["LLM_SDK_MAX_RETRIES"] = str(args.llm_sdk_retries)
+    if args.llm_max_concurrent_requests is not None:
+        if args.llm_max_concurrent_requests < 1:
+            raise ValueError("--llm-max-concurrent-requests must be at least 1")
+        os.environ["LLM_MAX_CONCURRENT_REQUESTS"] = str(args.llm_max_concurrent_requests)
+        # A command-line setting must also override a provider-specific value
+        # loaded from .env (for example GROQ_MAX_CONCURRENT_REQUESTS).
+        provider_name = os.environ.get("LLM_PROVIDER", "").strip().upper()
+        if provider_name:
+            os.environ[f"{provider_name}_MAX_CONCURRENT_REQUESTS"] = str(
+                args.llm_max_concurrent_requests
+            )
     max_workers = args.max_workers
     if max_workers is None:
-        max_workers = int(os.environ.get("BENCHMARK_MAX_WORKERS", "1"))
+        max_workers = int(os.environ.get("BENCHMARK_MAX_WORKERS", "8"))
     if max_workers < 1:
         raise ValueError("--max-workers and BENCHMARK_MAX_WORKERS must be at least 1")
     completed, mode = set(), "w"
@@ -332,17 +358,31 @@ def main() -> None:
         # while requests themselves run concurrently.
         with ThreadPoolExecutor(max_workers=min(max_workers, len(pending) or 1)) as executor:
             records_to_write = executor.map(lambda example: _evaluate_example(example, args), pending)
+            disable_progress = args.no_progress or (not args.force_progress and not sys.stderr.isatty())
             with tqdm(
                 total=len(pending),
                 desc=f"{args.dataset}/{args.method}",
                 unit="sample",
                 dynamic_ncols=True,
-                disable=args.no_progress or not sys.stderr.isatty(),
+                disable=disable_progress,
             ) as progress:
+                done_count = 0
+                em_acc = 0.0
+                calls_acc = 0.0
                 for record in records_to_write:
                     output.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
                     output.flush()
-                    print(json.dumps(record, ensure_ascii=False, default=str))
+                    if not args.quiet_records:
+                        print(json.dumps(record, ensure_ascii=False, default=str))
+                    done_count += 1
+                    em_acc += float(record.get("exact_match") or 0.0)
+                    calls_acc += float(record.get("llm_calls") or 0.0)
+                    if not disable_progress:
+                        progress.set_postfix(
+                            em=f"{100 * em_acc / done_count:.1f}%",
+                            avg_calls=f"{calls_acc / done_count:.1f}",
+                            refresh=False,
+                        )
                     progress.update(1)
 
     records = [
@@ -421,6 +461,12 @@ def main() -> None:
         "finqa_table_format": args.finqa_table_format,
         "second_stage_k": args.second_stage_k,
         "max_workers": max_workers,
+        "llm_max_concurrent_requests": int(
+            os.environ.get(
+                f"{os.environ.get('LLM_PROVIDER', '').strip().upper()}_MAX_CONCURRENT_REQUESTS",
+                os.environ.get("LLM_MAX_CONCURRENT_REQUESTS", "8"),
+            )
+        ),
     }
     summary_path = args.output.with_suffix(args.output.suffix + ".summary.json")
     summary_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")

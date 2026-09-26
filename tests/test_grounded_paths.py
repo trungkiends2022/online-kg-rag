@@ -67,3 +67,20 @@ def test_grounded_path_ranking_uses_attached_text_context():
 
     assert paths[0].edges[0]["source_id"] == "award:1"
     assert paths[0].score_components["text_context_match"] > 0
+
+def test_grounded_paths_boost_numeric_context_and_team_answer_type():
+    kg = OnlineKG()
+    kg.register_table_structure("clubs", [
+        {"Club": "Wests Tigers", "Home Ground": "Wests Stadium (45,500)"},
+        {"Club": "Canterbury-Bankstown Bulldogs", "Home Ground": "Stadium Australia (83,500)"},
+    ], cell_links=[{
+        "row_index": 1, "column_name": "Home Ground",
+        "cell_value": "Stadium Australia (83,500)", "url": "/wiki/Stadium_Australia",
+    }])
+    kg.register_passage("/wiki/Stadium_Australia", "Capacity is 83,500 rectangular and 82,500 oval.")
+
+    paths = GroundedPathPlanner(max_hops=3).generate_candidates(
+        "Who plays at the stadium with a capacity of 83,500 for a rectangular field and 82,500 for an oval field?", kg, n=3,
+    )
+
+    assert "Canterbury-Bankstown Bulldogs" in paths[0].nodes

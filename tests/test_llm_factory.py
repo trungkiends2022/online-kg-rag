@@ -29,13 +29,13 @@ def test_openai_compatible_provider_instantiates():
     assert provider.name == "openai_compatible"
 
 
-def test_openrouter_provider_instantiates(monkeypatch):
+def test_openrouter_provider_defaults_to_paid_deepseek_model(monkeypatch):
     monkeypatch.setenv("OPENROUTER_API_KEY", "fake-key-for-test")
-    monkeypatch.setenv("OPENROUTER_MODEL", "openrouter/free")
+    monkeypatch.delenv("OPENROUTER_MODEL", raising=False)
     provider = create_provider("openrouter")
     assert isinstance(provider, LLMProvider)
     assert provider.name == "openrouter"
-    assert provider.model == "openrouter/free"
+    assert provider.model == "deepseek/deepseek-v4-flash"
     assert str(provider._client.base_url) == "https://openrouter.ai/api/v1/"
 
 
@@ -72,7 +72,7 @@ def test_openrouter_can_explicitly_disable_reasoning(monkeypatch):
 
     provider._client = SimpleNamespace(chat=SimpleNamespace(completions=FakeCompletions()))
     assert provider.complete("hello", max_tokens=12) == "ok"
-    assert captured["extra_body"] == {"reasoning": {"enabled": False}}
+    assert "extra_body" not in captured
 
 
 def test_deepseek_provider_instantiates(monkeypatch):

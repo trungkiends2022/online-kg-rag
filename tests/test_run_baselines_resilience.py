@@ -91,3 +91,25 @@ def test_max_workers_runs_samples_concurrently_and_keeps_input_order(monkeypatch
     assert time.perf_counter() - began < 0.1
     records = [json.loads(line) for line in output.read_text().splitlines()]
     assert [record["id"] for record in records] == ["first", "second"]
+
+
+def test_cli_request_concurrency_override_is_exposed_in_summary(monkeypatch, tmp_path):
+    output = tmp_path / "results.jsonl"
+    monkeypatch.setattr(run_baselines, "_examples", lambda args: [
+        DatasetExample("one", "q", [], [], answer="a"),
+    ])
+    monkeypatch.setattr(run_baselines, "_make_method", lambda args: object())
+    monkeypatch.setattr(
+        run_baselines, "_run_method",
+        lambda method, example, args: {"answer": "a", "executed_value": None, "method": args.method},
+    )
+    monkeypatch.setattr(sys, "argv", [
+        "run_baselines", "--dataset", "hybridqa", "--input", str(tmp_path / "unused.json"),
+        "--output", str(output), "--llm-max-concurrent-requests", "3",
+    ])
+
+    run_baselines.main()
+
+    summary = json.loads((tmp_path / "results.jsonl.summary.json").read_text())
+    assert summary["method"] == "online_kg_path_text"
+    assert summary["config"]["llm_max_concurrent_requests"] == 3

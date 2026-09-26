@@ -31,6 +31,12 @@ def test_load_hybridqa_embedded_table(tmp_path):
 
     assert example.example_id == "q1"
     assert example.table_rows[0]["rows"] == [{"Winner": "An", "Year": "2020"}]
+    assert example.table_rows[0]["cell_links"] == [{
+        "row_index": 0,
+        "column_name": "Winner",
+        "cell_value": "An",
+        "url": "An",
+    }]
     assert example.text_passages == [{"id": "An", "text": "An was born in Hanoi."}]
     assert example.answer == "Hanoi"
 
