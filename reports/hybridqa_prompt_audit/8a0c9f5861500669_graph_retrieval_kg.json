@@ -1,0 +1,1942 @@
+{
+  "case_id": "8a0c9f5861500669",
+  "question": "What is the name of the club whose city/town is situated between Kgale and Oodi Hills ?",
+  "gold_answer": "Gaborone United",
+  "kg_summary": {
+    "num_nodes": 72,
+    "num_edges": 78,
+    "num_record_edges": 88,
+    "num_text_contexts": 8,
+    "num_contextualized_nodes": 13,
+    "num_contextualized_edges": 17,
+    "relations": [
+      "city_town",
+      "linked_passage",
+      "located_in",
+      "population",
+      "position_in_2018_19"
+    ],
+    "num_entity_aliases": 8,
+    "entity_resolution": {
+      "structural": 8
+    },
+    "num_rejected_triples": 0,
+    "num_extraction_errors": 0,
+    "node_types": {
+      "Gaborone": [
+        "Attribute",
+        "Entity"
+      ],
+      "5th": [
+        "Attribute"
+      ],
+      "Botswana Railways Highlanders": [
+        "Entity"
+      ],
+      "Mahalapye": [
+        "Attribute",
+        "Entity"
+      ],
+      "11th": [
+        "Attribute"
+      ],
+      "Extension Gunners": [
+        "Entity"
+      ],
+      "Lobatse": [
+        "Attribute",
+        "Entity"
+      ],
+      "10th": [
+        "Attribute"
+      ],
+      "Gaborone United": [
+        "Entity"
+      ],
+      "6th": [
+        "Attribute"
+      ],
+      "Gilport Lions": [
+        "Entity"
+      ],
+      "Promoted": [
+        "Attribute"
+      ],
+      "Jwaneng": [
+        "Attribute",
+        "Entity"
+      ],
+      "2nd": [
+        "Attribute"
+      ],
+      "Miscellaneous": [
+        "Entity"
+      ],
+      "Serowe": [
+        "Attribute",
+        "Entity"
+      ],
+      "9th": [
+        "Attribute"
+      ],
+      "Morupule Wanderers FC": [
+        "Entity"
+      ],
+      "Palapye": [
+        "Attribute",
+        "Entity"
+      ],
+      "12th": [
+        "Attribute"
+      ],
+      "Orapa": [
+        "Attribute",
+        "Entity"
+      ],
+      "3rd": [
+        "Attribute"
+      ],
+      "Police XI": [
+        "Entity"
+      ],
+      "Otse": [
+        "Attribute",
+        "Entity"
+      ],
+      "4th": [
+        "Attribute"
+      ],
+      "Prisons XI": [
+        "Entity"
+      ],
+      "13th": [
+        "Attribute"
+      ],
+      "7th": [
+        "Attribute"
+      ],
+      "8th": [
+        "Attribute"
+      ],
+      "Francistown": [
+        "Attribute",
+        "Entity"
+      ],
+      "1st": [
+        "Attribute"
+      ],
+      "/wiki/Botswana_Defence_Force_XI_FC": [
+        "Attribute"
+      ],
+      "Botswana Defence Force XI FC": [
+        "Entity"
+      ],
+      "/wiki/Gaborone": [
+        "Attribute"
+      ],
+      "/wiki/Botswana_Railways_Highlanders": [
+        "Attribute"
+      ],
+      "/wiki/Mahalapye": [
+        "Attribute"
+      ],
+      "/wiki/Extension_Gunners": [
+        "Attribute"
+      ],
+      "/wiki/Lobatse": [
+        "Attribute"
+      ],
+      "/wiki/Gaborone_United_S.C.": [
+        "Attribute"
+      ],
+      "Gaborone United S.C.": [
+        "Entity"
+      ],
+      "/wiki/Botswana_Meat_Commission_F.C.": [
+        "Attribute"
+      ],
+      "Botswana Meat Commission F.C.": [
+        "Entity"
+      ],
+      "/wiki/Jwaneng_Galaxy_F.C.": [
+        "Attribute"
+      ],
+      "Jwaneng Galaxy F.C.": [
+        "Entity"
+      ],
+      "/wiki/Jwaneng": [
+        "Attribute"
+      ],
+      "/wiki/Miscellaneous_SC_Serowe": [
+        "Attribute"
+      ],
+      "Miscellaneous SC Serowe": [
+        "Entity"
+      ],
+      "/wiki/Serowe": [
+        "Attribute"
+      ],
+      "/wiki/Morupule_Wanderers_FC": [
+        "Attribute"
+      ],
+      "/wiki/Palapye": [
+        "Attribute"
+      ],
+      "/wiki/Notwane_F.C.": [
+        "Attribute"
+      ],
+      "Notwane F.C.": [
+        "Entity"
+      ],
+      "/wiki/Orapa_United_FC": [
+        "Attribute"
+      ],
+      "Orapa United FC": [
+        "Entity"
+      ],
+      "/wiki/Orapa": [
+        "Attribute"
+      ],
+      "/wiki/Wonder_Sporting_Club": [
+        "Attribute"
+      ],
+      "Wonder Sporting Club": [
+        "Entity"
+      ],
+      "/wiki/Otse": [
+        "Attribute"
+      ],
+      "/wiki/Prisons_XI": [
+        "Attribute"
+      ],
+      "/wiki/Security_Systems_F.C.": [
+        "Attribute"
+      ],
+      "Security Systems F.C.": [
+        "Entity"
+      ],
+      "/wiki/Sharps_Shooting_Stars_FC": [
+        "Attribute"
+      ],
+      "Sharps Shooting Stars FC": [
+        "Entity"
+      ],
+      "/wiki/TAFIC_F.C.": [
+        "Attribute"
+      ],
+      "TAFIC F.C.": [
+        "Entity"
+      ],
+      "/wiki/Francistown": [
+        "Attribute"
+      ],
+      "/wiki/Township_Rollers_F.C.": [
+        "Attribute"
+      ],
+      "Township Rollers F.C.": [
+        "Entity"
+      ],
+      "is the capital and largest city of Botswana": [
+        "Entity"
+      ],
+      "231,626": [
+        "Attribute"
+      ],
+      "It": [
+        "Entity"
+      ],
+      "eastern Botswana": [
+        "Attribute"
+      ]
+    }
+  },
+  "retrieval_trace": {
+    "strategy": "two_stage_bm25_schema",
+    "stage1_top_k": 5,
+    "selected_table_rows": 16,
+    "stage2_budget": 3,
+    "expansion_queries": [
+      "Club City / Town Position in 2018-19"
+    ],
+    "table_constraints": [],
+    "table_witnesses": [],
+    "entity_anchor": {
+      "direct_mentions": [
+        "Oodi Hills"
+      ],
+      "entity_type": "club",
+      "target_attribute": null,
+      "constraints": {},
+      "bridge_entities": [],
+      "table_constraints": [],
+      "table_witnesses": []
+    },
+    "selected_row_hyperlinks": [
+      "/wiki/Botswana_Defence_Force_XI_FC",
+      "/wiki/Gaborone",
+      "/wiki/Botswana_Railways_Highlanders",
+      "/wiki/Mahalapye",
+      "/wiki/Extension_Gunners",
+      "/wiki/Lobatse",
+      "/wiki/Gaborone_United_S.C.",
+      "/wiki/Botswana_Meat_Commission_F.C.",
+      "/wiki/Jwaneng_Galaxy_F.C.",
+      "/wiki/Jwaneng",
+      "/wiki/Miscellaneous_SC_Serowe",
+      "/wiki/Serowe",
+      "/wiki/Morupule_Wanderers_FC",
+      "/wiki/Palapye",
+      "/wiki/Notwane_F.C.",
+      "/wiki/Orapa_United_FC",
+      "/wiki/Orapa",
+      "/wiki/Wonder_Sporting_Club",
+      "/wiki/Otse",
+      "/wiki/Prisons_XI",
+      "/wiki/Security_Systems_F.C.",
+      "/wiki/Sharps_Shooting_Stars_FC",
+      "/wiki/TAFIC_F.C.",
+      "/wiki/Francistown",
+      "/wiki/Township_Rollers_F.C."
+    ],
+    "passage_reranker_query": "question_plus_selected_rows",
+    "selected_table_row_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "constraint_policy": {
+      "allowed_output_values": [],
+      "require_table_evidence": false
+    }
+  },
+  "num_nodes": 72,
+  "num_edges": 78,
+  "nodes": {
+    "Gaborone": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "5th": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Botswana Railways Highlanders": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Mahalapye": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "11th": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Extension Gunners": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Lobatse": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "10th": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Gaborone United": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "6th": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Gilport Lions": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Promoted": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Jwaneng": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "2nd": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Miscellaneous": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Serowe": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "9th": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Morupule Wanderers FC": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Palapye": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "12th": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Orapa": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "3rd": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Police XI": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Otse": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "4th": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Prisons XI": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "13th": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "7th": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "8th": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Francistown": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "1st": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Botswana_Defence_Force_XI_FC": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Botswana Defence Force XI FC": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Gaborone": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Botswana_Railways_Highlanders": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Mahalapye": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Extension_Gunners": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Lobatse": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Gaborone_United_S.C.": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Gaborone United S.C.": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Botswana_Meat_Commission_F.C.": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Botswana Meat Commission F.C.": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Jwaneng_Galaxy_F.C.": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Jwaneng Galaxy F.C.": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Jwaneng": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Miscellaneous_SC_Serowe": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Miscellaneous SC Serowe": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Serowe": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Morupule_Wanderers_FC": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Palapye": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Notwane_F.C.": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Notwane F.C.": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Orapa_United_FC": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Orapa United FC": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Orapa": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Wonder_Sporting_Club": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Wonder Sporting Club": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Otse": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Prisons_XI": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Security_Systems_F.C.": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Security Systems F.C.": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Sharps_Shooting_Stars_FC": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Sharps Shooting Stars FC": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/TAFIC_F.C.": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "TAFIC F.C.": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Francistown": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "/wiki/Township_Rollers_F.C.": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "Township Rollers F.C.": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "is the capital and largest city of Botswana": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "231,626": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "It": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    },
+    "eastern Botswana": {
+      "types": [],
+      "aliases": [],
+      "attributes": {}
+    }
+  },
+  "edges": [
+    {
+      "head": "Gaborone",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Gaborone",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Gaborone",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Gaborone",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Gaborone",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Gaborone",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Botswana Railways Highlanders",
+      "relation": "city_town",
+      "tail": "Mahalapye",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Botswana Railways Highlanders",
+      "relation": "position_in_2018_19",
+      "tail": "11th",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Botswana Railways Highlanders",
+      "relation": "linked_passage",
+      "tail": "/wiki/Botswana_Railways_Highlanders",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Mahalapye",
+      "relation": "linked_passage",
+      "tail": "/wiki/Mahalapye",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Extension Gunners",
+      "relation": "city_town",
+      "tail": "Lobatse",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Extension Gunners",
+      "relation": "position_in_2018_19",
+      "tail": "10th",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Extension Gunners",
+      "relation": "linked_passage",
+      "tail": "/wiki/Extension_Gunners",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Lobatse",
+      "relation": "linked_passage",
+      "tail": "/wiki/Lobatse",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Lobatse",
+      "relation": "linked_passage",
+      "tail": "/wiki/Lobatse",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Gaborone United",
+      "relation": "city_town",
+      "tail": "Gaborone",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Gaborone United",
+      "relation": "position_in_2018_19",
+      "tail": "6th",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Gaborone United",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone_United_S.C.",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Gilport Lions",
+      "relation": "city_town",
+      "tail": "Lobatse",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Gilport Lions",
+      "relation": "position_in_2018_19",
+      "tail": "Promoted",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Gilport Lions",
+      "relation": "linked_passage",
+      "tail": "/wiki/Botswana_Meat_Commission_F.C.",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Jwaneng",
+      "relation": "linked_passage",
+      "tail": "/wiki/Jwaneng",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Miscellaneous",
+      "relation": "city_town",
+      "tail": "Serowe",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Miscellaneous",
+      "relation": "position_in_2018_19",
+      "tail": "9th",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Miscellaneous",
+      "relation": "linked_passage",
+      "tail": "/wiki/Miscellaneous_SC_Serowe",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Serowe",
+      "relation": "linked_passage",
+      "tail": "/wiki/Serowe",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Morupule Wanderers FC",
+      "relation": "city_town",
+      "tail": "Palapye",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Morupule Wanderers FC",
+      "relation": "position_in_2018_19",
+      "tail": "Promoted",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Morupule Wanderers FC",
+      "relation": "linked_passage",
+      "tail": "/wiki/Morupule_Wanderers_FC",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Palapye",
+      "relation": "linked_passage",
+      "tail": "/wiki/Palapye",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Orapa",
+      "relation": "linked_passage",
+      "tail": "/wiki/Orapa",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Police XI",
+      "relation": "city_town",
+      "tail": "Otse",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Police XI",
+      "relation": "position_in_2018_19",
+      "tail": "4th",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Police XI",
+      "relation": "linked_passage",
+      "tail": "/wiki/Wonder_Sporting_Club",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Otse",
+      "relation": "linked_passage",
+      "tail": "/wiki/Otse",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Otse",
+      "relation": "linked_passage",
+      "tail": "/wiki/Otse",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Prisons XI",
+      "relation": "city_town",
+      "tail": "Gaborone",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Prisons XI",
+      "relation": "position_in_2018_19",
+      "tail": "13th",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Prisons XI",
+      "relation": "linked_passage",
+      "tail": "/wiki/Prisons_XI",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Francistown",
+      "relation": "linked_passage",
+      "tail": "/wiki/Francistown",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Botswana Defence Force XI FC",
+      "relation": "linked_passage",
+      "tail": "/wiki/Botswana_Defence_Force_XI_FC",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Botswana Defence Force XI FC",
+      "relation": "linked_passage",
+      "tail": "/wiki/Botswana_Defence_Force_XI_FC",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Botswana Defence Force XI FC",
+      "relation": "city_town",
+      "tail": "Gaborone",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Botswana Defence Force XI FC",
+      "relation": "position_in_2018_19",
+      "tail": "5th",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Gaborone United S.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone_United_S.C.",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Botswana Meat Commission F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Botswana_Meat_Commission_F.C.",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Jwaneng Galaxy F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Jwaneng_Galaxy_F.C.",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Jwaneng Galaxy F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Jwaneng_Galaxy_F.C.",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Jwaneng Galaxy F.C.",
+      "relation": "city_town",
+      "tail": "Jwaneng",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Jwaneng Galaxy F.C.",
+      "relation": "position_in_2018_19",
+      "tail": "2nd",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Miscellaneous SC Serowe",
+      "relation": "linked_passage",
+      "tail": "/wiki/Miscellaneous_SC_Serowe",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Notwane F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Notwane_F.C.",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Notwane F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Notwane_F.C.",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Notwane F.C.",
+      "relation": "city_town",
+      "tail": "Gaborone",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Notwane F.C.",
+      "relation": "position_in_2018_19",
+      "tail": "12th",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Orapa United FC",
+      "relation": "linked_passage",
+      "tail": "/wiki/Orapa_United_FC",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Orapa United FC",
+      "relation": "linked_passage",
+      "tail": "/wiki/Orapa_United_FC",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Orapa United FC",
+      "relation": "city_town",
+      "tail": "Orapa",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Orapa United FC",
+      "relation": "position_in_2018_19",
+      "tail": "3rd",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Wonder Sporting Club",
+      "relation": "linked_passage",
+      "tail": "/wiki/Wonder_Sporting_Club",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Security Systems F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Security_Systems_F.C.",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Security Systems F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Security_Systems_F.C.",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Security Systems F.C.",
+      "relation": "city_town",
+      "tail": "Otse",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Security Systems F.C.",
+      "relation": "position_in_2018_19",
+      "tail": "7th",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Sharps Shooting Stars FC",
+      "relation": "linked_passage",
+      "tail": "/wiki/Sharps_Shooting_Stars_FC",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Sharps Shooting Stars FC",
+      "relation": "linked_passage",
+      "tail": "/wiki/Sharps_Shooting_Stars_FC",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Sharps Shooting Stars FC",
+      "relation": "city_town",
+      "tail": "Gaborone",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Sharps Shooting Stars FC",
+      "relation": "position_in_2018_19",
+      "tail": "8th",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "TAFIC F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/TAFIC_F.C.",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "TAFIC F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/TAFIC_F.C.",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "TAFIC F.C.",
+      "relation": "city_town",
+      "tail": "Francistown",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "TAFIC F.C.",
+      "relation": "position_in_2018_19",
+      "tail": "Promoted",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Township Rollers F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Township_Rollers_F.C.",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Township Rollers F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Township_Rollers_F.C.",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Township Rollers F.C.",
+      "relation": "city_town",
+      "tail": "Gaborone",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "Township Rollers F.C.",
+      "relation": "position_in_2018_19",
+      "tail": "1st",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "is the capital and largest city of Botswana",
+      "relation": "population",
+      "tail": "231,626",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    },
+    {
+      "head": "It",
+      "relation": "located_in",
+      "tail": "eastern Botswana",
+      "source_type": null,
+      "source_id": null,
+      "row_index": null,
+      "column_name": null,
+      "structural": null,
+      "provenance_text": null
+    }
+  ],
+  "prompt_triples_count": 78,
+  "prompt_triples": [
+    {
+      "head": "Gaborone",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone"
+    },
+    {
+      "head": "Gaborone",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone"
+    },
+    {
+      "head": "Gaborone",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone"
+    },
+    {
+      "head": "Gaborone",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone"
+    },
+    {
+      "head": "Gaborone",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone"
+    },
+    {
+      "head": "Gaborone",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone"
+    },
+    {
+      "head": "Botswana Railways Highlanders",
+      "relation": "city_town",
+      "tail": "Mahalapye"
+    },
+    {
+      "head": "Botswana Railways Highlanders",
+      "relation": "position_in_2018_19",
+      "tail": "11th"
+    },
+    {
+      "head": "Botswana Railways Highlanders",
+      "relation": "linked_passage",
+      "tail": "/wiki/Botswana_Railways_Highlanders"
+    },
+    {
+      "head": "Mahalapye",
+      "relation": "linked_passage",
+      "tail": "/wiki/Mahalapye"
+    },
+    {
+      "head": "Extension Gunners",
+      "relation": "city_town",
+      "tail": "Lobatse"
+    },
+    {
+      "head": "Extension Gunners",
+      "relation": "position_in_2018_19",
+      "tail": "10th"
+    },
+    {
+      "head": "Extension Gunners",
+      "relation": "linked_passage",
+      "tail": "/wiki/Extension_Gunners"
+    },
+    {
+      "head": "Lobatse",
+      "relation": "linked_passage",
+      "tail": "/wiki/Lobatse"
+    },
+    {
+      "head": "Lobatse",
+      "relation": "linked_passage",
+      "tail": "/wiki/Lobatse"
+    },
+    {
+      "head": "Gaborone United",
+      "relation": "city_town",
+      "tail": "Gaborone"
+    },
+    {
+      "head": "Gaborone United",
+      "relation": "position_in_2018_19",
+      "tail": "6th"
+    },
+    {
+      "head": "Gaborone United",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone_United_S.C."
+    },
+    {
+      "head": "Gilport Lions",
+      "relation": "city_town",
+      "tail": "Lobatse"
+    },
+    {
+      "head": "Gilport Lions",
+      "relation": "position_in_2018_19",
+      "tail": "Promoted"
+    },
+    {
+      "head": "Gilport Lions",
+      "relation": "linked_passage",
+      "tail": "/wiki/Botswana_Meat_Commission_F.C."
+    },
+    {
+      "head": "Jwaneng",
+      "relation": "linked_passage",
+      "tail": "/wiki/Jwaneng"
+    },
+    {
+      "head": "Miscellaneous",
+      "relation": "city_town",
+      "tail": "Serowe"
+    },
+    {
+      "head": "Miscellaneous",
+      "relation": "position_in_2018_19",
+      "tail": "9th"
+    },
+    {
+      "head": "Miscellaneous",
+      "relation": "linked_passage",
+      "tail": "/wiki/Miscellaneous_SC_Serowe"
+    },
+    {
+      "head": "Serowe",
+      "relation": "linked_passage",
+      "tail": "/wiki/Serowe"
+    },
+    {
+      "head": "Morupule Wanderers FC",
+      "relation": "city_town",
+      "tail": "Palapye"
+    },
+    {
+      "head": "Morupule Wanderers FC",
+      "relation": "position_in_2018_19",
+      "tail": "Promoted"
+    },
+    {
+      "head": "Morupule Wanderers FC",
+      "relation": "linked_passage",
+      "tail": "/wiki/Morupule_Wanderers_FC"
+    },
+    {
+      "head": "Palapye",
+      "relation": "linked_passage",
+      "tail": "/wiki/Palapye"
+    },
+    {
+      "head": "Orapa",
+      "relation": "linked_passage",
+      "tail": "/wiki/Orapa"
+    },
+    {
+      "head": "Police XI",
+      "relation": "city_town",
+      "tail": "Otse"
+    },
+    {
+      "head": "Police XI",
+      "relation": "position_in_2018_19",
+      "tail": "4th"
+    },
+    {
+      "head": "Police XI",
+      "relation": "linked_passage",
+      "tail": "/wiki/Wonder_Sporting_Club"
+    },
+    {
+      "head": "Otse",
+      "relation": "linked_passage",
+      "tail": "/wiki/Otse"
+    },
+    {
+      "head": "Otse",
+      "relation": "linked_passage",
+      "tail": "/wiki/Otse"
+    },
+    {
+      "head": "Prisons XI",
+      "relation": "city_town",
+      "tail": "Gaborone"
+    },
+    {
+      "head": "Prisons XI",
+      "relation": "position_in_2018_19",
+      "tail": "13th"
+    },
+    {
+      "head": "Prisons XI",
+      "relation": "linked_passage",
+      "tail": "/wiki/Prisons_XI"
+    },
+    {
+      "head": "Francistown",
+      "relation": "linked_passage",
+      "tail": "/wiki/Francistown"
+    },
+    {
+      "head": "Botswana Defence Force XI FC",
+      "relation": "linked_passage",
+      "tail": "/wiki/Botswana_Defence_Force_XI_FC"
+    },
+    {
+      "head": "Botswana Defence Force XI FC",
+      "relation": "linked_passage",
+      "tail": "/wiki/Botswana_Defence_Force_XI_FC"
+    },
+    {
+      "head": "Botswana Defence Force XI FC",
+      "relation": "city_town",
+      "tail": "Gaborone"
+    },
+    {
+      "head": "Botswana Defence Force XI FC",
+      "relation": "position_in_2018_19",
+      "tail": "5th"
+    },
+    {
+      "head": "Gaborone United S.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Gaborone_United_S.C."
+    },
+    {
+      "head": "Botswana Meat Commission F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Botswana_Meat_Commission_F.C."
+    },
+    {
+      "head": "Jwaneng Galaxy F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Jwaneng_Galaxy_F.C."
+    },
+    {
+      "head": "Jwaneng Galaxy F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Jwaneng_Galaxy_F.C."
+    },
+    {
+      "head": "Jwaneng Galaxy F.C.",
+      "relation": "city_town",
+      "tail": "Jwaneng"
+    },
+    {
+      "head": "Jwaneng Galaxy F.C.",
+      "relation": "position_in_2018_19",
+      "tail": "2nd"
+    },
+    {
+      "head": "Miscellaneous SC Serowe",
+      "relation": "linked_passage",
+      "tail": "/wiki/Miscellaneous_SC_Serowe"
+    },
+    {
+      "head": "Notwane F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Notwane_F.C."
+    },
+    {
+      "head": "Notwane F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Notwane_F.C."
+    },
+    {
+      "head": "Notwane F.C.",
+      "relation": "city_town",
+      "tail": "Gaborone"
+    },
+    {
+      "head": "Notwane F.C.",
+      "relation": "position_in_2018_19",
+      "tail": "12th"
+    },
+    {
+      "head": "Orapa United FC",
+      "relation": "linked_passage",
+      "tail": "/wiki/Orapa_United_FC"
+    },
+    {
+      "head": "Orapa United FC",
+      "relation": "linked_passage",
+      "tail": "/wiki/Orapa_United_FC"
+    },
+    {
+      "head": "Orapa United FC",
+      "relation": "city_town",
+      "tail": "Orapa"
+    },
+    {
+      "head": "Orapa United FC",
+      "relation": "position_in_2018_19",
+      "tail": "3rd"
+    },
+    {
+      "head": "Wonder Sporting Club",
+      "relation": "linked_passage",
+      "tail": "/wiki/Wonder_Sporting_Club"
+    },
+    {
+      "head": "Security Systems F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Security_Systems_F.C."
+    },
+    {
+      "head": "Security Systems F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Security_Systems_F.C."
+    },
+    {
+      "head": "Security Systems F.C.",
+      "relation": "city_town",
+      "tail": "Otse"
+    },
+    {
+      "head": "Security Systems F.C.",
+      "relation": "position_in_2018_19",
+      "tail": "7th"
+    },
+    {
+      "head": "Sharps Shooting Stars FC",
+      "relation": "linked_passage",
+      "tail": "/wiki/Sharps_Shooting_Stars_FC"
+    },
+    {
+      "head": "Sharps Shooting Stars FC",
+      "relation": "linked_passage",
+      "tail": "/wiki/Sharps_Shooting_Stars_FC"
+    },
+    {
+      "head": "Sharps Shooting Stars FC",
+      "relation": "city_town",
+      "tail": "Gaborone"
+    },
+    {
+      "head": "Sharps Shooting Stars FC",
+      "relation": "position_in_2018_19",
+      "tail": "8th"
+    },
+    {
+      "head": "TAFIC F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/TAFIC_F.C."
+    },
+    {
+      "head": "TAFIC F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/TAFIC_F.C."
+    },
+    {
+      "head": "TAFIC F.C.",
+      "relation": "city_town",
+      "tail": "Francistown"
+    },
+    {
+      "head": "TAFIC F.C.",
+      "relation": "position_in_2018_19",
+      "tail": "Promoted"
+    },
+    {
+      "head": "Township Rollers F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Township_Rollers_F.C."
+    },
+    {
+      "head": "Township Rollers F.C.",
+      "relation": "linked_passage",
+      "tail": "/wiki/Township_Rollers_F.C."
+    },
+    {
+      "head": "Township Rollers F.C.",
+      "relation": "city_town",
+      "tail": "Gaborone"
+    },
+    {
+      "head": "Township Rollers F.C.",
+      "relation": "position_in_2018_19",
+      "tail": "1st"
+    },
+    {
+      "head": "is the capital and largest city of Botswana",
+      "relation": "population",
+      "tail": "231,626"
+    },
+    {
+      "head": "It",
+      "relation": "located_in",
+      "tail": "eastern Botswana"
+    }
+  ]
+}

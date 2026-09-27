@@ -212,10 +212,20 @@ def two_stage_retrieve(
     first["table_rows"] = _select_table_rows(
         question, table_rows, top_k=top_k, anchor=anchor,
     )
+    selected_row_links = list(dict.fromkeys(
+        str(link.get("url", "")).strip()
+        for group in first["table_rows"] for link in group.get("cell_links", [])
+        if str(link.get("url", "")).strip()
+    ))
+    selected_row_text = " ".join(
+        _row_text(str(group.get("table_name", "")), row)
+        for group in first["table_rows"] for row in group.get("rows", [])
+    )
     expansions = _query_expansions(question, table_rows)
     entity_queries = list(anchor.bridge_entities)
     table_constraints = list(anchor.table_constraints)
     table_witnesses = list(getattr(anchor, "table_witnesses", ()))
+
     constrained_candidates = list(dict.fromkeys(
         entity for constraint in table_constraints for entity in constraint["candidates"]
     ))
@@ -252,6 +262,32 @@ def two_stage_retrieve(
                             selected_ids.add(item_id)
                             break
 
+        # Row-first multi-hop retrieval: expand selected-row hyperlinks and
+        # rerank them using the question plus the selected table rows.
+        if selected_row_links and second_stage_k > 0:
+            link_targets = {
+                link.removeprefix("/wiki/").removeprefix("passage:").casefold()
+                for link in selected_row_links
+            }
+            linked = [
+                item for item in remaining
+                if any(target in str(item.get("id") or item.get("url") or "").casefold()
+                       for target in link_targets)
+            ]
+            for item in _bm25_topk(f"{question} {selected_row_text}", linked, "text", second_stage_k):
+                item_id = _item_id(item)
+                if item_id in selected_ids:
+                    continue
+                enriched = dict(item)
+                position = positions[item_id]
+                enriched["context_before"] = " ".join(
+                    str(previous.get("text", ""))
+                    for previous in items[max(0, position - 2):position]
+                )
+                added.append(enriched)
+                selected_ids.add(item_id)
+                if len(added) >= second_stage_k:
+                    return selected + added
         # A table can identify an entity that is absent from the question.  For
         # example, HybridQA's Walter Payton item requires rank=2 -> Walter
         # Payton (table) -> Walter Payton passage -> middle name.  Prioritise
@@ -306,10 +342,14 @@ def two_stage_retrieve(
             ),
             "stage2_budget": second_stage_k,
             "expansion_queries": expansions,
-            "entity_anchor": anchor.to_dict(),
-            "entity_queries": entity_queries,
             "table_constraints": table_constraints,
             "table_witnesses": table_witnesses,
+            "entity_anchor": anchor.to_dict(),
+            "selected_row_hyperlinks": selected_row_links,
+            "passage_reranker_query": "question_plus_selected_rows",
+            "selected_table_row_indices": [
+                index for group in first["table_rows"] for index in group.get("row_indices", [])
+            ],
             "constraint_policy": {
                 "allowed_output_values": list(dict.fromkeys(
                     entity for constraint in table_constraints

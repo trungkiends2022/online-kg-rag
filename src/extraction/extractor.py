@@ -6,6 +6,7 @@ import json
 import re
 
 from src.kg.schema import Triple, Provenance
+from src.extraction.rule_text_triples import extract_rule_text_triples
 from src.llm.client import llm_call_json
 
 
@@ -29,16 +30,17 @@ class EntityRelationExtractor:
     def __init__(
         self,
         table_batch_size: int = 5,
-        text_batch_size: int = 5,
+        text_batch_size: int | None = 5,
         json_retries: int = 2,
         temperature: float | None = None,
         max_output_tokens: int = 4096,
         use_llm_text_enrichment: bool = True,
+        use_rule_text_triples: bool = True,
     ):
         if table_batch_size < 1:
             raise ValueError("table_batch_size must be at least 1")
-        if text_batch_size < 1:
-            raise ValueError("text_batch_size must be at least 1")
+        if text_batch_size is not None and text_batch_size < 1:
+            raise ValueError("text_batch_size must be at least 1 or None")
         if json_retries < 0:
             raise ValueError("json_retries must be non-negative")
         if max_output_tokens < 1:
@@ -49,6 +51,7 @@ class EntityRelationExtractor:
         self.temperature = temperature
         self.max_output_tokens = max_output_tokens
         self.use_llm_text_enrichment = use_llm_text_enrichment
+        self.use_rule_text_triples = use_rule_text_triples
 
     def _call_json(self, prompt: str, max_tokens: int):
         kwargs = {"max_tokens": max_tokens, "retries": self.json_retries}
@@ -151,6 +154,7 @@ class EntityRelationExtractor:
     def extract_from_text_batch(self, passages: list[dict]) -> list[Triple]:
         """Extract text facts in bounded batches, preserving passage provenance.
 
+        Set ``text_batch_size=None`` to use one LLM request for all passages of a case.
         A batch of five is one request for the ordinary HybridQA first-stage
         retrieval set. Each returned fact must carry ``source_id`` so a batch
         cannot accidentally attribute a fact to the wrong passage.
@@ -169,9 +173,12 @@ class EntityRelationExtractor:
                 )
             ]
 
+        batches = [passages] if self.text_batch_size is None else [
+            passages[start:start + self.text_batch_size]
+            for start in range(0, len(passages), self.text_batch_size)
+        ]
         triples = []
-        for start in range(0, len(passages), self.text_batch_size):
-            batch = passages[start:start + self.text_batch_size]
+        for batch in batches:
             if self.use_llm_text_enrichment:
                 payload = [
                     {
@@ -211,13 +218,15 @@ Chỉ trả JSON, không giải thích, không markdown fence.
                 ))
         return triples
 
-    @staticmethod
     def _deterministic_text_triples(
-        passage_id: str, text: str, *, context_before: str = "",
+        self, passage_id: str, text: str, *, context_before: str = "",
     ) -> list[Triple]:
         """Facts retained even when text LLM enrichment is disabled or fails."""
         provenance = Provenance("text", passage_id, text[:200])
-        triples = []
+        triples = (
+            extract_rule_text_triples(passage_id, text, context_before=context_before)
+            if self.use_rule_text_triples else []
+        )
 
         # Biography passages commonly open with a three-token legal name, while
         # the linked table uses only first + last name. Preserve this bridge
@@ -282,6 +291,63 @@ Chỉ trả JSON, không giải thích, không markdown fence.
                 Triple(head, f"increase_from_{change_match.group('start')}_to_{change_match.group('end')}",
                        f"${change_match.group('delta')} million", provenance),
             ])
+
+        # Retain typed demographic/location facts even when path-text mode
+        # disables optional LLM triple extraction.  Pronouns such as "the
+        # region" inherit the most recent named administrative subject in the
+        # same passage, making population facts usable as typed graph edges.
+        demographic_text = f"{context_before} {text}".strip()
+        sentences = [part.strip() for part in re.split(r"(?<=[.!?])\s+", demographic_text) if part.strip()]
+        last_administrative_subject = ""
+        named_population = re.compile(
+            r"(?P<head>[A-Z][A-Za-z0-9 ,'’()&-]{1,100}?)\s+"
+            r"(?:has|had|with)\s+(?:an?\s+)?(?:estimated\s+|approximate(?:ly)?\s+)?"
+            r"population\s+of\s+(?P<value>\d[\d,]*(?:\.\d+)?)", re.IGNORECASE,
+        )
+        generic_population = re.compile(
+            r"\b(?:the\s+)?(?:region|district|council|area|municipality|it)\b.*?"
+            r"(?:has|had|with)\s+(?:an?\s+)?(?:estimated\s+|approximate(?:ly)?\s+)?"
+            r"population\s+of\s+(?P<value>\d[\d,]*(?:\.\d+)?)", re.IGNORECASE,
+        )
+        administrative_subject = re.compile(
+            r"(?:^|\bthe\s+)(?P<head>[A-Z][A-Za-z0-9 ,'’()&-]{2,100}?)\s+"
+            r"(?:is|was)\s+(?:an?\s+)?(?:local government area|region|district|council|municipality)\b",
+            re.IGNORECASE,
+        )
+        location_pattern = re.compile(
+            r"(?:^|(?<=[.!?])\s*)(?P<head>[A-Z][A-Za-z0-9 ,'’()&-]{1,100}?)\s+"
+            r"(?:is|was)\s+(?:located|situated)\s+in\s+"
+            r"(?P<tail>[A-Z][A-Za-z0-9 ,'’()&-]{1,100}?)(?=[,.;]|$)", re.IGNORECASE,
+        )
+        def clean_subject(value: str) -> str:
+            return re.sub(r"^the\s+", "", value.strip(" ,."), flags=re.IGNORECASE)
+
+        seen_demographic = set()
+        for sentence in sentences:
+            subject_match = administrative_subject.search(sentence)
+            if subject_match:
+                last_administrative_subject = clean_subject(subject_match.group("head"))
+            for match in named_population.finditer(sentence):
+                head, value = clean_subject(match.group("head")), match.group("value")
+                if head.casefold().split()[:1] in (["region"], ["district"], ["council"], ["area"], ["municipality"]):
+                    continue
+                if head and (head, "population", value) not in seen_demographic:
+                    triples.append(Triple(head, "population", value, provenance))
+                    seen_demographic.add((head, "population", value))
+            generic_match = generic_population.search(sentence)
+            if generic_match and last_administrative_subject:
+                value = generic_match.group("value")
+                key = (last_administrative_subject, "population", value)
+                if key not in seen_demographic:
+                    triples.append(Triple(*key, provenance))
+                    seen_demographic.add(key)
+            for match in location_pattern.finditer(sentence):
+                head, tail = (match.group(name).strip(" ,.") for name in ("head", "tail"))
+                if head and tail and head != tail:
+                    key = (head, "located_in", tail)
+                    if key not in seen_demographic:
+                        triples.append(Triple(*key, provenance))
+                        seen_demographic.add(key)
         return triples
 
     def extract_from_web(self, url: str, snippet: str) -> list[Triple]:

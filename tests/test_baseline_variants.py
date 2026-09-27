@@ -102,6 +102,11 @@ def test_online_kg_path_text_answers_without_program_execution(monkeypatch):
     )
     result = baseline.run(_example())
     assert result["answer"] == "Liverpool"
+    assert len(prompts) == 1
+    assert "evidence synthesizer" in prompts[0]
+    assert result["final_judge_response_format"] == "deterministic_reverse_grounding"
+    assert result["final_judge_valid"] is True
+    assert result["llm_selected_path_ids"] == ["p1"]
     assert result["execution_mode"] == "path_text"
     assert result["code_generated"] is False
     assert result["program_executed"] is False
@@ -186,7 +191,7 @@ def test_online_kg_path_text_canonicalizes_resolved_entity_alias(monkeypatch):
     assert result["answer"] == "Republican Stadium"
 
 
-def test_online_kg_path_text_retries_invalid_judge_evidence_once(monkeypatch):
+def test_online_kg_path_text_reverse_grounds_without_second_llm_call(monkeypatch):
     kg = OnlineKG()
     kg.add_triple(Triple("Alice", "club", "Liverpool", Provenance("table", "Managers")))
 
@@ -202,38 +207,68 @@ def test_online_kg_path_text_retries_invalid_judge_evidence_once(monkeypatch):
             )]
 
     calls = []
-    responses = [
-        json.dumps({
-            "selected_path_id": "p1", "answer": "Liverpool",
-            "evidence_edge_ids": ["invented-edge"],
-        }),
-        json.dumps({
-            "selected_path_id": "p1", "answer": "Liverpool",
-            "evidence_edge_ids": ["semantic:0:0"],
-        }),
-    ]
     monkeypatch.setattr(
         "src.baselines.online_kg_path_text.get_provider",
         lambda: type("Provider", (), {"name": "fake", "model": "m"})(),
     )
     monkeypatch.setattr(
         "src.baselines.online_kg_path_text.llm_call",
-        lambda prompt, **kwargs: calls.append(prompt) or responses.pop(0),
+        lambda prompt, **kwargs: calls.append(prompt) or "Liverpool",
     )
 
     result = OnlineKGPathTextBaseline(
         RAGConfig(top_k=1), n_paths=1, kg_builder=Builder(), planner=Planner(),
     ).run(_example())
 
-    assert len(calls) == 2
+    assert len(calls) == 1
     assert result["answer"] == "Liverpool"
-    assert result["answer_retry_attempted"] is True
-    assert result["answer_fallback_used"] is False
+    assert result["final_judge_valid"] is True
     assert result["llm_selected_path_id"] == "p1"
     assert result["final_judge_evidence_edge_ids"] == ["semantic:0:0"]
-    assert result["final_judge_valid"] is True
+    assert result["grounding_audit"]["mode"] == "deterministic_reverse_answer_match"
 
 
+
+def test_online_kg_path_text_keeps_incomplete_paths_for_post_answer_grounding():
+    baseline = OnlineKGPathTextBaseline(RAGConfig(top_k=1))
+    records = [
+        {
+            "path_id": "wrong_high_score",
+            "score": 99.0,
+            "edges": [{
+                "edge_id": "wrong", "head": "Bob", "relation": "club",
+                "tail": "Arsenal", "source_type": "text",
+            }],
+            "nodes": ["Bob", "Arsenal"], "steps": [],
+        },
+        {
+            "path_id": "grounded_row",
+            "score": 1.0,
+            "edges": [{
+                "edge_id": "right", "head": "Alice", "relation": "club",
+                "tail": "Liverpool", "source_type": "table", "row_index": 4,
+            }],
+            "nodes": ["Alice", "Liverpool"], "steps": [],
+        },
+    ]
+    selected, audit = baseline._select_verified_paths(
+        "What is Alice's club?", records,
+        {
+            "table_witnesses": [{
+                "row_indices": [4], "bridge_entities": ["Alice"], "hyperlinks": [],
+            }],
+            "constraint_policy": {"require_table_evidence": True},
+        },
+    )
+
+    assert [path["path_id"] for path in selected] == ["wrong_high_score", "grounded_row"]
+    assert audit["rejected_path_ids"] == ["wrong_high_score"]
+    assert audit["pre_answer_path_selection"] is False
+    assert audit["abstained_for_missing_grounding"] is False
+    assert audit["verification_by_path"]["wrong_high_score"]["hard_failures"] == [
+        "missing_table_witness"
+    ]
+    assert selected[1]["path_verification"]["status"] == "qualified"
 def test_online_kg_path_text_rejects_empty_grounded_path_set(monkeypatch):
     kg = OnlineKG()
     kg.add_triple(Triple("Alice", "club", "Liverpool", Provenance("table", "Managers")))

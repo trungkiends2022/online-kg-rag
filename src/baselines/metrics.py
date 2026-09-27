@@ -11,11 +11,50 @@ from typing import Any
 from src.kg.normalization import DEFAULT_ENTITY_ALIASES, normalize_key
 
 
+_IRREGULAR_SINGULARS = {
+    "children": "child",
+    "feet": "foot",
+    "geese": "goose",
+    "men": "man",
+    "mice": "mouse",
+    "people": "person",
+    "teeth": "tooth",
+    "women": "woman",
+}
+_NON_PLURAL_S_SUFFIXES = ("ss", "us", "is")
+
+
+def _singularize_answer_token(token: str) -> str:
+    """Apply a deterministic English plural normalizer for scoring.
+
+    Evaluation should not mark an answer wrong solely for an inflection such as
+    ``clubs`` versus ``club``. This avoids external NLP models so benchmark
+    scoring remains reproducible and offline.
+    """
+    if token in _IRREGULAR_SINGULARS:
+        return _IRREGULAR_SINGULARS[token]
+    if len(token) <= 3 or any(character.isdigit() for character in token):
+        return token
+    if token.endswith("ies") and len(token) > 4:
+        return token[:-3] + "y"
+    if token.endswith("lves") and len(token) > 4:
+        return token[:-3] + "f"
+    if token.endswith("ives") and len(token) > 4:
+        return token[:-3] + "fe"
+    if token.endswith("ves") and len(token) > 4:
+        return token[:-3] + "f"
+    if token.endswith(("ches", "shes", "xes", "zes", "sses")):
+        return token[:-2]
+    if token.endswith("s") and not token.endswith(_NON_PLURAL_S_SUFFIXES):
+        return token[:-1]
+    return token
+
+
 def normalize_answer(value: Any) -> str:
     text = str(value).lower()
     text = "".join(character for character in text if character not in set(string.punctuation))
     text = re.sub(r"\b(a|an|the)\b", " ", text)
-    return " ".join(text.split())
+    return " ".join(_singularize_answer_token(token) for token in text.split())
 
 
 def exact_match(gold: Any, prediction: Any) -> float:

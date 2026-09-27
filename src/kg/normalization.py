@@ -201,6 +201,32 @@ class EntityResolver:
                 canonical, [node], tier="contextual_merger_alias", score=1.0,
             )
 
+    @staticmethod
+    def _linked_entity_base(value: str) -> str:
+        """Display-form key for narrowly-defined aliases sharing one hyperlink."""
+        tokens = normalize_key(value).split()
+        for suffix in (("community",), ("cec",)):
+            if tuple(tokens[-len(suffix):]) == suffix:
+                tokens = tokens[:-len(suffix)]
+                break
+        return " ".join(tokens)
+
+    def _resolve_linked_display_aliases(self, kg: "OnlineKG") -> None:
+        """Merge bare/community display names only when their URL is identical."""
+        by_passage: dict[str, list[str]] = defaultdict(list)
+        for head, tail, data in kg.graph.edges(data=True):
+            if data.get("relation") == "linked_passage":
+                by_passage[str(tail)].append(str(head))
+        for nodes in by_passage.values():
+            present = [node for node in dict.fromkeys(nodes) if node in kg.graph]
+            for node in present:
+                base = self._linked_entity_base(node)
+                if not base or base == normalize_key(node):
+                    continue
+                matches = [other for other in present if normalize_key(other) == base]
+                if len(matches) == 1:
+                    kg.merge_entities(node, matches, tier="linked_display_alias", score=1.0)
+
     def resolve(self, kg: "OnlineKG") -> None:
         # Tier 1: exact match after normalization.
         buckets: dict[str, list[str]] = defaultdict(list)
@@ -216,6 +242,8 @@ class EntityResolver:
             canonical = self.aliases.get(normalize_key(node))
             if canonical and node != canonical:
                 kg.merge_entities(canonical, [node], tier="alias", score=1.0)
+
+        self._resolve_linked_display_aliases(kg)
 
         # Tier 2.5: resolve a merger-created "new X" to an exact same-source
         # base entity. This is stricter than lexical similarity and avoids

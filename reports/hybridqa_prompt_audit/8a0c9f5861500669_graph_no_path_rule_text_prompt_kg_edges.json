@@ -1,0 +1,1828 @@
+[
+  {
+    "edge_id": "0",
+    "head": "Gaborone",
+    "relation": "linked_passage",
+    "tail": "/wiki/Gaborone",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Gaborone",
+      "source_group": null,
+      "domain": null,
+      "row_index": 0,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Gaborone",
+        "text": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population of 231,626 based on the 2011 census , about 10% of the total population of Botswana . Its agglomeration is home to 421,907 inhabitants at the 2011 census . Gaborone City , is situated between Kgale and Oodi Hills , near the confluence Notwane River and Segoditshane River in the south-eastern corner of Botswana , and 15 kilometres ( 9.3 mi ) from the South African border . The city is served by the Sir Seretse Khama International Airport . It is an administrative district in its own right , but is the capital of the surrounding South-East District . Locals often refer to the city as Gabs . The city of Gaborone is named after Chief Gaborone of the Tlokwa tribe , who once controlled land nearby . Because it had no tribal affiliation and was close to fresh water , the city was planned to be the capital in the mid-1960s when the Bechuanaland Protectorate became an independent nation . The centre of the city is a long strip of commercial businesses , called Main Mall with a semicircle-shaped area of government offices to its east . Gaborone is one of the fastest-growing cities in the world , and this has created problems with housing and illegal settlements . The city has also dealt with conflicts spilling into the country from Zimbabwe and South Africa during the 1980s . Gaborone is the economic capital as well as the government capital ; it is headquarters to numerous companies and the Botswana Stock Exchange .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "1",
+    "head": "Gaborone",
+    "relation": "linked_passage",
+    "tail": "/wiki/Gaborone",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Gaborone",
+      "source_group": null,
+      "domain": null,
+      "row_index": 3,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Gaborone",
+        "text": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population of 231,626 based on the 2011 census , about 10% of the total population of Botswana . Its agglomeration is home to 421,907 inhabitants at the 2011 census . Gaborone City , is situated between Kgale and Oodi Hills , near the confluence Notwane River and Segoditshane River in the south-eastern corner of Botswana , and 15 kilometres ( 9.3 mi ) from the South African border . The city is served by the Sir Seretse Khama International Airport . It is an administrative district in its own right , but is the capital of the surrounding South-East District . Locals often refer to the city as Gabs . The city of Gaborone is named after Chief Gaborone of the Tlokwa tribe , who once controlled land nearby . Because it had no tribal affiliation and was close to fresh water , the city was planned to be the capital in the mid-1960s when the Bechuanaland Protectorate became an independent nation . The centre of the city is a long strip of commercial businesses , called Main Mall with a semicircle-shaped area of government offices to its east . Gaborone is one of the fastest-growing cities in the world , and this has created problems with housing and illegal settlements . The city has also dealt with conflicts spilling into the country from Zimbabwe and South Africa during the 1980s . Gaborone is the economic capital as well as the government capital ; it is headquarters to numerous companies and the Botswana Stock Exchange .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "2",
+    "head": "Gaborone",
+    "relation": "linked_passage",
+    "tail": "/wiki/Gaborone",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Gaborone",
+      "source_group": null,
+      "domain": null,
+      "row_index": 8,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Gaborone",
+        "text": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population of 231,626 based on the 2011 census , about 10% of the total population of Botswana . Its agglomeration is home to 421,907 inhabitants at the 2011 census . Gaborone City , is situated between Kgale and Oodi Hills , near the confluence Notwane River and Segoditshane River in the south-eastern corner of Botswana , and 15 kilometres ( 9.3 mi ) from the South African border . The city is served by the Sir Seretse Khama International Airport . It is an administrative district in its own right , but is the capital of the surrounding South-East District . Locals often refer to the city as Gabs . The city of Gaborone is named after Chief Gaborone of the Tlokwa tribe , who once controlled land nearby . Because it had no tribal affiliation and was close to fresh water , the city was planned to be the capital in the mid-1960s when the Bechuanaland Protectorate became an independent nation . The centre of the city is a long strip of commercial businesses , called Main Mall with a semicircle-shaped area of government offices to its east . Gaborone is one of the fastest-growing cities in the world , and this has created problems with housing and illegal settlements . The city has also dealt with conflicts spilling into the country from Zimbabwe and South Africa during the 1980s . Gaborone is the economic capital as well as the government capital ; it is headquarters to numerous companies and the Botswana Stock Exchange .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "3",
+    "head": "Gaborone",
+    "relation": "linked_passage",
+    "tail": "/wiki/Gaborone",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Gaborone",
+      "source_group": null,
+      "domain": null,
+      "row_index": 11,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Gaborone",
+        "text": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population of 231,626 based on the 2011 census , about 10% of the total population of Botswana . Its agglomeration is home to 421,907 inhabitants at the 2011 census . Gaborone City , is situated between Kgale and Oodi Hills , near the confluence Notwane River and Segoditshane River in the south-eastern corner of Botswana , and 15 kilometres ( 9.3 mi ) from the South African border . The city is served by the Sir Seretse Khama International Airport . It is an administrative district in its own right , but is the capital of the surrounding South-East District . Locals often refer to the city as Gabs . The city of Gaborone is named after Chief Gaborone of the Tlokwa tribe , who once controlled land nearby . Because it had no tribal affiliation and was close to fresh water , the city was planned to be the capital in the mid-1960s when the Bechuanaland Protectorate became an independent nation . The centre of the city is a long strip of commercial businesses , called Main Mall with a semicircle-shaped area of government offices to its east . Gaborone is one of the fastest-growing cities in the world , and this has created problems with housing and illegal settlements . The city has also dealt with conflicts spilling into the country from Zimbabwe and South Africa during the 1980s . Gaborone is the economic capital as well as the government capital ; it is headquarters to numerous companies and the Botswana Stock Exchange .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "4",
+    "head": "Gaborone",
+    "relation": "linked_passage",
+    "tail": "/wiki/Gaborone",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Gaborone",
+      "source_group": null,
+      "domain": null,
+      "row_index": 13,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Gaborone",
+        "text": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population of 231,626 based on the 2011 census , about 10% of the total population of Botswana . Its agglomeration is home to 421,907 inhabitants at the 2011 census . Gaborone City , is situated between Kgale and Oodi Hills , near the confluence Notwane River and Segoditshane River in the south-eastern corner of Botswana , and 15 kilometres ( 9.3 mi ) from the South African border . The city is served by the Sir Seretse Khama International Airport . It is an administrative district in its own right , but is the capital of the surrounding South-East District . Locals often refer to the city as Gabs . The city of Gaborone is named after Chief Gaborone of the Tlokwa tribe , who once controlled land nearby . Because it had no tribal affiliation and was close to fresh water , the city was planned to be the capital in the mid-1960s when the Bechuanaland Protectorate became an independent nation . The centre of the city is a long strip of commercial businesses , called Main Mall with a semicircle-shaped area of government offices to its east . Gaborone is one of the fastest-growing cities in the world , and this has created problems with housing and illegal settlements . The city has also dealt with conflicts spilling into the country from Zimbabwe and South Africa during the 1980s . Gaborone is the economic capital as well as the government capital ; it is headquarters to numerous companies and the Botswana Stock Exchange .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "5",
+    "head": "Gaborone",
+    "relation": "linked_passage",
+    "tail": "/wiki/Gaborone",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Gaborone",
+      "source_group": null,
+      "domain": null,
+      "row_index": 15,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Gaborone",
+        "text": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population of 231,626 based on the 2011 census , about 10% of the total population of Botswana . Its agglomeration is home to 421,907 inhabitants at the 2011 census . Gaborone City , is situated between Kgale and Oodi Hills , near the confluence Notwane River and Segoditshane River in the south-eastern corner of Botswana , and 15 kilometres ( 9.3 mi ) from the South African border . The city is served by the Sir Seretse Khama International Airport . It is an administrative district in its own right , but is the capital of the surrounding South-East District . Locals often refer to the city as Gabs . The city of Gaborone is named after Chief Gaborone of the Tlokwa tribe , who once controlled land nearby . Because it had no tribal affiliation and was close to fresh water , the city was planned to be the capital in the mid-1960s when the Bechuanaland Protectorate became an independent nation . The centre of the city is a long strip of commercial businesses , called Main Mall with a semicircle-shaped area of government offices to its east . Gaborone is one of the fastest-growing cities in the world , and this has created problems with housing and illegal settlements . The city has also dealt with conflicts spilling into the country from Zimbabwe and South Africa during the 1980s . Gaborone is the economic capital as well as the government capital ; it is headquarters to numerous companies and the Botswana Stock Exchange .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "0",
+    "head": "Gaborone",
+    "relation": "situated_between",
+    "tail": "Kgale and Oodi Hills",
+    "provenance": {
+      "source_type": "text",
+      "source_id": "/wiki/Gaborone",
+      "raw_snippet": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population ",
+      "source_group": "rule_text",
+      "domain": null,
+      "row_index": null,
+      "column_name": null,
+      "header_path": null,
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Gaborone",
+        "text": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population of 231,626 based on the 2011 census , about 10% of the total population of Botswana . Its agglomeration is home to 421,907 inhabitants at the 2011 census . Gaborone City , is situated between Kgale and Oodi Hills , near the confluence Notwane River and Segoditshane River in the south-eastern corner of Botswana , and 15 kilometres ( 9.3 mi ) from the South African border . The city is served by the Sir Seretse Khama International Airport . It is an administrative district in its own right , but is the capital of the surrounding South-East District . Locals often refer to the city as Gabs . The city of Gaborone is named after Chief Gaborone of the Tlokwa tribe , who once controlled land nearby . Because it had no tribal affiliation and was close to fresh water , the city was planned to be the capital in the mid-1960s when the Bechuanaland Protectorate became an independent nation . The centre of the city is a long strip of commercial businesses , called Main Mall with a semicircle-shaped area of government offices to its east . Gaborone is one of the fastest-growing cities in the world , and this has created problems with housing and illegal settlements . The city has also dealt with conflicts spilling into the country from Zimbabwe and South Africa during the 1980s . Gaborone is the economic capital as well as the government capital ; it is headquarters to numerous companies and the Botswana Stock Exchange .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "0",
+    "head": "Gaborone",
+    "relation": "situated_between_landmark",
+    "tail": "Kgale",
+    "provenance": {
+      "source_type": "text",
+      "source_id": "/wiki/Gaborone",
+      "raw_snippet": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population ",
+      "source_group": "rule_text",
+      "domain": null,
+      "row_index": null,
+      "column_name": null,
+      "header_path": null,
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Gaborone",
+        "text": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population of 231,626 based on the 2011 census , about 10% of the total population of Botswana . Its agglomeration is home to 421,907 inhabitants at the 2011 census . Gaborone City , is situated between Kgale and Oodi Hills , near the confluence Notwane River and Segoditshane River in the south-eastern corner of Botswana , and 15 kilometres ( 9.3 mi ) from the South African border . The city is served by the Sir Seretse Khama International Airport . It is an administrative district in its own right , but is the capital of the surrounding South-East District . Locals often refer to the city as Gabs . The city of Gaborone is named after Chief Gaborone of the Tlokwa tribe , who once controlled land nearby . Because it had no tribal affiliation and was close to fresh water , the city was planned to be the capital in the mid-1960s when the Bechuanaland Protectorate became an independent nation . The centre of the city is a long strip of commercial businesses , called Main Mall with a semicircle-shaped area of government offices to its east . Gaborone is one of the fastest-growing cities in the world , and this has created problems with housing and illegal settlements . The city has also dealt with conflicts spilling into the country from Zimbabwe and South Africa during the 1980s . Gaborone is the economic capital as well as the government capital ; it is headquarters to numerous companies and the Botswana Stock Exchange .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "0",
+    "head": "Gaborone",
+    "relation": "situated_between_landmark",
+    "tail": "Oodi Hills",
+    "provenance": {
+      "source_type": "text",
+      "source_id": "/wiki/Gaborone",
+      "raw_snippet": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population ",
+      "source_group": "rule_text",
+      "domain": null,
+      "row_index": null,
+      "column_name": null,
+      "header_path": null,
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Gaborone",
+        "text": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population of 231,626 based on the 2011 census , about 10% of the total population of Botswana . Its agglomeration is home to 421,907 inhabitants at the 2011 census . Gaborone City , is situated between Kgale and Oodi Hills , near the confluence Notwane River and Segoditshane River in the south-eastern corner of Botswana , and 15 kilometres ( 9.3 mi ) from the South African border . The city is served by the Sir Seretse Khama International Airport . It is an administrative district in its own right , but is the capital of the surrounding South-East District . Locals often refer to the city as Gabs . The city of Gaborone is named after Chief Gaborone of the Tlokwa tribe , who once controlled land nearby . Because it had no tribal affiliation and was close to fresh water , the city was planned to be the capital in the mid-1960s when the Bechuanaland Protectorate became an independent nation . The centre of the city is a long strip of commercial businesses , called Main Mall with a semicircle-shaped area of government offices to its east . Gaborone is one of the fastest-growing cities in the world , and this has created problems with housing and illegal settlements . The city has also dealt with conflicts spilling into the country from Zimbabwe and South Africa during the 1980s . Gaborone is the economic capital as well as the government capital ; it is headquarters to numerous companies and the Botswana Stock Exchange .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "0",
+    "head": "Botswana Railways Highlanders",
+    "relation": "city_town",
+    "tail": "Mahalapye",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Mahalapye",
+      "source_group": null,
+      "domain": null,
+      "row_index": 1,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Botswana Railways Highlanders",
+    "relation": "position_in_2018_19",
+    "tail": "11th",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "11th",
+      "source_group": null,
+      "domain": null,
+      "row_index": 1,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Botswana Railways Highlanders",
+    "relation": "linked_passage",
+    "tail": "/wiki/Botswana_Railways_Highlanders",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Botswana_Railways_Highlanders",
+      "source_group": null,
+      "domain": null,
+      "row_index": 1,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Mahalapye",
+    "relation": "linked_passage",
+    "tail": "/wiki/Mahalapye",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Mahalapye",
+      "source_group": null,
+      "domain": null,
+      "row_index": 1,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Mahalapye",
+        "text": "Mahalapye is a town located in the Central District of Botswana . The town has about 41,000 inhabitants and is situated along the main road between the capital Gaborone and the second largest city Francistown . Mahalapye has a bus station , a railway station , a couple of hotels and a market area with many shops and fast food restaurants , Water Shed mall is the latest attraction to those travelling from Gaborone to Francistown , great place for refreshments . It also has several petrol stations , some open 24 hours per day . Being situated on the edge of the Kalahari desert it is quite dry , and the local waterways are dry except during the rainy season . In recent times , it has become a convenient stop-over town for travelers travelling to and from Gaborone . This town is located on the Tropic of Capricorn . Thus at approximately 13:11 hours on 21 December , or at solar noon on Summer Solstice , the sun will be directly overhead at this site . To mark this geographic feature there is a small monument just outside town on the 23rd parallel , or 23 degrees South of the equator . At this time the sun will be directly above this monument where the sun reaches its furthest point South . At this point there will be no shadow on the monument . The Botswana Prison Service ( BPS ) operates the Mahalapye Prison .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "0",
+    "head": "Lobatse",
+    "relation": "linked_passage",
+    "tail": "/wiki/Lobatse",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Lobatse",
+      "source_group": null,
+      "domain": null,
+      "row_index": 2,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "1",
+    "head": "Lobatse",
+    "relation": "linked_passage",
+    "tail": "/wiki/Lobatse",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Lobatse",
+      "source_group": null,
+      "domain": null,
+      "row_index": 4,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Gaborone United",
+    "relation": "city_town",
+    "tail": "Gaborone",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Gaborone",
+      "source_group": null,
+      "domain": null,
+      "row_index": 3,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Gaborone United",
+    "relation": "position_in_2018_19",
+    "tail": "6th",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "6th",
+      "source_group": null,
+      "domain": null,
+      "row_index": 3,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Gaborone United",
+    "relation": "linked_passage",
+    "tail": "/wiki/Gaborone_United_S.C.",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Gaborone_United_S.C.",
+      "source_group": null,
+      "domain": null,
+      "row_index": 3,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Gilport Lions",
+    "relation": "city_town",
+    "tail": "Lobatse",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Lobatse",
+      "source_group": null,
+      "domain": null,
+      "row_index": 4,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Gilport Lions",
+    "relation": "position_in_2018_19",
+    "tail": "Promoted",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Promoted",
+      "source_group": null,
+      "domain": null,
+      "row_index": 4,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Gilport Lions",
+    "relation": "linked_passage",
+    "tail": "/wiki/Botswana_Meat_Commission_F.C.",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Botswana_Meat_Commission_F.C.",
+      "source_group": null,
+      "domain": null,
+      "row_index": 4,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Jwaneng",
+    "relation": "linked_passage",
+    "tail": "/wiki/Jwaneng",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Jwaneng",
+      "source_group": null,
+      "domain": null,
+      "row_index": 5,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Miscellaneous",
+    "relation": "city_town",
+    "tail": "Serowe",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Serowe",
+      "source_group": null,
+      "domain": null,
+      "row_index": 6,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Miscellaneous",
+    "relation": "position_in_2018_19",
+    "tail": "9th",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "9th",
+      "source_group": null,
+      "domain": null,
+      "row_index": 6,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Miscellaneous",
+    "relation": "linked_passage",
+    "tail": "/wiki/Miscellaneous_SC_Serowe",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Miscellaneous_SC_Serowe",
+      "source_group": null,
+      "domain": null,
+      "row_index": 6,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Miscellaneous_SC_Serowe",
+        "text": "Miscellaneous Sporting Club is a football club based in Serowe , Botswana . Miscellaneous is also known as Tsenala ( the red and white ) , Mmamonotwane , the official nicknames of the club . The club is also often referred to as Matswakabele ( Miscellaneous ) , a nickname that developed in the early days but has never been officially adopted by the club . Miscellaneous Sporting Club is a soccer club based in Serowe , Botswana . The club is currently playing in the Botswana Premier League . The club 's colours are red , white and green . The team is owned by its supporters , whose membership of the club qualifies them to be a part of the Miscellaneous SCs inner sanctum . The society membership elects the Miscellaneous executive committee at annual general meetings ( AGM ) .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "0",
+    "head": "Serowe",
+    "relation": "linked_passage",
+    "tail": "/wiki/Serowe",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Serowe",
+      "source_group": null,
+      "domain": null,
+      "row_index": 6,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Palapye",
+    "relation": "linked_passage",
+    "tail": "/wiki/Palapye",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Palapye",
+      "source_group": null,
+      "domain": null,
+      "row_index": 7,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Palapye",
+        "text": "Palapye is becoming a large town in Botswana , situated about halfway between Francistown and Gaborone ( 240 km away from Gaborone and 170 km away from Francistown ) . Over the years its position has made it a convenient stopover on one of Southern Africa 's principal north-south rail and road routes . [ citation needed ] Located here is the Morupule Colliery coal mine , which supplies Morupule Power Station , Botswana 's principal domestic source of electricity . The power station has undertaken an expansion project to increase its generation capacity in an effort to meet the country 's increasing demand for electricity . Construction began in 2010 . Currently , the plant produces 120 MW of electricity . [ citation needed ] In 1997 Palapye was said to be the fastest-growing village in Africa , and was expected to expand its population from 30,000 to 180,000 .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "0",
+    "head": "Orapa",
+    "relation": "linked_passage",
+    "tail": "/wiki/Orapa",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Orapa",
+      "source_group": null,
+      "domain": null,
+      "row_index": 9,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Police XI",
+    "relation": "city_town",
+    "tail": "Otse",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Otse",
+      "source_group": null,
+      "domain": null,
+      "row_index": 10,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Police XI",
+    "relation": "position_in_2018_19",
+    "tail": "4th",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "4th",
+      "source_group": null,
+      "domain": null,
+      "row_index": 10,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Police XI",
+    "relation": "linked_passage",
+    "tail": "/wiki/Wonder_Sporting_Club",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Wonder_Sporting_Club",
+      "source_group": null,
+      "domain": null,
+      "row_index": 10,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Otse",
+    "relation": "linked_passage",
+    "tail": "/wiki/Otse",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Otse",
+      "source_group": null,
+      "domain": null,
+      "row_index": 10,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "1",
+    "head": "Otse",
+    "relation": "linked_passage",
+    "tail": "/wiki/Otse",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Otse",
+      "source_group": null,
+      "domain": null,
+      "row_index": 12,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Prisons XI",
+    "relation": "city_town",
+    "tail": "Gaborone",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Gaborone",
+      "source_group": null,
+      "domain": null,
+      "row_index": 11,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Prisons XI",
+    "relation": "position_in_2018_19",
+    "tail": "13th",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "13th",
+      "source_group": null,
+      "domain": null,
+      "row_index": 11,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Prisons XI",
+    "relation": "linked_passage",
+    "tail": "/wiki/Prisons_XI",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Prisons_XI",
+      "source_group": null,
+      "domain": null,
+      "row_index": 11,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Francistown",
+    "relation": "linked_passage",
+    "tail": "/wiki/Francistown",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Francistown",
+      "source_group": null,
+      "domain": null,
+      "row_index": 14,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Francistown",
+        "text": "Francistown is the second largest city in Botswana , with a population of about 100,079 and 150,800 inhabitants for its agglomeration at the 2011 census . and often described as the Capital of the North . It is located in eastern Botswana , about 400 kilometres ( 250 mi ) north-northeast from the capital , Gaborone . Francistown is located at the confluence of the Tati and Inchwe rivers , and near the Shashe River ( tributary to the Limpopo ) and 90 kilometres ( 55 miles ) from the international border with Zimbabwe . Francistown was the centre of southern Africa 's first gold rush and is still surrounded by old and abandoned mines . The City of Francistown is an administrative district , separated from North-East District . It is administered by Francistown City Council .",
+        "context_before": "The club were formed in 1984 . Led by Keitsumetse Pio Paul , Sharps won the 2016-17 First Division South , and gained promotion to the Botswana Premier League for the first time . They finished mid-table in their first season in the league . Sharps exceeded expectations at the start of the 2018-19 campaign , winning their first three matches and sitting third on the ladder after the first 11 games . Tati African Football Independent Club also known as TAFIC for short , is a football club based in Francistown , Botswana . The team was relegated from the Botswana Premier League to the First Division North in 2014 . Nicknamed Matjimenyenga , after a stream , which runs behind the low-income locations of Maipaafela and Kgaphamadi . The club motto : Undipe ndi kupe . The club was founded as in 1959 as a break away from the then popular TAFA football club . Information has it that the founders of TAFIC , which was initially known as Sharp Shooters in its formative years , were based at Kgaphamadi . They gained promotion back to the elite league as champions in the 2016/17 season but were subsequently relegated the very next season . They are currently playing in the First Division North ."
+      }
+    ]
+  },
+  {
+    "edge_id": "0",
+    "head": "Botswana Defence Force XI FC",
+    "relation": "linked_passage",
+    "tail": "/wiki/Botswana_Defence_Force_XI_FC",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Botswana_Defence_Force_XI_FC",
+      "source_group": null,
+      "domain": null,
+      "row_index": 0,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "1",
+    "head": "Botswana Defence Force XI FC",
+    "relation": "linked_passage",
+    "tail": "/wiki/Botswana_Defence_Force_XI_FC",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Botswana_Defence_Force_XI_FC",
+      "source_group": null,
+      "domain": null,
+      "row_index": 0,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Botswana Defence Force XI FC",
+    "relation": "city_town",
+    "tail": "Gaborone",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Gaborone",
+      "source_group": null,
+      "domain": null,
+      "row_index": 0,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Botswana Defence Force XI FC",
+    "relation": "position_in_2018_19",
+    "tail": "5th",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "5th",
+      "source_group": null,
+      "domain": null,
+      "row_index": 0,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Gaborone United S.C.",
+    "relation": "linked_passage",
+    "tail": "/wiki/Gaborone_United_S.C.",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Gaborone_United_S.C.",
+      "source_group": null,
+      "domain": null,
+      "row_index": 3,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Botswana Meat Commission F.C.",
+    "relation": "linked_passage",
+    "tail": "/wiki/Botswana_Meat_Commission_F.C.",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Botswana_Meat_Commission_F.C.",
+      "source_group": null,
+      "domain": null,
+      "row_index": 4,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Jwaneng Galaxy F.C.",
+    "relation": "linked_passage",
+    "tail": "/wiki/Jwaneng_Galaxy_F.C.",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Jwaneng_Galaxy_F.C.",
+      "source_group": null,
+      "domain": null,
+      "row_index": 5,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "1",
+    "head": "Jwaneng Galaxy F.C.",
+    "relation": "linked_passage",
+    "tail": "/wiki/Jwaneng_Galaxy_F.C.",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Jwaneng_Galaxy_F.C.",
+      "source_group": null,
+      "domain": null,
+      "row_index": 5,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Jwaneng Galaxy F.C.",
+    "relation": "city_town",
+    "tail": "Jwaneng",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Jwaneng",
+      "source_group": null,
+      "domain": null,
+      "row_index": 5,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Jwaneng Galaxy F.C.",
+    "relation": "position_in_2018_19",
+    "tail": "2nd",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "2nd",
+      "source_group": null,
+      "domain": null,
+      "row_index": 5,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Miscellaneous SC Serowe",
+    "relation": "linked_passage",
+    "tail": "/wiki/Miscellaneous_SC_Serowe",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Miscellaneous_SC_Serowe",
+      "source_group": null,
+      "domain": null,
+      "row_index": 6,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Miscellaneous_SC_Serowe",
+        "text": "Miscellaneous Sporting Club is a football club based in Serowe , Botswana . Miscellaneous is also known as Tsenala ( the red and white ) , Mmamonotwane , the official nicknames of the club . The club is also often referred to as Matswakabele ( Miscellaneous ) , a nickname that developed in the early days but has never been officially adopted by the club . Miscellaneous Sporting Club is a soccer club based in Serowe , Botswana . The club is currently playing in the Botswana Premier League . The club 's colours are red , white and green . The team is owned by its supporters , whose membership of the club qualifies them to be a part of the Miscellaneous SCs inner sanctum . The society membership elects the Miscellaneous executive committee at annual general meetings ( AGM ) .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "0",
+    "head": "Notwane F.C.",
+    "relation": "linked_passage",
+    "tail": "/wiki/Notwane_F.C.",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Notwane_F.C.",
+      "source_group": null,
+      "domain": null,
+      "row_index": 8,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "1",
+    "head": "Notwane F.C.",
+    "relation": "linked_passage",
+    "tail": "/wiki/Notwane_F.C.",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Notwane_F.C.",
+      "source_group": null,
+      "domain": null,
+      "row_index": 8,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Notwane F.C.",
+    "relation": "city_town",
+    "tail": "Gaborone",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Gaborone",
+      "source_group": null,
+      "domain": null,
+      "row_index": 8,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Notwane F.C.",
+    "relation": "position_in_2018_19",
+    "tail": "12th",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "12th",
+      "source_group": null,
+      "domain": null,
+      "row_index": 8,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Orapa United FC",
+    "relation": "linked_passage",
+    "tail": "/wiki/Orapa_United_FC",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Orapa_United_FC",
+      "source_group": null,
+      "domain": null,
+      "row_index": 9,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "1",
+    "head": "Orapa United FC",
+    "relation": "linked_passage",
+    "tail": "/wiki/Orapa_United_FC",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Orapa_United_FC",
+      "source_group": null,
+      "domain": null,
+      "row_index": 9,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Orapa United FC",
+    "relation": "city_town",
+    "tail": "Orapa",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Orapa",
+      "source_group": null,
+      "domain": null,
+      "row_index": 9,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Orapa United FC",
+    "relation": "position_in_2018_19",
+    "tail": "3rd",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "3rd",
+      "source_group": null,
+      "domain": null,
+      "row_index": 9,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Wonder Sporting Club",
+    "relation": "linked_passage",
+    "tail": "/wiki/Wonder_Sporting_Club",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Wonder_Sporting_Club",
+      "source_group": null,
+      "domain": null,
+      "row_index": 10,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Security Systems F.C.",
+    "relation": "linked_passage",
+    "tail": "/wiki/Security_Systems_F.C.",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Security_Systems_F.C.",
+      "source_group": null,
+      "domain": null,
+      "row_index": 12,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "1",
+    "head": "Security Systems F.C.",
+    "relation": "linked_passage",
+    "tail": "/wiki/Security_Systems_F.C.",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Security_Systems_F.C.",
+      "source_group": null,
+      "domain": null,
+      "row_index": 12,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Security Systems F.C.",
+    "relation": "city_town",
+    "tail": "Otse",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Otse",
+      "source_group": null,
+      "domain": null,
+      "row_index": 12,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Security Systems F.C.",
+    "relation": "position_in_2018_19",
+    "tail": "7th",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "7th",
+      "source_group": null,
+      "domain": null,
+      "row_index": 12,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Sharps Shooting Stars FC",
+    "relation": "linked_passage",
+    "tail": "/wiki/Sharps_Shooting_Stars_FC",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Sharps_Shooting_Stars_FC",
+      "source_group": null,
+      "domain": null,
+      "row_index": 13,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "1",
+    "head": "Sharps Shooting Stars FC",
+    "relation": "linked_passage",
+    "tail": "/wiki/Sharps_Shooting_Stars_FC",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Sharps_Shooting_Stars_FC",
+      "source_group": null,
+      "domain": null,
+      "row_index": 13,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Sharps Shooting Stars FC",
+    "relation": "city_town",
+    "tail": "Gaborone",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Gaborone",
+      "source_group": null,
+      "domain": null,
+      "row_index": 13,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Sharps Shooting Stars FC",
+    "relation": "position_in_2018_19",
+    "tail": "8th",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "8th",
+      "source_group": null,
+      "domain": null,
+      "row_index": 13,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "TAFIC F.C.",
+    "relation": "linked_passage",
+    "tail": "/wiki/TAFIC_F.C.",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/TAFIC_F.C.",
+      "source_group": null,
+      "domain": null,
+      "row_index": 14,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "1",
+    "head": "TAFIC F.C.",
+    "relation": "linked_passage",
+    "tail": "/wiki/TAFIC_F.C.",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/TAFIC_F.C.",
+      "source_group": null,
+      "domain": null,
+      "row_index": 14,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "TAFIC F.C.",
+    "relation": "city_town",
+    "tail": "Francistown",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Francistown",
+      "source_group": null,
+      "domain": null,
+      "row_index": 14,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "TAFIC F.C.",
+    "relation": "position_in_2018_19",
+    "tail": "Promoted",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Promoted",
+      "source_group": null,
+      "domain": null,
+      "row_index": 14,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "is the capital and largest city of Botswana",
+    "relation": "population",
+    "tail": "231,626",
+    "provenance": {
+      "source_type": "text",
+      "source_id": "/wiki/Gaborone",
+      "raw_snippet": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population ",
+      "source_group": null,
+      "domain": null,
+      "row_index": null,
+      "column_name": null,
+      "header_path": null,
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Gaborone",
+        "text": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population of 231,626 based on the 2011 census , about 10% of the total population of Botswana . Its agglomeration is home to 421,907 inhabitants at the 2011 census . Gaborone City , is situated between Kgale and Oodi Hills , near the confluence Notwane River and Segoditshane River in the south-eastern corner of Botswana , and 15 kilometres ( 9.3 mi ) from the South African border . The city is served by the Sir Seretse Khama International Airport . It is an administrative district in its own right , but is the capital of the surrounding South-East District . Locals often refer to the city as Gabs . The city of Gaborone is named after Chief Gaborone of the Tlokwa tribe , who once controlled land nearby . Because it had no tribal affiliation and was close to fresh water , the city was planned to be the capital in the mid-1960s when the Bechuanaland Protectorate became an independent nation . The centre of the city is a long strip of commercial businesses , called Main Mall with a semicircle-shaped area of government offices to its east . Gaborone is one of the fastest-growing cities in the world , and this has created problems with housing and illegal settlements . The city has also dealt with conflicts spilling into the country from Zimbabwe and South Africa during the 1980s . Gaborone is the economic capital as well as the government capital ; it is headquarters to numerous companies and the Botswana Stock Exchange .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "0",
+    "head": "Township Rollers Football Club",
+    "relation": "based_in",
+    "tail": "Gaborone",
+    "provenance": {
+      "source_type": "text",
+      "source_id": "/wiki/Township_Rollers_F.C.",
+      "raw_snippet": "Township Rollers Football Club is a football club based in Gaborone . Rollers are also known as Popa , The Blues or Tse Tala , the official nicknames of the club . The club is also often referred to a",
+      "source_group": "rule_text",
+      "domain": null,
+      "row_index": null,
+      "column_name": null,
+      "header_path": null,
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Township_Rollers_F.C.",
+        "text": "Township Rollers Football Club is a football club based in Gaborone . Rollers are also known as Popa , The Blues or Tse Tala , the official nicknames of the club . The club is also often referred to as Mapalastina , a nickname that developed in the 1990s but has never been officially adopted by the club . Rollers is most successful club in Botswana football history , with more league titles and cup competitions won than any other local side and enjoys the largest support base of any sports team in the country . [ citation needed ] The club was founded in 1961 as Mighty Tigers , later to adopt the name Township Rollers in 1965 . Rollers has an old rivalry with cross town club Gaborone United , the match between the two sides called the Gaborone Derby . Rollers also have a bitter rivalry with Mochudi Centre Chiefs , and matches between the two sides over time eclipsed the Gaborone Derby as the biggest football encounter in Botswana due to both clubs ' following and success . Club financier Jagdish Shah has been the most influential figure at the club since 2013 . The team is owned by its supporters , whose membership of the club qualifies them to be a part of the Township Rollers society . The society membership elects the Rollers executive committee at annual general meetings ( AGM ) . The club is currently administered by an executive committee comprising Walter Kgabung ( chairman ) , Jagdish Shah ( president ) , Khumo Masonya ( secretary general ) , Kebadile Mosiakgabo ( deputy secretary ) , Phempheretlhe Bafana Pheto ( public relations officer ) , Minkie Molatlhegi ( Treasurer ) , and additional member Baatweng Motladiile . Other senior officials are Sydney Magagane ( general manager ) , Ajay Shah ( finance manager ) and Motshegetsi Mafa ( team manager ) .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "1",
+    "head": "Township Rollers Football Club",
+    "relation": "city_town",
+    "tail": "Gaborone",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Gaborone",
+      "source_group": null,
+      "domain": null,
+      "row_index": 15,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Township Rollers Football Club",
+    "relation": "position_in_2018_19",
+    "tail": "1st",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "1st",
+      "source_group": null,
+      "domain": null,
+      "row_index": 15,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Township Rollers Football Club",
+    "relation": "linked_passage",
+    "tail": "/wiki/Township_Rollers_F.C.",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Township_Rollers_F.C.",
+      "source_group": null,
+      "domain": null,
+      "row_index": 15,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Township_Rollers_F.C.",
+        "text": "Township Rollers Football Club is a football club based in Gaborone . Rollers are also known as Popa , The Blues or Tse Tala , the official nicknames of the club . The club is also often referred to as Mapalastina , a nickname that developed in the 1990s but has never been officially adopted by the club . Rollers is most successful club in Botswana football history , with more league titles and cup competitions won than any other local side and enjoys the largest support base of any sports team in the country . [ citation needed ] The club was founded in 1961 as Mighty Tigers , later to adopt the name Township Rollers in 1965 . Rollers has an old rivalry with cross town club Gaborone United , the match between the two sides called the Gaborone Derby . Rollers also have a bitter rivalry with Mochudi Centre Chiefs , and matches between the two sides over time eclipsed the Gaborone Derby as the biggest football encounter in Botswana due to both clubs ' following and success . Club financier Jagdish Shah has been the most influential figure at the club since 2013 . The team is owned by its supporters , whose membership of the club qualifies them to be a part of the Township Rollers society . The society membership elects the Rollers executive committee at annual general meetings ( AGM ) . The club is currently administered by an executive committee comprising Walter Kgabung ( chairman ) , Jagdish Shah ( president ) , Khumo Masonya ( secretary general ) , Kebadile Mosiakgabo ( deputy secretary ) , Phempheretlhe Bafana Pheto ( public relations officer ) , Minkie Molatlhegi ( Treasurer ) , and additional member Baatweng Motladiile . Other senior officials are Sydney Magagane ( general manager ) , Ajay Shah ( finance manager ) and Motshegetsi Mafa ( team manager ) .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "1",
+    "head": "Township Rollers Football Club",
+    "relation": "linked_passage",
+    "tail": "/wiki/Township_Rollers_F.C.",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Township_Rollers_F.C.",
+      "source_group": null,
+      "domain": null,
+      "row_index": 15,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Township_Rollers_F.C.",
+        "text": "Township Rollers Football Club is a football club based in Gaborone . Rollers are also known as Popa , The Blues or Tse Tala , the official nicknames of the club . The club is also often referred to as Mapalastina , a nickname that developed in the 1990s but has never been officially adopted by the club . Rollers is most successful club in Botswana football history , with more league titles and cup competitions won than any other local side and enjoys the largest support base of any sports team in the country . [ citation needed ] The club was founded in 1961 as Mighty Tigers , later to adopt the name Township Rollers in 1965 . Rollers has an old rivalry with cross town club Gaborone United , the match between the two sides called the Gaborone Derby . Rollers also have a bitter rivalry with Mochudi Centre Chiefs , and matches between the two sides over time eclipsed the Gaborone Derby as the biggest football encounter in Botswana due to both clubs ' following and success . Club financier Jagdish Shah has been the most influential figure at the club since 2013 . The team is owned by its supporters , whose membership of the club qualifies them to be a part of the Township Rollers society . The society membership elects the Rollers executive committee at annual general meetings ( AGM ) . The club is currently administered by an executive committee comprising Walter Kgabung ( chairman ) , Jagdish Shah ( president ) , Khumo Masonya ( secretary general ) , Kebadile Mosiakgabo ( deputy secretary ) , Phempheretlhe Bafana Pheto ( public relations officer ) , Minkie Molatlhegi ( Treasurer ) , and additional member Baatweng Motladiile . Other senior officials are Sydney Magagane ( general manager ) , Ajay Shah ( finance manager ) and Motshegetsi Mafa ( team manager ) .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "0",
+    "head": "Miscellaneous Sporting Club",
+    "relation": "based_in",
+    "tail": "Serowe",
+    "provenance": {
+      "source_type": "text",
+      "source_id": "/wiki/Miscellaneous_SC_Serowe",
+      "raw_snippet": "Miscellaneous Sporting Club is a football club based in Serowe , Botswana . Miscellaneous is also known as Tsenala ( the red and white ) , Mmamonotwane , the official nicknames of the club . The club ",
+      "source_group": "rule_text",
+      "domain": null,
+      "row_index": null,
+      "column_name": null,
+      "header_path": null,
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Miscellaneous_SC_Serowe",
+        "text": "Miscellaneous Sporting Club is a football club based in Serowe , Botswana . Miscellaneous is also known as Tsenala ( the red and white ) , Mmamonotwane , the official nicknames of the club . The club is also often referred to as Matswakabele ( Miscellaneous ) , a nickname that developed in the early days but has never been officially adopted by the club . Miscellaneous Sporting Club is a soccer club based in Serowe , Botswana . The club is currently playing in the Botswana Premier League . The club 's colours are red , white and green . The team is owned by its supporters , whose membership of the club qualifies them to be a part of the Miscellaneous SCs inner sanctum . The society membership elects the Miscellaneous executive committee at annual general meetings ( AGM ) .",
+        "context_before": ""
+      }
+    ]
+  },
+  {
+    "edge_id": "0",
+    "head": "Morupule Wanderers Football Club",
+    "relation": "based_in",
+    "tail": "Palapye",
+    "provenance": {
+      "source_type": "text",
+      "source_id": "/wiki/Morupule_Wanderers_FC",
+      "raw_snippet": "Morupule Wanderers Football Club is a football club based in Palapye . Wanderers is also known as Bafana ba Magala or Wandy-Wandy . It is one of the best known Palapye-based teams . At the end of the ",
+      "source_group": "rule_text",
+      "domain": null,
+      "row_index": null,
+      "column_name": null,
+      "header_path": null,
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Morupule_Wanderers_FC",
+        "text": "Morupule Wanderers Football Club is a football club based in Palapye . Wanderers is also known as Bafana ba Magala or Wandy-Wandy . It is one of the best known Palapye-based teams . At the end of the 2018-19 season the club was promoted to the Botswana Premier League by beating First Division South runners up Jwaneng Fighters in the Botswana Premier League playoffs , ending a 46-year First Division North stay",
+        "context_before": "Miscellaneous Sporting Club is a football club based in Serowe , Botswana . Miscellaneous is also known as Tsenala ( the red and white ) , Mmamonotwane , the official nicknames of the club . The club is also often referred to as Matswakabele ( Miscellaneous ) , a nickname that developed in the early days but has never been officially adopted by the club . Miscellaneous Sporting Club is a soccer club based in Serowe , Botswana . The club is currently playing in the Botswana Premier League . The club 's colours are red , white and green . The team is owned by its supporters , whose membership of the club qualifies them to be a part of the Miscellaneous SCs inner sanctum . The society membership elects the Miscellaneous executive committee at annual general meetings ( AGM ) . Serowe ( population approximately 60,000 [ citation needed ] ) is an urban village in Botswana 's Central District . A trade and commercial centre , it is Botswana 's largest village . Serowe has played an important role in Botswana 's history , as capital for the Bamangwato people in the early 20th century and as birthplace of several of Botswana 's presidents . More recently it has undergone significant development as the town and Botswana continue to grow ."
+      }
+    ]
+  },
+  {
+    "edge_id": "1",
+    "head": "Morupule Wanderers Football Club",
+    "relation": "city_town",
+    "tail": "Palapye",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Palapye",
+      "source_group": null,
+      "domain": null,
+      "row_index": 7,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Morupule Wanderers Football Club",
+    "relation": "position_in_2018_19",
+    "tail": "Promoted",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Promoted",
+      "source_group": null,
+      "domain": null,
+      "row_index": 7,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Morupule Wanderers Football Club",
+    "relation": "linked_passage",
+    "tail": "/wiki/Morupule_Wanderers_FC",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Morupule_Wanderers_FC",
+      "source_group": null,
+      "domain": null,
+      "row_index": 7,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Morupule_Wanderers_FC",
+        "text": "Morupule Wanderers Football Club is a football club based in Palapye . Wanderers is also known as Bafana ba Magala or Wandy-Wandy . It is one of the best known Palapye-based teams . At the end of the 2018-19 season the club was promoted to the Botswana Premier League by beating First Division South runners up Jwaneng Fighters in the Botswana Premier League playoffs , ending a 46-year First Division North stay",
+        "context_before": "Miscellaneous Sporting Club is a football club based in Serowe , Botswana . Miscellaneous is also known as Tsenala ( the red and white ) , Mmamonotwane , the official nicknames of the club . The club is also often referred to as Matswakabele ( Miscellaneous ) , a nickname that developed in the early days but has never been officially adopted by the club . Miscellaneous Sporting Club is a soccer club based in Serowe , Botswana . The club is currently playing in the Botswana Premier League . The club 's colours are red , white and green . The team is owned by its supporters , whose membership of the club qualifies them to be a part of the Miscellaneous SCs inner sanctum . The society membership elects the Miscellaneous executive committee at annual general meetings ( AGM ) . Serowe ( population approximately 60,000 [ citation needed ] ) is an urban village in Botswana 's Central District . A trade and commercial centre , it is Botswana 's largest village . Serowe has played an important role in Botswana 's history , as capital for the Bamangwato people in the early 20th century and as birthplace of several of Botswana 's presidents . More recently it has undergone significant development as the town and Botswana continue to grow ."
+      }
+    ]
+  },
+  {
+    "edge_id": "0",
+    "head": "Extension Gunners FC",
+    "relation": "based_in",
+    "tail": "Lobatse",
+    "provenance": {
+      "source_type": "text",
+      "source_id": "/wiki/Extension_Gunners",
+      "raw_snippet": "Extension Gunners FC is a football club based in Lobatse , Botswana . The team plays in the Botswana Premier League . The club was founded in 1962 in the Southern town of Lobatse , where it is still b",
+      "source_group": "rule_text",
+      "domain": null,
+      "row_index": null,
+      "column_name": null,
+      "header_path": null,
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Extension_Gunners",
+        "text": "Extension Gunners FC is a football club based in Lobatse , Botswana . The team plays in the Botswana Premier League . The club was founded in 1962 in the Southern town of Lobatse , where it is still based . They play at the Lobatse Sports Complex .",
+        "context_before": "Botswana Railways Highlanders are a football club in the Botswana Premier League who play home games in Molepolole , but are based out of Mahalapye . Botswana Railways Highlanders are the team of Botswana Railways , but the company 's sponsorship only goes as far as transport and some sporting equipment . In 2015 Highlanders were 100% financed by the Railways corporation . Mahalapye is a town located in the Central District of Botswana . The town has about 41,000 inhabitants and is situated along the main road between the capital Gaborone and the second largest city Francistown . Mahalapye has a bus station , a railway station , a couple of hotels and a market area with many shops and fast food restaurants , Water Shed mall is the latest attraction to those travelling from Gaborone to Francistown , great place for refreshments . It also has several petrol stations , some open 24 hours per day . Being situated on the edge of the Kalahari desert it is quite dry , and the local waterways are dry except during the rainy season . In recent times , it has become a convenient stop-over town for travelers travelling to and from Gaborone . This town is located on the Tropic of Capricorn . Thus at approximately 13:11 hours on 21 December , or at solar noon on Summer Solstice , the sun will be directly overhead at this site . To mark this geographic feature there is a small monument just outside town on the 23rd parallel , or 23 degrees South of the equator . At this time the sun will be directly above this monument where the sun reaches its furthest point South . At this point there will be no shadow on the monument . The Botswana Prison Service ( BPS ) operates the Mahalapye Prison ."
+      }
+    ]
+  },
+  {
+    "edge_id": "1",
+    "head": "Extension Gunners FC",
+    "relation": "city_town",
+    "tail": "Lobatse",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "Lobatse",
+      "source_group": null,
+      "domain": null,
+      "row_index": 2,
+      "column_name": "City / Town",
+      "header_path": [
+        "City / Town"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Extension Gunners FC",
+    "relation": "position_in_2018_19",
+    "tail": "10th",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "10th",
+      "source_group": null,
+      "domain": null,
+      "row_index": 2,
+      "column_name": "Position in 2018-19",
+      "header_path": [
+        "Position in 2018-19"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": []
+  },
+  {
+    "edge_id": "0",
+    "head": "Extension Gunners FC",
+    "relation": "linked_passage",
+    "tail": "/wiki/Extension_Gunners",
+    "provenance": {
+      "source_type": "table",
+      "source_id": "Botswana Premier League",
+      "raw_snippet": "/wiki/Extension_Gunners",
+      "source_group": null,
+      "domain": null,
+      "row_index": 2,
+      "column_name": "Club",
+      "header_path": [
+        "Club"
+      ],
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Extension_Gunners",
+        "text": "Extension Gunners FC is a football club based in Lobatse , Botswana . The team plays in the Botswana Premier League . The club was founded in 1962 in the Southern town of Lobatse , where it is still based . They play at the Lobatse Sports Complex .",
+        "context_before": "Botswana Railways Highlanders are a football club in the Botswana Premier League who play home games in Molepolole , but are based out of Mahalapye . Botswana Railways Highlanders are the team of Botswana Railways , but the company 's sponsorship only goes as far as transport and some sporting equipment . In 2015 Highlanders were 100% financed by the Railways corporation . Mahalapye is a town located in the Central District of Botswana . The town has about 41,000 inhabitants and is situated along the main road between the capital Gaborone and the second largest city Francistown . Mahalapye has a bus station , a railway station , a couple of hotels and a market area with many shops and fast food restaurants , Water Shed mall is the latest attraction to those travelling from Gaborone to Francistown , great place for refreshments . It also has several petrol stations , some open 24 hours per day . Being situated on the edge of the Kalahari desert it is quite dry , and the local waterways are dry except during the rainy season . In recent times , it has become a convenient stop-over town for travelers travelling to and from Gaborone . This town is located on the Tropic of Capricorn . Thus at approximately 13:11 hours on 21 December , or at solar noon on Summer Solstice , the sun will be directly overhead at this site . To mark this geographic feature there is a small monument just outside town on the 23rd parallel , or 23 degrees South of the equator . At this time the sun will be directly above this monument where the sun reaches its furthest point South . At this point there will be no shadow on the monument . The Botswana Prison Service ( BPS ) operates the Mahalapye Prison ."
+      }
+    ]
+  },
+  {
+    "edge_id": "0",
+    "head": "It",
+    "relation": "located_in",
+    "tail": "eastern Botswana",
+    "provenance": {
+      "source_type": "text",
+      "source_id": "/wiki/Francistown",
+      "raw_snippet": "Francistown is the second largest city in Botswana , with a population of about 100,079 and 150,800 inhabitants for its agglomeration at the 2011 census . and often described as the Capital of the Nor",
+      "source_group": null,
+      "domain": null,
+      "row_index": null,
+      "column_name": null,
+      "header_path": null,
+      "derived_from_compound": false
+    },
+    "contexts": [
+      {
+        "source_id": "/wiki/Francistown",
+        "text": "Francistown is the second largest city in Botswana , with a population of about 100,079 and 150,800 inhabitants for its agglomeration at the 2011 census . and often described as the Capital of the North . It is located in eastern Botswana , about 400 kilometres ( 250 mi ) north-northeast from the capital , Gaborone . Francistown is located at the confluence of the Tati and Inchwe rivers , and near the Shashe River ( tributary to the Limpopo ) and 90 kilometres ( 55 miles ) from the international border with Zimbabwe . Francistown was the centre of southern Africa 's first gold rush and is still surrounded by old and abandoned mines . The City of Francistown is an administrative district , separated from North-East District . It is administered by Francistown City Council .",
+        "context_before": "The club were formed in 1984 . Led by Keitsumetse Pio Paul , Sharps won the 2016-17 First Division South , and gained promotion to the Botswana Premier League for the first time . They finished mid-table in their first season in the league . Sharps exceeded expectations at the start of the 2018-19 campaign , winning their first three matches and sitting third on the ladder after the first 11 games . Tati African Football Independent Club also known as TAFIC for short , is a football club based in Francistown , Botswana . The team was relegated from the Botswana Premier League to the First Division North in 2014 . Nicknamed Matjimenyenga , after a stream , which runs behind the low-income locations of Maipaafela and Kgaphamadi . The club motto : Undipe ndi kupe . The club was founded as in 1959 as a break away from the then popular TAFA football club . Information has it that the founders of TAFIC , which was initially known as Sharp Shooters in its formative years , were based at Kgaphamadi . They gained promotion back to the elite league as champions in the 2016/17 season but were subsequently relegated the very next season . They are currently playing in the First Division North ."
+      }
+    ]
+  }
+]

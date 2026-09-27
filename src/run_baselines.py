@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import os
 import subprocess
 import sys
@@ -144,6 +145,7 @@ def _build_run_manifest(args, *, max_workers: int) -> dict:
         "max_context_chars": args.max_context_chars,
         "max_output_tokens": args.max_output_tokens,
         "temperature": args.temperature,
+        "use_rule_text_triples": args.use_rule_text_triples,
         "n_paths": args.n_paths,
         "max_replans": args.max_replans,
         "finqa_table_format": args.finqa_table_format,
@@ -221,7 +223,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--top-k", type=int, default=5)
     parser.add_argument("--second-stage-k", type=int, default=3)
     parser.add_argument("--max-context-chars", type=int, default=24_000)
-    parser.add_argument("--max-output-tokens", type=int, default=1024)
+    parser.add_argument("--max-output-tokens", type=int, default=512)
     parser.add_argument(
         "--llm-timeout-seconds", type=float,
         help="Timeout for one provider request; overrides LLM_REQUEST_TIMEOUT_SECONDS.",
@@ -231,6 +233,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="Provider SDK retry count; overrides LLM_SDK_MAX_RETRIES.",
     )
     parser.add_argument("--temperature", type=float, default=0.0)
+    parser.add_argument("--no-rule-text-triples", action="store_false", dest="use_rule_text_triples", help="Disable deterministic rule-based text triples when building a KG.")
     parser.add_argument("--n-paths", type=int, default=5)
     parser.add_argument("--max-replans", type=int, default=2)
     parser.add_argument(
@@ -289,6 +292,7 @@ def _make_method(args):
         top_k=args.top_k,
         second_stage_k=args.second_stage_k,
         max_context_chars=args.max_context_chars,
+        use_rule_text_triples=args.use_rule_text_triples,
         max_output_tokens=args.max_output_tokens,
         temperature=args.temperature,
     )
@@ -297,6 +301,7 @@ def _make_method(args):
             passage_top_k=args.top_k,
             max_context_chars=args.max_context_chars,
             max_output_tokens=args.max_output_tokens,
+            second_stage_k=args.second_stage_k,
             temperature=args.temperature,
         ))
     if args.method == "flat_table_bm25":
@@ -330,7 +335,56 @@ def _run_method(method, example, args) -> dict:
     else:
         prediction = method.run(example)
     prediction["method"] = args.method
+
     return prediction
+
+def _hybridqa_retrieval_audit(example, prediction: dict) -> dict:
+    """Evaluate retrieval only when HybridQA traced answer-node evidence exists."""
+    nodes = example.metadata.get("answer_nodes", [])
+    if not nodes:
+        return {"gold_row_recall": None, "gold_hyperlink_recall": None, "gold_passage_recall": None}
+    gold_rows, gold_links = set(), set()
+    for node in nodes:
+        if not isinstance(node, (list, tuple)):
+            continue
+        if len(node) > 1 and isinstance(node[1], (list, tuple)) and node[1]:
+            gold_rows.add(int(node[1][0]))
+        if len(node) > 2 and node[2]:
+            gold_links.add(str(node[2]).casefold())
+    trace = prediction.get("retrieval_trace", {})
+    selected_rows = set(trace.get("selected_table_row_indices", []))
+    selected_passages = {
+        str(value).casefold() for value in prediction.get("retrieved_passage_ids", [])
+    }
+    selected_links = {
+        str(value).casefold() for value in trace.get("selected_row_hyperlinks", [])
+    }
+    return {
+        "gold_row_recall": float(bool(gold_rows) and gold_rows <= selected_rows) if gold_rows else None,
+        "gold_hyperlink_recall": float(bool(gold_links) and gold_links <= selected_links) if gold_links else None,
+        "gold_passage_recall": float(bool(gold_links) and gold_links <= selected_passages) if gold_links else None,
+    }
+
+
+def _hybridqa_error_category(record: dict) -> str | None:
+    if record["exact_match"]:
+        return None
+    if not str(record.get("answer") or "").strip():
+        return "output_format"
+    if record.get("table_truncated"):
+        return "table_context_budget"
+    if record.get("final_judge_valid") is False:
+        return "judge_contract"
+    if any(value == 0.0 for key, value in record.get("retrieval_audit", {}).items()
+           if key.startswith("gold_")):
+        return "retrieval_miss"
+    if re.search(r"\b(?:how many|how much|what year|which year)\b", record["question"], re.I):
+        return "numeric_or_temporal_reasoning"
+    if record.get("reasoning_paths"):
+        return "wrong_hop_or_path_selection"
+    if record.get("f1", 0) > 0:
+        return "format_or_normalization"
+    return "retrieval_or_reasoning"
 
 
 def _evaluate_example(example, args) -> dict:
@@ -382,6 +436,8 @@ def _evaluate_example(example, args) -> dict:
         record["execution_exact_match"] = (
             exact_match(example.answer, executed) if executed is not None else None
         )
+        record["retrieval_audit"] = _hybridqa_retrieval_audit(example, prediction)
+        record["error_category"] = _hybridqa_error_category(record)
     elif args.dataset == "finqa":
         _add_finqa_metrics(record, prediction, example, args)
     else:
@@ -563,6 +619,28 @@ def main() -> None:
         summary.update(exact_match=em, f1=f1, exact_match_percent=100 * em, f1_percent=100 * f1)
         semantic_em = sum(row["semantic_exact_match"] for row in records) / len(records) if records else 0.0
         summary.update(semantic_exact_match=semantic_em, semantic_exact_match_percent=100 * semantic_em)
+        empty_answers = [row for row in records if not str(row.get("answer") or "").strip()]
+        categories: dict[str, int] = {}
+        for row in records:
+            category = row.get("error_category")
+            if category:
+                categories[category] = categories.get(category, 0) + 1
+        retrieval_means = {}
+        for key in ("gold_row_recall", "gold_hyperlink_recall", "gold_passage_recall"):
+            values = [row.get("retrieval_audit", {}).get(key) for row in records]
+            values = [float(value) for value in values if value is not None]
+            retrieval_means[f"mean_{key}"] = sum(values) / len(values) if values else None
+        audit_sample = [
+            {key: row.get(key) for key in ("id", "question", "gold_answer", "answer", "error_category", "retrieval_audit")}
+            for row in records if row.get("error_category")
+        ][:100]
+        summary.update(
+            empty_answer_count=len(empty_answers),
+            empty_answer_rate=(len(empty_answers) / len(records) if records else 0.0),
+            error_taxonomy=categories,
+            error_audit_sample=audit_sample,
+            **retrieval_means,
+        )
     elif args.dataset == "finqa":
         execution = (
             sum(row["execution_accuracy"] for row in records) / len(records)
@@ -618,6 +696,7 @@ def main() -> None:
             summary[f"mean_{key}"] = round(sum(values) / len(values), 2)
     summary["config"] = {
         "top_k": args.top_k,
+        "use_rule_text_triples": args.use_rule_text_triples,
         "max_context_chars": args.max_context_chars,
         "max_output_tokens": args.max_output_tokens,
         "temperature": args.temperature,

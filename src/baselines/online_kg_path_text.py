@@ -40,6 +40,7 @@ class OnlineKGPathTextBaseline:
                 # This branch reasons directly over retrieved passage context.
                 # It deliberately performs zero LLM text-triple extraction.
                 use_llm_text_enrichment=False,
+                use_rule_text_triples=self.config.use_rule_text_triples,
             )
         )
         self.planner = planner or GroundedPathPlanner()
@@ -77,6 +78,11 @@ class OnlineKGPathTextBaseline:
             "nodes": path.get("nodes", []),
             "edge_ids": [edge.get("edge_id") for edge in path.get("edges", [])],
             "steps": path.get("steps", []),
+            "path_verification": {
+                key: path.get("path_verification", {}).get(key)
+                for key in ("status", "selection_score", "hard_failures")
+                if key in path.get("path_verification", {})
+            },
         }
 
     @staticmethod
@@ -87,9 +93,132 @@ class OnlineKGPathTextBaseline:
             for key in (
                 "edge_id", "head", "relation", "tail", "source_type", "source_id",
                 "row_index", "column_name", "header_path", "structural",
+                "source_group",
                 "traversal_from", "traversal_to", "direction",
             )
             if edge.get(key) is not None
+        }
+
+    @staticmethod
+    def _path_evidence_text(path: dict) -> str:
+        return " ".join(
+            " ".join(
+                str(edge.get(field, ""))
+                for field in ("head", "relation", "tail", "traversal_from", "traversal_to")
+            ) + " " + " ".join(
+                str(context.get(field, ""))
+                for context in edge.get("contexts", [])
+                for field in ("context_before", "text")
+            )
+            for edge in path.get("edges", [])
+        )
+
+    def _verify_path(
+        self, question: str, path: dict, retrieval_trace: dict,
+    ) -> dict:
+        """Deterministically reject paths that miss mandatory table grounding."""
+        edges = path.get("edges", [])
+        path_text = self._path_evidence_text(path).casefold()
+        question_terms = self._terms(question) - {
+            "what", "which", "where", "when", "who", "whose", "how", "does",
+            "did", "with", "from", "that", "this", "there", "their",
+        }
+        covered_terms = question_terms & self._terms(path_text)
+        row_indices = {edge.get("row_index") for edge in edges if edge.get("row_index") is not None}
+        nodes = {
+            str(value).casefold()
+            for edge in edges
+            for value in (edge.get("head"), edge.get("tail"), edge.get("traversal_from"), edge.get("traversal_to"))
+            if value is not None
+        }
+        witnesses = retrieval_trace.get("table_witnesses", [])
+        matched_witnesses = []
+        linked_witness = False
+        for index, witness in enumerate(witnesses):
+            witness_rows = set(witness.get("row_indices", ()))
+            bridge_entities = {str(value).casefold() for value in witness.get("bridge_entities", ())}
+            links = {
+                str(value).removeprefix("/wiki/").removeprefix("passage:").casefold()
+                for value in witness.get("hyperlinks", ()) if value
+            }
+            row_or_entity = bool(row_indices & witness_rows) or bool(nodes & bridge_entities)
+            link_match = any(link and link in path_text for link in links)
+            if row_or_entity:
+                matched_witnesses.append(index)
+            linked_witness = linked_witness or (row_or_entity and link_match)
+
+        policy = retrieval_trace.get("constraint_policy", {})
+        table_required = bool(policy.get("require_table_evidence"))
+        table_grounded = bool(matched_witnesses) if witnesses else bool(row_indices)
+        numeric_question = bool(re.search(r"\b(how many|how much|what year|which year|when)\b", question, re.I))
+        numeric_evidence = bool(re.search(r"(?<!\d)\d[\d,]*(?:\.\d+)?", path_text))
+        terminal = str(
+            edges[-1].get("traversal_to") or edges[-1].get("tail") or ""
+        ) if edges else ""
+        terminal_is_container = terminal.startswith(("table:", "passage:"))
+        hard_failures = []
+        if not edges:
+            hard_failures.append("no_grounded_edges")
+        if table_required and not table_grounded:
+            hard_failures.append("missing_table_witness")
+        score = float(path.get("score", 0.0))
+        score += 3.0 if table_grounded else 0.0
+        score += 2.0 if linked_witness else 0.0
+        score += min(len(covered_terms), 5) * 0.4
+        if numeric_question:
+            score += 1.5 if numeric_evidence else -1.5
+        if terminal_is_container:
+            score -= 1.0
+        return {
+            "status": "qualified" if not hard_failures else "rejected",
+            "hard_failures": hard_failures,
+            "question_term_coverage": round(
+                len(covered_terms) / max(len(question_terms), 1), 4,
+            ),
+            "table_witness_indices": matched_witnesses,
+            "linked_witness": linked_witness,
+            "numeric_evidence": numeric_evidence if numeric_question else None,
+            "terminal_is_container": terminal_is_container,
+            "selection_score": round(score, 4),
+        }
+
+    def _select_verified_paths(
+        self, question: str, path_records: list[dict], retrieval_trace: dict,
+    ) -> tuple[list[dict], dict]:
+        """Annotate retrieval paths; never choose or discard an answer path early.
+
+        A path can be a useful bridge even when its last edge is a passage URL.
+        The former implementation dropped such paths before the answer text was
+        read, which made the model choose among several equally incomplete
+        chains.  Verification remains an audit/ranking signal; final grounding
+        is deliberately performed after answer synthesis.
+        """
+        for path in path_records:
+            path["path_verification"] = self._verify_path(question, path, retrieval_trace)
+        ordered = sorted(
+            path_records,
+            key=lambda path: (
+                -path["path_verification"]["selection_score"],
+                -float(path.get("score", 0.0)),
+                path["path_id"],
+            ),
+        )
+        qualified = [
+            path for path in ordered
+            if path["path_verification"]["status"] == "qualified"
+        ]
+        return ordered, {
+            "candidate_path_ids": [path["path_id"] for path in ordered],
+            "qualified_path_ids": [path["path_id"] for path in qualified],
+            "rejected_path_ids": [
+                path["path_id"] for path in ordered
+                if path["path_verification"]["status"] == "rejected"
+            ],
+            "abstained_for_missing_grounding": not bool(ordered),
+            "pre_answer_path_selection": False,
+            "verification_by_path": {
+                path["path_id"]: path["path_verification"] for path in ordered
+            },
         }
 
     def _bounded_kg_context(
@@ -193,28 +322,27 @@ class OnlineKGPathTextBaseline:
 
     @staticmethod
     def _constraint_instruction(retrieval_trace: dict) -> str:
+        """Expose table candidates as bridge evidence, never a blanket answer set."""
         policy = retrieval_trace.get("constraint_policy", {})
         candidates = policy.get("allowed_output_values", [])
         witnesses = retrieval_trace.get("table_witnesses", [])
         instruction = ""
         if witnesses:
-            witness_summaries = []
-            for w in witnesses:
-                op = w.get("operator", "")
-                entities = ", ".join(w.get("bridge_entities", ()))
-                cols = ", ".join(w.get("evidence_columns", ()))
-                witness_summaries.append(f"{op} on [{cols}] -> entity: {entities}")
-            instruction += (
-                "\nTABLE WITNESS EVIDENCE: The following entity was grounded by exact local table logic:\n"
-                + "\n".join(f"- {s}" for s in witness_summaries)
-                + "\nPrioritize this witness entity and its linked passage evidence.\n"
-            )
+            summaries = []
+            for witness in witnesses:
+                summaries.append(
+                    f"{witness.get('operator', '')} on "
+                    f"[{', '.join(witness.get('evidence_columns', ()))}] -> bridge entity: "
+                    f"{', '.join(witness.get('bridge_entities', ()))}"
+                )
+            instruction += "\nTABLE WITNESS EVIDENCE:\n" + "\n".join(
+                f"- {summary}" for summary in summaries
+            ) + "\nUse these as bridge evidence; the requested answer may be a later text fact.\n"
         if candidates:
             instruction += (
-                "\nBẮT BUỘC: câu hỏi có ràng buộc bảng. Đáp án phải là một trong các "
-                f"candidate sau: {json.dumps(candidates, ensure_ascii=False)}. "
-                "Chỉ chọn candidate khi evidence bao phủ cả điều kiện bảng lẫn điều kiện "
-                "nêu trong text; không trả entity chỉ thỏa một vế.\n"
+                "\nTABLE CANDIDATES (bridge entities, not a mandatory answer list): "
+                f"{json.dumps(candidates, ensure_ascii=False)}. "
+                "Return one only when it is itself the final answer requested by the question.\n"
             )
         return instruction
 
@@ -224,33 +352,33 @@ class OnlineKGPathTextBaseline:
         if "what year" in lowered or "which year" in lowered:
             return "Return the four-digit year from the final supported fact, not a related event year."
         if re.search(r"\bwhen\b", lowered):
-            return (
-                "Return the most specific final date or date range supported by the final edge; "
-                "do not replace it with a broader event year."
-            )
+            return "Return the most specific final date or date range supported by the final evidence."
         if "how many" in lowered or "how much" in lowered:
-            return "Return the final grounded count or amount, not an intermediate count or value."
-        return "Return the final entity/value at the end of the complete supported chain, not an intermediate entity."
+            return "Return the final grounded count or amount, not an intermediate value."
+        return "Return the final entity/value supported by the complete evidence, not an intermediate entity."
+
+    @staticmethod
+    def _bounded_response(value: str | None, limit: int = 1_000) -> str:
+        value = str(value or "").strip()
+        return value if len(value) <= limit else value[: limit - 1] + "…"
 
     @staticmethod
     def _canonicalize_kg_alias(answer: str, kg) -> str:
-        """Use the shortest observed alias for the same resolved KG entity."""
         if not answer:
             return answer
         resolved = kg._resolve_entity(answer)
         aliases = [resolved]
-        aliases.extend(
-            alias for alias, canonical in kg.entity_aliases.items()
-            if kg._resolve_entity(canonical) == resolved
-        )
+        aliases.extend(alias for alias, canonical in kg.entity_aliases.items()
+                       if kg._resolve_entity(canonical) == resolved)
         return min(aliases, key=lambda value: (len(str(value)), str(value).casefold()))
 
     @staticmethod
     def _canonicalize_candidate(answer: str, retrieval_trace: dict) -> str:
-        """Keep an exact table candidate when the model wraps it in prose."""
-        candidates = retrieval_trace.get("constraint_policy", {}).get(
-            "allowed_output_values", []
-        )
+        """Canonicalize table values only when the trace explicitly requires it."""
+        policy = retrieval_trace.get("constraint_policy", {})
+        if not policy.get("enforce_answer_candidate", False):
+            return answer
+        candidates = policy.get("allowed_output_values", [])
         normalized = answer.casefold().strip()
         exact = [candidate for candidate in candidates if candidate.casefold() == normalized]
         if exact:
@@ -259,148 +387,147 @@ class OnlineKGPathTextBaseline:
         return contained[0] if len(contained) == 1 else answer
 
     @staticmethod
-    def _fallback_path_answer(path_record: dict) -> str:
-        """Return the final grounded entity only when the final judge fails."""
-        for edge in reversed(path_record.get("edges", [])):
-            candidate = str(edge.get("traversal_to") or edge.get("tail") or "").strip()
-            if not candidate or candidate.startswith(("table:", "passage:")):
-                continue
-            if re.fullmatch(r"\d+", candidate):
-                continue
-            return candidate
-        return ""
-
-    @staticmethod
     def _parse_final_judge_response(response: str) -> dict | None:
-        """Parse JSON even when a provider wraps it in a Markdown fence."""
+        """Accept exactly one JSON object, optionally wrapped in a JSON fence."""
         response = str(response or "").strip()
         if response.startswith("```"):
             response = re.sub(r"^```(?:json)?\s*|\s*```$", "", response).strip()
         try:
             parsed = json.loads(response)
         except json.JSONDecodeError:
-            match = re.search(r"\{.*\}", response, flags=re.DOTALL)
-            if not match:
-                return None
-            try:
-                parsed = json.loads(match.group(0))
-            except json.JSONDecodeError:
-                return None
+            return None
         return parsed if isinstance(parsed, dict) else None
 
-    def _reconcile_plain_answer(
-        self,
-        response: str,
-        path_records: list[dict],
-        retrieval_trace: dict,
-    ) -> tuple[str, str | None, list[str]]:
-        """Ground a plain answer in one ranked path for non-JSON providers."""
-        response = str(response or "").strip()
-        if not response:
-            return "", None, []
-        candidates = retrieval_trace.get("constraint_policy", {}).get(
-            "allowed_output_values", []
+    @staticmethod
+    def _answer_match_score(question: str, answer: str, edge: dict) -> float:
+        """Score an existing edge by how directly it supports a fixed answer."""
+        answer = str(answer or "").strip()
+        if not answer:
+            return 0.0
+        answer_key = " ".join(re.findall(r"[a-z0-9]+", answer.casefold()))
+        answer_digits = re.sub(r"\D", "", answer)
+        if not answer_key:
+            return 0.0
+        phrase = re.compile(r"(?<![a-z0-9])" + re.escape(answer_key) + r"(?![a-z0-9])")
+        fields = " ".join(str(edge.get(field, "")) for field in (
+            "head", "relation", "tail", "traversal_from", "traversal_to",
+        ))
+        field_key = " ".join(re.findall(r"[a-z0-9]+", fields.casefold()))
+        contexts = " ".join(
+            str(context.get(field, ""))
+            for context in edge.get("contexts", [])
+            for field in ("context_before", "text")
         )
-        normalized = response.casefold()
-        matched_candidates = [
-            candidate for candidate in candidates if candidate.casefold() in normalized
-        ]
-        if candidates:
-            if len(matched_candidates) != 1:
-                return "", None, []
-            answer = matched_candidates[0]
-        else:
-            answer = response
-        answer_normalized = answer.casefold().strip()
-        for path in path_records:
-            evidence_ids = []
-            for edge in path.get("edges", []):
-                values = [
-                    str(edge.get(field, ""))
-                    for field in ("traversal_to", "tail", "head", "traversal_from")
-                ]
-                values.extend(
-                    str(context.get("text", "")) for context in edge.get("contexts", [])
-                )
-                if any(
-                    value.casefold().strip() == answer_normalized
-                    or answer_normalized in value.casefold()
-                    for value in values if value
-                ):
-                    evidence_ids.append(str(edge.get("edge_id")))
-            if evidence_ids:
-                return answer, path["path_id"], list(dict.fromkeys(evidence_ids))
-        return "", None, []
+        context_key = " ".join(re.findall(r"[a-z0-9]+", contexts.casefold()))
+        score = 0.0
+        if phrase.search(field_key):
+            score += 100.0
+        if phrase.search(context_key):
+            score += 80.0
+        if answer_digits:
+            if answer_digits in re.sub(r"\D", "", fields):
+                score += 100.0
+            if answer_digits in re.sub(r"\D", "", contexts):
+                score += 80.0
+        if answer_digits and str(edge.get("relation", "")).casefold() in {"population", "count", "total"}:
+            score += 25.0
+        question_terms = OnlineKGPathTextBaseline._terms(question)
+        score += min(len(question_terms & OnlineKGPathTextBaseline._terms(fields + " " + contexts)), 6) * 0.5
+        return score
 
-    def _validated_judgement(
-        self,
-        response: str,
-        path_records: list[dict],
-        retrieval_trace: dict,
-    ) -> tuple[str, str | None, list[str], str | None, str | None]:
-        """Return validated answer/path/evidence and the response format."""
-        judgement = self._parse_final_judge_response(response)
-        if judgement is None:
-            answer, path_id, evidence_ids = self._reconcile_plain_answer(
-                response, path_records, retrieval_trace,
-            )
-            if answer:
-                return answer, path_id, evidence_ids, None, "plain_answer_reconciled"
-            return "", None, [], "invalid_json_or_ungrounded_plain_answer", None
-        path_id = judgement.get("selected_path_id")
-        answer = judgement.get("answer")
-        evidence_ids = judgement.get("evidence_edge_ids")
-        paths_by_id = {path["path_id"]: path for path in path_records}
-        if not isinstance(path_id, str) or path_id not in paths_by_id:
-            return "", None, [], "unknown_path_id", "json"
-        if not isinstance(answer, str) or not answer.strip():
-            return "", None, [], "empty_answer", "json"
-        if not isinstance(evidence_ids, list) or not evidence_ids or not all(
-            isinstance(edge_id, str) for edge_id in evidence_ids
-        ):
-            return "", None, [], "missing_evidence_edge_ids", "json"
-        path_edge_ids = {
-            str(edge.get("edge_id")) for edge in paths_by_id[path_id].get("edges", [])
+    def _materialize_answer_evidence_paths(
+        self, question: str, answer: str, kg, path_records: list[dict],
+    ) -> list[dict]:
+        """Add answer-bearing KG edges only after free answer synthesis.
+
+        The retrieval paths remain untouched in step 1.  These one-edge paths
+        are created solely for reverse grounding when an answer fact was in the
+        merged subgraph but not part of a top-k traversal.
+        """
+        existing = {
+            str(edge.get("edge_id"))
+            for path in path_records for edge in path.get("edges", [])
         }
-        if not set(evidence_ids) <= path_edge_ids:
-            return "", None, [], "evidence_outside_selected_path", "json"
-        answer = self._canonicalize_candidate(answer.strip(), retrieval_trace)
-        candidates = retrieval_trace.get("constraint_policy", {}).get(
-            "allowed_output_values", []
-        )
-        if candidates and answer not in candidates:
-            return "", None, [], "answer_outside_table_candidates", "json"
-        return answer, path_id, evidence_ids, None, "json"
+        additions = []
+        candidates = []
+        for edge in kg.path_edge_records():
+            if str(edge.get("edge_id")) in existing:
+                continue
+            score = self._answer_match_score(question, answer, edge)
+            if score >= 80.0:
+                candidates.append((score, edge))
+        for rank, (score, edge) in enumerate(sorted(candidates, key=lambda item: (-item[0], str(item[1].get("edge_id"))))[:3], start=1):
+            path_id = "answer_evidence_" + re.sub(r"[^a-zA-Z0-9_]+", "_", str(edge["edge_id"]))
+            additions.append({
+                "path_id": path_id,
+                "score": score,
+                "score_components": {"reverse_answer_match": round(score, 4)},
+                "nodes": [str(edge["head"]), str(edge["tail"])],
+                "edges": [edge],
+                "steps": [{"step": 1, "goal": f'{edge["head"]} --{edge["relation"]}--> {edge["tail"]}', "depends_on": None}],
+                "path_verification": {"status": "answer_evidence", "selection_score": score, "hard_failures": []},
+                "created_after_answer": True,
+            })
+        return [*path_records, *additions]
 
-    def _final_judge_prompt(
-        self,
-        question: str,
-        context: str,
-        retrieval_trace: dict,
-        *,
-        retry: bool = False,
-    ) -> str:
-        retry_instruction = (
-            "This is the only retry; use the single supplied path. "
-            if retry else "Compare only the supplied candidate paths. "
-        )
-        return f"""You are the final grounded-path judge. {retry_instruction}
-Use only the ranked Online KG paths and their supporting evidence below. Do not
-invent facts, generate code, or execute a program. Prefer a path whose edges and
-passage context jointly satisfy every condition in the question.
+    def _reverse_ground_answer(self, question: str, answer: str, path_records: list[dict]) -> tuple[list[str], list[str], dict]:
+        """Map a completed answer to nearest real evidence without another LLM call."""
+        scored = []
+        for path in path_records:
+            for edge in path.get("edges", []):
+                score = self._answer_match_score(question, answer, edge)
+                if score > 0:
+                    scored.append((score, path["path_id"], str(edge.get("edge_id"))))
+        if not scored:
+            return [], [], {"status": "ungrounded", "reason": "answer_not_found_in_merged_evidence"}
+        best = max(score for score, _, _ in scored)
+        # Keep all exact/direct evidence ties; avoid attributing the answer to
+        # merely adjacent paths whose text did not contain the answer span.
+        selected = [(score, path_id, edge_id) for score, path_id, edge_id in scored if score >= max(80.0, best - 0.01)]
+        path_ids = list(dict.fromkeys(path_id for _, path_id, _ in selected))
+        edge_ids = list(dict.fromkeys(edge_id for _, _, edge_id in selected))
+        return path_ids, edge_ids, {
+            "status": "grounded",
+            "mode": "deterministic_reverse_answer_match",
+            "best_score": round(best, 4),
+            "matched_edge_count": len(edge_ids),
+        }
+
+    def _answer_synthesis_prompt(self, question: str, context: str, retrieval_trace: dict, *, retry: bool = False) -> str:
+        retry_instruction = "Your previous answer was invalid. " if retry else ""
+        return f"""You are an evidence synthesizer. {retry_instruction}Use only the merged Online KG
+subgraph and its related text contexts below. Do not select paths or citations yet:
+first determine the final answer from the union of this evidence. Table values may
+be bridge entities, and a linked-passage context can contain the final fact.
 {self._constraint_instruction(retrieval_trace)}
 Answer contract: {self._answer_shape_instruction(question)}
-
-Return only the shortest answer span or numeric answer. Do not explain it and do
-not return JSON.
+Return exactly one non-empty answer span on one line, with no JSON, label, explanation,
+or chain-of-thought.
 
 Question: {question}
 
 Online KG candidate payload:
 {context}
 
-Final answer:
-"""
+Final answer:"""
+
+    def _synthesized_answer(self, response: str) -> str:
+        """Accept a short answer, and tolerate a legacy JSON answer completion."""
+        response = str(response or "").strip()
+        parsed = self._parse_final_judge_response(response)
+        if parsed and isinstance(parsed.get("answer"), str):
+            response = parsed["answer"].strip()
+        response = re.sub(r"^(?:final\s+)?answer\s*:\s*", "", response, flags=re.I)
+        response = response.splitlines()[0].strip() if response else ""
+        if response.casefold() in {"", "unknown", "n/a", "na", "null", "none", "insufficient information"}:
+            return ""
+        return response
+
+    @staticmethod
+    def _request_token_limit(provider, configured: int) -> int:
+        """Reserve enough GPT-OSS completion budget for its hidden reasoning."""
+        model = str(getattr(provider, "model", "")).casefold()
+        return max(configured, 512) if "gpt-oss" in model else configured
 
     def run(self, example: DatasetExample) -> dict:
         started = time.perf_counter()
@@ -451,50 +578,52 @@ Final answer:
             }
             for path in paths
         ]
-        context = self._bounded_kg_context(
-            example.question, path_records, kg, retrieval_trace,
+        path_records, path_selection_audit = self._select_verified_paths(
+            example.question, path_records, retrieval_trace,
         )
-        prompt = self._final_judge_prompt(
-            example.question, context, retrieval_trace,
-        )
+        if not path_records:
+            return {
+                "answer": None,
+                "error": "No candidate path passed deterministic grounding checks.",
+                "method": self.method_name,
+                "kg_summary": kg.summary(),
+                "entity_anchor": retrieval_trace.get("entity_anchor", {}),
+                "retrieval_trace": retrieval_trace,
+                "path_selection_audit": path_selection_audit,
+                "reasoning_paths": [],
+                "execution_mode": "path_text",
+                "code_generated": False,
+                "program_executed": False,
+            }
+        context = self._bounded_kg_context(example.question, path_records, kg, retrieval_trace)
         provider = get_provider()
-        raw_answer = llm_call(
-            prompt,
-            max_tokens=self.config.max_output_tokens,
-            temperature=self.config.temperature,
+        request_max_tokens = self._request_token_limit(provider, self.config.max_output_tokens)
+
+        synthesis_prompt = self._answer_synthesis_prompt(example.question, context, retrieval_trace)
+        raw_synthesis_response = llm_call(
+            synthesis_prompt, max_tokens=request_max_tokens, temperature=self.config.temperature,
         )
-        answer, selected_path_id, evidence_edge_ids, validation_error, response_format = self._validated_judgement(
-            raw_answer, path_records, retrieval_trace,
-        )
-        answer_retry_attempted = False
-        answer_fallback_used = False
-        retry_prompt_chars = 0
-        if validation_error:
-            answer_retry_attempted = True
-            top_path = path_records[0]
-            narrow_context = self._bounded_kg_context(
-                example.question, [top_path], kg, retrieval_trace,
+        answer = self._synthesized_answer(raw_synthesis_response)
+        synthesis_retry_attempted = False
+        if not answer:
+            synthesis_retry_attempted = True
+            raw_synthesis_response = llm_call(
+                self._answer_synthesis_prompt(example.question, context, retrieval_trace, retry=True),
+                max_tokens=max(512, request_max_tokens), temperature=self.config.temperature,
             )
-            retry_prompt = self._final_judge_prompt(
-                example.question, narrow_context, retrieval_trace, retry=True,
-            )
-            retry_prompt_chars = len(retry_prompt)
-            raw_answer = llm_call(
-                retry_prompt,
-                max_tokens=min(128, self.config.max_output_tokens),
-                temperature=self.config.temperature,
-            )
-            answer, selected_path_id, evidence_edge_ids, retry_error, response_format = self._validated_judgement(
-                raw_answer, [top_path], retrieval_trace,
-            )
-            if retry_error:
-                answer = self._fallback_path_answer(top_path)
-                answer_fallback_used = bool(answer)
-                validation_error = retry_error
-            else:
-                validation_error = None
+            answer = self._synthesized_answer(raw_synthesis_response)
         answer = self._canonicalize_kg_alias(answer, kg)
         answer = self._canonicalize_candidate(answer, retrieval_trace)
+
+        # Step 3 is deliberately non-generative: after the answer exists,
+        # attach it to exact answer-bearing edges/contexts in the merged KG.
+        path_records = self._materialize_answer_evidence_paths(
+            example.question, answer, kg, path_records,
+        ) if answer else path_records
+        selected_path_ids, evidence_edge_ids, grounding_audit = self._reverse_ground_answer(
+            example.question, answer, path_records,
+        ) if answer else ([], [], {"status": "ungrounded", "reason": "empty_synthesis_answer"})
+        validation_error = None if evidence_edge_ids else grounding_audit["reason"]
 
         return {
             "answer": answer,
@@ -503,18 +632,28 @@ Final answer:
             "model": getattr(provider, "model", None),
             "temperature": self.config.temperature,
             "latency_ms": round((time.perf_counter() - started) * 1000, 2),
-            "prompt_chars": len(prompt),
-            "answer_retry_attempted": answer_retry_attempted,
-            "answer_fallback_used": answer_fallback_used,
-            "retry_prompt_chars": retry_prompt_chars,
-            "llm_selected_path_id": selected_path_id,
+            "prompt_chars": len(synthesis_prompt),
+            "synthesis_prompt_chars": len(synthesis_prompt),
+            "grounding_prompt_chars": 0,
+            "synthesis_retry_attempted": synthesis_retry_attempted,
+            "raw_synthesis_response": self._bounded_response(raw_synthesis_response),
+            "request_max_output_tokens": request_max_tokens,
+            "answer_retry_attempted": False,
+            "answer_fallback_used": False,
+            "retry_prompt_chars": 0,
+            "raw_final_judge_response": None,
+            "retry_raw_final_judge_response": None,
+            "llm_selected_path_ids": selected_path_ids,
+            "llm_selected_path_id": selected_path_ids[0] if selected_path_ids else None,
             "final_judge_evidence_edge_ids": evidence_edge_ids,
-            "final_judge_response_format": response_format,
+            "final_judge_response_format": "deterministic_reverse_grounding",
             "final_judge_valid": validation_error is None,
             "final_judge_failure_reason": validation_error,
+            "grounding_audit": grounding_audit,
             "kg_summary": kg.summary(),
             "entity_anchor": retrieval_trace.get("entity_anchor", {}),
             "retrieval_trace": retrieval_trace,
+            "path_selection_audit": path_selection_audit,
             "reasoning_paths": path_records,
             "best_path_id": path_records[0]["path_id"] if path_records else None,
             "best_path_score": path_records[0]["score"] if path_records else None,

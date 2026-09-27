@@ -291,10 +291,19 @@ class OnlineKG:
     def path_edge_records(self) -> list[dict]:
         """Return semantic and row-record edges for grounded text-path search."""
         records = []
+        semantic_seen = set()
         for index, (head, tail, key, data) in enumerate(
             self.graph.edges(keys=True, data=True)
         ):
             provenance = data["provenance"]
+            identity = (
+                str(head), str(data["relation"]), str(tail),
+                str(provenance.source_type), str(provenance.source_id),
+                provenance.row_index, str(provenance.column_name),
+            )
+            if identity in semantic_seen:
+                continue
+            semantic_seen.add(identity)
             records.append({
                 "edge_id": f"semantic:{index}:{key}",
                 "head": str(head),
@@ -302,6 +311,7 @@ class OnlineKG:
                 "tail": str(tail),
                 "source_type": provenance.source_type,
                 "source_id": provenance.source_id,
+                "source_group": provenance.source_group,
                 "row_index": provenance.row_index,
                 "column_name": provenance.column_name,
                 "header_path": provenance.header_path,
@@ -335,6 +345,19 @@ class OnlineKG:
                     self.node_types.pop(str(alias))
                 )
             self.graph.remove_node(alias)
+            # The path-text view is maintained separately from the semantic
+            # graph. Canonicalize it too, otherwise aliases recreate duplicate
+            # candidate paths after entity resolution.
+            for record in self.record_edges:
+                if str(record.get("head")) == str(alias):
+                    record["head"] = canonical
+                if str(record.get("tail")) == str(alias):
+                    record["tail"] = canonical
+            for edge in self.structural_edges:
+                if str(edge.get("head")) == str(alias):
+                    edge["head"] = canonical
+                if str(edge.get("tail")) == str(alias):
+                    edge["tail"] = canonical
             self.entity_aliases[alias] = canonical
             for old_alias, target in list(self.entity_aliases.items()):
                 if target == alias:
@@ -342,6 +365,24 @@ class OnlineKG:
             self.resolution_log.append(
                 {"tier": tier, "alias": alias, "canonical": canonical, "score": round(score, 4)}
             )
+
+        self._deduplicate_path_records()
+
+    def _deduplicate_path_records(self) -> None:
+        """Keep one path-view edge per canonical fact and provenance location."""
+        unique, seen = [], set()
+        for record in self.record_edges:
+            contexts = record.get("contexts", [])
+            context_ids = tuple(sorted(str(item.get("source_id", "")) for item in contexts))
+            identity = (
+                str(record.get("head")), str(record.get("relation")), str(record.get("tail")),
+                str(record.get("source_type", "")), str(record.get("source_id", "")),
+                record.get("row_index"), str(record.get("column_name", "")), context_ids,
+            )
+            if identity not in seen:
+                unique.append(record)
+                seen.add(identity)
+        self.record_edges = unique
 
     def _resolve_entity(self, entity: str) -> str:
         seen = set()
@@ -485,6 +526,9 @@ class OnlineKG:
                 bool(data.get("contexts")) for _, _, data in self.graph.edges(data=True)
             ),
             "relations": sorted({d["relation"] for _, _, d in self.graph.edges(data=True)}),
+            "num_rule_text_edges": sum(
+                d["provenance"].source_group == "rule_text" for _, _, d in self.graph.edges(data=True)
+            ),
             "num_entity_aliases": len(self.entity_aliases),
             "entity_resolution": resolution_counts,
             "num_rejected_triples": len(self.rejection_log),

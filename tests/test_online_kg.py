@@ -256,3 +256,15 @@ def test_cell_multi_entity_splitter_creates_atomic_row_and_link_edges():
         if edge["relation"] == "linked_passage" and edge["tail"] == "passage:/wiki/Tommy_Dunne"
     }
     assert "Tommy Dunne" in linked_members
+
+
+def test_linked_display_aliases_canonicalize_path_view_without_duplicate_edges():
+    kg = OnlineKG()
+    source = "https://example.org/Ltyentye_Apurte"
+    kg.add_triple(Triple("Ltyentye Apurte Community", "linked_passage", source, Provenance("table", "places")))
+    kg.add_triple(Triple("Ltyentye Apurte", "linked_passage", source, Provenance("table", "places")))
+    EntityResolver().resolve(kg)
+
+    assert kg._resolve_entity("Ltyentye Apurte") == "Ltyentye Apurte Community"
+    linked = [edge for edge in kg.path_edge_records() if edge["relation"] == "linked_passage"]
+    assert len(linked) == 1

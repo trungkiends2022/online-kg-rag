@@ -95,10 +95,10 @@ for shard in "${shards[@]}"; do
       --output "$output" \
       --top-k 5 \
       --second-stage-k 3 \
-      --n-paths 3 \
+      --n-paths 5 \
       --max-replans 0 \
       --max-context-chars 24000 \
-      --max-output-tokens 512 \
+      --max-output-tokens 128 \
       --temperature 0 \
       --llm-timeout-seconds 120 \
       --llm-sdk-retries 2 \

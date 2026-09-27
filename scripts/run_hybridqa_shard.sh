@@ -44,7 +44,7 @@ METHOD="online_kg_path_text"
 WORKERS=4
 MAX_WORKERS_ALLOWED=8
 COMPARE_DIRECT=true
-LIMIT=""
+LIMIT="200"
 RESUME=true
 QUIET_RECORDS=true
 RUN_TAG="${RUN_TAG:-run_$(date +%Y%m%d_%H%M%S)}"
@@ -204,10 +204,10 @@ for s in "${shards[@]}"; do
       --output "$out_file"
       --top-k 5
       --second-stage-k 3
-      --n-paths 3
+      --n-paths 5
       --max-replans 0
       --max-context-chars 24000
-      --max-output-tokens 512
+      --max-output-tokens 128
       --temperature 0
       --max-workers "$WORKERS"
       --llm-max-concurrent-requests "$WORKERS"

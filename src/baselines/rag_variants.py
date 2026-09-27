@@ -19,6 +19,7 @@ class RAGConfig:
     max_output_tokens: int = 1024
     temperature: float = 0.0
 
+    use_rule_text_triples: bool = True
     def validate(self) -> None:
         if self.top_k < 1:
             raise ValueError("top_k must be positive")
@@ -26,6 +27,8 @@ class RAGConfig:
             raise ValueError("second_stage_k must be non-negative")
         if self.max_context_chars < 1 or self.max_output_tokens < 1:
             raise ValueError("context and output limits must be positive")
+        if not isinstance(self.use_rule_text_triples, bool):
+            raise ValueError("use_rule_text_triples must be boolean")
 
 
 def flatten_documents(example: DatasetExample) -> list[dict]:

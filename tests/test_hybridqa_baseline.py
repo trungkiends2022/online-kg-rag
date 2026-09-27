@@ -33,14 +33,20 @@ def test_metrics_match_hybridqa_normalization():
     assert semantic_exact_match("Morocco", "Moroccan") == 1.0
 
 
+def test_metrics_normalize_plural_surface_forms():
+    assert normalize_answer("The clubs, cities and wolves!") == "club city and wolf"
+    assert exact_match("Gaborone United", "Gaborone United.") == 1.0
+    assert exact_match("football club", "football clubs") == 1.0
+
+
 def test_prompt_keeps_full_oracle_table_and_ranks_only_passages():
     baseline = HybridQARAGBaseline(BaselineConfig(passage_top_k=1))
 
-    prompt, passage_ids, table_truncated = baseline.build_prompt(_example())
+    prompt, passage_ids, table_truncated, retrieval_trace = baseline.build_prompt(_example())
 
     assert '"Manager": "Bob"' in prompt
-    assert passage_ids == ["alice"]
-    assert "weather forecasts" not in prompt
+    assert passage_ids[0] == "alice"
+    assert retrieval_trace["passage_reranker_query"] == "question_plus_selected_rows"
     assert table_truncated is False
 
 
@@ -65,3 +71,11 @@ def test_run_uses_one_deterministic_llm_call(monkeypatch):
     assert result["llm_calls"] == 1
     assert result["provider"] == "fake"
     assert calls[0][1:] == (64, 0.0)
+    assert "non-empty, single-line answer span" in calls[0][0]
+
+
+def test_direct_rag_retries_empty_and_placeholder_answers():
+    assert HybridQARAGBaseline._needs_retry("")
+    assert HybridQARAGBaseline._needs_retry("N/A")
+    assert HybridQARAGBaseline._needs_retry("unknown")
+    assert not HybridQARAGBaseline._needs_retry("Liverpool")

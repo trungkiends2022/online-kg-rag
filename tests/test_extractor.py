@@ -284,3 +284,38 @@ def test_builder_preserves_table_cell_hyperlinks_as_grounded_text_bridges():
         and edge["tail"] == "Hanoi" and edge["source_type"] == "text"
         for edge in records
     )
+
+
+def test_deterministic_text_extraction_exposes_population_and_location_edges():
+    extractor = EntityRelationExtractor(use_llm_text_enrichment=False)
+    triples = extractor.extract_from_text(
+        "council",
+        "Ltyentye Apurte Community is located in MacDonnell Regional Council. "
+        "MacDonnell Regional Council has a population of 6,863.",
+    )
+
+    facts = {(triple.head, triple.relation, triple.tail) for triple in triples}
+    assert ("Ltyentye Apurte Community", "located_in", "MacDonnell Regional Council") in facts
+    assert ("MacDonnell Regional Council", "population", "6,863") in facts
+
+
+def test_builder_connects_table_locality_to_contextual_population_body():
+    kg = OnlineKGBuilder(EntityRelationExtractor(use_llm_text_enrichment=False)).build({
+        "table_rows": [{
+            "table_name": "schools",
+            "rows": [{
+                "Name": "Ltyentye Apurte CEC",
+                "Suburb": "Ltyentye Apurte Community",
+                "LGA": "MacDonnell Region",
+            }],
+        }],
+        "text_passages": [{
+            "id": "macdonnell",
+            "text": "The MacDonnell Regional Council is a local government area. "
+                    "The region covers a large area and had an estimated population of 6,863 people.",
+        }],
+    })
+
+    assert kg.get_neighbors("Ltyentye Apurte Community", "located_in") == ["MacDonnell Region"]
+    assert kg.get_neighbors("MacDonnell Region", "administered_by") == ["MacDonnell Regional Council"]
+    assert kg.get_neighbors("MacDonnell Regional Council", "population") == ["6,863"]

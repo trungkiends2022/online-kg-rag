@@ -1,0 +1,308 @@
+[
+  {
+    "question_id": "7d2cbbdbecead98c",
+    "question": "What was the person who founded the Shamrock Hotel known to be the king of ?",
+    "table_id": "List_of_Texas_A&M_University_people_21",
+    "answer-text": "Wildcatter",
+    "question_postag": "WP VBD DT NN WP VBD DT NNP NNP VBN TO VB DT NN IN .",
+    "answer-node": [
+      [
+        "Winner of the Hoover Medal ; wildcatter",
+        [
+          4,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Wildcatter",
+        [
+          9,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Michael T. Halbouty",
+        [
+          4,
+          0
+        ],
+        "/wiki/Michael_T._Halbouty",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "8a0c9f5861500669",
+    "question": "What is the name of the club whose city/town is situated between Kgale and Oodi Hills ?",
+    "table_id": "Botswana_Premier_League_0",
+    "answer-text": "Gaborone United",
+    "question_postag": "WP VBZ DT NN IN DT NN WP$ NN VBZ VBN IN NNP CC NNP NNP .",
+    "answer-node": [
+      [
+        "Gaborone United",
+        [
+          3,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Township Rollers F.C.",
+        [
+          15,
+          0
+        ],
+        "/wiki/Township_Rollers_F.C.",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "d27ec782152ad273",
+    "question": "What is the alternative name for the historic place that is located in the township that was established in 1886 and that has the date listed # 14000426 ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Houghton_County,_Michigan_0",
+    "answer-text": "Portage Entry Light",
+    "question_postag": "WP VBZ DT JJ NN IN DT JJ NN WDT VBZ VBN IN DT NN WDT VBD VBN IN CD CC DT VBZ DT NN VBD # CD .",
+    "answer-node": [
+      [
+        "Keweenaw Waterway Lower Entrance Light",
+        [
+          19,
+          1
+        ],
+        "/wiki/Keweenaw_Waterway_Lower_Entrance_Light",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "91125ed5fbdba303",
+    "question": "Which plain is the city in Yugoslavia that had a GDP index of 172 located on ?",
+    "table_id": "Economy_of_the_Socialist_Federal_Republic_of_Yugoslavia_0",
+    "answer-text": "Pannonian",
+    "question_postag": "JJ NN VBZ DT NN IN NNP WDT VBD DT NNP NN IN CD VBN IN .",
+    "answer-node": [
+      [
+        "Belgrade",
+        [
+          0,
+          0
+        ],
+        "/wiki/Belgrade",
+        "passage"
+      ],
+      [
+        "Novi Sad",
+        [
+          5,
+          0
+        ],
+        "/wiki/Novi_Sad",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "4b2c14918cc950b7",
+    "question": "How many inhabit the Northern Territory district which contains the Ltyentye Apurte suburb ?",
+    "table_id": "List_of_schools_in_the_Northern_Territory_5",
+    "answer-text": "6,863",
+    "question_postag": "WRB JJ VBP DT NNP NNP NN WDT VBZ DT NNP NNP NN .",
+    "answer-node": [
+      [
+        "MacDonnell Region",
+        [
+          2,
+          2
+        ],
+        "/wiki/MacDonnell_Region",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "4950879950bb5189",
+    "question": "What year of the member of the Hong Kong films entered the music industry ?",
+    "table_id": "List_of_Hong_Kong_films_of_2014_0",
+    "answer-text": "2007",
+    "question_postag": "WP NN IN DT NN IN DT NNP NNP NNS VBD DT NN NN .",
+    "answer-node": [
+      [
+        "Moses Chan",
+        [
+          7,
+          2
+        ],
+        "/wiki/Moses_Chan",
+        "passage"
+      ],
+      [
+        "Deep Ng",
+        [
+          11,
+          2
+        ],
+        "/wiki/Deep_Ng",
+        "passage"
+      ],
+      [
+        "Andy Lau",
+        [
+          13,
+          2
+        ],
+        "/wiki/Andy_Lau",
+        "passage"
+      ],
+      [
+        "Edison Chen",
+        [
+          13,
+          2
+        ],
+        "/wiki/Edison_Chen",
+        "passage"
+      ],
+      [
+        "Vincent Kok",
+        [
+          15,
+          1
+        ],
+        "/wiki/Vincent_Kok",
+        "passage"
+      ],
+      [
+        "Pakho Chau",
+        [
+          19,
+          2
+        ],
+        "/wiki/Pakho_Chau",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c1f49af7526d9ef2",
+    "question": "Who established the school that was the 2nd place winner of the 2002 Head of the River ( Queensland ) ?",
+    "table_id": "Head_of_the_River_(Queensland)_13",
+    "answer-text": "Society of the Sacred Heart",
+    "question_postag": "WP VBD DT NN WDT VBD DT JJ NN NN IN DT CD NNP IN DT NNP ( NNP ) .",
+    "answer-node": [
+      [
+        "Stuartholme School",
+        [
+          8,
+          1
+        ],
+        "/wiki/Stuartholme_School",
+        "passage"
+      ],
+      [
+        "Stuartholme School",
+        [
+          11,
+          3
+        ],
+        "/wiki/Stuartholme_School",
+        "passage"
+      ],
+      [
+        "Stuartholme School",
+        [
+          12,
+          2
+        ],
+        "/wiki/Stuartholme_School",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "cc03f30f5224d8bd",
+    "question": "The runner-up in the election with the smallest margin was the former minister of what ?",
+    "table_id": "Tamil_Nadu_legislative_assembly_election,_2001_0",
+    "answer-text": "revenue and housing in the Indian state of Tamil nadu",
+    "question_postag": "DT NN IN DT NN IN DT JJS NN VBD DT JJ NN IN WP .",
+    "answer-node": [
+      [
+        "I. Periyasamy",
+        [
+          17,
+          3
+        ],
+        "/wiki/I._Periyasamy",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "1ac9822f92cc06aa",
+    "question": "How many boroughs does the 10th most populated metro area have ?",
+    "table_id": "Metropolitan_areas_of_Mexico_0",
+    "answer-text": "Seven",
+    "question_postag": "WRB JJ NN VBZ DT CD JJS JJ JJ NN VBP .",
+    "answer-node": [
+      [
+        "Santiago de Querétaro",
+        [
+          9,
+          1
+        ],
+        "/wiki/Santiago_de_Querétaro",
+        "passage"
+      ],
+      [
+        "San Luis Potosí",
+        [
+          10,
+          2
+        ],
+        "/wiki/San_Luis_Potosí",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "4ad1d3215fb69cd0",
+    "question": "What is the largest city of the home country of the sixth place finisher of the 2012 Chicago Marathon ?",
+    "table_id": "2012_Chicago_Marathon_1",
+    "answer-text": "Mombasa",
+    "question_postag": "WP VBZ DT JJS NN IN DT NN NN IN DT JJ NN NN IN DT CD NNP NNP .",
+    "answer-node": [
+      [
+        "Kenya",
+        [
+          1,
+          2
+        ],
+        "/wiki/Kenya",
+        "passage"
+      ],
+      [
+        "Kenya",
+        [
+          2,
+          2
+        ],
+        "/wiki/Kenya",
+        "passage"
+      ],
+      [
+        "Kenya",
+        [
+          4,
+          2
+        ],
+        "/wiki/Kenya",
+        "passage"
+      ]
+    ]
+  }
+]
