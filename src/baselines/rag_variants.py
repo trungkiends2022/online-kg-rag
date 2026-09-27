@@ -20,6 +20,11 @@ class RAGConfig:
     temperature: float = 0.0
 
     use_rule_text_triples: bool = True
+    # OUEG-only: prompt keeps the ambiguity visible by default. The two other
+    # modes are explicit selective-prediction behaviours.
+    ambiguity_policy: str = "prompt"
+    oueg_context_mode: str = "lossless"
+
     def validate(self) -> None:
         if self.top_k < 1:
             raise ValueError("top_k must be positive")
@@ -29,6 +34,10 @@ class RAGConfig:
             raise ValueError("context and output limits must be positive")
         if not isinstance(self.use_rule_text_triples, bool):
             raise ValueError("use_rule_text_triples must be boolean")
+        if self.ambiguity_policy not in {"prompt", "return_candidates", "lexical_tiebreak"}:
+            raise ValueError("ambiguity_policy must be prompt, return_candidates, or lexical_tiebreak")
+        if self.oueg_context_mode not in {"lossless", "extractive"}:
+            raise ValueError("oueg_context_mode must be lossless or extractive")
 
 
 def flatten_documents(example: DatasetExample) -> list[dict]:

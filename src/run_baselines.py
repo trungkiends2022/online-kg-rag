@@ -19,6 +19,7 @@ from src.baselines import (
     FlatTableBM25Baseline,
     HybridQARAGBaseline,
     OnlineKGPathTextBaseline,
+    OnlineUnifiedEvidenceGraphBaseline,
     OracleEvidenceBaseline,
     PathConsistencyEvaluator,
     GraphRetrievalNoPathBaseline,
@@ -44,6 +45,7 @@ METHODS = (
     "direct_llm",
     "flat_table_bm25",
     "online_kg_path_text",
+    "online_unified_evidence_graph",
     "oracle_evidence",
     "path_consistency",
     "numerical_ir",
@@ -146,6 +148,8 @@ def _build_run_manifest(args, *, max_workers: int) -> dict:
         "max_output_tokens": args.max_output_tokens,
         "temperature": args.temperature,
         "use_rule_text_triples": args.use_rule_text_triples,
+        "ambiguity_policy": args.ambiguity_policy,
+        "oueg_context_mode": args.oueg_context_mode,
         "n_paths": args.n_paths,
         "max_replans": args.max_replans,
         "finqa_table_format": args.finqa_table_format,
@@ -234,6 +238,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--no-rule-text-triples", action="store_false", dest="use_rule_text_triples", help="Disable deterministic rule-based text triples when building a KG.")
+    parser.add_argument(
+        "--ambiguity-policy", choices=("prompt", "return_candidates", "lexical_tiebreak"), default="prompt",
+        help="OUEG ambiguity handling: expose it to the LLM, return all candidates, or use a unique lexical tie-break.",
+    )
+    parser.add_argument(
+        "--oueg-context-mode", choices=("lossless", "extractive"), default="lossless",
+        help="OUEG prompt context serialization; extractive only shortens long contexts.",
+    )
     parser.add_argument("--n-paths", type=int, default=5)
     parser.add_argument("--max-replans", type=int, default=2)
     parser.add_argument(
@@ -293,6 +305,8 @@ def _make_method(args):
         second_stage_k=args.second_stage_k,
         max_context_chars=args.max_context_chars,
         use_rule_text_triples=args.use_rule_text_triples,
+        ambiguity_policy=args.ambiguity_policy,
+        oueg_context_mode=args.oueg_context_mode,
         max_output_tokens=args.max_output_tokens,
         temperature=args.temperature,
     )
@@ -310,6 +324,8 @@ def _make_method(args):
         return GraphRetrievalNoPathBaseline(rag_config)
     if args.method == "online_kg_path_text":
         return OnlineKGPathTextBaseline(rag_config, n_paths=args.n_paths)
+    if args.method == "online_unified_evidence_graph":
+        return OnlineUnifiedEvidenceGraphBaseline(rag_config)
     if args.method == "oracle_evidence":
         return OracleEvidenceBaseline(rag_config)
     pipeline = OnlineKGPipeline(
@@ -438,6 +454,13 @@ def _evaluate_example(example, args) -> dict:
         )
         record["retrieval_audit"] = _hybridqa_retrieval_audit(example, prediction)
         record["error_category"] = _hybridqa_error_category(record)
+        ambiguity = prediction.get("ambiguity")
+        if isinstance(ambiguity, dict):
+            record["is_ambiguous"] = bool(ambiguity.get("is_ambiguous", False))
+            record["ambiguity_status"] = ambiguity.get("status")
+        else:
+            record["is_ambiguous"] = None
+            record["ambiguity_status"] = None
     elif args.dataset == "finqa":
         _add_finqa_metrics(record, prediction, example, args)
     else:
@@ -634,11 +657,29 @@ def main() -> None:
             {key: row.get(key) for key in ("id", "question", "gold_answer", "answer", "error_category", "retrieval_audit")}
             for row in records if row.get("error_category")
         ][:100]
+        ambiguous_rows = [r for r in records if r.get("is_ambiguous") is True]
+        unambiguous_rows = [r for r in records if r.get("is_ambiguous") is False]
+        ambiguity_metrics = {}
+        if ambiguous_rows:
+            ambiguity_metrics.update(
+                ambiguous_count=len(ambiguous_rows),
+                ambiguous_exact_match=sum(r["exact_match"] for r in ambiguous_rows) / len(ambiguous_rows),
+                ambiguous_semantic_exact_match=sum(r["semantic_exact_match"] for r in ambiguous_rows) / len(ambiguous_rows),
+                ambiguous_f1=sum(r["f1"] for r in ambiguous_rows) / len(ambiguous_rows),
+            )
+        if unambiguous_rows:
+            ambiguity_metrics.update(
+                unambiguous_count=len(unambiguous_rows),
+                unambiguous_exact_match=sum(r["exact_match"] for r in unambiguous_rows) / len(unambiguous_rows),
+                unambiguous_semantic_exact_match=sum(r["semantic_exact_match"] for r in unambiguous_rows) / len(unambiguous_rows),
+                unambiguous_f1=sum(r["f1"] for r in unambiguous_rows) / len(unambiguous_rows),
+            )
         summary.update(
             empty_answer_count=len(empty_answers),
             empty_answer_rate=(len(empty_answers) / len(records) if records else 0.0),
             error_taxonomy=categories,
             error_audit_sample=audit_sample,
+            **ambiguity_metrics,
             **retrieval_means,
         )
     elif args.dataset == "finqa":
@@ -697,6 +738,8 @@ def main() -> None:
     summary["config"] = {
         "top_k": args.top_k,
         "use_rule_text_triples": args.use_rule_text_triples,
+        "ambiguity_policy": args.ambiguity_policy,
+        "oueg_context_mode": args.oueg_context_mode,
         "max_context_chars": args.max_context_chars,
         "max_output_tokens": args.max_output_tokens,
         "temperature": args.temperature,

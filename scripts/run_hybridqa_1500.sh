@@ -45,9 +45,9 @@ log_root="${LOG_ROOT:-$repo_root/data/logs/hybridqa-1500-seed2027/$run_tag}"
 # Oracle evidence is a retrieval upper bound and numerical_ir targets arithmetic
 # datasets, so the controlled HybridQA comparison uses these six methods.
 default_methods=(
+  graph_retrieval_no_path
   direct_llm
   flat_table_bm25
-  graph_retrieval_no_path
   online_kg_path_text
   path_consistency
   online_kg

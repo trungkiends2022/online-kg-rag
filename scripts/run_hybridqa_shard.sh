@@ -40,7 +40,7 @@ python_bin="$(resolve_python)"
 
 # Default configuration
 SHARD="01"
-METHOD="online_kg_path_text"
+METHOD="graph_retrieval_no_path"
 WORKERS=4
 MAX_WORKERS_ALLOWED=8
 COMPARE_DIRECT=true
@@ -60,9 +60,9 @@ ghi log EM, ACC, số lần gọi LLM, thời gian chạy và so sánh với dir
 Options:
   -s, --shard <01..08|all>   Shard cần chạy (mặc định: 01). Có thể là 01, 02, ..., 08 hoặc all.
   -w, --workers <1..8>       Số luồng chạy song song (mặc định: 4, tối đa: 8).
-  -m, --method <name>        Phương pháp đánh giá (mặc định: online_kg_path_text).
-                             Các lựa chọn: online_kg_path_text, online_kg, flat_table_bm25,
-                             graph_retrieval_no_path, path_consistency, direct_llm.
+  -m, --method <name>        Phương pháp đánh giá (mặc định: graph_retrieval_no_path).
+                             Các lựa chọn: graph_retrieval_no_path, online_kg_path_text, online_kg,
+                             flat_table_bm25, path_consistency, direct_llm.
   --no-compare-direct        Chỉ chạy phương pháp đã chọn, không chạy direct_llm để so sánh.
   -l, --limit <N>            Chỉ chạy N mẫu đầu tiên trong shard (rất tiện để test nhanh).
   --no-resume                Ghi đè kết quả, không chạy tiếp từ kết quả cũ.
@@ -72,7 +72,7 @@ Options:
   -h, --help                 Hiển thị hướng dẫn này.
 
 Ví dụ:
-  # Chạy shard 01 với 4 luồng, so sánh online_kg_path_text với direct_llm:
+  # Chạy shard 01 với 4 luồng, so sánh graph_retrieval_no_path với direct_llm:
   $(basename "$0") --shard 01 --workers 4
 
   # Chạy test nhanh 5 câu đầu của shard 02 với 8 luồng song song:

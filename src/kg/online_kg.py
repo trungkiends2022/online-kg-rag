@@ -183,6 +183,46 @@ class OnlineKG:
                     {"head": row_id, "relation": "row_contains", "tail": cell_id},
                     {"head": cell_id, "relation": "column_of", "tail": column_id},
                 ))
+                if str(value).strip():
+                    relation = self.normalize_relation(str(column))
+                    header_path = tuple(
+                        part for part in str(column).replace("__", "_").split("_")
+                        if part
+                    )
+                    # The header is the relation to an addressable cell node;
+                    # the cell then carries its displayed value. This retains
+                    # table topology for reasoning across values in one row.
+                    self.structural_edges.extend((
+                        {"head": row_id, "relation": relation, "tail": cell_id},
+                        {"head": cell_id, "relation": "cell_value", "tail": str(value)},
+                    ))
+                    self.record_edges.extend((
+                        {
+                            "head": row_id,
+                            "relation": relation,
+                            "tail": cell_id,
+                            "source_type": "table",
+                            "source_id": table_name,
+                            "row_index": row_index,
+                            "column_name": str(column),
+                            "header_path": header_path,
+                            "structural": True,
+                            "cell_node": True,
+                            "cell_value": str(value),
+                        },
+                        {
+                            "head": cell_id,
+                            "relation": "cell_value",
+                            "tail": str(value),
+                            "source_type": "table",
+                            "source_id": table_name,
+                            "row_index": row_index,
+                            "column_name": str(column),
+                            "header_path": header_path,
+                            "structural": True,
+                            "cell_node": True,
+                        },
+                    ))
                 if cell_index > 0 and str(value).strip():
                     self.record_edges.append({
                         "head": row_id,

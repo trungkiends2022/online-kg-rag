@@ -338,9 +338,11 @@ Runner `src.run_baselines` hỗ trợ các phương án:
 
 | Method | Mô tả |
 |---|---|
+| `graph_retrieval_no_path` | Dựng Online KG + coarse retrieval (không sinh/thực thi path reasoning) |
 | `direct_llm` | Bảng oracle + passage BM25, một LLM call |
 | `flat_table_bm25` | Flatten từng row, trộn với passage rồi BM25 top-k |
 | `online_kg_path_text` | Dựng KG và sinh path dạng text, không sinh/thực thi code |
+| `online_unified_evidence_graph` | Toàn bộ subgraph + context dedupe; path chỉ là candidate view, không lọc evidence |
 | `oracle_evidence` | Chỉ dùng supporting facts do dataset annotate |
 | `path_consistency` | Online-KG nhưng chọn output bằng số path đồng ý |
 | `numerical_ir` | Online-KG + typed numerical IR có operator đóng và provenance |
@@ -378,7 +380,7 @@ Script [`scripts/run_hybridqa_shard.sh`](scripts/run_hybridqa_shard.sh) hỗ tr�
 
 **Các câu lệnh mẫu:**
 
-* Chạy Shard 01 với 8 luồng song song, đối sánh `online_kg_path_text` với `direct_llm`:
+* Chạy Shard 01 với 8 luồng song song, đối sánh `graph_retrieval_no_path` (mặc định) với `direct_llm`:
   ```bash
   ./scripts/run_hybridqa_shard.sh --shard 01 --workers 8
   ```
@@ -402,12 +404,12 @@ Script [`scripts/run_hybridqa_shard.sh`](scripts/run_hybridqa_shard.sh) hỗ tr�
   ```bash
   python3 -m src.run_baselines \
     --dataset hybridqa \
-    --method online_kg_path_text \
+    --method graph_retrieval_no_path \
     --input benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard01.json \
     --tables-dir data/WikiTables-WithLinks/tables_tok \
     --passages-dir data/WikiTables-WithLinks/request_tok \
-    --output data/results/shard01_online_kg_path_text.jsonl \
-    --top-k 5 --second-stage-k 3 --n-paths 3 \
+    --output data/results/shard01_graph_retrieval_no_path.jsonl \
+    --top-k 5 --second-stage-k 3 \
     --max-workers 8 --llm-max-concurrent-requests 8 \
     --quiet-records --force-progress --resume
   ```

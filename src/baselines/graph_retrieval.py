@@ -9,6 +9,7 @@ from src.baselines.rag_variants import RAGConfig
 from src.datasets.schema import DatasetExample
 from src.extraction.extractor import EntityRelationExtractor
 from src.kg.builder import OnlineKGBuilder
+from src.baselines.kg_payload import deduplicate_edge_contexts
 from src.llm.client import get_provider, llm_call
 from src.retrieval.coarse_retrieval import two_stage_retrieve
 
@@ -39,50 +40,31 @@ class GraphRetrievalNoPathBaseline:
 
     @staticmethod
     def _prompt_kg_payload(kg_edges: list[dict]) -> dict:
-        """Move repeated passage text into a source-id keyed context registry.
-
-        The full KG trace keeps per-edge contexts for review. The answer prompt
-        carries each passage only once and each edge references it through
-        ``context_ids``. This preserves all evidence while avoiding repeated
-        table-to-passage links from multiplying the same text in the request.
-        """
-        contexts_by_source_id: dict[str, dict] = {}
-        edges: list[dict] = []
-        for edge in kg_edges:
-            prompt_edge = {
-                key: value for key, value in edge.items() if key != "contexts"
-            }
-            context_ids: list[str] = []
-            for context in edge.get("contexts", []):
-                source_id = str(context.get("source_id", "")).strip()
-                if not source_id:
-                    continue
-                contexts_by_source_id.setdefault(source_id, dict(context))
-                if source_id not in context_ids:
-                    context_ids.append(source_id)
-            prompt_edge["context_ids"] = context_ids
-            edges.append(prompt_edge)
-        return {
-            "edges": edges,
-            "contexts_by_source_id": contexts_by_source_id,
-        }
+        """Keep all edge evidence while storing each passage once by source id."""
+        return deduplicate_edge_contexts(kg_edges)
 
     def run(self, example: DatasetExample) -> dict:
         started = time.perf_counter()
         retrieved = two_stage_retrieve(example.question, example.table_rows, example.text_passages,
                                        example.web_snippets, top_k=self.config.top_k, second_stage_k=3)
         kg = self.kg_builder.build(retrieved)
-        kg_edges = kg.to_trace()["edges"]
+        kg_trace = kg.to_trace()
+        semantic_kg_edges = kg_trace["edges"]
+        # Match Path Text's table-to-KG view: semantic facts plus row-record
+        # structure, including has_record, row field, and passage bridge edges.
+        # Graph No Path still supplies an unordered set and performs no path
+        # planning; it simply no longer discards the table structure.
+        kg_edges = kg.path_edge_records()
         prompt_triples = [
-            {"head": h, "relation": d.get("relation"), "tail": t}
-            for h, t, d in kg.graph.edges(data=True)
+            {"head": edge["head"], "relation": edge.get("relation"), "tail": edge["tail"]}
+            for edge in kg_edges
         ][:200]
         # Preserve every KG edge attribute and all linked passage contexts in
         # the exact payload sent to the answer model, without repeating the
         # same passage for every linked table edge.
         prompt_kg_edges = self._prompt_kg_payload(kg_edges)
         prompt_payload = json.dumps(prompt_kg_edges, ensure_ascii=False, default=str)
-        prompt = f"""Answer using only these retrieved KG edge records. Each record may reference text evidence through `context_ids`; resolve them in `contexts_by_source_id`. The records are an unordered set;
+        prompt = f"""Answer using only these retrieved KG edge records. Records with `structural: true` preserve the table row/column topology; records with `structural: false` are semantic facts. Each record may reference text evidence through `context_ids`; resolve them in `contexts_by_source_id`. The records are an unordered set;
 do not assume a reasoning path not supported by them. Return only the shortest answer span.
 
 Question: {example.question}
@@ -106,8 +88,11 @@ Answer:"""
         return {
             "answer": answer, "method": self.method_name, "provider": provider.name,
             "model": getattr(provider, "model", None), "kg_summary": kg.summary(),
-            # Keep the exact answer-time evidence for auditable single-case reruns.
-            "graph_kg_edges": kg_edges, "prompt_kg_edges": prompt_kg_edges,
+            # Keep the complete KG and the exact answer-time payload for audit.
+            "graph_kg_trace": kg_trace,
+            "graph_semantic_kg_edges": semantic_kg_edges,
+            "graph_kg_edges": kg_edges,
+            "prompt_kg_edges": prompt_kg_edges,
             "prompt_triples": prompt_triples, "prompt": prompt,
             "entity_anchor": retrieved["retrieval_trace"].get("entity_anchor", {}),
             "retrieval_trace": retrieved["retrieval_trace"], "prompt_chars": len(prompt),

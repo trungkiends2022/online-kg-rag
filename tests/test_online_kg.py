@@ -220,12 +220,39 @@ def test_record_edges_preserve_same_row_binding_for_path_text():
         (edge["relation"], edge["tail"])
         for edge in records
         if edge["head"] == row_id
-    } == {("year", "2022"), ("revenue", "10M")}
+    } >= {("year", "2022"), ("revenue", "10M")}
     assert all(
         edge["row_index"] == 7
         for edge in records
         if edge.get("structural")
     )
+
+
+def test_table_header_relates_row_to_cell_node_before_display_value():
+    kg = OnlineKG()
+    kg.register_table_structure(
+        "league", [{"Club": "Gaborone United", "City / Town": "Gaborone"}],
+        row_indices=[3],
+    )
+
+    row_id = "table:league:row:3"
+    cell_id = f"{row_id}:cell:City / Town"
+    records = kg.path_edge_records()
+    assert any(
+        edge["head"] == row_id
+        and edge["relation"] == "city_town"
+        and edge["tail"] == cell_id
+        and edge.get("cell_node")
+        for edge in records
+    )
+    assert any(
+        edge["head"] == cell_id
+        and edge["relation"] == "cell_value"
+        and edge["tail"] == "Gaborone"
+        for edge in records
+    )
+    assert any(node["id"] == cell_id and node["type"] == "Cell"
+               for node in kg.to_trace()["structural_nodes"])
 
 
 def test_new_name_is_not_merged_without_an_explicit_same_source_merger():

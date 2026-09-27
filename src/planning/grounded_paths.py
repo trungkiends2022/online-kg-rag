@@ -236,13 +236,16 @@ class GroundedPathPlanner:
             for edge in edges
             if edge.get("row_index") is not None
         }
-        record_edges = sum(bool(edge.get("structural")) for edge in edges)
-        row_context = 1.0 if record_edges >= 2 and len(rows) == 1 else 0.0
-        row_entity_binding = (
-            1.0
-            if row_context and any(edge["relation"] == "has_record" for edge in edges)
-            else 0.0
+        has_record = any(edge["relation"] == "has_record" for edge in edges)
+        row_attributes = sum(
+            bool(edge.get("structural")) and edge["relation"] != "has_record"
+            for edge in edges
         )
+        # A pair of row attributes alone is not a row bundle. Require the
+        # explicit entity→row binding and two row values so this component
+        # denotes a record-level comparison rather than a partial traversal.
+        row_context = 1.0 if has_record and row_attributes >= 2 and len(rows) == 1 else 0.0
+        row_entity_binding = 1.0 if row_context else 0.0
         scoring = (constraint_context or {}).get("_path_scoring", {})
         path_text = " ".join(
             f"{edge['head']} {edge['relation']} {edge['tail']} {_context_text(edge)}"
@@ -336,6 +339,39 @@ class GroundedPathPlanner:
         ) - length_penalty
         return round(score, 4), components
 
+    def score_edges(
+        self,
+        question: str,
+        records: list[dict],
+        edges: list[dict],
+        constraint_context: dict | None = None,
+    ) -> tuple[float, dict[str, float]]:
+        """Score an already-enumerated path without selecting or rejecting it.
+
+        This is intentionally separate from :meth:`generate_candidates`: callers
+        such as OUEG can retain every candidate and use the components solely as
+        reading-priority metadata.
+        """
+        scoring_context = {
+            **(constraint_context or {}),
+            "_path_scoring": self._path_constraints(question, records),
+        }
+        fact_sources: dict[tuple[str, str, str], set[str]] = defaultdict(set)
+        for edge in records:
+            fact = (
+                normalize_key(edge["head"]),
+                normalize_key(edge["relation"]),
+                normalize_key(edge["tail"]),
+            )
+            fact_sources[fact].add(str(edge.get("source_type")))
+        nodes = list(dict.fromkeys(
+            str(value)
+            for edge in edges
+            for value in (edge.get("traversal_from", edge.get("head")), edge.get("traversal_to", edge.get("tail")))
+            if value is not None
+        ))
+        return self._score(question, nodes, edges, scoring_context, fact_sources)
+
     def _make_path(
         self,
         path_id: str,
@@ -413,9 +449,14 @@ class GroundedPathPlanner:
         record_links = [edge for edge in records if edge["relation"] == "has_record"]
         for record_link in record_links:
             row_id = str(record_link["tail"])
+            # Prefer Row→value projections for row bundles. The Cell nodes are
+            # retained in the KG for topology, but choosing Row→Cell here would
+            # spend the short path budget before reaching the actual values.
             attributes = [
                 edge for edge in records
                 if str(edge["head"]) == row_id and edge.get("structural")
+                and not edge.get("cell_node")
+                and ":cell:" not in str(edge.get("tail", ""))
             ]
             attributes.sort(
                 key=lambda edge: len(
