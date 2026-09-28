@@ -1,0 +1,2 @@
+# Full OUEG prediction traces exceed GitHub's regular-file size limit.
+data/results/hybridqa_oueg_vs_direct_shard*_gpt_oss_*_reasoning_full/*.jsonl filter=lfs diff=lfs merge=lfs -text

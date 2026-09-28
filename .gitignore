@@ -13,6 +13,12 @@ venv/
 # Data (thường nặng, không commit; dùng README hướng dẫn tải lại)
 data/*
 !data/.gitkeep
+# Keep completed, reproducible HybridQA benchmark artifacts under version
+# control. Large JSONL predictions are managed by Git LFS (see .gitattributes).
+!data/results/
+data/results/*
+!data/results/hybridqa_oueg_vs_direct_shard*_gpt_oss_*_reasoning_full/
+!data/results/hybridqa_oueg_vs_direct_shard*_gpt_oss_*_reasoning_full/**
 
 # IDE
 .vscode/*
