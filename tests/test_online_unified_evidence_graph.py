@@ -53,10 +53,42 @@ def test_oueg_ordering_hint_sorts_complete_candidate_set_by_temporal_column():
         "Which club was first formed?", candidates,
     )
 
-    assert hint["detected_signal"] == "temporal_first"
+    assert hint["detected_signal"] == "ordinal_rank"
+    assert hint["ordinal_rank"] == 1
     assert hint["sort_by_column"] == "Formed"
     assert [path["path_id"] for path in ordered] == ["row_1", "row_2", "row_0"]
     assert {path["path_id"] for path in ordered} == {"row_0", "row_1", "row_2"}
+
+
+def test_oueg_ordering_hint_prioritizes_ordinal_over_counting_and_reverses_before():
+    candidates = OnlineUnifiedEvidenceGraphBaseline._candidate_rows(
+        "How many goals did the 10th-ranked club score?", _kg_with_rows().path_edge_records(),
+    )
+    hint, _ = OnlineUnifiedEvidenceGraphBaseline._ordering_hint(
+        "How many goals did the 10th-ranked club score?", candidates,
+    )
+    assert hint["detected_signal"] == "ordinal_rank"
+    assert hint["ordinal_rank"] == 10
+
+    hint, ordered = OnlineUnifiedEvidenceGraphBaseline._ordering_hint(
+        "Which club was formed before 1980?", candidates,
+    )
+    assert hint["direction"] == "descending"
+    assert [path["path_id"] for path in ordered] == ["row_0", "row_2", "row_1"]
+
+
+def test_oueg_ordering_hint_descends_for_recent_wording():
+    candidates = OnlineUnifiedEvidenceGraphBaseline._candidate_rows(
+        "Which club was most recently formed?", _kg_with_rows().path_edge_records(),
+    )
+    for question in (
+        "Which club was most recent?",
+        "Which club formed recently?",
+        "Which is the newest club?",
+    ):
+        hint, ordered = OnlineUnifiedEvidenceGraphBaseline._ordering_hint(question, candidates)
+        assert hint["direction"] == "descending"
+        assert [path["path_id"] for path in ordered] == ["row_0", "row_2", "row_1"]
 
 
 def test_oueg_prompt_keeps_full_subgraph_while_paths_are_only_guides(monkeypatch):

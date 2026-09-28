@@ -453,7 +453,9 @@ def _evaluate_example(example, args) -> dict:
     }
     if args.dataset == "hybridqa":
         record["exact_match"] = exact_match(example.answer, answer)
-        record["semantic_exact_match"] = semantic_exact_match(example.answer, answer)
+        record["semantic_exact_match"] = semantic_exact_match(
+            example.answer, answer, question=example.question,
+        )
         record["f1"] = token_f1(example.answer, answer)
         executed = prediction.get("executed_value")
         record["execution_exact_match"] = (

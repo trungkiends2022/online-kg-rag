@@ -27,6 +27,34 @@ _STOP_TERMS = {
     "this", "to", "was", "what", "when", "where", "which", "who", "whose", "with",
 }
 
+_ORDINAL_WORD_VALUES = {
+    "first": 1,
+    "second": 2,
+    "third": 3,
+    "fourth": 4,
+    "fifth": 5,
+    "sixth": 6,
+    "seventh": 7,
+    "eighth": 8,
+    "ninth": 9,
+    "tenth": 10,
+}
+_ORDINAL_PATTERN = re.compile(
+    r"\b(?:(?P<word>first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)"
+    r"|(?P<number>\d+)(?:st|nd|rd|th))\b",
+    re.IGNORECASE,
+)
+
+
+def _ordinal_rank(question: str) -> int | None:
+    """Extract an explicit ordinal rank, when the question supplies one."""
+    match = _ORDINAL_PATTERN.search(question)
+    if match is None:
+        return None
+    if word := match.group("word"):
+        return _ORDINAL_WORD_VALUES[word.casefold()]
+    return int(match.group("number"))
+
 
 class OnlineUnifiedEvidenceGraphBaseline:
     """Answer from the whole retrieved KG; paths are candidate reading guides only."""
@@ -335,6 +363,7 @@ class OnlineUnifiedEvidenceGraphBaseline:
     @classmethod
     def _ordering_hint(cls, question: str, candidates: list[dict]) -> tuple[dict, list[dict]]:
         lowered = question.casefold()
+        ordinal_rank = _ordinal_rank(lowered)
         columns = sorted({
             str(column)
             for candidate in candidates
@@ -348,7 +377,9 @@ class OnlineUnifiedEvidenceGraphBaseline:
                 str(candidate.get("path_id", "")),
             ),
         )
-        if re.search(r"\b(how many|number of|count)\b", lowered):
+        # An ordinal changes the answer target (e.g. "how many goals did the
+        # tenth player score?"); it must take precedence over a generic count.
+        if ordinal_rank is None and re.search(r"\b(how many|number of|count)\b", lowered):
             return ({
                 "detected_signal": "counting",
                 "sort_by_column": None,
@@ -356,8 +387,12 @@ class OnlineUnifiedEvidenceGraphBaseline:
                 "note": "Counting signal detected; retain every structural candidate and count only after applying question constraints. Within no explicit table order, paths use score metadata only as reading priority.",
             }, reading_priority)
 
-        temporal = bool(re.search(r"\b(first|earliest|oldest|elected|before|after|previous|next|last|latest)\b", lowered))
-        if not temporal:
+        temporal = bool(re.search(
+            r"\b(earliest|oldest|elected|before|after|previous|next|last|latest|"
+            r"most\s+recent|recently|newest)\b",
+            lowered,
+        ))
+        if ordinal_rank is None and not temporal:
             return ({
                 "detected_signal": "none",
                 "sort_by_column": None,
@@ -375,15 +410,30 @@ class OnlineUnifiedEvidenceGraphBaseline:
                 score += 3
             return (score, column)
 
-        sort_by = max(columns, key=column_score) if columns else None
+        ordinal_columns = [
+            column for column in columns
+            if cls._terms(column) & {"position", "rank", "order", "number"}
+        ]
+        # For ordinal questions, prefer an explicit rank/order column rather
+        # than an incidental temporal or numeric column.
+        sort_by = max(
+            ordinal_columns if ordinal_rank is not None and ordinal_columns else columns,
+            key=column_score,
+        ) if columns else None
         if not sort_by:
             return ({
-                "detected_signal": "sequence_prev_next",
+                "detected_signal": "ordinal_rank" if ordinal_rank is not None else "sequence_prev_next",
                 "sort_by_column": None,
                 "direction": None,
+                "ordinal_rank": ordinal_rank,
                 "note": "Ordering signal detected but no sortable table column was found; keep original table-row order.",
             }, candidates)
-        direction = "descending" if re.search(r"\b(last|latest|after)\b", lowered) else "ascending"
+        # With "before X", the immediately preceding entity should be shown
+        # first.  The same reverse ordering applies to recent/newest wording.
+        direction = "descending" if re.search(
+            r"\b(last|latest|after|before|most\s+recent|recently|newest)\b",
+            lowered,
+        ) else "ascending"
         # Stable sort preserves score-based reading priority only among paths
         # with the same table ordering value; it never drops a candidate.
         ordered = sorted(
@@ -391,11 +441,16 @@ class OnlineUnifiedEvidenceGraphBaseline:
             key=lambda candidate: cls._sort_value(candidate.get("sort_keys", {}).get(sort_by)),
             reverse=direction == "descending",
         )
-        signal = "temporal_first" if re.search(r"\b(first|earliest|oldest|elected)\b", lowered) else "sequence_prev_next"
+        signal = (
+            "ordinal_rank" if ordinal_rank is not None
+            else "temporal_first" if re.search(r"\b(earliest|oldest|elected)\b", lowered)
+            else "sequence_prev_next"
+        )
         return ({
             "detected_signal": signal,
             "sort_by_column": sort_by,
             "direction": direction,
+            "ordinal_rank": ordinal_rank,
             "note": f"Candidates are sorted by the displayed `{sort_by}` values in {direction} order; they remain a complete candidate set, not a shortlist.",
         }, ordered)
 

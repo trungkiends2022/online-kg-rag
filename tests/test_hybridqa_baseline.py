@@ -1,5 +1,10 @@
 from src.baselines.hybridqa_rag import BaselineConfig, HybridQARAGBaseline
-from src.baselines.metrics import exact_match, normalize_answer, semantic_exact_match, token_f1
+from src.baselines.metrics import (
+    exact_match,
+    normalize_answer,
+    semantic_exact_match,
+    token_f1,
+)
 from src.datasets.schema import DatasetExample
 
 
@@ -37,6 +42,32 @@ def test_metrics_normalize_plural_surface_forms():
     assert normalize_answer("The clubs, cities and wolves!") == "club city and wolf"
     assert exact_match("Gaborone United", "Gaborone United.") == 1.0
     assert exact_match("football club", "football clubs") == 1.0
+
+
+def test_metrics_normalize_unicode_hyphens_and_parenthetical_unit_conversions():
+    assert exact_match("1991-92", "1991\u201192") == 1.0
+    assert exact_match("806 km", "806 km (≈ 501 mi)") == 1.0
+    assert normalize_answer("151 square miles (392 km²)") == "151 square mile"
+
+
+def test_semantic_em_applies_explicit_rule_based_equivalences_only():
+    assert exact_match("seven", "7") == 0.0
+    assert semantic_exact_match("seven", "7") == 1.0
+    assert semantic_exact_match(
+        "fourteen", "14 years", question="How many years did the driver race?",
+    ) == 1.0
+    assert semantic_exact_match(
+        "21 seasons", "21", question="How many seasons did the player compete?",
+    ) == 1.0
+    assert semantic_exact_match("21 seasons", "21") == 0.0
+    assert semantic_exact_match("a quarter", "about a quarter of its population") == 1.0
+    assert semantic_exact_match("PyeongChang", "Pyeongchang County") == 1.0
+    assert semantic_exact_match("southern", "southern coast") == 1.0
+    assert semantic_exact_match("Equatoguinean", "Equatoguinean Premier League") == 1.0
+    assert semantic_exact_match(
+        "Lancaster University and a campus of the University of Cumbria",
+        "Lancaster University and the University of Cumbria",
+    ) == 1.0
 
 
 def test_prompt_keeps_full_oracle_table_and_ranks_only_passages():

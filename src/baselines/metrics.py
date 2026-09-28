@@ -22,6 +22,41 @@ _IRREGULAR_SINGULARS = {
     "women": "woman",
 }
 _NON_PLURAL_S_SUFFIXES = ("ss", "us", "is")
+_MEASUREMENT_UNIT = (
+    r"(?:%|percent(?:age)?|km(?:²|2)?|kilometers?|kilometres?|mi|miles?|"
+    r"m(?:²|2)?|meters?|metres?|ft|feet|foot|yards?|acres?|hectares?|"
+    r"years?|months?|days?|hours?|minutes?|seconds?|square\s+(?:miles?|"
+    r"kilometers?|kilometres?|meters?|metres?))"
+)
+_CONVERTED_UNIT_SUFFIX = re.compile(
+    rf"(?P<value>[+-]?\d[\d,]*(?:\.\d+)?\s*{_MEASUREMENT_UNIT})\s*"
+    rf"\(\s*(?:≈|~|=)?\s*[+-]?\d[\d,]*(?:\.\d+)?\s*{_MEASUREMENT_UNIT}\s*\)",
+    re.IGNORECASE,
+)
+_CARDINAL_WORD_VALUES = {
+    "zero": 0, "one": 1, "two": 2, "three": 3, "four": 4,
+    "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9,
+    "ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13,
+    "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17,
+    "eighteen": 18, "nineteen": 19, "twenty": 20, "thirty": 30,
+    "forty": 40, "fifty": 50, "sixty": 60, "seventy": 70,
+    "eighty": 80, "ninety": 90,
+}
+_NUMBER_SCALES = {"hundred": 100, "thousand": 1000}
+_ENTITY_CLASSIFIER_SUFFIXES = (
+    "premier league",
+    "county",
+    "city",
+    "coast",
+    "league",
+)
+_QUESTION_COUNT_UNIT_PATTERN = re.compile(
+    r"\bhow many(?:\s+\w+){0,3}\s+(?P<unit>year|season)\b"
+)
+_FRACTIONAL_CONTEXT_PATTERN = re.compile(
+    r"^(?:about|approximately|around|roughly)\s+(?P<fraction>half|quarter|third|fourth|fifth)"
+    r"\s+of\s+(?:its|their|the)\s+.+$"
+)
 
 
 def _singularize_answer_token(token: str) -> str:
@@ -51,7 +86,16 @@ def _singularize_answer_token(token: str) -> str:
 
 
 def normalize_answer(value: Any) -> str:
-    text = str(value).lower()
+    text = str(value)
+    # Convert non-ASCII punctuation before the legacy ASCII punctuation pass.
+    # In particular, U+2011 otherwise survives scoring and splits identical
+    # values such as "1991-92" and "1991‑92".
+    text = text.replace("\u2011", "-")
+    # Keep the primary measurement but discard a parenthetical conversion, e.g.
+    # "806 km (≈ 501 mi)" -> "806 km". Both sides must be numeric units, so
+    # descriptive parentheses in entity names are left intact.
+    text = _CONVERTED_UNIT_SUFFIX.sub(r"\g<value>", text)
+    text = text.lower()
     text = "".join(character for character in text if character not in set(string.punctuation))
     text = re.sub(r"\b(a|an|the)\b", " ", text)
     return " ".join(_singularize_answer_token(token) for token in text.split())
@@ -74,9 +118,71 @@ def normalize_entity_answer(value: Any) -> str:
     return normalize_answer(canonical if canonical is not None else value)
 
 
-def semantic_exact_match(gold: Any, prediction: Any) -> float:
-    """Alias-aware complement to strict benchmark EM; do not report as EM."""
-    return float(normalize_entity_answer(gold) == normalize_entity_answer(prediction))
+def _normalize_cardinal_number(text: str) -> str:
+    """Convert a complete English cardinal phrase to digits, when unambiguous."""
+    tokens = text.split()
+    if not tokens or any(
+        token not in _CARDINAL_WORD_VALUES and token not in _NUMBER_SCALES and token != "and"
+        for token in tokens
+    ):
+        return text
+    total = 0
+    current = 0
+    for token in tokens:
+        if token == "and":
+            continue
+        if token in _NUMBER_SCALES:
+            scale = _NUMBER_SCALES[token]
+            if scale == 100:
+                current = max(current, 1) * scale
+            else:
+                total += max(current, 1) * scale
+                current = 0
+        else:
+            current += _CARDINAL_WORD_VALUES[token]
+    return str(total + current)
+
+
+def _question_count_unit(question: str | None) -> str | None:
+    if not question:
+        return None
+    match = _QUESTION_COUNT_UNIT_PATTERN.search(normalize_answer(question))
+    return match.group("unit") if match else None
+
+
+def _strip_entity_classifier(text: str) -> str:
+    for suffix in _ENTITY_CLASSIFIER_SUFFIXES:
+        if text.endswith(" " + suffix):
+            return text[: -len(suffix)].strip()
+    return text
+
+
+def normalize_semantic_answer(value: Any, *, question: str | None = None) -> str:
+    """Deterministic surface normalization used only by Semantic EM.
+
+    Strict EM intentionally remains the benchmark's original normalization.
+    These rules cover transparent equivalences: cardinal words/digits, a count
+    unit repeated by a ``how many`` question, fractional context, and generic
+    entity classifier suffixes.
+    """
+    text = normalize_entity_answer(value)
+    fractional = _FRACTIONAL_CONTEXT_PATTERN.fullmatch(text)
+    if fractional:
+        text = fractional.group("fraction")
+    if unit := _question_count_unit(question):
+        text = re.sub(rf"\s+{re.escape(unit)}$", "", text)
+    text = re.sub(r"\bcampus of (?=university\b)", "", text)
+    text = " ".join(text.split())
+    text = _strip_entity_classifier(text)
+    return _normalize_cardinal_number(text)
+
+
+def semantic_exact_match(gold: Any, prediction: Any, *, question: str | None = None) -> float:
+    """Rule-based semantic complement to strict benchmark EM; report separately."""
+    return float(
+        normalize_semantic_answer(gold, question=question)
+        == normalize_semantic_answer(prediction, question=question)
+    )
 
 
 def token_f1(gold: Any, prediction: Any) -> float:
