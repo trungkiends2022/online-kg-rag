@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "dataset": "hybridqa",
-  "method": "direct_llm",
+  "method": "online_unified_evidence_graph",
   "code_worktree_diff_sha256": null,
   "input": {
     "path": "/workspace/storage-shared/nlp/huypq51/projects/online-kg-rag-wip-main-changes-20260926/benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard04.json",
@@ -46,5 +46,5 @@
     "max_workers": 4,
     "llm_max_concurrent_requests": 4
   },
-  "fingerprint": "1b623faaab76b2da87698cb91be6592ca9586d076aaa4957feb87248bc8e8284"
+  "fingerprint": "f92de373227d7e985b49b97e0dee8faadf0c48fd479bccab4bbf521030c1c0da"
 }
