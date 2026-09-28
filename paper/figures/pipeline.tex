@@ -1,10 +1,10 @@
 \begin{figure}[t]
 \centering
 \input{figures/pipeline-diagram}
-\caption{Overview of the primary Online-KG path-text method. Retrieval selects
-query-relevant rows and passages before graph construction. Candidate paths are
-enumerated only from registered semantic and row-record edges, scored
-deterministically, and passed to the answer model as bounded textual evidence.
-The primary method does not generate or execute programs.}
+\caption{Overview of the Online Unified Evidence Graph (OUEG) framework. Two-stage
+retrieval anchors table rows and expands Wikipedia hyperlink passages. A query-time
+multigraph preserves record nodes, qualified headers, and rule-based text triples.
+OUEG compresses the full evidence subgraph while enumerating non-filtering suggested
+paths, assessing structural score-collision ambiguity before generating the answer.}
 \label{fig:pipeline}
 \end{figure}

@@ -3,161 +3,205 @@
 
 \subsection{Overview}
 Given a question $q$, supplied tables $\mathcal{T}$, and an associated passage
-pool $\mathcal{D}$, the method constructs a bounded knowledge graph specifically
-for $q$. The graph is an intermediate reasoning structure rather than a
-persistent database. The pipeline is
-\[
-q \rightarrow \text{row and passage retrieval}
-\rightarrow \text{local KG construction}
-\rightarrow \text{grounded text paths}
-\rightarrow \text{path ranking}
-\rightarrow \text{answer}.
-\]
-No program generation or execution is required by the primary method. Python
-and typed numerical programs remain separate experimental variants.
+pool $\mathcal{D}$, the framework constructs a bounded knowledge graph $G_q$
+specifically for $q$ at query time. Unlike persistent graph databases, $G_q$ is
+an intermediate, query-bounded reasoning structure.
 
-\subsection{Query-Driven Context Retrieval}
-A deterministic anchor first inspects the question and table schema. Its current
-rules recognize ordinal constraints, exact numerical table constraints, and a
-small set of entity-bearing columns. An ordinal such as \emph{second} can
-therefore identify a bridge entity from a rank--entity row even when that entity
-does not occur in the question.
+Previous grounded graph-RAG architectures suffer from a fundamental tension:
+filtering the evidence graph to only the top-$N$ ranked paths reduces prompt
+noise, but can discard peripheral corroborating facts or fail when several
+candidates tie on path score. Conversely, passing an uncurated graph overwhelms
+the language model with unstructured triples.
 
-Table retrieval forms a union of anchor-matched rows and BM25-ranked rows, with a
-global row budget $k$. Original row indices are retained after filtering. This
-is important because the same label can occur in several rows and because
-provenance must refer to the source table rather than the filtered position.
-Passage retrieval first applies BM25 to $q$, then adds at most $b$ passages using
-bridge-entity queries and deterministic schema expansions. Duplicate passages
-are removed by source identifier. The current defaults are $k=5$ and $b=3$ in
-the benchmark runner; experiments record any override.
+To resolve this trade-off, we propose the \textbf{Online Unified Evidence Graph
+(OUEG)} framework alongside the classic \textbf{Grounded Path-Text} view. The
+complete pipeline proceeds as follows:
+\begin{align*}
+q &\rightarrow \text{two-stage context retrieval} \\
+  &\rightarrow \text{schema-preserving online KG construction} \\
+  &\rightarrow \begin{cases}
+    \text{grounded path enumeration \& scoring} \\
+    \text{subgraph prompt compression}
+  \end{cases} \\
+  &\rightarrow \text{ambiguity assessment} \rightarrow \text{grounded answer}.
+\end{align*}
+Candidate paths serve as prioritized \emph{non-filtering reading guides} over
+the complete unified subgraph rather than destructive filters. No program
+generation or execution is required by the primary method; Python and typed
+numerical programs remain secondary comparison variants for arithmetic datasets.
 
-The benchmark setting supplies an oracle table and its associated passage pool.
-Retrieval is therefore query-local within supplied context, not open-domain
-table or web search.
+\subsection{Query-Driven Two-Stage Retrieval}
+\label{sec:method-retrieval}
+Benchmark settings supply an oracle table and an associated pool of linked
+passages. Retrieval operates within this supplied context.
+
+\paragraph{Stage 1: Coarse retrieval.}
+BM25 indexes table rows and text passages with respect to question $q$. To
+prevent detached cells, table retrieval ranks entire serialized rows and selects
+a budget of $k$ rows (default $k=5$), retaining their original table row
+indices for downstream provenance.
+
+\paragraph{Stage 2: Bridge-entity and hyperlink expansion.}
+Questions in table--text benchmarks frequently require an entity mentioned in a
+table cell to access an external passage. A deterministic query anchor inspects
+$q$ for:
+\begin{enumerate}
+    \item \emph{Ordinal constraints}: A regex recognizer matches words
+    (\emph{first}, \emph{second}, \dots) or numeric ordinals (\emph{1st},
+    \emph{2nd}, \dots) and resolves the matching row index.
+    \item \emph{Exact schema constraints}: Specific column header mentions and
+    numerical filters.
+    \item \emph{Hyperlink-directed passage expansion}: For every cell in the
+    retrieved top-$k$ rows, dataset adapters harvest Wikipedia hyperlinks
+    (\texttt{linked\_passage} URLs). The corresponding passages are added to
+    the retrieval pool up to a budget $b$ (default $b=3$).
+\end{enumerate}
+Passage retrieval combines direct BM25 passage matches with hyperlink expansions
+and bridge-entity queries, deduplicating passages by source identifier.
 
 \subsection{Schema-Preserving Online KG Construction}
-For each question, the system creates a directed multigraph
-$G_q=(V_q,E_q)$. A semantic edge is
+\label{sec:method-kg}
+For each question, the system instantiates a directed multigraph
+$G_q=(V_q, E_q)$. An edge $e \in E_q$ is defined as
 \[
-e=(h,r,t,\pi),
+e = (h, r, t, \pi),
 \]
-where $h$ and $t$ are entity or literal labels, $r$ is a normalized relation,
-and $\pi$ stores source type, source identifier, and optional row, column, and
-header-path metadata. A multigraph retains separate provenance records when
-several sources express the same fact.
+where $h$ and $t$ denote head and tail node labels, $r$ is a normalized relation,
+and $\pi$ stores provenance metadata including source type (\texttt{table} or
+\texttt{text}), source identifier, row index, column name, and header path.
 
-\paragraph{Deterministic table edges.}
-Dataset adapters convert a selected row into a dictionary with a row label and
-qualified column names. The first nonempty field supplies the row subject
-$u_i$; every other nonempty cell produces
+\paragraph{Deterministic table edges and record nodes.}
+Flattened tables lose header hierarchies and intra-row bindings. We address this
+with two structural representations:
+\begin{enumerate}
+    \item \emph{Qualified headers}: Hierarchical column headers are qualified
+    into normalized relation keys (e.g., \texttt{2002 / Dividend} becomes
+    \texttt{2002\_dividend}).
+    \item \emph{Record nodes}: Direct subject--value edges
+    $(u_i, \operatorname{norm}(H_j), v_{ij})$ permit entity lookups but do not
+    guarantee that values from the same row remain bound. For each row $i$, we
+    introduce a local record node $\rho_i = \texttt{table:}T\texttt{:row:}i$:
+    \[
+    u_i \xrightarrow{\mathrm{has\_record}} \rho_i, \qquad
+    \rho_i \xrightarrow{\operatorname{norm}(H_j)} v_{ij}.
+    \]
+    This structural star topology ensures that attributes such as year, venue,
+    and score belonging to row $i$ cannot be conflated with those of another row
+    sharing the same entity subject.
+    \item \emph{Multi-value cell splitting}: When a table cell contains multiple
+    comma-separated values, the adapter splits them into individual
+    \texttt{derived\_from\_cell\_split} edges so that target entities are not
+    masked within compound strings.
+\end{enumerate}
+In parallel, an audit trace records the explicit
+$\text{Table} \rightarrow \text{Row} \rightarrow \text{Cell} \rightarrow \text{Column}$
+topology without altering the semantic reasoning graph.
+
+\paragraph{Text edges and rule-based extraction.}
+For retrieved passages, semantic triples connect entities to their attributes
+and linked passage nodes ($u \xrightarrow{\mathrm{linked\_passage}} \text{passage\_id}$).
+To avoid the latency, API costs, and hallucinations of unstructured LLM triple
+extraction, the primary extractor employs deterministic rule-based patterns
+(\texttt{rule\_text\_triples}) alongside lexical entity-linking. Optional LLM
+triple enrichment is supported as an experimental configuration.
+
+\paragraph{Entity normalization and resolution.}
+Nodes undergo four-stage resolution: (1) lexical normalization (Unicode,
+casing, whitespace, punctuation); (2) configured domain aliases; (3) structural
+name cleanup (removing club/corporation prefixes/suffixes); and (4) conservative
+string similarity (threshold $\ge 0.93$ restricted to identical entity roles).
+All resolution merges are recorded in an auditable resolution log.
+
+\subsection{Grounded Path Generation and Scoring}
+\label{sec:method-paths}
+The reasoning edge set $E_q^*$ unites semantic edges, record edges, and
+hyperlink edges. Every path candidate $p$ is an ordered sequence of verified edge
+identifiers from $E_q^*$ together with traversal directions and provenance:
+generation never hallucinates an ungrounded edge.
+
+\paragraph{Candidate search.}
+Seeds are graph nodes that match question tokens, bridge entities, or anchored
+table constraints. Bounded depth-first search enumerates connected simple paths
+up to 5 hops ($|E_p| \le 5$). Additionally, the planner synthesizes
+\emph{row bundles}: subgraphs connecting $u_i \rightarrow \rho_i$ with the most
+question-relevant outgoing cell edges of row $i$, keeping multi-attribute
+constraints co-located.
+
+\paragraph{Multi-factor path scoring.}
+Paths are scored deterministically via:
 \[
-(u_i,\operatorname{norm}(H_j),v_{ij},\pi_{ij}).
+S(p) = G + Q_e + Q_r + Q_c + C + M + R + B + A - 0.35 \max(|E_p|-1, 0),
 \]
-Hierarchical headers are qualified before graph construction. For example,
-\texttt{2002 / Dividend} becomes \texttt{2002\_dividend}, preventing a
-dividend from being confused with \texttt{2002\_high}.
+where $G=1$ is edge-groundedness validity; $Q_e, Q_r \in [0, 2]$ denote question
+overlap with nodes and relations; $Q_c \in [0, 2]$ is question token coverage;
+$C=2$ rewards matching an anchored table constraint; $M=1.5$ awards cross-modal
+evidence combining table and text; $A=1.0$ credits identical-fact corroboration;
+$R=1.0$ rewards row consistency; and $B=1.0$ requires explicit
+\texttt{has\_record} binding.
 
-Direct subject--value edges are convenient for entity lookup but do not by
-themselves preserve which values co-occur in one row. The path-text reasoning
-view therefore adds a record node $\rho_i$:
-\[
-u_i \xrightarrow{\mathrm{has\_record}} \rho_i, \qquad
-\rho_i \xrightarrow{\operatorname{norm}(H_j)} v_{ij}.
-\]
-For two records of the same company, this representation prevents a year from
-one row being paired with a revenue from another. Record identifiers are local
-implementation nodes and do not alter the legacy executable entity interface.
+\subsection{Online Unified Evidence Graph (OUEG) and Prompt Compression}
+\label{sec:method-oueg}
+In the classic Path-Text baseline, only the top-$N$ ranked paths are serialized,
+discarding the remainder of $G_q$. In the \textbf{Online Unified Evidence Graph
+(OUEG)}, the language model receives the entire unified subgraph
+$G_q^{\text{unified}} = (V_q^*, E_q^*)$ alongside the raw text contexts, with
+the generated candidate paths provided as \emph{non-filtering suggested reading
+guides}.
 
-In parallel, an audit trace stores
-Table $\rightarrow$ Row $\rightarrow$ Cell $\rightarrow$ Column topology.
-Thus the implementation exposes an entity-centric semantic graph, a
-record-aware path view, and a complete structural trace without conflating their
-roles.
+\paragraph{Prompt compression and context deduplication.}
+Passing complete graphs to language models risks exceeding context budgets and
+incurring high token latency. OUEG incorporates a compact serializer
+(\texttt{CompactOUEGPromptBuilder}):
+\begin{enumerate}
+    \item \emph{Edge deduplication}: Multiple edges sharing identical endpoints
+    and relations are merged, aggregating their provenance contexts into a
+    compact identifier list.
+    \item \emph{Shared context dictionary}: Passage text snippets are indexed by
+    source ID in a shared text dictionary rather than duplicated across individual
+    edges.
+    \item \emph{Node role annotations}: Nodes in the serialized prompt are
+    annotated with their candidate path memberships, step indices, and row order
+    indices.
+\end{enumerate}
 
-\paragraph{Text edges and entity resolution.}
-An LLM extracts semantic triples from each retrieved passage. A small set of
-deterministic extractors preserves recurrent numerical and name facts when the
-model response is malformed. Failed optional table enrichment falls back to
-deterministic cells; a failed passage is logged and skipped. Entity resolution
-then applies lexical normalization, configured aliases, structural name rules,
-and conservative string similarity. Resolution events and rejected self-loops
-are included in the trace.
+\subsection{Ambiguity Assessment and Score-Collision Handling}
+\label{sec:method-ambiguity}
+A pervasive challenge in structured table QA is \emph{structural ambiguity}:
+multiple candidate rows often satisfy the coarse question constraints with
+identical path scores. For example, when asked for ``the club whose city is
+between Kgale and Oodi Hills'', several rows may match the country/league
+condition, creating a score tie.
 
-The graph metadata distinguishes entity-oriented nodes, literal attributes, and
-record structure operationally. It is not presented as a learned ontology or
-a general semantic type system.
+OUEG actively detects these collisions during candidate generation:
+\begin{enumerate}
+    \item \emph{Tie classification}: If two or more distinct candidate paths
+    achieve identical maximal scores, the status is flagged as
+    \texttt{SCORE\_COLLISION\_TIE}; if multiple rows match without a score tie,
+    it is labelled \texttt{MULTIPLE\_\allowbreak STRUCTURAL\_\allowbreak CANDIDATES}.
+    \item \emph{Lexical tiebreak}: When a collision occurs, OUEG computes the
+    lexical overlap between candidate entity labels and bridge-entity passage
+    mentions. If a unique lexical winner exists, it is highlighted as a
+    tiebreak signal in the prompt.
+    \item \emph{Prompting instructions}: The answer synthesizer is alerted of
+    potential ambiguity, prompting it to verify subtle textual nuances in the
+    deduplicated contexts rather than arbitrarily selecting the first row.
+\end{enumerate}
 
-\subsection{Grounded Text-Path Generation}
-The reasoning edge set $E_q^*$ is the union of semantic edges and row-record
-edges. Candidate generation never invents an edge: every emitted path step
-contains an edge identifier from $E_q^*$ together with direction and provenance.
-Traversal may follow an edge forward or backward, but its stored factual
-direction remains unchanged.
+\subsection{Answer Generation, Fallback, and Audit Trace}
+\label{sec:method-answer}
+The final answer model receives the compressed unified subgraph (or top-ranked
+paths), suggested path reading guides, ordering hints (e.g., explicit ordinal
+ranks), ambiguity diagnostics, and the question. The model extracts a concise
+denotation span.
 
-Seeds are graph nodes that match a question phrase, a bridge entity, or an
-explicit table constraint. When no node is matched, endpoints of relations
-sharing terms with the question provide fallback seeds. From each seed, bounded
-search enumerates simple connected paths of at most three edges. Branching and
-the total enumerated candidates are capped. The implementation additionally
-creates a row bundle containing
-$u_i\rightarrow\rho_i$ and the most question-relevant outgoing cell edges.
-A row bundle is a connected evidence subgraph rather than a forced linear chain;
-this allows a year constraint and requested value to remain attached to the same
-record.
+\paragraph{Reverse grounding and empty fallback.}
+If the path search yields no valid candidates or the graph is disconnected,
+the pipeline activates \emph{reverse grounding}: the answer model performs
+evidence-conditioned direct synthesis over the retrieved rows and passages,
+and the extracted entity is reverse-mapped onto $G_q$ to recover provenance. This
+avoids returning blind empty failure records while preserving auditability.
 
-Each candidate is verbalized directly from its verified edges, for example
-\[
-\texttt{A --has\_record--> row:7 --year--> 2022}
-\]
-together with a sibling edge
-\[
-\texttt{row:7 --revenue--> 10M}.
-\]
-This differs from asking a language model to propose plausible relation names
-from a list of nodes and relations.
-
-\subsection{Text-Path Scoring}
-All candidates pass a hard groundedness gate because generation only accepts
-registered edge identifiers. The implemented heuristic score is
-\[
-\begin{split}
-S(p)={}&G+Q_e+Q_r+Q_c+C+M+R+B+A\\
-      &-0.35\max(|E_p|-1,0),
-\end{split}
-\]
-where $G=1$ is grounded-edge validity; $Q_e$ and $Q_r$ are question overlap
-with path nodes and relations, each capped at 2; and $Q_c$ is question-term
-coverage, also capped at 2. The constraint term $C=2$ when the path includes
-an anchored table value or allowed output candidate.
-
-The cross-modal completeness term $M=1.5$ when a path uses both table and text
-evidence. This is not called agreement: different sources may supply different
-hops. Same-fact corroboration $A=1$ is awarded only when normalized
-$(h,r,t)$ is supported by both table and text. Row consistency $R=1$ requires
-at least two record-aware edges from one source row, and entity binding $B=1$
-additionally requires the \texttt{has\_record} edge. These weights are fixed
-heuristics rather than learned probabilities.
-
-The top $N$ distinct paths are serialized with their score components, nodes,
-edges, source identifiers, row indices, columns, and header paths. Supporting
-edges are packed within a character budget, with selected path edges receiving
-priority. Context packing does not change the path scores.
-
-\subsection{Answer Production and Audit Record}
-The answer model receives only the ranked paths, supporting KG edges, table
-constraints, and the question. It reasons over this evidence as text and returns
-a short answer span; it is explicitly instructed not to generate or execute a
-program. The output is canonicalized to a resolved KG alias and, when a table
-constraint defines an allowed candidate set, to the corresponding exact table
-value.
-
-Each prediction records the retrieved row count, passage retrieval decisions,
-entity anchor, KG summary, ranked paths, score decomposition, and selected path
-identifier. Empty graphs or an empty candidate set produce an explicit failure
-record rather than an unsupported answer.
-
-The trace establishes that path edges exist in the constructed graph. It does
-not prove that LLM-extracted text triples are factually correct, that the
-retriever found all required evidence, or that the top-ranked grounded path is
-semantically sufficient for the question.
+\paragraph{Audit record.}
+Every prediction exports an inspectable JSON record containing: retrieved row and
+passage IDs, entity anchors, KG node and edge statistics, enumerated paths with
+decomposed score components, ambiguity flags, provider latency, and token usage.

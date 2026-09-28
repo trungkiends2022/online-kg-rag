@@ -1,0 +1,43 @@
+\begin{thebibliography}{1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{chen2024tablerag}
+Chen, S.A., Miculicich, L., Eisenschlos, J.M., Wang, Z., Wang, Z., Chen, Y.,
+  Fujii, Y., Lin, H.T., Lee, C.Y., Pfister, T.: {TableRAG}: Million-token table
+  understanding with language models. In: Advances in Neural Information
+  Processing Systems 37 (2024). \doi{10.52202/079017-2382}
+
+\bibitem{chen2022pot}
+Chen, W., Ma, X., Wang, X., Cohen, W.W., Wang, W.Y.: Program of thoughts
+  prompting: Disentangling computation from reasoning for numerical reasoning
+  tasks. arXiv preprint arXiv:2211.12588  (2022)
+
+\bibitem{hybridqa}
+Chen, W., Zha, H., Chen, Z., Xiong, W., Wang, H., Wang, W.Y.: {HybridQA}: A
+  dataset of multi-hop question answering over tabular and textual data. In:
+  Findings of the Association for Computational Linguistics: EMNLP 2020. pp.
+  1026--1036. Association for Computational Linguistics (2020).
+  \doi{10.18653/v1/2020.findings-emnlp.91}
+
+\bibitem{gao2023pal}
+Gao, L., Madaan, A., Zhou, S., Alon, U., Liu, P., Yang, Y., Callan, J., Neubig,
+  G.: {PAL}: Program-aided language models. In: Proceedings of the 40th
+  International Conference on Machine Learning. pp. 10764--10799 (2023),
+  \url{https://proceedings.mlr.press/v202/gao23f.html}
+
+\bibitem{tan2025hydrarag}
+Tan, X., Wang, X., Liu, Q., Xu, X., Yuan, X., Zhu, L., Zhang, W.: {HydraRAG}:
+  Structured cross-source enhanced large language model reasoning. In:
+  Proceedings of the 2025 Conference on Empirical Methods in Natural Language
+  Processing. pp. 14431--14459 (2025),
+  \url{https://aclanthology.org/2025.emnlp-main.730/}
+
+\bibitem{yu2025tablerag}
+Yu, X., Jian, P., Chen, C.: {TableRAG}: A retrieval augmented generation
+  framework for heterogeneous document reasoning. In: Proceedings of the 2025
+  Conference on Empirical Methods in Natural Language Processing (2025),
+  \url{https://aclanthology.org/2025.emnlp-main.710/}
+
+\end{thebibliography}

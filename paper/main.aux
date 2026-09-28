@@ -1,0 +1,71 @@
+\relax 
+\citation{hybridqa}
+\@writefile{toc}{\contentsline {title}{OUEG-RAG: Schema-Preserving Online Unified Evidence Graphs for Grounded Table--Text Question Answering}{1}\protected@file@percent }
+\@writefile{toc}{\authcount {3}}
+\@writefile{toc}{\contentsline {author}{Trung-Kien Nguyen\unskip {} \and Khac-Hoai-Nam Bui \and Van-Vinh Nguyen}{1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}\protected@file@percent }
+\citation{hybridqa}
+\citation{chen2024tablerag}
+\citation{yu2025tablerag}
+\citation{tan2025hydrarag}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{3}\protected@file@percent }
+\newlabel{sec:related}{{2}{3}}
+\@writefile{toc}{\contentsline {paragraph}{Table--text and table retrieval.}{3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Cross-source and graph-guided RAG.}{3}\protected@file@percent }
+\citation{gao2023pal}
+\citation{chen2022pot}
+\citation{yu2025tablerag}
+\@writefile{toc}{\contentsline {paragraph}{Grounded paths and executable reasoning.}{4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Problem Formulation}{4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Overview of the Online Unified Evidence Graph (OUEG) framework. Two-stage retrieval anchors table rows and expands Wikipedia hyperlink passages. A query-time multigraph preserves record nodes, qualified headers, and rule-based text triples. OUEG compresses the full evidence subgraph while enumerating non-filtering suggested paths, assessing structural score-collision ambiguity before generating the answer.}}{5}\protected@file@percent }
+\newlabel{fig:pipeline}{{1}{5}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Method}{5}\protected@file@percent }
+\newlabel{sec:method}{{4}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Overview}{5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Query-Driven Two-Stage Retrieval}{6}\protected@file@percent }
+\newlabel{sec:method-retrieval}{{4.2}{6}}
+\@writefile{toc}{\contentsline {paragraph}{Stage 1: Coarse retrieval.}{6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Stage 2: Bridge-entity and hyperlink expansion.}{6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Schema-Preserving Online KG Construction}{6}\protected@file@percent }
+\newlabel{sec:method-kg}{{4.3}{6}}
+\@writefile{toc}{\contentsline {paragraph}{Deterministic table edges and record nodes.}{7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Text edges and rule-based extraction.}{7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Entity normalization and resolution.}{7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Grounded Path Generation and Scoring}{7}\protected@file@percent }
+\newlabel{sec:method-paths}{{4.4}{7}}
+\@writefile{toc}{\contentsline {paragraph}{Candidate search.}{7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Multi-factor path scoring.}{8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Online Unified Evidence Graph (OUEG) and Prompt Compression}{8}\protected@file@percent }
+\newlabel{sec:method-oueg}{{4.5}{8}}
+\@writefile{toc}{\contentsline {paragraph}{Prompt compression and context deduplication.}{8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Ambiguity Assessment and Score-Collision Handling}{8}\protected@file@percent }
+\newlabel{sec:method-ambiguity}{{4.6}{8}}
+\citation{hybridqa}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Answer Generation, Fallback, and Audit Trace}{9}\protected@file@percent }
+\newlabel{sec:method-answer}{{4.7}{9}}
+\@writefile{toc}{\contentsline {paragraph}{Reverse grounding and empty fallback.}{9}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Audit record.}{9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Experimental Protocol}{9}\protected@file@percent }
+\newlabel{sec:experiments}{{5}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Benchmark and Evaluation Metrics}{9}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Main benchmark comparison between Direct LLM and OUEG-RAG on HybridQA ($N=200$) across small (20B) and large (120B) model scales. Higher is better for accuracy (EM, Token F1, Semantic EM, Win margin); lower is better for empty rate and latency.}}{10}\protected@file@percent }
+\newlabel{tab:main-results}{{1}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Baselines and Model Configurations}{10}\protected@file@percent }
+\newlabel{sec:baselines}{{5.2}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Controls and Cost}{10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Results and Error Analysis}{10}\protected@file@percent }
+\newlabel{sec:results}{{6}{10}}
+\@writefile{toc}{\contentsline {paragraph}{Structural ambiguity breakdown.}{10}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Ablation study of OUEG-RAG components on the HybridQA benchmark. Evaluated on the matched evaluation split.}}{11}\protected@file@percent }
+\newlabel{tab:ablations}{{2}{11}}
+\@writefile{toc}{\contentsline {paragraph}{Error taxonomy and context integrity.}{11}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Limitations}{11}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{11}\protected@file@percent }
+\bibstyle{splncs04}
+\bibdata{refs}
+\bibcite{chen2024tablerag}{1}
+\bibcite{chen2022pot}{2}
+\bibcite{hybridqa}{3}
+\bibcite{gao2023pal}{4}
+\bibcite{tan2025hydrarag}{5}
+\bibcite{yu2025tablerag}{6}
