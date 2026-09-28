@@ -134,7 +134,7 @@ def test_short_table_retrieval_preserves_all_cell_links():
     ]
 
 
-def test_long_table_retrieval_filters_cell_links_to_selected_rows():
+def test_default_table_retrieval_keeps_every_long_row_for_kg():
     rows = [{"Name": f"Person {index}"} for index in range(30)]
     rows.append({"Name": "Target Person"})
     result = two_stage_retrieve(
@@ -151,6 +151,31 @@ def test_long_table_retrieval_filters_cell_links_to_selected_rows():
     )
 
     group = result["table_rows"][0]
+    assert group["row_indices"] == list(range(31))
+    assert group["cell_links"] == [
+        {"row_index": 0, "column_name": "Name", "cell_value": "Person 0", "url": "/wiki/Person_0"},
+        {"row_index": 30, "column_name": "Name", "cell_value": "Target Person", "url": "/wiki/Target"},
+    ]
+    assert result["retrieval_trace"]["max_table_rows"] is None
+
+
+def test_table_row_limit_filters_cell_links_to_selected_rows():
+    rows = [{"Name": f"Person {index}"} for index in range(30)]
+    rows.append({"Name": "Target Person"})
+    result = two_stage_retrieve(
+        "Where was Target Person born?",
+        [{
+            "table_name": "people",
+            "rows": rows,
+            "cell_links": [
+                {"row_index": 0, "column_name": "Name", "cell_value": "Person 0", "url": "/wiki/Person_0"},
+                {"row_index": 30, "column_name": "Name", "cell_value": "Target Person", "url": "/wiki/Target"},
+            ],
+        }],
+        [], [], top_k=1, second_stage_k=0, max_table_rows=1,
+    )
+
+    group = result["table_rows"][0]
     assert group["row_indices"] == [30]
     assert group["cell_links"] == [{
         "row_index": 30,
@@ -158,3 +183,4 @@ def test_long_table_retrieval_filters_cell_links_to_selected_rows():
         "cell_value": "Target Person",
         "url": "/wiki/Target",
     }]
+    assert result["retrieval_trace"]["max_table_rows"] == 1

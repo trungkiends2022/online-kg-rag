@@ -89,6 +89,9 @@ class HybridQARAGBaseline:
             example.question, example.table_rows, example.text_passages,
             example.web_snippets, top_k=self.config.passage_top_k,
             second_stage_k=self.config.second_stage_k,
+            # Direct LLM retains its existing bounded table-prompt behaviour;
+            # the unlimited default is reserved for KG construction.
+            max_table_rows=self.config.passage_top_k,
         )
         table_text, row_indices, table_truncated = self._bounded_table_context(retrieved["table_rows"])
         remaining = max(self.config.max_context_chars - len(table_text), 0)

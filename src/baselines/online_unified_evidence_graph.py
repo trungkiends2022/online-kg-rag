@@ -615,6 +615,7 @@ class OnlineUnifiedEvidenceGraphBaseline:
             example.question, example.table_rows, example.text_passages,
             example.web_snippets, top_k=self.config.top_k,
             second_stage_k=self.config.second_stage_k,
+            max_table_rows=self.config.max_table_rows_for_kg,
         )
         kg = self.kg_builder.build(retrieved)
         kg_trace = kg.to_trace()

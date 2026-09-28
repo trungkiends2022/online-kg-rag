@@ -45,8 +45,11 @@ class GraphRetrievalNoPathBaseline:
 
     def run(self, example: DatasetExample) -> dict:
         started = time.perf_counter()
-        retrieved = two_stage_retrieve(example.question, example.table_rows, example.text_passages,
-                                       example.web_snippets, top_k=self.config.top_k, second_stage_k=3)
+        retrieved = two_stage_retrieve(
+            example.question, example.table_rows, example.text_passages,
+            example.web_snippets, top_k=self.config.top_k, second_stage_k=3,
+            max_table_rows=self.config.max_table_rows_for_kg,
+        )
         kg = self.kg_builder.build(retrieved)
         kg_trace = kg.to_trace()
         semantic_kg_edges = kg_trace["edges"]

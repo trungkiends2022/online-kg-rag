@@ -162,6 +162,28 @@ def _select_table_rows(
             ]
         output.append(group)
     return output
+def _all_table_rows(table_groups: list[dict]) -> list[dict]:
+    """Return every table row with stable original indices and cell links.
+
+    KG construction must be able to retain a complete table independently of
+    the retrieval ``top_k`` used for text passages. Keep the copying and
+    index-normalisation here so downstream builders receive the same schema as
+    they do for a bounded selection.
+    """
+    output = []
+    for group in table_groups:
+        rows = list(group.get("rows", []))
+        inherited_indices = list(group.get("row_indices", []))
+        row_indices = inherited_indices if len(inherited_indices) == len(rows) else list(range(len(rows)))
+        copied = {key: value for key, value in group.items() if key not in {"rows", "row_indices", "cell_links"}}
+        copied["rows"] = rows
+        copied["row_indices"] = row_indices
+        if "cell_links" in group:
+            copied["cell_links"] = [dict(link) for link in group["cell_links"]]
+        output.append(copied)
+    return output
+
+
 
 
 def _entity_topk(entity: str, items: list[dict], top_k: int) -> list[dict]:
@@ -203,14 +225,27 @@ def two_stage_retrieve(
     web_snippets: list[dict],
     top_k: int = 10,
     second_stage_k: int = 3,
+    max_table_rows: int | None = None,
 ) -> dict:
-    """Add a bounded schema-aware stage to ordinary question BM25 retrieval."""
+    """Retrieve text evidence and prepare table rows for downstream consumers.
+
+    ``max_table_rows=None`` (the default) retains the complete table, which is
+    the safe policy when the rows are used to build a KG. A positive limit
+    restores BM25/anchor row filtering for consumers that need a bounded table
+    representation, such as a direct-context prompt.
+    """
+    if max_table_rows is not None and max_table_rows < 1:
+        raise ValueError("max_table_rows must be positive when set")
     anchor = anchor_question(question, table_rows, text_passages)
     first = coarse_retrieve(
         question, table_rows, text_passages, web_snippets, top_k=top_k
     )
-    first["table_rows"] = _select_table_rows(
-        question, table_rows, top_k=top_k, anchor=anchor,
+    first["table_rows"] = (
+        _all_table_rows(table_rows)
+        if max_table_rows is None
+        else _select_table_rows(
+            question, table_rows, top_k=max_table_rows, anchor=anchor,
+        )
     )
     selected_row_links = list(dict.fromkeys(
         str(link.get("url", "")).strip()
@@ -337,6 +372,7 @@ def two_stage_retrieve(
         "retrieval_trace": {
             "strategy": "two_stage_bm25_schema",
             "stage1_top_k": top_k,
+            "max_table_rows": max_table_rows,
             "selected_table_rows": sum(
                 len(group.get("rows", [])) for group in first["table_rows"]
             ),

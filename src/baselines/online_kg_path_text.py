@@ -538,6 +538,7 @@ Final answer:"""
             example.web_snippets,
             top_k=self.config.top_k,
             second_stage_k=self.config.second_stage_k,
+            max_table_rows=self.config.max_table_rows_for_kg,
         )
         kg = self.kg_builder.build(retrieved)
         if kg.is_empty():

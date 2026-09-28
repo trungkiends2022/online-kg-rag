@@ -145,6 +145,7 @@ def _build_run_manifest(args, *, max_workers: int) -> dict:
         "top_k": args.top_k,
         "second_stage_k": args.second_stage_k,
         "max_context_chars": args.max_context_chars,
+        "max_table_rows_for_kg": args.max_table_rows_for_kg,
         "max_output_tokens": args.max_output_tokens,
         "temperature": args.temperature,
         "use_rule_text_triples": args.use_rule_text_triples,
@@ -227,6 +228,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--top-k", type=int, default=5)
     parser.add_argument("--second-stage-k", type=int, default=3)
     parser.add_argument("--max-context-chars", type=int, default=24_000)
+    parser.add_argument(
+        "--max-table-rows-for-kg", type=int,
+        help="Maximum table rows used to construct a KG; omit to retain every row (default).",
+    )
     parser.add_argument("--max-output-tokens", type=int, default=512)
     parser.add_argument(
         "--llm-timeout-seconds", type=float,
@@ -303,6 +308,7 @@ def _make_method(args):
     rag_config = RAGConfig(
         top_k=args.top_k,
         second_stage_k=args.second_stage_k,
+        max_table_rows_for_kg=args.max_table_rows_for_kg,
         max_context_chars=args.max_context_chars,
         use_rule_text_triples=args.use_rule_text_triples,
         ambiguity_policy=args.ambiguity_policy,
@@ -329,6 +335,7 @@ def _make_method(args):
     if args.method == "oracle_evidence":
         return OracleEvidenceBaseline(rag_config)
     pipeline = OnlineKGPipeline(
+        max_table_rows_for_kg=args.max_table_rows_for_kg,
         temperature=args.temperature,
         execution_mode="numerical_ir" if args.method == "numerical_ir" else "python",
         finqa_canonical_ratio=(args.dataset == "finqa" and args.method == "numerical_ir"),
@@ -745,6 +752,7 @@ def main() -> None:
         "temperature": args.temperature,
         "n_paths": args.n_paths,
         "max_replans": args.max_replans,
+        "max_table_rows_for_kg": args.max_table_rows_for_kg,
         "finqa_table_format": args.finqa_table_format,
         "second_stage_k": args.second_stage_k,
         "max_workers": max_workers,

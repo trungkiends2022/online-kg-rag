@@ -35,12 +35,16 @@ class OnlineKGPipeline:
         execution_mode: str = "python",
         finqa_canonical_ratio: bool = False,
         max_output_tokens: int = 4096,
+        max_table_rows_for_kg: int | None = None,
     ):
         if execution_mode not in {"python", "numerical_ir"}:
             raise ValueError(f"unsupported execution mode: {execution_mode}")
         self.execution_mode = execution_mode
         self.finqa_canonical_ratio = finqa_canonical_ratio
         self.max_output_tokens = max_output_tokens
+        if max_table_rows_for_kg is not None and max_table_rows_for_kg < 1:
+            raise ValueError("max_table_rows_for_kg must be positive when set")
+        self.max_table_rows_for_kg = max_table_rows_for_kg
         self.kg_builder = OnlineKGBuilder(
             EntityRelationExtractor(
                 temperature=temperature, max_output_tokens=max_output_tokens
@@ -87,6 +91,7 @@ class OnlineKGPipeline:
         retrieved = two_stage_retrieve(
             question, table_rows, text_passages, web_snippets,
             top_k=retrieval_top_k, second_stage_k=retrieval_second_stage_k,
+            max_table_rows=self.max_table_rows_for_kg,
         )
         kg = self.kg_builder.build(retrieved)
         constraint_context = retrieved.get("retrieval_trace", {})

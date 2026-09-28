@@ -16,6 +16,9 @@ class RAGConfig:
     top_k: int = 5
     second_stage_k: int = 3
     max_context_chars: int = 24_000
+    # ``None`` deliberately keeps every table row when constructing a KG.
+    # This is independent of top_k, which ranks text/web retrieval.
+    max_table_rows_for_kg: int | None = None
     max_output_tokens: int = 1024
     temperature: float = 0.0
 
@@ -30,6 +33,8 @@ class RAGConfig:
             raise ValueError("top_k must be positive")
         if self.second_stage_k < 0:
             raise ValueError("second_stage_k must be non-negative")
+        if self.max_table_rows_for_kg is not None and self.max_table_rows_for_kg < 1:
+            raise ValueError("max_table_rows_for_kg must be positive when set")
         if self.max_context_chars < 1 or self.max_output_tokens < 1:
             raise ValueError("context and output limits must be positive")
         if not isinstance(self.use_rule_text_triples, bool):

@@ -22,6 +22,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--n-paths", type=int, default=5)
     parser.add_argument("--max-replans", type=int, default=2)
     parser.add_argument(
+        "--max-table-rows-for-kg", type=int,
+        help="Maximum table rows used to construct a KG; omit to retain every row (default).",
+    )
+    parser.add_argument(
         "--method", choices=("online_kg_path_text", "online_kg"),
         default="online_kg_path_text",
         help="Default avoids code synthesis and sandbox execution.",
@@ -47,8 +51,12 @@ def main() -> None:
         )
 
     method = (
-        OnlineKGPathTextBaseline(RAGConfig(), n_paths=args.n_paths)
-        if args.method == "online_kg_path_text" else OnlineKGPipeline()
+        OnlineKGPathTextBaseline(
+            RAGConfig(max_table_rows_for_kg=args.max_table_rows_for_kg), n_paths=args.n_paths,
+        )
+        if args.method == "online_kg_path_text" else OnlineKGPipeline(
+            max_table_rows_for_kg=args.max_table_rows_for_kg,
+        )
     )
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

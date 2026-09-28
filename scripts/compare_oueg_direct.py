@@ -2,8 +2,8 @@
 """Compare OUEG vs Direct LLM across benchmark runs with ambiguity stratification."""
 
 import argparse
+import csv
 import json
-import sys
 from pathlib import Path
 
 
@@ -12,6 +12,11 @@ def parse_args():
     parser.add_argument("--oueg", type=Path, required=True, help="OUEG results JSONL")
     parser.add_argument("--direct", type=Path, required=True, help="Direct LLM results JSONL")
     parser.add_argument("--markdown", type=Path, help="Optional output markdown report path")
+    parser.add_argument(
+        "--csv",
+        type=Path,
+        help="Optional per-case comparison CSV; ambiguity is derived from the OUEG row.",
+    )
     return parser.parse_args()
 
 
@@ -53,6 +58,63 @@ def compute_metrics(rows: list[dict]) -> dict:
     }
 
 
+def is_ambiguous(row: dict) -> bool:
+    """Return OUEG's structural ambiguity flag for a single result row."""
+    if row.get("is_ambiguous") is True:
+        return True
+    ambiguity = row.get("ambiguity")
+    return isinstance(ambiguity, dict) and ambiguity.get("is_ambiguous") is True
+
+
+def markdown_cell(value: object) -> str:
+    """Keep free-form model output from breaking a Markdown table."""
+    return str(value if value is not None else "").replace("|", r"\|").replace("\n", " ")
+
+
+def write_case_csv(path: Path, oueg_map: dict[str, dict], direct_map: dict[str, dict], common_ids: list[str]) -> None:
+    """Write one joined row per evaluated case for spreadsheet-based review."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fields = [
+        "id",
+        "question",
+        "gold_answer",
+        "is_ambiguous",
+        "ambiguity_status",
+        "directLLM_answer",
+        "directLLM_exact_match",
+        "directLLM_semantic_exact_match",
+        "directLLM_f1",
+        "OUEG_answer",
+        "OUEG_exact_match",
+        "OUEG_semantic_exact_match",
+        "OUEG_f1",
+    ]
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        for example_id in common_ids:
+            oueg = oueg_map[example_id]
+            direct = direct_map[example_id]
+            ambiguity = oueg.get("ambiguity")
+            writer.writerow(
+                {
+                    "id": example_id,
+                    "question": oueg.get("question", direct.get("question", "")),
+                    "gold_answer": oueg.get("gold_answer", direct.get("gold_answer", "")),
+                    "is_ambiguous": is_ambiguous(oueg),
+                    "ambiguity_status": ambiguity.get("status") if isinstance(ambiguity, dict) else oueg.get("ambiguity_status"),
+                    "directLLM_answer": direct.get("answer", ""),
+                    "directLLM_exact_match": direct.get("exact_match"),
+                    "directLLM_semantic_exact_match": direct.get("semantic_exact_match"),
+                    "directLLM_f1": direct.get("f1"),
+                    "OUEG_answer": oueg.get("answer", ""),
+                    "OUEG_exact_match": oueg.get("exact_match"),
+                    "OUEG_semantic_exact_match": oueg.get("semantic_exact_match"),
+                    "OUEG_f1": oueg.get("f1"),
+                }
+            )
+
+
 def main():
     args = parse_args()
     oueg_map = load_jsonl(args.oueg)
@@ -65,12 +127,7 @@ def main():
     direct_rows = [direct_map[i] for i in common_ids]
 
     # Ambiguity is determined from OUEG's structural candidate analysis
-    ambiguous_ids = set()
-    for row in oueg_rows:
-        if row.get("is_ambiguous") is True:
-            ambiguous_ids.add(row["id"])
-        elif isinstance(row.get("ambiguity"), dict) and row["ambiguity"].get("is_ambiguous"):
-            ambiguous_ids.add(row["id"])
+    ambiguous_ids = {row["id"] for row in oueg_rows if is_ambiguous(row)}
 
     # Stratified subsets
     oueg_amb = [r for r in oueg_rows if r["id"] in ambiguous_ids]
@@ -92,8 +149,10 @@ def main():
     report_lines.append(f"# Benchmark Comparison: OUEG vs Direct LLM (N={len(common_ids)})")
     report_lines.append("")
     report_lines.append(f"- **Total Evaluated Cases**: {len(common_ids)}")
-    report_lines.append(f"- **Ambiguous Cases (Multiple structural ties/candidates)**: {len(ambiguous_ids)} ({len(ambiguous_ids)/len(common_ids)*100:.1f}%)")
-    report_lines.append(f"- **Unambiguous Cases**: {len(common_ids) - len(ambiguous_ids)} ({(len(common_ids) - len(ambiguous_ids))/len(common_ids)*100:.1f}%)")
+    ambiguous_pct = len(ambiguous_ids) / len(common_ids) * 100 if common_ids else 0.0
+    unambiguous_pct = 100 - ambiguous_pct if common_ids else 0.0
+    report_lines.append(f"- **Ambiguous Cases (Multiple structural ties/candidates)**: {len(ambiguous_ids)} ({ambiguous_pct:.1f}%)")
+    report_lines.append(f"- **Unambiguous Cases**: {len(common_ids) - len(ambiguous_ids)} ({unambiguous_pct:.1f}%)")
     report_lines.append("")
     report_lines.append("## Overall Performance")
     report_lines.append("")
@@ -116,18 +175,21 @@ def main():
     if ambiguous_ids:
         report_lines.append("## Case Inspection: Ambiguous Samples")
         report_lines.append("")
-        report_lines.append("| ID | Question | Gold Answer | Direct LLM Answer | OUEG Answer | Status / Candidates |")
-        report_lines.append("|---|---|---|---|---|---|")
+        report_lines.append("| ID | Ambiguous? | Question | Gold Answer | Direct LLM Answer | OUEG Answer | Status / Candidates |")
+        report_lines.append("|---|---|---|---|---|---|---|")
         for ex_id in ambiguous_ids:
             o_row = oueg_map[ex_id]
             d_row = direct_map[ex_id]
             amb_info = o_row.get("ambiguity") or {}
             status = amb_info.get("status", "AMBIGUOUS")
-            q = o_row["question"]
-            gold = o_row["gold_answer"]
+            q = markdown_cell(o_row.get("question", ""))
+            gold = markdown_cell(o_row.get("gold_answer", ""))
             d_ans = d_row.get("answer", "")
             o_ans = o_row.get("answer", "")
-            report_lines.append(f"| `{ex_id}` | {q} | **{gold}** | {d_ans} | {o_ans} | {status} |")
+            report_lines.append(
+                f"| `{ex_id}` | Yes | {q} | **{gold}** | {markdown_cell(d_ans)} | "
+                f"{markdown_cell(o_ans)} | {markdown_cell(status)} |"
+            )
         report_lines.append("")
 
     report_text = "\n".join(report_lines)
@@ -137,6 +199,10 @@ def main():
         args.markdown.parent.mkdir(parents=True, exist_ok=True)
         args.markdown.write_text(report_text, encoding="utf-8")
         print(f"Saved comparison report to {args.markdown}")
+
+    if args.csv:
+        write_case_csv(args.csv, oueg_map, direct_map, common_ids)
+        print(f"Saved per-case comparison CSV to {args.csv}")
 
 
 if __name__ == "__main__":
