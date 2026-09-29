@@ -1,0 +1,86 @@
+\begin{tikzpicture}[
+  >=Latex,
+  font=\scriptsize,
+  box/.style={draw=gray!40, fill=white, rounded corners=3pt, line width=0.45pt, inner sep=3pt},
+  panel/.style={draw=#1!70!black, fill=#1!3, rounded corners=5pt, line width=0.7pt, inner sep=4pt},
+  titlebar/.style={fill=#1!18, draw=#1!75!black, line width=0.5pt, rounded corners=2pt, font=\bfseries\scriptsize, text=#1!90!black, align=center, inner sep=2.5pt},
+  flow/.style={->, line width=0.7pt, draw=gray!75!black},
+  tag/.style={draw=#1!80!black, fill=#1!12, rounded corners=2pt, font=\tiny\bfseries, inner sep=1.5pt, text=#1!90!black}
+]
+
+% ========================================================
+% LEFT: DUAL-TRACK ARCHITECTURE (ORANGE)
+% ========================================================
+\node[panel=orange, text width=5.6cm, minimum height=7.2cm] (p_dual) at (2.9, 0) {};
+\node[titlebar=orange, minimum width=5.4cm] (t_dual) at ([yshift=-3.2mm]p_dual.north) {Dual-Track Traversal \& Compression};
+
+\node[box, text width=5.25cm, fill=orange!8, draw=orange!45] (track_a) at (2.9, 1.85) {
+  \textbf{Track 3a: Lossless Prompt Compression} \\
+  \tiny $\bullet$ Encodes complete evidence multigraph $G_q^*$ losslessly \\
+  $\bullet$ Shared passage dictionary $\mathcal{S}_p$ eliminates text redundancy \\
+  $\bullet$ \textbf{100\% evidence recall} (retains all row attributes)
+};
+
+\node[box, text width=5.25cm, fill=orange!8, draw=orange!45] (track_b) at (2.9, 0.35) {
+  \textbf{Track 3b: Grounded Path Enumeration} \\
+  \tiny Bounded DFS enumerates non-filtering reading guides: \\
+  \vspace{0.6mm}
+  \textbf{Path $p_1$:} \texttt{Toronto Eagles} $\xrightarrow{\text{rec}}$ $\rho_0$ $\xrightarrow{\text{city}}$ \texttt{Toronto} $\xrightarrow{\text{link}}$ \texttt{Doc} $\xrightarrow{\text{text}}$ \texttt{York} \\
+  \quad $\bullet$ Multi-factor Score: $S(p_1) = 7.85$ \quad (\textbf{Rank 1}) \\
+  \textbf{Path $p_2$:} \texttt{Hamilton Tigers} $\xrightarrow{\text{rec}}$ $\rho_1$ $\xrightarrow{\text{city}}$ \texttt{Hamilton} \dots \\
+  \quad $\bullet$ Multi-factor Score: $S(p_2) = 3.10$ \quad (Year mismatch)
+};
+
+\node[box, text width=5.25cm, fill=orange!18, draw=orange!80!black, line width=0.6pt] (track_c) at (2.9, -2.0) {
+  \textbf{Track 3c: Structural Ambiguity Tiebreak} \\
+  \tiny When candidate rows tie on graph score ($S(p_A) = S(p_B)$): \\
+  $\bullet$ Collision set $|\mathcal{C}_q| > 1 \implies$ Flag \texttt{SCORE\_COLLISION\_TIE} \\
+  $\bullet$ Computes bridge lexical tiebreak score: \\
+  \quad $\tau(c) = \sum_{w \in \operatorname{Tokens}(c) \cap \mathcal{D}^{\text{bridge}}} \operatorname{IDF}(w)$ \\
+  $\bullet$ Selects winner candidate $\rho_0$ to prevent guessing
+};
+
+\draw[flow] (track_b.south) -- (track_c.north);
+
+% ========================================================
+% RIGHT: COMPACT PROMPT & GENERATION (TEAL)
+% ========================================================
+\node[panel=teal, text width=6.6cm, minimum height=7.2cm] (p_prompt) at (9.3, 0) {};
+\node[titlebar=teal, minimum width=6.4cm] (t_prompt) at ([yshift=-3.2mm]p_prompt.north) {Unified Prompt Payload \& LLM Generation};
+
+\node[box, text width=6.25cm, fill=teal!6, draw=teal!40, inner sep=3pt] (prompt_content) at (9.3, 1.35) {
+  \textbf{Serialized Unified Prompt Payload:} \\
+  \fontsize{4.6pt}{5.8pt}\selectfont
+  \texttt{\textbf{[SYSTEM]}: Answer with exact span from verified evidence. \\
+  \textbf{[GRAPH EVIDENCE]}: \\
+  \ \ Record\_0: \{Club: "Toronto Eagles", Formed: "1989", City: "Toronto"\} \\
+  \ \ Record\_1: \{Club: "Hamilton Tigers", Formed: "1991", City: "Hamilton"\} \\
+  \textbf{[SHARED PASSAGES]}: \\
+  \ \ Doc:Toronto: "Originally established in 1793 as the town of York..." \\
+  \textbf{[SUGGESTED READING GUIDE]}: \\
+  \ \ Path 1 (Score 7.85): Toronto Eagles $\rightarrow$ Record\_0 $\rightarrow$ Toronto $\rightarrow$ York \\
+  \textbf{[AMBIGUITY RESOLUTION]}: Prioritized Candidate: Record\_0 \\
+  \textbf{[QUESTION]}: Original name of city with AFL club formed in 1989?}
+};
+
+\node[box, text width=6.25cm, fill=teal!18, draw=teal!70!black, line width=0.6pt] (llm_step) at (9.3, -0.65) {
+  \textbf{Backbone LLM Forward Pass ($T=0$)} \\
+  \tiny Single-turn in-context generation conditioned on complete multigraph context and guided by non-filtering candidate paths.
+};
+
+\node[box, text width=6.25cm, fill=green!15, draw=green!60!black, line width=0.7pt] (final_output) at (9.3, -2.05) {
+  \textbf{Grounded Answer:} \texttt{"York"} \\
+  \vspace{0.7mm}
+  \textbf{Auditable Provenance Record:} \\
+  \tiny $\bullet$ Table: \texttt{AFL\_Ontario\_0} \quad $\bullet$ Row: \texttt{0} \quad $\bullet$ Cell: \texttt{City: Toronto} \\
+  $\bullet$ Passage Bridge: \texttt{/wiki/Toronto} \quad $\bullet$ Target Span: \texttt{"York"}
+};
+
+\draw[flow] (prompt_content.south) -- (llm_step.north);
+\draw[flow] (llm_step.south) -- (final_output.north);
+
+% Connectors between panels
+\draw[flow, line width=0.8pt, draw=teal!80!black] (track_a.east) -- ++(0.25,0) |- ([yshift=3mm]prompt_content.west);
+\draw[flow, line width=0.8pt, draw=orange!80!black] (track_c.east) -- ++(0.25,0) |- ([yshift=-3mm]prompt_content.west);
+
+\end{tikzpicture}

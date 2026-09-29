@@ -13,8 +13,8 @@ noise, but can discard peripheral corroborating facts or fail when several
 candidates tie on path score. Conversely, passing an uncurated graph overwhelms
 the language model with unstructured triples.
 
-To resolve this trade-off, we propose the \textbf{Online Unified Evidence Graph
-(OUEG)} framework alongside the classic \textbf{Grounded Path-Text} view. The
+To resolve this trade-off, we propose the Online Unified Evidence Graph
+(OUEG) framework alongside the classic Grounded Path-Text view. The
 complete pipeline proceeds as follows:
 \begin{align*}
 q &\rightarrow \text{two-stage context retrieval} \\
@@ -61,38 +61,24 @@ and bridge-entity queries, deduplicating passages by source identifier.
 
 \subsection{Schema-Preserving Online KG Construction}
 \label{sec:method-kg}
-For each question, the system instantiates a directed multigraph
-$G_q=(V_q, E_q)$. An edge $e \in E_q$ is defined as
-\[
-e = (h, r, t, \pi),
-\]
-where $h$ and $t$ denote head and tail node labels, $r$ is a normalized relation,
-and $\pi$ stores provenance metadata including source type (\texttt{table} or
-\texttt{text}), source identifier, row index, column name, and header path.
+For each question, the system dynamically instantiates a directed multigraph $G_q=(V_q, E_q)$ whose node and edge sets are partitioned as:
+\begin{equation}
+\label{eq:graph-partition}
+V_q = V_{\text{ent}} \cup V_{\text{rec}} \cup V_{\text{lit}}, \qquad
+E_q = E_{\text{rec}} \cup E_{\text{attr}} \cup E_{\text{link}} \cup E_{\text{text}}.
+\end{equation}
+An edge $e \in E_q$ is defined as $e = (h, r, t, \pi)$, where $h, t \in V_q$ are head and tail nodes, $r$ is a normalized relation predicate, and $\pi$ stores provenance metadata (source type, row index, column name, and header path).
 
 \paragraph{Deterministic table edges and record nodes.}
-Flattened tables lose header hierarchies and intra-row bindings. We address this
-with two structural representations:
-\begin{enumerate}
-    \item \emph{Qualified headers}: Hierarchical column headers are qualified
-    into normalized relation keys (e.g., \texttt{2002 / Dividend} becomes
-    \texttt{2002\_dividend}).
-    \item \emph{Record nodes}: Direct subject--value edges
-    $(u_i, \operatorname{norm}(H_j), v_{ij})$ permit entity lookups but do not
-    guarantee that values from the same row remain bound. For each row $i$, we
-    introduce a local record node $\rho_i = \texttt{table:}T\texttt{:row:}i$:
-    \[
-    u_i \xrightarrow{\mathrm{has\_record}} \rho_i, \qquad
-    \rho_i \xrightarrow{\operatorname{norm}(H_j)} v_{ij}.
-    \]
-    This structural star topology ensures that attributes such as year, venue,
-    and score belonging to row $i$ cannot be conflated with those of another row
-    sharing the same entity subject.
-    \item \emph{Multi-value cell splitting}: When a table cell contains multiple
-    comma-separated values, the adapter splits them into individual
-    \texttt{derived\_from\_cell\_split} edges so that target entities are not
-    masked within compound strings.
-\end{enumerate}
+Flattened tables lose header hierarchies and intra-row bindings. Direct subject--value edges $(u_i, \operatorname{norm}(H_j), v_{ij})$ permit entity lookups but fail to guarantee that values from the same row remain bound. For each row $i$, we introduce a local centroid record node $\rho_i = \texttt{table:}T\texttt{:row:}i \in V_{\text{rec}}$ with star-topology bindings (Fig.~\ref{fig:kg-construction}):
+\begin{equation}
+\label{eq:star-topology}
+E_{\text{rec}} = \{ (u_i, \texttt{has\_record}, \rho_i) \}, \qquad
+E_{\text{attr}} = \{ (\rho_i, \operatorname{norm}(H_j), v_{ij}) \}.
+\end{equation}
+\input{figures/graph-construction}
+This structural star topology ensures that attributes (e.g., year, venue, score) belonging to row $i$ cannot be conflated with attributes of another row sharing the same entity subject.
+When a table cell contains multiple comma-separated values, the adapter splits them into individual derived edges so that target entities are not masked within compound strings.
 In parallel, an audit trace records the explicit
 $\text{Table} \rightarrow \text{Row} \rightarrow \text{Cell} \rightarrow \text{Column}$
 topology without altering the semantic reasoning graph.
@@ -129,21 +115,22 @@ constraints co-located.
 
 \paragraph{Multi-factor path scoring.}
 Paths are scored deterministically via:
-\[
-S(p) = G + Q_e + Q_r + Q_c + C + M + R + B + A - 0.35 \max(|E_p|-1, 0),
-\]
+\begin{equation}
+\label{eq:path-score}
+S(p) = G + Q_e + Q_r + Q_c + C + M + R + B + A - \lambda_{\text{len}} \max(|E_p|-1, 0),
+\end{equation}
 where $G=1$ is edge-groundedness validity; $Q_e, Q_r \in [0, 2]$ denote question
 overlap with nodes and relations; $Q_c \in [0, 2]$ is question token coverage;
 $C=2$ rewards matching an anchored table constraint; $M=1.5$ awards cross-modal
 evidence combining table and text; $A=1.0$ credits identical-fact corroboration;
-$R=1.0$ rewards row consistency; and $B=1.0$ requires explicit
-\texttt{has\_record} binding.
+$R=1.0$ rewards row consistency; $B=1.0$ requires explicit
+\texttt{has\_record} binding; and $\lambda_{\text{len}}=0.35$ penalizes ungrounded redundant hops.
 
 \subsection{Online Unified Evidence Graph (OUEG) and Prompt Compression}
 \label{sec:method-oueg}
 In the classic Path-Text baseline, only the top-$N$ ranked paths are serialized,
-discarding the remainder of $G_q$. In the \textbf{Online Unified Evidence Graph
-(OUEG)}, the language model receives the entire unified subgraph
+discarding the remainder of $G_q$. In the Online Unified Evidence Graph
+(OUEG), the language model receives the entire unified subgraph
 $G_q^{\text{unified}} = (V_q^*, E_q^*)$ alongside the raw text contexts, with
 the generated candidate paths provided as \emph{non-filtering suggested reading
 guides}.
@@ -166,33 +153,30 @@ incurring high token latency. OUEG incorporates a compact serializer
 
 \subsection{Ambiguity Assessment and Score-Collision Handling}
 \label{sec:method-ambiguity}
-A pervasive challenge in structured table QA is \emph{structural ambiguity}:
-multiple candidate rows often satisfy the coarse question constraints with
-identical path scores. For example, when asked for ``the club whose city is
-between Kgale and Oodi Hills'', several rows may match the country/league
-condition, creating a score tie.
+A pervasive challenge in structured table QA is \emph{structural ambiguity}: multiple candidate rows often satisfy coarse relational constraints with identical path scores (Fig.~\ref{fig:dual-track}). Let $\mathcal{P}_q$ be the set of valid enumerated paths, and let $S^* = \max_{p \in \mathcal{P}_q} S(p)$ be the maximal graph path score. We formalize the candidate collision set $\mathcal{C}_q$ as the set of distinct target entities reaching this maximal score:
+\begin{equation}
+\label{eq:collision-set}
+\mathcal{C}_q = \{ \operatorname{tail}(p) \mid p \in \mathcal{P}_q, \, S(p) = S^* \}.
+\end{equation}
+\input{figures/dual-track}
+When $|\mathcal{C}_q| > 1$, the query triggers a score collision (\texttt{SCORE\_COLLISION\_TIE}).
 
-OUEG actively detects these collisions during candidate generation:
-\begin{enumerate}
-    \item \emph{Tie classification}: If two or more distinct candidate paths
-    achieve identical maximal scores, the status is flagged as
-    \texttt{SCORE\_COLLISION\_TIE}; if multiple rows match without a score tie,
-    it is labelled \texttt{MULTIPLE\_\allowbreak STRUCTURAL\_\allowbreak CANDIDATES}.
-    \item \emph{Lexical tiebreak}: When a collision occurs, OUEG computes the
-    lexical overlap between candidate entity labels and bridge-entity passage
-    mentions. If a unique lexical winner exists, it is highlighted as a
-    tiebreak signal in the prompt.
-    \item \emph{Prompting instructions}: The answer synthesizer is alerted of
-    potential ambiguity, prompting it to verify subtle textual nuances in the
-    deduplicated contexts rather than arbitrarily selecting the first row.
-\end{enumerate}
+To resolve collisions deterministically without hallucination, OUEG formulates a bridge lexical tiebreak score $\tau(c)$ over the bridge passage tokens $\mathcal{D}_q^{\text{bridge}}$:
+\begin{equation}
+\label{eq:tiebreak-score}
+\tau(c) = \sum_{w \in \operatorname{Tokens}(c) \cap \operatorname{Tokens}(\mathcal{D}_q^{\text{bridge}})} \operatorname{IDF}(w), \qquad
+c^* = \arg\max_{c \in \mathcal{C}_q} \tau(c).
+\end{equation}
+If a unique candidate satisfies $\tau(c^*) > \max_{c \ne c^*} \tau(c)$, it is designated as the tiebreak winner and highlighted as a prioritized grounding signal in the prompt. The language model is simultaneously instructed to verify textual nuances in the deduplicated context rather than arbitrarily guessing between tied candidates.
 
 \subsection{Answer Generation, Fallback, and Audit Trace}
 \label{sec:method-answer}
-The final answer model receives the compressed unified subgraph (or top-ranked
-paths), suggested path reading guides, ordering hints (e.g., explicit ordinal
-ranks), ambiguity diagnostics, and the question. The model extracts a concise
-denotation span.
+The final answer model synthesizes the answer span $a^*$ conditioned on the complete evidence multigraph, non-filtering path reading guides, and the disambiguated tiebreak anchor:
+\begin{equation}
+\label{eq:answer-synthesis}
+a^* = \arg\max_a P_{\text{LLM}}\left(a \mid q, \, G_q^{\text{unified}}, \, \mathcal{P}_q^{\text{guide}}, \, c^*\right),
+\end{equation}
+which preserves 100\% evidence recall while directing model attention toward verified relational paths.
 
 \paragraph{Reverse grounding and empty fallback.}
 If the path search yields no valid candidates or the graph is disconnected,

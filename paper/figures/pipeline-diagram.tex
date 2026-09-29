@@ -1,132 +1,171 @@
 \begin{tikzpicture}[
   >=Latex,
   font=\scriptsize,
-  panel/.style={draw=#1!75!black, fill=#1!4, rounded corners=5pt, line width=0.7pt},
-  titlebar/.style={fill=#1!20, draw=#1!75!black, line width=0.5pt, rounded corners=2pt, font=\bfseries\scriptsize, text=#1!90!black, align=center, inner sep=2.5pt, minimum height=4.2mm},
-  card/.style={draw=gray!35, fill=white, rounded corners=3pt, align=center, inner sep=2.5pt, font=\scriptsize, line width=0.5pt},
+  panel/.style={draw=#1!75!black, fill=#1!3, rounded corners=5pt, line width=0.7pt},
+  titlebar/.style={fill=#1!18, draw=#1!75!black, line width=0.5pt, rounded corners=2pt, font=\bfseries\tiny, text=#1!90!black, align=center, inner sep=2pt, minimum height=3.6mm},
+  subcard/.style={draw=gray!35, fill=white, rounded corners=3pt, align=left, inner sep=2.5pt, font=\tiny, line width=0.45pt},
   flow/.style={->, line width=0.7pt, draw=gray!75!black},
   flowlabel/.style={font=\tiny\bfseries, fill=white, inner sep=1pt, text=gray!85!black},
-  knode/.style={draw=#1!85!black, fill=#1!22, circle, inner sep=0.5pt, minimum size=4.5mm, font=\tiny\bfseries},
-  kedge/.style={->, line width=0.5pt, draw=#1!75!black, font=\tiny}
+  knode/.style={draw=#1!85!black, fill=#1!18, rounded corners=2.5pt, inner sep=2pt, font=\tiny\bfseries, align=center},
+  kedge/.style={->, line width=0.55pt, draw=#1!80!black, font=\tiny}
 ]
+
+% ========================================================
+% TOP BANNER: RUNNING USE CASE QUESTION (HydraRAG Style)
+% ========================================================
+\node[draw=blue!65!black, fill=blue!7, rounded corners=4pt, line width=0.7pt, text width=14.6cm, inner sep=3.5pt, align=left] (q_box) at (7.4, 3.75) {
+  \textbf{\small Running Use Case (HybridQA Benchmark):} \textit{``What was the original name of the city with an AFL club formed in 1989?''} \\
+  \tiny \textbf{Target Ground Truth:} \texttt{"York"} \quad $\bullet$ \quad \textbf{Modality Fusion:} Semi-Structured Table (\texttt{AFL\_Ontario\_0}) $+$ Wikipedia Passage (\texttt{/wiki/Toronto})
+};
 
 % ========================================================
 % STAGE 1: MULTI-SOURCE RETRIEVAL (BLUE)
 % ========================================================
-\node[panel=blue, minimum width=2.45cm, minimum height=5.5cm] (panel1) at (1.25, 0) {};
-\node[titlebar=blue, minimum width=2.25cm] (t1) at ([yshift=-3mm]panel1.north) {1. Multi-Source Ingestion};
+\node[panel=blue, minimum width=3.55cm, minimum height=6.6cm] (panel1) at (1.78, -0.15) {};
+\node[titlebar=blue, minimum width=3.35cm] (t1) at ([yshift=-3.2mm]panel1.north) {1. Multi-Source Ingestion};
 
-\node[card, text width=2.15cm, fill=blue!8, draw=blue!35] (q_node) at (1.25, 1.65) {
-  \textbf{Question $q$}\\
-  \tiny Input query text
+\node[subcard, text width=3.3cm, anchor=north] (table_box) at ([yshift=-3.5mm]t1.south) {
+  {\fontsize{5pt}{6pt}\selectfont
+  \textbf{Table $T$: \texttt{AFL\_Ontario\_0}} \\[0.5mm]
+  \resizebox{\linewidth}{!}{%
+  \renewcommand{\arraystretch}{1.05}%
+  \setlength{\tabcolsep}{2.5pt}%
+  \begin{tabular}{|l|c|l|}
+    \hline
+    \textbf{Club} & \textbf{Formed} & \textbf{City} \\
+    \hline
+    \rowcolor{blue!18} \textbf{Tor.\ Eagles} & \textbf{1989} & \textbf{\underline{Toronto}} \\
+    Ham.\ Tigers & 1991 & Hamilton \\
+    \hline
+  \end{tabular}%
+  }\\[0.6mm]
+  $\rightarrow$ \textbf{Anchor Row 0} (\texttt{1989})
+  \par}
 };
 
-\node[card, text width=2.15cm, fill=blue!5, draw=blue!30] (table_node) at (1.25, 0.5) {
-  \textbf{Table $T$ \& Texts $D$}\\
-  \tiny Headers, cells, and Wiki links
+\node[subcard, text width=3.3cm, anchor=north] (link_box) at ([yshift=-5mm]table_box.south) {
+  {\fontsize{5pt}{6pt}\selectfont
+  \textbf{Bridge}: \texttt{Toronto} $\rightarrow$ \texttt{Doc:Toronto} \\[0.4mm]
+  \textit{``...capital of Ontario. Established in 1793 as the town of \textbf{\underline{York}}, incorporated in 1834...''}
+  \par}
 };
 
-\node[card, text width=2.15cm, fill=blue!12, draw=blue!65, line width=0.6pt] (retriever) at (1.25, -0.9) {
-  \textbf{Two-Stage Retrieval}\\
-  \tiny 1. Coarse retrieval + Schema anchor\\
-  \tiny 2. Hyperlink expansion ($k_2=3$)
+\node[subcard, text width=3.3cm, fill=blue!8, draw=blue!45, anchor=north] (retr_summary) at ([yshift=-5mm]link_box.south) {
+  {\fontsize{5pt}{6pt}\selectfont
+  \textbf{Retriever Output} \\[0.3mm]
+  $\bullet$ Anchor: Row $\rho_0$ (\texttt{1989}) \\
+  $\bullet$ Bridge: \texttt{Doc:Toronto} ($k_2=3$) \\
+  $\bullet$ Preserves full row context
+  \par}
 };
 
-\draw[flow] (q_node.south) -- (table_node.north);
-\draw[flow] (table_node.south) -- (retriever.north);
+\draw[flow] (table_box.south) -- (link_box.north);
+\draw[flow] (link_box.south) -- (retr_summary.north);
 
 % ========================================================
 % STAGE 2: SCHEMA-PRESERVING MULTIGRAPH (PURPLE)
 % ========================================================
-\node[panel=purple, minimum width=2.9cm, minimum height=5.5cm] (panel2) at (4.25, 0) {};
-\node[titlebar=purple, minimum width=2.7cm] (t2) at ([yshift=-3mm]panel2.north) {2. Schema Multigraph $G_q^*$};
+\node[panel=purple, minimum width=3.5cm, minimum height=6.6cm] (panel2) at (5.45, -0.15) {};
+\node[titlebar=purple, minimum width=3.3cm] (t2) at ([yshift=-3.2mm]panel2.north) {2. Schema Multigraph $G_q^*$};
 
-% Mini-graph nodes
-\node[knode=blue] (ent_u) at (3.45, 1.45) {$u_i$};
-\node[knode=purple] (rec_rho) at (3.45, 0.45) {$\rho_i$};
-\node[knode=teal] (cell_c) at (5.05, 0.45) {$c_{ij}$};
-\node[knode=orange] (bridge_p) at (5.05, -0.5) {$d_k$};
-\node[knode=red] (triple_t) at (3.45, -0.5) {$t$};
+% Graph nodes
+\node[knode=blue] (ent_club) at (4.45, 1.95) {Toronto\\Eagles};
+\node[knode=purple] (rec_node) at (4.45, 0.95) {$\rho_0$\\(Rec 0)};
+\node[knode=teal] (ent_city) at (6.45, 0.95) {Toronto};
+\node[knode=gray] (lit_year) at (4.45, -0.05) {``1989''};
+\node[knode=orange] (doc_node) at (6.45, -0.05) {Doc:\\Toronto};
+\node[knode=red] (ans_node_g) at (6.45, -1.0) {York};
 
-% Mini-graph edges
-\draw[kedge=purple] (ent_u) -- node[left, font=\tiny] {\texttt{rec}} (rec_rho);
-\draw[kedge=teal] (rec_rho) -- node[above, font=\tiny] {\texttt{col}} (cell_c);
-\draw[kedge=orange] (cell_c) -- node[right, font=\tiny] {\texttt{link}} (bridge_p);
-\draw[kedge=red] (bridge_p) -- node[below, font=\tiny] {\texttt{fact}} (triple_t);
+% Graph edges
+\draw[kedge=purple] (ent_club) -- node[left, font=\tiny] {\texttt{rec}} (rec_node);
+\draw[kedge=teal] (rec_node) -- node[above, font=\tiny] {\texttt{city}} (ent_city);
+\draw[kedge=gray] (rec_node) -- node[left, font=\tiny] {\texttt{formed}} (lit_year);
+\draw[kedge=orange] (ent_city) -- node[right, font=\tiny] {\texttt{link}} (doc_node);
+\draw[kedge=red] (doc_node) -- node[right, font=\tiny] {\texttt{orig\_name}} (ans_node_g);
 
-\node[card, text width=2.55cm, fill=purple!5, draw=purple!35] (graph_desc) at (4.25, -1.75) {
-  \textbf{Bounded Multigraph}\\
-  \tiny $\bullet$ Row bindings $\rho_i$ preserved\\
-  $\bullet$ Rule text triples $(h,r,t)$
+\node[subcard, text width=3.2cm, fill=purple!6, draw=purple!40] (graph_props) at (5.45, -2.15) {
+  \textbf{Star-Topology Guarantees} \\
+  $\bullet$ Centroid $\rho_0$ binds attributes together \\
+  $\bullet$ Hyperlink edge bridges Table $\leftrightarrow$ Text \\
+  $\bullet$ Deterministic rule-based text triples
 };
 
 % ========================================================
-% STAGE 3: OUEG DUAL-TRACK PIPELINE (ORANGE)
+% STAGE 3: OUEG DUAL-TRACK ENGINE (ORANGE)
 % ========================================================
-\node[panel=orange, minimum width=3.3cm, minimum height=5.5cm] (panel3) at (7.7, 0) {};
-\node[titlebar=orange, minimum width=3.1cm] (t3) at ([yshift=-3mm]panel3.north) {3. OUEG Dual Track};
+\node[panel=orange, minimum width=3.95cm, minimum height=6.6cm] (panel3) at (9.35, -0.15) {};
+\node[titlebar=orange, minimum width=3.75cm] (t3) at ([yshift=-3.2mm]panel3.north) {3. OUEG Dual-Track Engine};
 
-\node[card, text width=2.95cm, fill=orange!8, draw=orange!45] (compression) at (7.7, 1.4) {
-  \textbf{3a. Subgraph Compression}\\
-  \tiny $\bullet$ Edge deduplication \& context dict $\mathcal{S}_p$\\
-  $\bullet$ \textbf{100\% evidence preservation}
+\node[subcard, text width=3.6cm, fill=orange!7, draw=orange!45, anchor=north] (track_comp) at ([yshift=-3mm]t3.south) {
+  {\fontsize{5pt}{6pt}\selectfont
+  \textbf{Track 3a: Subgraph Compression} \\[0.3mm]
+  $\bullet$ Deduplicated edges $+$ shared dict $\mathcal{S}_p$ \\
+  $\bullet$ \textbf{100\% evidence recall} (lossless) \\
+  \texttt{\{"rec":$\rho_0$, "yr":"1989", "city":"Toronto"\}}
+  \par}
 };
 
-\node[card, text width=2.95cm, fill=orange!8, draw=orange!45] (paths) at (7.7, 0.15) {
-  \textbf{3b. Grounded Path Traversal}\\
-  \tiny $\bullet$ Bounded DFS ($\le 5$ hops) + score $S(p)$\\
-  $\bullet$ \textbf{Non-filtering reading guides}
+\node[subcard, text width=3.6cm, fill=orange!7, draw=orange!45, anchor=north] (track_paths) at ([yshift=-3mm]track_comp.south) {
+  {\fontsize{5pt}{6pt}\selectfont
+  \textbf{Track 3b: Grounded Path Traversal} \\[0.3mm]
+  $\bullet$ \textbf{Path $p_1$:} Eagles $\rightarrow \rho_0 \rightarrow$ Toronto $\rightarrow$ York \\
+  \quad Score $S(p_1) = 7.85$ \quad (\textbf{Rank 1}) \\
+  $\bullet$ \textbf{Path $p_2$:} Tigers $\rightarrow \rho_1 \dots$ ($S=3.10$, Rank 2)
+  \par}
 };
 
-\node[card, text width=2.95cm, fill=orange!16, draw=orange!80!black, line width=0.6pt] (ambiguity) at (7.7, -1.35) {
-  \textbf{3c. Structural Ambiguity}\\
-  \tiny $\bullet$ Detects \texttt{SCORE\_COLLISION\_TIE}\\
-  $\bullet$ Bridge lexical overlap tiebreak
+\node[subcard, text width=3.6cm, fill=orange!15, draw=orange!75!black, line width=0.5pt, anchor=north] (track_amb) at ([yshift=-3mm]track_paths.south) {
+  {\fontsize{5pt}{6pt}\selectfont
+  \textbf{Track 3c: Ambiguity Resolution} \\[0.3mm]
+  $\bullet$ Collision set $|\mathcal{C}_q|=1$ (unique top) \\
+  $\bullet$ Deterministic tiebreak: $\rho_0$ ($\tau=1.0$)
+  \par}
 };
 
-\draw[flow] (paths.south) -- (ambiguity.north);
-
-% ========================================================
-% STAGE 4: GENERATION & AUDIT (TEAL)
-% ========================================================
-\node[panel=teal, minimum width=2.45cm, minimum height=5.5cm] (panel4) at (10.9, 0) {};
-\node[titlebar=teal, minimum width=2.25cm] (t4) at ([yshift=-3mm]panel4.north) {4. Answer \& Audit};
-
-\node[card, text width=2.15cm, fill=teal!8, draw=teal!45] (prompt_box) at (10.9, 1.4) {
-  \textbf{Unified Payload}\\
-  \tiny Graph + Reading Guides + Tiebreak
-};
-
-\node[card, text width=2.15cm, fill=teal!15, draw=teal!65, line width=0.6pt] (llm_node) at (10.9, 0.15) {
-  \textbf{Backbone LLM}\\
-  \tiny Frozen parameters ($T=0$)\\
-  Single-turn generation
-};
-
-\node[card, text width=2.15cm, fill=green!12, draw=green!60!black, line width=0.7pt] (ans_node) at (10.9, -1.35) {
-  \textbf{Grounded Answer}\\
-  \tiny Exact Denotation Span\\
-  $+$ Full Provenance Trace
-};
-
-\draw[flow] (prompt_box.south) -- (llm_node.north);
-\draw[flow] (llm_node.south) -- (ans_node.north);
+\draw[flow] (track_paths.south) -- (track_amb.north);
 
 % ========================================================
-% INTER-STAGE CONNECTIONS
+% STAGE 4: ANSWER & AUDIT PROVENANCE (TEAL)
 % ========================================================
-% Retriever to Graph (enters cleanly below mini-graph)
-\draw[flow] (retriever.east) -- node[flowlabel, above=1pt] {Evidence} (panel2.west |- retriever.east);
+\node[panel=teal, minimum width=3.35cm, minimum height=6.6cm] (panel4) at (13.15, -0.15) {};
+\node[titlebar=teal, minimum width=3.15cm] (t4) at ([yshift=-3.2mm]panel4.north) {4. Answer \& Trace};
 
-% Graph into Dual-Track
-\draw[flow] (panel2.east |- compression.west) -- node[flowlabel, above=1pt] {Full Graph} (compression.west);
-\draw[flow] (panel2.east |- paths.west) -- node[flowlabel, above=1pt] {Topology} (paths.west);
+\node[subcard, text width=3.05cm, fill=teal!8, draw=teal!45, anchor=north] (prompt_box) at ([yshift=-2mm]t4.south) {
+  \textbf{Unified Prompt Payload} \\
+  \texttt{[Context]}: Compressed $G_q^*$ $+$ text \\
+  \texttt{[Guide]}: $p_1$ (Eagles $\rightarrow$ Toronto $\rightarrow$ York) \\
+  \texttt{[Question]}: Original name of city? \\
+  \texttt{[Instruction]}: Exact answer span
+};
 
-% Dual-Track into Prompt
-\draw[flow] (compression.east) -- (prompt_box.west);
-\draw[flow] (ambiguity.east) -- ++(0.18,0) |- (llm_node.west);
+\node[subcard, text width=3.05cm, fill=teal!18, draw=teal!70!black, line width=0.6pt, anchor=north] (llm_box) at ([yshift=-2.2mm]prompt_box.south) {
+  \textbf{Frozen LLM ($T=0$)} \\
+  Single-turn in-context generation \\
+  Guided by non-filtering path $p_1$
+};
 
-% Fallback Arc
-\draw[->, dashed, line width=0.5pt, draw=red!75!black] (panel2.south) -- ++(0,-0.3) -| node[flowlabel, text=red!75!black, below, near end] {Fallback: Reverse Grounding} (ans_node.south);
+\node[subcard, text width=3.05cm, fill=green!15, draw=green!60!black, line width=0.7pt, anchor=north] (ans_box) at ([yshift=-2.2mm]llm_box.south) {
+  \textbf{Grounded Answer: \texttt{"York"}} \\[0.4mm]
+  \textbf{Audit Provenance Trace:} \\
+  $\bullet$ Row: \texttt{AFL\_Ontario\_0:row:0} \\
+  $\bullet$ Bridge: \texttt{/wiki/Toronto} \\
+  $\bullet$ Target: \texttt{town of York (1793)}
+};
+
+\draw[flow] (prompt_box.south) -- (llm_box.north);
+\draw[flow] (llm_box.south) -- (ans_box.north);
+
+% ========================================================
+% INTER-STAGE CONNECTORS
+% ========================================================
+\draw[flow] (panel1.east |- rec_node.west) -- (rec_node.west);
+\draw[flow] (panel2.east |- track_comp.west) -- (track_comp.west);
+\draw[flow] (panel2.east |- track_paths.west) -- (track_paths.west);
+
+\draw[flow] (track_comp.east) -- (prompt_box.west);
+\draw[flow] (track_amb.east) -- ++(0.12,0) |- (llm_box.west);
+
+% Connect top question box
+\draw[flow, draw=blue!70!black] (q_box.south -| t1.north) -- (t1.north);
 
 \end{tikzpicture}

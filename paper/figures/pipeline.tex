@@ -1,10 +1,8 @@
 \begin{figure}[t]
 \centering
-\resizebox{0.92\linewidth}{!}{\input{figures/pipeline-diagram}}
-\caption{Overview of the Online Unified Evidence Graph (OUEG) framework. Two-stage
-retrieval anchors table rows and expands Wikipedia hyperlink passages. A query-time
-multigraph preserves record nodes, qualified headers, and rule-based text triples.
-OUEG compresses the full evidence subgraph while enumerating non-filtering suggested
-paths, assessing structural score-collision ambiguity before generating the answer.}
+\resizebox{\linewidth}{!}{\input{figures/pipeline-diagram}}
+\vspace{-2mm}
+\caption{End-to-end architecture of OUEG-RAG illustrated with a running HybridQA query. (1)~Multi-source ingestion anchors candidate table rows and expands hyperlinked Wikipedia passages. (2)~Schema-preserving online multigraph construction introduces star-topology record centroids $\rho_i$ to bind cell attributes, bridging tabular entities to external passages via deterministic text triples. (3)~The dual-track engine serializes the complete subgraph via lossless prompt compression while enumerating scored candidate paths as non-filtering reading guides, actively resolving structural score collisions. (4)~The unified prompt payload steers LLM generation to produce the exact grounded answer with an auditable provenance trace.}
+\vspace{-2mm}
 \label{fig:pipeline}
 \end{figure}

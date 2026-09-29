@@ -1,0 +1,8 @@
+\begin{figure}[t]
+\centering
+\resizebox{\linewidth}{!}{\input{figures/graph-construction-diagram}}
+\vspace{-2mm}
+\caption{Detailed schema-preserving online multigraph construction. (Left) Flattening tables into unstructured strings decouples row attributes and loses column qualifiers. (Right) OUEG-RAG introduces a local centroid record node $\rho_0 \in V_{\text{rec}}$ with star-topology bindings to preserve intra-row attributes ($E_{\text{rec}}, E_{\text{attr}}$). Wikipedia hyperlinks bridge tabular entities directly to external text passages ($E_{\text{link}}$), from which deterministic rule-based text triples ($E_{\text{text}}$) are extracted on-the-fly without LLM hallucination.}
+\vspace{-2mm}
+\label{fig:kg-construction}
+\end{figure}
