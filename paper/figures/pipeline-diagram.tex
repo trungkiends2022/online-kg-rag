@@ -1,54 +1,132 @@
 \begin{tikzpicture}[
-  >=stealth,
-  stage/.style={draw,rounded corners=2pt,align=center,text width=7.4cm,
-    minimum height=8.5mm,inner sep=3pt,font=\small},
-  substage/.style={draw,rounded corners=2pt,align=center,text width=3.55cm,
-    minimum height=11mm,inner sep=2pt,font=\scriptsize},
-  source/.style={draw,align=center,text width=3.4cm,
-    minimum height=8mm,inner sep=3pt,font=\small},
-  flow/.style={->,line width=0.6pt},
-  note/.style={font=\scriptsize,align=center,fill=white,inner sep=2pt}
+  >=Latex,
+  font=\scriptsize,
+  panel/.style={draw=#1!75!black, fill=#1!4, rounded corners=5pt, line width=0.7pt},
+  titlebar/.style={fill=#1!20, draw=#1!75!black, line width=0.5pt, rounded corners=2pt, font=\bfseries\scriptsize, text=#1!90!black, align=center, inner sep=2.5pt, minimum height=4.2mm},
+  card/.style={draw=gray!35, fill=white, rounded corners=3pt, align=center, inner sep=2.5pt, font=\scriptsize, line width=0.5pt},
+  flow/.style={->, line width=0.7pt, draw=gray!75!black},
+  flowlabel/.style={font=\tiny\bfseries, fill=white, inner sep=1pt, text=gray!85!black},
+  knode/.style={draw=#1!85!black, fill=#1!22, circle, inner sep=0.5pt, minimum size=4.5mm, font=\tiny\bfseries},
+  kedge/.style={->, line width=0.5pt, draw=#1!75!black, font=\tiny}
 ]
-\node[source] (question) at (-2.05,0)
-  {Question $q$};
-\node[source] (sources) at (2.05,0)
-  {Supplied tables and passages};
 
-\node[stage] (retrieve) at (0,-1.25)
-  {\textbf{1. Two-stage retrieval \& anchoring}\\
-   BM25 coarse retrieval + hyperlink passage expansion + ordinal anchor};
+% ========================================================
+% STAGE 1: MULTI-SOURCE RETRIEVAL (BLUE)
+% ========================================================
+\node[panel=blue, minimum width=2.45cm, minimum height=5.5cm] (panel1) at (1.25, 0) {};
+\node[titlebar=blue, minimum width=2.25cm] (t1) at ([yshift=-3mm]panel1.north) {1. Multi-Source Ingestion};
 
-\node[stage] (build) at (0,-2.5)
-  {\textbf{2. Schema-preserving online KG construction}\\
-   Record nodes $\rho_i$ + qualified headers + rule-based text triples};
+\node[card, text width=2.15cm, fill=blue!8, draw=blue!35] (q_node) at (1.25, 1.65) {
+  \textbf{Question $q$}\\
+  \tiny Input query text
+};
 
-\node[substage] (compress) at (-1.95,-4.0)
-  {\textbf{3a. Subgraph compression}\\
-   Deduplicated edge payloads +\\
-   shared passage context dictionary};
+\node[card, text width=2.15cm, fill=blue!5, draw=blue!30] (table_node) at (1.25, 0.5) {
+  \textbf{Table $T$ \& Texts $D$}\\
+  \tiny Headers, cells, and Wiki links
+};
 
-\node[substage] (paths) at (1.95,-4.0)
-  {\textbf{3b. Guided path enumeration}\\
-   Bounded multi-hop search +\\
-   non-filtering reading guides};
+\node[card, text width=2.15cm, fill=blue!12, draw=blue!65, line width=0.6pt] (retriever) at (1.25, -0.9) {
+  \textbf{Two-Stage Retrieval}\\
+  \tiny 1. Coarse retrieval + Schema anchor\\
+  \tiny 2. Hyperlink expansion ($k_2=3$)
+};
 
-\node[stage] (ambiguity) at (0,-5.5)
-  {\textbf{4. Ambiguity assessment \& score tie-break}\\
-   Detect \texttt{SCORE\_COLLISION\_TIE} + lexical overlap tiebreaker};
+\draw[flow] (q_node.south) -- (table_node.north);
+\draw[flow] (table_node.south) -- (retriever.north);
 
-\node[stage] (answer) at (0,-6.75)
-  {\textbf{5. Grounded answer generation}\\
-   Reason over compressed subgraph + reverse grounding fallback};
+% ========================================================
+% STAGE 2: SCHEMA-PRESERVING MULTIGRAPH (PURPLE)
+% ========================================================
+\node[panel=purple, minimum width=2.9cm, minimum height=5.5cm] (panel2) at (4.25, 0) {};
+\node[titlebar=purple, minimum width=2.7cm] (t2) at ([yshift=-3mm]panel2.north) {2. Schema Multigraph $G_q^*$};
 
-\draw[flow] (question.south) -- ++(0,-0.15) -| (retrieve.north);
-\draw[flow] (sources.south) -- ++(0,-0.15) -| (retrieve.north);
-\draw[flow] (retrieve) -- (build);
-\draw[flow] (build.south) -- ++(0,-0.15) -| (compress.north);
-\draw[flow] (build.south) -- ++(0,-0.15) -| (paths.north);
-\draw[flow] (compress.south) |- (ambiguity.north);
-\draw[flow] (paths.south) |- (ambiguity.north);
-\draw[flow] (ambiguity) -- (answer);
+% Mini-graph nodes
+\node[knode=blue] (ent_u) at (3.45, 1.45) {$u_i$};
+\node[knode=purple] (rec_rho) at (3.45, 0.45) {$\rho_i$};
+\node[knode=teal] (cell_c) at (5.05, 0.45) {$c_{ij}$};
+\node[knode=orange] (bridge_p) at (5.05, -0.5) {$d_k$};
+\node[knode=red] (triple_t) at (3.45, -0.5) {$t$};
 
-\node[note] at (0,-7.5)
-  {No valid path $\longrightarrow$ reverse-grounded evidence synthesis};
+% Mini-graph edges
+\draw[kedge=purple] (ent_u) -- node[left, font=\tiny] {\texttt{rec}} (rec_rho);
+\draw[kedge=teal] (rec_rho) -- node[above, font=\tiny] {\texttt{col}} (cell_c);
+\draw[kedge=orange] (cell_c) -- node[right, font=\tiny] {\texttt{link}} (bridge_p);
+\draw[kedge=red] (bridge_p) -- node[below, font=\tiny] {\texttt{fact}} (triple_t);
+
+\node[card, text width=2.55cm, fill=purple!5, draw=purple!35] (graph_desc) at (4.25, -1.75) {
+  \textbf{Bounded Multigraph}\\
+  \tiny $\bullet$ Row bindings $\rho_i$ preserved\\
+  $\bullet$ Rule text triples $(h,r,t)$
+};
+
+% ========================================================
+% STAGE 3: OUEG DUAL-TRACK PIPELINE (ORANGE)
+% ========================================================
+\node[panel=orange, minimum width=3.3cm, minimum height=5.5cm] (panel3) at (7.7, 0) {};
+\node[titlebar=orange, minimum width=3.1cm] (t3) at ([yshift=-3mm]panel3.north) {3. OUEG Dual Track};
+
+\node[card, text width=2.95cm, fill=orange!8, draw=orange!45] (compression) at (7.7, 1.4) {
+  \textbf{3a. Subgraph Compression}\\
+  \tiny $\bullet$ Edge deduplication \& context dict $\mathcal{S}_p$\\
+  $\bullet$ \textbf{100\% evidence preservation}
+};
+
+\node[card, text width=2.95cm, fill=orange!8, draw=orange!45] (paths) at (7.7, 0.15) {
+  \textbf{3b. Grounded Path Traversal}\\
+  \tiny $\bullet$ Bounded DFS ($\le 5$ hops) + score $S(p)$\\
+  $\bullet$ \textbf{Non-filtering reading guides}
+};
+
+\node[card, text width=2.95cm, fill=orange!16, draw=orange!80!black, line width=0.6pt] (ambiguity) at (7.7, -1.35) {
+  \textbf{3c. Structural Ambiguity}\\
+  \tiny $\bullet$ Detects \texttt{SCORE\_COLLISION\_TIE}\\
+  $\bullet$ Bridge lexical overlap tiebreak
+};
+
+\draw[flow] (paths.south) -- (ambiguity.north);
+
+% ========================================================
+% STAGE 4: GENERATION & AUDIT (TEAL)
+% ========================================================
+\node[panel=teal, minimum width=2.45cm, minimum height=5.5cm] (panel4) at (10.9, 0) {};
+\node[titlebar=teal, minimum width=2.25cm] (t4) at ([yshift=-3mm]panel4.north) {4. Answer \& Audit};
+
+\node[card, text width=2.15cm, fill=teal!8, draw=teal!45] (prompt_box) at (10.9, 1.4) {
+  \textbf{Unified Payload}\\
+  \tiny Graph + Reading Guides + Tiebreak
+};
+
+\node[card, text width=2.15cm, fill=teal!15, draw=teal!65, line width=0.6pt] (llm_node) at (10.9, 0.15) {
+  \textbf{Backbone LLM}\\
+  \tiny Frozen parameters ($T=0$)\\
+  Single-turn generation
+};
+
+\node[card, text width=2.15cm, fill=green!12, draw=green!60!black, line width=0.7pt] (ans_node) at (10.9, -1.35) {
+  \textbf{Grounded Answer}\\
+  \tiny Exact Denotation Span\\
+  $+$ Full Provenance Trace
+};
+
+\draw[flow] (prompt_box.south) -- (llm_node.north);
+\draw[flow] (llm_node.south) -- (ans_node.north);
+
+% ========================================================
+% INTER-STAGE CONNECTIONS
+% ========================================================
+% Retriever to Graph (enters cleanly below mini-graph)
+\draw[flow] (retriever.east) -- node[flowlabel, above=1pt] {Evidence} (panel2.west |- retriever.east);
+
+% Graph into Dual-Track
+\draw[flow] (panel2.east |- compression.west) -- node[flowlabel, above=1pt] {Full Graph} (compression.west);
+\draw[flow] (panel2.east |- paths.west) -- node[flowlabel, above=1pt] {Topology} (paths.west);
+
+% Dual-Track into Prompt
+\draw[flow] (compression.east) -- (prompt_box.west);
+\draw[flow] (ambiguity.east) -- ++(0.18,0) |- (llm_node.west);
+
+% Fallback Arc
+\draw[->, dashed, line width=0.5pt, draw=red!75!black] (panel2.south) -- ++(0,-0.3) -| node[flowlabel, text=red!75!black, below, near end] {Fallback: Reverse Grounding} (ans_node.south);
+
 \end{tikzpicture}

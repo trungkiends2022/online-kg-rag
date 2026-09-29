@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  28 SEP 2026 23:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  29 SEP 2026 12:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -561,19 +561,47 @@ File: pgfmodulematrix.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 zlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 )))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.meta.
+code.tex
+File: pgflibraryarrows.meta.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+\pgfarrowinset=\dimen287
+\pgfarrowlength=\dimen288
+\pgfarrowwidth=\dimen289
+\pgfarrowlinewidth=\dimen290
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibrarypositioning.code.tex
+File: tikzlibrarypositioning.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibrarycalc.code.tex
+File: tikzlibrarycalc.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibraryfit.code.tex
+File: tikzlibraryfit.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibraryshapes.geometric.code.tex
+File: tikzlibraryshapes.geometric.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshape
+s.geometric.code.tex
+File: pgflibraryshapes.geometric.code.tex 2020/01/08 v3.1.5b (3.1.5b)
+))
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
 \lst@mode=\count308
 \lst@gtempboxa=\box106
 \lst@token=\toks36
 \lst@length=\count309
-\lst@currlwidth=\dimen287
+\lst@currlwidth=\dimen291
 \lst@column=\count310
 \lst@pos=\count311
-\lst@lostspace=\dimen288
-\lst@width=\dimen289
+\lst@lostspace=\dimen292
+\lst@width=\dimen293
 \lst@newlines=\count312
 \lst@lineno=\count313
-\lst@maxwidth=\dimen290
+\lst@maxwidth=\dimen294
 
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2019/09/10 1.8c (Carsten Heinz)
@@ -591,7 +619,7 @@ Package: multirow 2019/05/31 v2.5 Span multiple rows of a table
 \multirow@colwidth=\skip54
 \multirow@cntb=\count316
 \multirow@dima=\skip55
-\bigstrutjot=\dimen291
+\bigstrutjot=\dimen295
 )
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
 File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
@@ -601,30 +629,30 @@ File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
 (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count318
-\scratchdimen=\dimen292
+\scratchdimen=\dimen296
 \scratchbox=\box109
 \nofMPsegments=\count319
 \nofMParguments=\count320
 \everyMPshowfont=\toks37
 \MPscratchCnt=\count321
-\MPscratchDim=\dimen293
+\MPscratchDim=\dimen297
 \MPnumerator=\count322
 \makeMPintoPDFobject=\count323
 \everyMPtoPDFconversion=\toks38
@@ -639,36 +667,36 @@ e
 ))
 ABD: EveryShipout initializing macros
 \c@lstlisting=\count324
-LaTeX Font Info:    Trying to load font information for U+msa on input line 24.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 25.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 24.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 25.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 2
-4.
+5.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-Overfull \hbox (1.63739pt too wide) in paragraph at lines 27--28
+Overfull \hbox (1.63739pt too wide) in paragraph at lines 28--29
 []\T1/cmr/m/n/9 Answering com-plex ques-tions over semi-structured ta-bles and
  []
 
 
-Overfull \hbox (2.95447pt too wide) in paragraph at lines 27--28
+Overfull \hbox (2.95447pt too wide) in paragraph at lines 28--29
 \T1/cmr/m/n/9 text re-quires pre-serv-ing struc-tural tab-u-lar con-text while 
 con-nect-ing multi-
  []
 
 
-Overfull \hbox (0.15836pt too wide) in paragraph at lines 27--28
+Overfull \hbox (0.15836pt too wide) in paragraph at lines 28--29
 \T1/cmr/m/n/9 OUEG-RAG com-bines a two-stage re-triever with hyperlink-guided b
 ridge
  []
@@ -676,38 +704,20 @@ ridge
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (0.34973pt too wide) in paragraph at lines 42--43
+Overfull \hbox (0.34973pt too wide) in paragraph at lines 43--44
 []\T1/cmr/m/n/10 To re-solve this dilemma, we pro-pose \T1/cmr/bx/n/10 OUEG-RAG
  \T1/cmr/m/n/10 (\T1/cmr/bx/n/10 O\T1/cmr/m/n/10 nline \T1/cmr/bx/n/10 U\T1/cmr
 /m/n/10 nified \T1/cmr/bx/n/10 E\T1/cmr/m/n/10 vidence
  []
 
 
-Overfull \hbox (4.5026pt too wide) in paragraph at lines 44--45
-[]\T1/cmr/m/n/10 We con-duct an ex-ten-sive head-to-head em-pir-i-cal eval-u-a-
-tion com-par-ing OUEG-
+Overfull \hbox (1.4328pt too wide) in paragraph at lines 45--50
+[]\T1/cmr/m/n/10 We con-duct an ex-ten-sive em-pir-i-cal eval-u-a-tion com-par-
+ing OUEG-RAG against
  []
 
-[2]
-Overfull \hbox (7.73425pt too wide) in paragraph at lines 74--75
-\T1/cmr/m/n/10 and tri-factor ver-i-fi-ca-tion (source re-li-a-bil-ity, cross-s
-ource cor-rob-o-ra-tion, and entity-
- []
-
-[3]
-Overfull \hbox (14.75719pt too wide) in paragraph at lines 83--91
- \T1/cmr/m/it/10 Grounded paths and ex-e-cutable rea-son-ing.[] \T1/cmr/m/n/10 
-Program-aided lan-guage mod-els (PAL) [4]
- []
-
-(./figures/pipeline.tex (./figures/pipeline-diagram.tex)) (./method.tex
-Underfull \vbox (badness 6141) has occurred while \output is active []
-
- [4]
-Underfull \vbox (badness 5878) has occurred while \output is active []
-
- [5]
-[6]
+[2] [3] [4] (./figures/pipeline.tex (./figures/pipeline-diagram.tex))
+(./method.tex [5] [6]
 Overfull \hbox (7.13974pt too wide) in paragraph at lines 91--95
 []\T1/cmr/m/it/10 Multi-value cell split-ting\T1/cmr/m/n/10 : When a ta-ble cel
 l con-tains mul-ti-ple comma-separated
@@ -719,58 +729,62 @@ Overfull \hbox (1.87457pt too wide) in paragraph at lines 192--196
  ex-plicit or-di-nal ranks),
  []
 
-) [9] [10] [11] (./main.bbl
-Underfull \hbox (badness 2165) in paragraph at lines 18--23
+) [9] [10] [11] (./main.bbl [12]
+Underfull \hbox (badness 2165) in paragraph at lines 13--18
 []\T1/cmr/m/n/9 Chen, W., Zha, H., Chen, Z., Xiong, W., Wang, H., Wang, W.Y.: H
 y-
  []
 
 
-Underfull \hbox (badness 1466) in paragraph at lines 18--23
+Underfull \hbox (badness 1466) in paragraph at lines 13--18
 \T1/cmr/m/n/9 bridQA: A dataset of multi-hop ques-tion an-swer-ing over tab-u-l
 ar and tex-
  []
 
 
-Underfull \hbox (badness 2486) in paragraph at lines 18--23
+Underfull \hbox (badness 2486) in paragraph at lines 13--18
 \T1/cmr/m/n/9 tual data. In: Find-ings of the As-so-ci-a-tion for Com-pu-ta-tio
 nal Lin-guis-tics:
  []
 
-) [12] (./main.aux) ) 
+) [13] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 14912 strings out of 483183
- 279984 string characters out of 5966292
- 497955 words of memory out of 5000000
- 29646 multiletter control sequences out of 15000+600000
- 549344 words of font info for 63 fonts, out of 8000000 for 9000
+ 16073 strings out of 483183
+ 307964 string characters out of 5966292
+ 561788 words of memory out of 5000000
+ 30786 multiletter control sequences out of 15000+600000
+ 550123 words of font info for 64 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,16n,64p,1674b,817s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,16n,69p,1674b,919s stack positions out of 5000i,500n,10000p,200000b,80000s
  </tmp/texfonts/pk/ljfour/jknappen/ec/ectt0800.525pk> </tm
-p/texfonts/pk/ljfour/jknappen/ec/ectt1000.600pk> </tmp/texfonts/pk/ljfour/jknap
-pen/ec/ecrm0700.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx0700.600pk> </t
-mp/texfonts/pk/ljfour/jknappen/ec/ecti1000.600pk> </tmp/texfonts/pk/ljfour/jkna
-ppen/ec/ecbx1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </
-tmp/texfonts/pk/ljfour/jknappen/ec/tcrm0900.600pk> </tmp/texfonts/pk/ljfour/jkn
-appen/ec/ecti0900.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx0900.600pk> <
-/tmp/texfonts/pk/ljfour/jknappen/ec/ectt0900.600pk> </tmp/texfonts/pk/ljfour/jk
-nappen/ec/ecrm0900.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm1000.600pk> 
-</tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1440.600pk></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on main.pdf (12 pages, 308548 bytes).
+p/texfonts/pk/ljfour/jknappen/ec/ecrm0700.600pk> </tmp/texfonts/pk/ljfour/jknap
+pen/ec/ectt1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx0500.600pk> </t
+mp/texfonts/pk/ljfour/jknappen/ec/ectt0800.375pk> </tmp/texfonts/pk/ljfour/jkna
+ppen/ec/ecrm0500.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx0700.600pk> </
+tmp/texfonts/pk/ljfour/jknappen/ec/ecti1000.600pk> </tmp/texfonts/pk/ljfour/jkn
+appen/ec/ecbx1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> <
+/tmp/texfonts/pk/ljfour/jknappen/ec/tcrm0900.600pk> </tmp/texfonts/pk/ljfour/jk
+nappen/ec/ecti0900.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx0900.600pk> 
+</tmp/texfonts/pk/ljfour/jknappen/ec/ectt0900.600pk> </tmp/texfonts/pk/ljfour/j
+knappen/ec/ecrm0900.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm1000.600pk>
+ </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1440.600pk></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></
+usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmsy7.pfb>
+Output written on main.pdf (13 pages, 357051 bytes).
 PDF statistics:
- 736 PDF objects out of 1000 (max. 8388607)
- 123 compressed objects within 2 object streams
+ 854 PDF objects out of 1000 (max. 8388607)
+ 144 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
