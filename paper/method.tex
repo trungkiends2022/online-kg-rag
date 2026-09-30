@@ -7,15 +7,7 @@ pool $\mathcal{D}$, the framework constructs a bounded knowledge graph $G_q$
 specifically for $q$ at query time. Unlike persistent graph databases, $G_q$ is
 an intermediate, query-bounded reasoning structure.
 
-Previous grounded graph-RAG architectures suffer from a fundamental tension:
-filtering the evidence graph to only the top-$N$ ranked paths reduces prompt
-noise, but can discard peripheral corroborating facts or fail when several
-candidates tie on path score. Conversely, passing an uncurated graph overwhelms
-the language model with unstructured triples.
-
-To resolve this trade-off, we propose the Online Unified Evidence Graph
-(OUEG) framework alongside the classic Grounded Path-Text view. The
-complete pipeline proceeds as follows:
+While standard graph-RAG either prunes peripheral context via top-$N$ path filtering or overwhelms language models with uncurated triples, OUEG-RAG reconciles complete subgraph retention with guided traversal. The complete pipeline proceeds as follows:
 \begin{align*}
 q &\rightarrow \text{two-stage context retrieval} \\
   &\rightarrow \text{schema-preserving online KG construction} \\
