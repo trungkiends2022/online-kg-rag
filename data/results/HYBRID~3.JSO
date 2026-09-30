@@ -4,8 +4,8 @@
   "method": "online_unified_evidence_graph",
   "code_worktree_diff_sha256": null,
   "input": {
-    "path": "/workspace/storage-shared/nlp/huypq51/projects/online-kg-rag-wip-main-changes-20260926-ablation/benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard07.json",
-    "sha256": "581dd531954d4579c5a2a0cc3ea9d163ebd6e1d60ef71cb28d3e43800c446e72"
+    "path": "/workspace/storage-shared/nlp/huypq51/projects/online-kg-rag-wip-main-changes-20260926-ablation/benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard08.json",
+    "sha256": "cd64113f08d90676cc460133d0d1d4264e0ce0239b953782be2dc36995ca8183"
   },
   "resources": {
     "tables_dir": "data/WikiTables-WithLinks/tables_tok",
@@ -30,7 +30,7 @@
   "code_revision": null,
   "config": {
     "top_k": 5,
-    "second_stage_k": 3,
+    "second_stage_k": 0,
     "max_context_chars": 24000,
     "max_table_rows_for_kg": null,
     "max_output_tokens": 1024,
@@ -38,8 +38,8 @@
     "use_rule_text_triples": true,
     "use_record_nodes": true,
     "use_path_guidance": true,
-    "use_lexical_tiebreak": false,
-    "use_hyperlink_expansion": true,
+    "use_lexical_tiebreak": true,
+    "use_hyperlink_expansion": false,
     "use_prompt_compression": true,
     "ambiguity_policy": "prompt",
     "oueg_context_mode": "lossless",
@@ -51,5 +51,5 @@
     "max_workers": 64,
     "llm_max_concurrent_requests": 64
   },
-  "fingerprint": "9824cf3fb85a5e8810a7d50ce2cd27e5c4a950b8329420ad929cd6bf58f660b3"
+  "fingerprint": "b18b13795008fb1c9c3528ec3f4d9c5d9286f5219fe1395ec1d11beea5cabdc3"
 }
