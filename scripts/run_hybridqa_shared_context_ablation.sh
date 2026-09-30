@@ -225,7 +225,8 @@ print(label or "unknown-provider__unknown-model")
     mkdir -p "$method_dir"
     prefix="$method_dir/${shard_label}__${model_label}__${method}"
     output="${prefix}.jsonl"
-    log="${log_dir}/${shard_label}__${model_label}__${method}.log"
+    # Keep each log self-describing even after it is copied outside its result folder.
+    log="${log_dir}/hybridqa__${shard_label}__${model_label}__${method}.log"
     common_args=(
       --dataset hybridqa
       --method "$method"
