@@ -27,6 +27,7 @@ class OUEGPromptCompressionConfig:
     snippet_min_chars: int = 900
     snippet_max_sentences: int = 4
     score_precision: int = 1
+    include_lexical_tiebreak: bool = True
 
     def validate(self) -> None:
         if self.context_mode not in {"lossless", "extractive"}:
@@ -35,6 +36,8 @@ class OUEGPromptCompressionConfig:
             raise ValueError("snippet limits must be positive")
         if self.score_precision < 0:
             raise ValueError("score_precision must be non-negative")
+        if not isinstance(self.include_lexical_tiebreak, bool):
+            raise ValueError("include_lexical_tiebreak must be boolean")
 
 
 class CompactOUEGPromptBuilder:
@@ -127,18 +130,18 @@ class CompactOUEGPromptBuilder:
                     "entity": candidate.get("entity"),
                     "row": candidate.get("row_order_index"),
                     "score": round(float(candidate.get("score", 0.0)), self.config.score_precision),
-                    "lex": round(float(candidate.get("lexical_overlap_with_bridge_entity", 0.0)), self.config.score_precision),
+                    "lex": round(float(candidate.get("lexical_overlap_with_bridge_entity", 0.0)), self.config.score_precision) if self.config.include_lexical_tiebreak else None,
                 }) for candidate in group.get("candidates", [])],
                 "lexical_tiebreak": self._remove_empty({
                     "winner": group.get("lexical_tiebreak", {}).get("winner"),
                     "eligible": group.get("lexical_tiebreak", {}).get("eligible"),
-                }),
+                }) if self.config.include_lexical_tiebreak else None,
             }))
         return self._remove_empty({
             "is_ambiguous": ambiguity.get("is_ambiguous"),
             "status": ambiguity.get("status"),
             "groups": groups,
-            "lexical_tiebreak_winner": ambiguity.get("selective_prediction", {}).get("lexical_tiebreak_winner"),
+            "lexical_tiebreak_winner": ambiguity.get("selective_prediction", {}).get("lexical_tiebreak_winner") if self.config.include_lexical_tiebreak else None,
         })
 
     def build(
@@ -301,7 +304,7 @@ class CompactOUEGPromptBuilder:
                     edge_ids.get(str(edge_id), str(edge_id)) for edge_id in path.get("edge_ids", [])
                 ]),
                 "score": round(float(path.get("score", 0.0)), self.config.score_precision),
-                "lex": round(float(path.get("lexical_overlap_with_bridge_entity", 0.0)), self.config.score_precision),
+                "lex": round(float(path.get("lexical_overlap_with_bridge_entity", 0.0)), self.config.score_precision) if self.config.include_lexical_tiebreak else None,
             }))
 
         direct_table_match = any(
@@ -346,7 +349,7 @@ class CompactOUEGPromptBuilder:
     def prompt(self, *, question: str, compact_json: str, tie_break_hint: str = "") -> str:
         return f"""Answer the question using the complete compact OUEG payload.
 
-`rows` retains every table row, its original order, values, passage references, and edge IDs. `edges` uses the legend schema and contains every KG edge not already represented in a row; no candidate or fact has been pruned. `contexts` are deduplicated by passage ID. `paths` are reading guides only. Their `score` is rounded relevance metadata and `lex` is a weak lexical tie-break, not factual proof. Follow `ordering` when present; use `edges` and `contexts` for multi-hop evidence. Return only the shortest answer span.{tie_break_hint}
+`rows` retains every table row, its original order, values, passage references, and edge IDs. `edges` uses the legend schema and contains every KG edge not already represented in a row; no candidate or fact has been pruned. `contexts` are deduplicated by passage ID. `paths` are reading guides only. Their `score` is rounded relevance metadata. `lex`, when present, is a weak lexical tie-break rather than factual proof. Follow `ordering` when present; use `edges` and `contexts` for multi-hop evidence. Return only the shortest answer span.{tie_break_hint}
 
 Question: {question}
 Compact OUEG payload: {compact_json}

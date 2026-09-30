@@ -73,3 +73,22 @@ def test_extractive_mode_only_shrinks_long_contexts_and_marks_them():
     assert context["extractive_snippet"] is True
     assert len(context["text"]) < len(long_text)
     assert result["stats"]["extractive_context_count"] == 1
+
+
+
+def test_compact_prompt_omits_lexical_tiebreak_fields_when_disabled():
+    kg, records, paths = _records()
+    ambiguity = OnlineUnifiedEvidenceGraphBaseline._ambiguity_assessment(
+        "Which club is in Gaborone?", paths,
+    )
+    result = CompactOUEGPromptBuilder(OUEGPromptCompressionConfig(
+        include_lexical_tiebreak=False,
+    )).build(
+        question="Which club is in Gaborone?", records=records,
+        contexts_by_source_id=kg.text_contexts, suggested_paths=paths,
+        ordering_hint={}, ambiguity=ambiguity, path_generation={},
+    )
+
+    assert all("lex" not in path for path in result["payload"]["paths"])
+    assert "lexical_tiebreak_winner" not in result["payload"]["ambiguity"]
+    assert all("lexical_tiebreak" not in group for group in result["payload"]["ambiguity"]["groups"])

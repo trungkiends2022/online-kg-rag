@@ -226,6 +226,7 @@ def two_stage_retrieve(
     top_k: int = 10,
     second_stage_k: int = 3,
     max_table_rows: int | None = None,
+    use_hyperlink_expansion: bool = True,
 ) -> dict:
     """Retrieve text evidence and prepare table rows for downstream consumers.
 
@@ -277,7 +278,7 @@ def two_stage_retrieve(
             for witness in table_witnesses
             for link in witness.get("hyperlinks", ())
             if link
-        ]
+        ] if use_hyperlink_expansion else []
         if witness_links:
             for link in witness_links:
                 clean_link = str(link).strip()
@@ -299,7 +300,7 @@ def two_stage_retrieve(
 
         # Row-first multi-hop retrieval: expand selected-row hyperlinks and
         # rerank them using the question plus the selected table rows.
-        if selected_row_links and second_stage_k > 0:
+        if use_hyperlink_expansion and selected_row_links and second_stage_k > 0:
             link_targets = {
                 link.removeprefix("/wiki/").removeprefix("passage:").casefold()
                 for link in selected_row_links
@@ -382,6 +383,7 @@ def two_stage_retrieve(
             "table_witnesses": table_witnesses,
             "entity_anchor": anchor.to_dict(),
             "selected_row_hyperlinks": selected_row_links,
+            "use_hyperlink_expansion": use_hyperlink_expansion,
             "passage_reranker_query": "question_plus_selected_rows",
             "selected_table_row_indices": [
                 index for group in first["table_rows"] for index in group.get("row_indices", [])

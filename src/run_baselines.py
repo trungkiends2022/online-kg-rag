@@ -153,6 +153,11 @@ def _build_run_manifest(args, *, max_workers: int) -> dict:
         "max_output_tokens": args.max_output_tokens,
         "temperature": args.temperature,
         "use_rule_text_triples": args.use_rule_text_triples,
+        "use_record_nodes": args.use_record_nodes,
+        "use_path_guidance": args.use_path_guidance,
+        "use_lexical_tiebreak": args.use_lexical_tiebreak,
+        "use_hyperlink_expansion": args.use_hyperlink_expansion,
+        "use_prompt_compression": args.use_prompt_compression,
         "ambiguity_policy": args.ambiguity_policy,
         "oueg_context_mode": args.oueg_context_mode,
         "n_paths": args.n_paths,
@@ -247,6 +252,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--no-rule-text-triples", action="store_false", dest="use_rule_text_triples", help="Disable deterministic rule-based text triples when building a KG.")
+    parser.add_argument("--no-record-nodes", action="store_false", dest="use_record_nodes", help="OUEG ablation: replace row-record hubs with direct subject--value edges.")
+    parser.add_argument("--no-path-guidance", action="store_false", dest="use_path_guidance", help="OUEG ablation: send the full subgraph without suggested paths or ordering guidance.")
+    parser.add_argument("--no-lexical-tiebreak", action="store_false", dest="use_lexical_tiebreak", help="OUEG ablation: hide lexical collision scores, winners, and tie-break instructions from the answer model.")
+    parser.add_argument("--no-hyperlink-expansion", action="store_false", dest="use_hyperlink_expansion", help="Ablation: disable selected-row and witness hyperlink passage expansion in stage two.")
+    parser.add_argument("--no-prompt-compression", action="store_false", dest="use_prompt_compression", help="OUEG ablation: serialize the full uncompressed evidence payload.")
     parser.add_argument(
         "--ambiguity-policy", choices=("prompt", "return_candidates", "lexical_tiebreak"), default="prompt",
         help="OUEG ambiguity handling: expose it to the LLM, return all candidates, or use a unique lexical tie-break.",
@@ -315,6 +325,11 @@ def _make_method(args):
         max_table_rows_for_kg=args.max_table_rows_for_kg,
         max_context_chars=args.max_context_chars,
         use_rule_text_triples=args.use_rule_text_triples,
+        use_record_nodes=args.use_record_nodes,
+        use_path_guidance=args.use_path_guidance,
+        use_lexical_tiebreak=args.use_lexical_tiebreak,
+        use_hyperlink_expansion=args.use_hyperlink_expansion,
+        use_prompt_compression=args.use_prompt_compression,
         ambiguity_policy=args.ambiguity_policy,
         oueg_context_mode=args.oueg_context_mode,
         max_output_tokens=args.max_output_tokens,
@@ -755,6 +770,11 @@ def main() -> None:
     summary["config"] = {
         "top_k": args.top_k,
         "use_rule_text_triples": args.use_rule_text_triples,
+        "use_record_nodes": args.use_record_nodes,
+        "use_path_guidance": args.use_path_guidance,
+        "use_lexical_tiebreak": args.use_lexical_tiebreak,
+        "use_hyperlink_expansion": args.use_hyperlink_expansion,
+        "use_prompt_compression": args.use_prompt_compression,
         "ambiguity_policy": args.ambiguity_policy,
         "oueg_context_mode": args.oueg_context_mode,
         "max_context_chars": args.max_context_chars,

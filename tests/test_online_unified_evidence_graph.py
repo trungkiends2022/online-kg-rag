@@ -1,4 +1,7 @@
-from src.baselines.online_unified_evidence_graph import OnlineUnifiedEvidenceGraphBaseline
+from src.baselines.online_unified_evidence_graph import (
+    OnlineUnifiedEvidenceGraphBaseline,
+    _VerbatimOUEGPromptBuilder,
+)
 from src.baselines.rag_variants import RAGConfig
 from src.datasets.schema import DatasetExample
 from src.kg.online_kg import OnlineKG
@@ -312,3 +315,32 @@ def test_oueg_prompt_injects_tie_break_hint_for_score_collision(monkeypatch):
     )
 
     assert "Warning: More than one candidate satisfies the same bridge condition." in prompts[0]
+
+
+
+def test_oueg_ablation_controls_flatten_record_nodes_and_keep_verbatim_payload():
+    kg = OnlineKG()
+    kg.register_table_structure("T", [{"Subject": "Alpha", "Value": "Beta"}])
+    records = OnlineUnifiedEvidenceGraphBaseline._complete_subgraph_records(
+        kg.to_trace(), kg.path_edge_records(),
+    )
+
+    flattened = OnlineUnifiedEvidenceGraphBaseline._without_record_nodes(records)
+
+    assert not any(edge.get("relation") == "has_record" for edge in flattened)
+    assert not any(
+        ":row:" in str(edge.get("head")) or ":row:" in str(edge.get("tail"))
+        for edge in flattened
+    )
+    assert any(
+        edge.get("head") == "Alpha" and edge.get("tail") == "Beta"
+        for edge in flattened
+    )
+
+    payload = _VerbatimOUEGPromptBuilder.build(
+        question="Which value belongs to Alpha?", records=flattened,
+        contexts_by_source_id={}, suggested_paths=[], ordering_hint={},
+        ambiguity={}, path_generation={},
+    )
+    assert payload["stats"]["compression_enabled"] is False
+    assert payload["payload"]["records"] == flattened

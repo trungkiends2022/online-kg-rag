@@ -6,6 +6,7 @@ import json
 import re
 import time
 from collections import defaultdict
+from copy import deepcopy
 
 from src.baselines.kg_payload import deduplicate_edge_contexts
 from src.baselines.oueg_prompt_compression import (
@@ -56,6 +57,41 @@ def _ordinal_rank(question: str) -> int | None:
     return int(match.group("number"))
 
 
+class _VerbatimOUEGPromptBuilder:
+    """A deliberately uncompressed control serializer for the OUEG ablation."""
+
+
+    @staticmethod
+    def build(*, question: str, records: list[dict], contexts_by_source_id: dict[str, dict], suggested_paths: list[dict], ordering_hint: dict, ambiguity: dict, path_generation: dict) -> dict:
+        payload = {
+            "format": "oueg-verbatim-v1",
+            "question": question,
+            "records": records,
+            "contexts_by_source_id": contexts_by_source_id,
+            "suggested_paths": suggested_paths,
+            "ordering_hint": ordering_hint,
+            "ambiguity": ambiguity,
+            "path_generation": path_generation,
+        }
+        rendered = json.dumps(payload, ensure_ascii=False, indent=2, default=str)
+        return {
+            "payload": payload,
+            "json": rendered,
+            "stats": {
+                "compression_enabled": False,
+                "full_edge_count": len(records),
+                "context_count": len(contexts_by_source_id),
+                "prompt_payload_chars": len(rendered),
+                "all_edges_represented": True,
+            },
+        }
+
+
+    @staticmethod
+    def prompt(*, question: str, compact_json: str, tie_break_hint: str = "") -> str:
+        return f"""Answer the question using the complete uncompressed OUEG payload.\n\nEvery record and source context is shown verbatim; suggested paths are reading guides only. Return only the shortest answer span.{tie_break_hint}\n\nQuestion: {question}\nUncompressed OUEG payload: {compact_json}\nAnswer:"""
+
+
 class OnlineUnifiedEvidenceGraphBaseline:
     """Answer from the whole retrieved KG; paths are candidate reading guides only."""
 
@@ -64,8 +100,11 @@ class OnlineUnifiedEvidenceGraphBaseline:
     def __init__(self, config: RAGConfig | None = None, *, kg_builder=None, prompt_builder=None):
         self.config = config or RAGConfig()
         self.config.validate()
-        self.prompt_builder = prompt_builder or CompactOUEGPromptBuilder(
-            OUEGPromptCompressionConfig(context_mode=self.config.oueg_context_mode)
+        self.prompt_builder = prompt_builder or (
+            CompactOUEGPromptBuilder(OUEGPromptCompressionConfig(
+                context_mode=self.config.oueg_context_mode,
+                include_lexical_tiebreak=self.config.use_lexical_tiebreak,
+            )) if self.config.use_prompt_compression else _VerbatimOUEGPromptBuilder()
         )
         self.kg_builder = kg_builder or OnlineKGBuilder(EntityRelationExtractor(
             temperature=self.config.temperature,
@@ -609,8 +648,30 @@ class OnlineUnifiedEvidenceGraphBaseline:
         return records
 
     @staticmethod
+    def _without_record_nodes(records: list[dict]) -> list[dict]:
+        """Flatten row hubs into direct subject--value edges for one control."""
+        row_subjects = {str(edge.get("tail")): str(edge.get("head")) for edge in records if edge.get("relation") == "has_record"}
+        flattened = []
+        for edge in records:
+            copied = dict(edge)
+            head, tail = str(copied.get("head", "")), str(copied.get("tail", ""))
+            if copied.get("structural"):
+                if copied.get("relation") == "has_record" or copied.get("cell_node"):
+                    continue
+                if head in row_subjects:
+                    if ":cell:" in tail:
+                        continue
+                    copied["head"] = row_subjects[head]
+                elif any(marker in value for value in (head, tail) for marker in (":row:", ":cell:", ":column:")):
+                    continue
+            flattened.append(copied)
+        return flattened
+
+
+    @staticmethod
     def _annotated_subgraph_nodes(
-        kg_trace: dict, records: list[dict], suggested_paths: list[dict],
+        kg_trace: dict, records: list[dict], suggested_paths: list[dict], *,
+        include_trace_topology: bool = True,
     ) -> list[dict]:
         """Return every semantic/structural node with non-filtering path metadata."""
         nodes: dict[str, dict] = {}
@@ -621,7 +682,7 @@ class OnlineUnifiedEvidenceGraphBaseline:
                 "types": sorted(set(node.get("types", []))),
                 "contexts": [dict(context) for context in node.get("contexts", [])],
             }
-        for node in kg_trace.get("structural_nodes", []):
+        for node in kg_trace.get("structural_nodes", []) if include_trace_topology else []:
             node_id = str(node.get("id"))
             current = nodes.setdefault(node_id, {"id": node_id, "types": [], "contexts": []})
             node_type = node.get("type")
@@ -671,10 +732,13 @@ class OnlineUnifiedEvidenceGraphBaseline:
             example.web_snippets, top_k=self.config.top_k,
             second_stage_k=self.config.second_stage_k,
             max_table_rows=self.config.max_table_rows_for_kg,
+            use_hyperlink_expansion=self.config.use_hyperlink_expansion,
         )
         kg = self.kg_builder.build(retrieved)
         kg_trace = kg.to_trace()
         records = self._complete_subgraph_records(kg_trace, kg.path_edge_records())
+        if not self.config.use_record_nodes:
+            records = self._without_record_nodes(records)
         compact = deduplicate_edge_contexts(records)
         all_contexts = {
             str(source_id): dict(context)
@@ -684,6 +748,10 @@ class OnlineUnifiedEvidenceGraphBaseline:
         row_candidates = self._candidate_rows(example.question, records)
         ambiguity = self._ambiguity_assessment(example.question, row_candidates)
         seed_candidates = self._seed_expansion_paths(example.question, records)
+        if not self.config.use_lexical_tiebreak:
+            for path in [*row_candidates, *seed_candidates]:
+                path.pop("lexical_overlap_with_bridge_entity", None)
+                path["presentation_score"] = path.get("score", 0.0)
         ordering_hint, ordered_rows = self._ordering_hint(example.question, row_candidates)
         # Row bundles are always complete. DFS paths are an additional view of
         # the same union graph and have only a fixed, non-score safety cap.
@@ -691,9 +759,19 @@ class OnlineUnifiedEvidenceGraphBaseline:
             seed_candidates,
             key=lambda path: (-float(path.get("presentation_score", path.get("score", 0.0))), str(path["path_id"])),
         )]
-        annotated_nodes = self._annotated_subgraph_nodes(kg_trace, records, suggested_paths)
+        if not self.config.use_path_guidance:
+            suggested_paths = []
+            ordering_hint = {
+                "detected_signal": "disabled",
+                "note": "Path guidance ablation: answer from the complete subgraph only.",
+            }
+        annotated_nodes = self._annotated_subgraph_nodes(
+            kg_trace, records, suggested_paths,
+            include_trace_topology=self.config.use_record_nodes,
+        )
         path_generation = {
-            "row_bundle": "Every has_record row is emitted; no top-k or score threshold is applied.",
+            "enabled": self.config.use_path_guidance,
+            "row_bundle": "Every has_record row is emitted; no top-k or score threshold is applied." if self.config.use_path_guidance else "disabled",
             "seed_expansion": {
                 "target_entity_type": self._target_entity_type(example.question),
                 "max_enumerated": 50,
@@ -703,6 +781,14 @@ class OnlineUnifiedEvidenceGraphBaseline:
             },
             "scoring": "All score_components are metadata used only to prioritize reading order; they never determine candidate inclusion.",
         }
+        prompt_ambiguity = deepcopy(ambiguity)
+        if not self.config.use_lexical_tiebreak:
+            for group in prompt_ambiguity.get("groups", []):
+                group.pop("lexical_tiebreak", None)
+                for candidate in group.get("candidates", []):
+                    candidate.pop("lexical_overlap_with_bridge_entity", None)
+            prompt_ambiguity.get("selective_prediction", {}).pop("lexical_tiebreak_winner", None)
+            prompt_ambiguity.get("selective_prediction", {}).pop("lexical_tiebreak_path_id", None)
         # Keep this full payload unchanged for audit. The LLM receives the
         # compact serialization built below, which has the same edge union.
         payload = {
@@ -717,7 +803,7 @@ class OnlineUnifiedEvidenceGraphBaseline:
             "path_generation": path_generation,
         }
         tie_break_hint = ""
-        if ambiguity["status"] == "SCORE_COLLISION_TIE":
+        if self.config.use_lexical_tiebreak and ambiguity["status"] == "SCORE_COLLISION_TIE":
             tie_break_hint = (
                 "\n\nWarning: More than one candidate satisfies the same bridge condition. "
                 "Prefer an entity whose name overlaps with the place-name tokens or is directly "
@@ -730,7 +816,7 @@ class OnlineUnifiedEvidenceGraphBaseline:
             contexts_by_source_id=all_contexts,
             suggested_paths=suggested_paths,
             ordering_hint=ordering_hint,
-            ambiguity=ambiguity,
+            ambiguity=prompt_ambiguity,
             path_generation=path_generation,
         )
         prompt = self.prompt_builder.prompt(
@@ -747,7 +833,8 @@ class OnlineUnifiedEvidenceGraphBaseline:
             answer = self._ambiguous_answer(ambiguity)
             abstained = True
         elif (
-            ambiguity["is_ambiguous"]
+            self.config.use_lexical_tiebreak
+            and ambiguity["is_ambiguous"]
             and self.config.ambiguity_policy == "lexical_tiebreak"
             and ambiguity["selective_prediction"]["lexical_tiebreak_is_safe"]
         ):

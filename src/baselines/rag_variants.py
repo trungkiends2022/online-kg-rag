@@ -23,6 +23,13 @@ class RAGConfig:
     temperature: float = 0.0
 
     use_rule_text_triples: bool = True
+    # OUEG component-ablation switches. Defaults define the full system;
+    # each False value removes one answer-time signal.
+    use_record_nodes: bool = True
+    use_path_guidance: bool = True
+    use_lexical_tiebreak: bool = True
+    use_hyperlink_expansion: bool = True
+    use_prompt_compression: bool = True
     # OUEG-only: prompt keeps the ambiguity visible by default. The two other
     # modes are explicit selective-prediction behaviours.
     ambiguity_policy: str = "prompt"
@@ -39,6 +46,12 @@ class RAGConfig:
             raise ValueError("context and output limits must be positive")
         if not isinstance(self.use_rule_text_triples, bool):
             raise ValueError("use_rule_text_triples must be boolean")
+        for name in (
+            "use_record_nodes", "use_path_guidance", "use_lexical_tiebreak",
+            "use_hyperlink_expansion", "use_prompt_compression",
+        ):
+            if not isinstance(getattr(self, name), bool):
+                raise ValueError(f"{name} must be boolean")
         if self.ambiguity_policy not in {"prompt", "return_candidates", "lexical_tiebreak"}:
             raise ValueError("ambiguity_policy must be prompt, return_candidates, or lexical_tiebreak")
         if self.oueg_context_mode not in {"lossless", "extractive"}:
