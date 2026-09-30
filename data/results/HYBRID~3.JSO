@@ -30,16 +30,16 @@
   "code_revision": null,
   "config": {
     "top_k": 5,
-    "second_stage_k": 0,
+    "second_stage_k": 3,
     "max_context_chars": 24000,
     "max_table_rows_for_kg": null,
     "max_output_tokens": 1024,
     "temperature": 0.0,
     "use_rule_text_triples": true,
     "use_record_nodes": true,
-    "use_path_guidance": true,
+    "use_path_guidance": false,
     "use_lexical_tiebreak": true,
-    "use_hyperlink_expansion": false,
+    "use_hyperlink_expansion": true,
     "use_prompt_compression": true,
     "ambiguity_policy": "prompt",
     "oueg_context_mode": "lossless",
@@ -51,5 +51,5 @@
     "max_workers": 64,
     "llm_max_concurrent_requests": 64
   },
-  "fingerprint": "b18b13795008fb1c9c3528ec3f4d9c5d9286f5219fe1395ec1d11beea5cabdc3"
+  "fingerprint": "2c5dbaef12741b3b2338607d9230b513f902c7d5214f6eeae013fae042ddb1f7"
 }
