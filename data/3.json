@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "dataset": "hybridqa",
+  "method": "online_unified_evidence_graph",
+  "code_worktree_diff_sha256": null,
+  "input": {
+    "path": "/workspace/storage-shared/nlp/huypq51/projects/online-kg-rag-wip-main-changes-20260926-ablation/benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard07.json",
+    "sha256": "581dd531954d4579c5a2a0cc3ea9d163ebd6e1d60ef71cb28d3e43800c446e72"
+  },
+  "resources": {
+    "tables_dir": "data/WikiTables-WithLinks/tables_tok",
+    "tables_revision": null,
+    "tables_worktree_diff_sha256": null,
+    "passages_dir": "data/WikiTables-WithLinks/request_tok",
+    "passages_revision": null,
+    "passages_worktree_diff_sha256": null,
+    "hitab_tables_dir": null,
+    "hitab_tables_revision": null,
+    "hitab_tables_worktree_diff_sha256": null
+  },
+  "provider": {
+    "provider": "openai_compatible",
+    "model": "GPT-OSS-20B"
+  },
+  "provider_options": {
+    "COMPAT_BASE_URL": "http://localhost:8864/v1",
+    "OPENROUTER_REASONING_ENABLED": null,
+    "LLM_RATE_LIMIT_RETRIES": null
+  },
+  "code_revision": null,
+  "config": {
+    "top_k": 5,
+    "second_stage_k": 3,
+    "max_context_chars": 24000,
+    "max_table_rows_for_kg": null,
+    "max_output_tokens": 1024,
+    "temperature": 0.0,
+    "use_rule_text_triples": true,
+    "use_record_nodes": true,
+    "use_path_guidance": false,
+    "use_lexical_tiebreak": true,
+    "use_hyperlink_expansion": true,
+    "use_prompt_compression": true,
+    "ambiguity_policy": "prompt",
+    "oueg_context_mode": "lossless",
+    "n_paths": 5,
+    "max_replans": 2,
+    "finqa_table_format": "official",
+    "llm_timeout_seconds": null,
+    "llm_sdk_retries": null,
+    "max_workers": 64,
+    "llm_max_concurrent_requests": 64
+  },
+  "fingerprint": "70123c8b68d3771a612508c9144d003711bd7ceae841b6af7033447fb642a297"
+}
