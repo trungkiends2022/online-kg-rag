@@ -4,8 +4,8 @@
   "method": "online_unified_evidence_graph",
   "code_worktree_diff_sha256": null,
   "input": {
-    "path": "/workspace/storage-shared/nlp/huypq51/projects/online-kg-rag-wip-main-changes-20260926-ablation/benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard06.json",
-    "sha256": "d7819b78783946f59b751c8d5bffde4ad8d971af135c12c1438f8a059c0833f6"
+    "path": "/workspace/storage-shared/nlp/huypq51/projects/online-kg-rag-wip-main-changes-20260926-ablation/benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard08.json",
+    "sha256": "cd64113f08d90676cc460133d0d1d4264e0ce0239b953782be2dc36995ca8183"
   },
   "resources": {
     "tables_dir": "data/WikiTables-WithLinks/tables_tok",
@@ -37,10 +37,10 @@
     "temperature": 0.0,
     "use_rule_text_triples": true,
     "use_record_nodes": true,
-    "use_path_guidance": false,
+    "use_path_guidance": true,
     "use_lexical_tiebreak": true,
     "use_hyperlink_expansion": true,
-    "use_prompt_compression": true,
+    "use_prompt_compression": false,
     "ambiguity_policy": "prompt",
     "oueg_context_mode": "lossless",
     "n_paths": 5,
@@ -51,5 +51,5 @@
     "max_workers": 64,
     "llm_max_concurrent_requests": 64
   },
-  "fingerprint": "ba96edc7a1b58580e15e9d212782e7525ad47a7e9dd9956adaf466c872889a37"
+  "fingerprint": "a0774b9888f564e391d5a58d56a926d4455bf5772f657761062ab1ef36fdd3d0"
 }
