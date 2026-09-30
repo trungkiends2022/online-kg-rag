@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  30 SEP 2026 14:12
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  30 SEP 2026 22:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -660,20 +660,20 @@ File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
 (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count320
@@ -698,49 +698,43 @@ e
 ))
 ABD: EveryShipout initializing macros
 \c@lstlisting=\count326
-LaTeX Font Info:    Trying to load font information for U+msa on input line 31.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 32.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 31.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 32.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 3
-1.
+2.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-Overfull \hbox (1.63739pt too wide) in paragraph at lines 34--35
+Overfull \hbox (1.63739pt too wide) in paragraph at lines 35--36
 []\T1/cmr/m/n/9 Answering com-plex ques-tions over semi-structured ta-bles and
  []
 
 
-Overfull \hbox (2.95447pt too wide) in paragraph at lines 34--35
+Overfull \hbox (2.95447pt too wide) in paragraph at lines 35--36
 \T1/cmr/m/n/9 text re-quires pre-serv-ing struc-tural tab-u-lar con-text while 
 con-nect-ing multi-
  []
 
 
-Underfull \vbox (badness 3965) has occurred while \output is active []
+Underfull \vbox (badness 6300) has occurred while \output is active []
 
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (4.31842pt too wide) in paragraph at lines 41--43
+Overfull \hbox (4.31842pt too wide) in paragraph at lines 42--44
 \T1/cmr/m/n/10 and re-trieved pas-sages are sup-plied di-rectly to the lan-guag
 e model. While straight-
- []
-
-
-Overfull \hbox (1.4328pt too wide) in paragraph at lines 51--56
-[]\T1/cmr/m/n/10 We con-duct an ex-ten-sive em-pir-i-cal eval-u-a-tion com-par-
-ing OUEG-RAG against
  []
 
 [2] (./figures/paradigm-comparison.tex
@@ -804,25 +798,25 @@ LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <3.56998> not available
 LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <2.55> not available
 (Font)              size <5> substituted on input line 143.
 
-)) [3] [4]
-Overfull \hbox (8.3254pt too wide) in paragraph at lines 78--79
+)) [3]
+Overfull \hbox (8.3254pt too wide) in paragraph at lines 77--78
  \T1/cmr/m/it/10 Con-tex-tu-al-iz-ing Star-Topology and Knowl-edge Graph Paradi
 gms.[] \T1/cmr/m/n/10 Ex-tract-ing struc-
  []
 
 
-Overfull \hbox (12.0943pt too wide) in paragraph at lines 78--79
+Overfull \hbox (12.0943pt too wide) in paragraph at lines 77--78
 \T1/cmr/m/n/10 along-side our pro-posed frame-work (Fig. 1[]): Se-man-tic Ta-bl
 e In-ter-pre-ta-tion (STI) [17,
  []
 
-
-Overfull \hbox (4.36008pt too wide) in paragraph at lines 83--84
+[4]
+Overfull \hbox (4.36008pt too wide) in paragraph at lines 82--83
 \T1/cmr/m/n/10 key-word and dense re-trieval miss, as demon-strated by QA-GNN [
 22], JointLK [19],
  []
 
-(./figures/pipeline.tex (./figures/pipeline-diagram.tex
+[5] (./figures/pipeline.tex (./figures/pipeline-diagram.tex
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <5> not available
 (Font)              Font shape `T1/cmtt/m/n' tried instead on input line 29.
 
@@ -830,194 +824,63 @@ Underfull \hbox (badness 2443) in paragraph at lines 104--105
 []\T1/cmtt/m/n/5 {"rec":$\OML/cmm/m/it/5 ^^Z[]$\T1/cmtt/m/n/5 , "yr":"1989", 
  []
 
-)) (./method.tex [5]
-Overfull \hbox (33.00336pt too wide) in paragraph at lines 10--12
-\T1/cmr/m/n/10 on-ciles com-plete sub-graph re-ten-tion with guided traver-sal 
-via: $\OML/cmm/m/it/10 q \OMS/cmsy/m/n/10 ! [] !
+)) (./method.tex [6] [7] [8]) [9] [10] [11]
+Underfull \hbox (badness 1117) in paragraph at lines 195--196
+[]|\T1/cmr/m/n/7 Raw triples over-flow con-text
  []
 
-
-Overfull \hbox (4.1072pt too wide) in paragraph at lines 10--12
-[]$\T1/cmr/m/n/10 . Can-di-date paths serve as pri-or-i-tized \T1/cmr/m/it/10 n
-on-filtering read-ing guides
+[12]
+Overfull \hbox (6.88724pt too wide) in paragraph at lines 223--224
+\T1/cmr/m/n/10 graphs with com-pact prompt com-pres-sion and non-filtering path
+ guid-ance, OUEG-
  []
 
-
-Overfull \hbox (6.42902pt too wide) in paragraph at lines 10--12
-\T1/cmr/m/n/10 nu-mer-i-cal pro-grams re-main sec-ondary com-par-i-son vari-ant
-s for arith-metic datasets. 
- []
-
-[6]
-Overfull \hbox (13.94928pt too wide) in paragraph at lines 21--23
-\T1/cmr/m/it/10 straints\T1/cmr/m/n/10 , iden-ti-fy-ing col-umn header men-tion
-s and nu-mer-i-cal fil-ters; and (3) \T1/cmr/m/it/10 hyperlink-
- []
-
-(./figures/graph-construction.tex (./figures/graph-construction-diagram.tex
-
-LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 19.
-
-
-LaTeX Font Warning: Font shape `T1/cmr/bx/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 20.
-
-LaTeX Font Info:    Calculating math sizes for size <5.5> on input line 20.
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 20.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.84998> not available
-(Font)              size <5> substituted on input line 20.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.75> not available
-(Font)              size <5> substituted on input line 20.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <5.5> not available
-(Font)              size <5> substituted on input line 20.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.84998> not available
-(Font)              size <5> substituted on input line 20.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.75> not available
-(Font)              size <5> substituted on input line 20.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 20.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.84998> not available
-(Font)              size <5> substituted on input line 20.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.75> not available
-(Font)              size <5> substituted on input line 20.
-
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <5.5> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 20.
-
-LaTeX Font Warning: Font shape `T1/cmtt/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 20.
-
-
-LaTeX Font Warning: Font shape `T1/cmtt/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 33.
-
-
-LaTeX Font Warning: Font shape `T1/cmr/m/it' in size <5.5> not available
-(Font)              size <5> substituted on input line 41.
-
-
-LaTeX Font Warning: Font shape `T1/cmtt/m/it' in size <5.5> not available
-(Font)              size <5> substituted on input line 41.
-
-
-LaTeX Font Warning: Font shape `T1/cmr/bx/it' in size <5.5> not available
-(Font)              size <5> substituted on input line 42.
-
-)) [7] [8] (./figures/dual-track.tex (./figures/dual-track-diagram.tex
-Underfull \hbox (badness 1117) in paragraph at lines 35--36
-[][]\T1/cmr/bx/n/7 Track 3c: Struc-tural Am-bi-gu-ity 
- []
-
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <4.8> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 70.
-LaTeX Font Info:    Calculating math sizes for size <4.8> on input line 70.
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.35999> not available
-(Font)              size <5> substituted on input line 70.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.4> not available
-(Font)              size <5> substituted on input line 70.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.35999> not available
-(Font)              size <5> substituted on input line 70.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.4> not available
-(Font)              size <5> substituted on input line 70.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.35999> not available
-(Font)              size <5> substituted on input line 70.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.4> not available
-(Font)              size <5> substituted on input line 70.
-
-)) [9]) [10] [11] [12]
-Underfull \vbox (badness 3407) has occurred while \output is active []
-
- [13]
-Overfull \hbox (1.12476pt too wide) in paragraph at lines 207--208
-\T1/cmr/m/n/10 bound re-la-tion cov-er-age by heuris-tic pat-terns. Fi-nally, s
-truc-tured ev-i-dence graphs
- []
-
-
-Overfull \hbox (0.99979pt too wide) in paragraph at lines 210--211
-\T1/cmr/m/n/10 graphs with loss-less prompt com-pres-sion and non-filtering pat
-h guid-ance, OUEG-
- []
-
-(./main.bbl [14]) [15] (./main.aux)
+(./main.bbl [13] [14]) [15] (./main.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 3.725pt have occurred.
 
  ) 
 Here is how much of TeX's memory you used:
- 17209 strings out of 483183
- 328453 string characters out of 5966292
- 589265 words of memory out of 5000000
- 31887 multiletter control sequences out of 15000+600000
- 561838 words of font info for 113 fonts, out of 8000000 for 9000
+ 16913 strings out of 483183
+ 323015 string characters out of 5966292
+ 588125 words of memory out of 5000000
+ 31604 multiletter control sequences out of 15000+600000
+ 557653 words of font info for 94 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,21n,71p,1645b,1059s stack positions out of 5000i,500n,10000p,200000b,80000s
- </tmp/texfonts/pk/ljfour/jknappen/ec/ectt0800.525pk> </tmp/texfonts/pk/ljfou
-r/jknappen/ec/ecrm0600.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecit0800.375
-pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx0700.600pk> </tmp/texfonts/pk/ljfo
-ur/jknappen/ec/ecrm0700.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ectt1000.60
-0pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecti0500.600pk> </tmp/texfonts/pk/ljf
-our/jknappen/ec/ectt0800.375pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecti0700.6
-00pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm0500.600pk> </tmp/texfonts/pk/lj
-four/jknappen/ec/ecbi0500.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx0500.
-600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/tcrm1000.600pk> </tmp/texfonts/pk/l
-jfour/jknappen/ec/ecbx1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecti1000
-.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </tmp/texfonts/pk/
-ljfour/jknappen/ec/tcrm0900.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx090
-0.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ectt0900.600pk> </tmp/texfonts/pk
-/ljfour/jknappen/ec/ecrm0900.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm10
-00.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1440.600pk></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/symbols/msam5.pfb>
-Output written on main.pdf (15 pages, 472566 bytes).
+ 60i,19n,69p,1645b,1057s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx0700.600pk> </tmp/texfonts/pk/ljfou
+r/jknappen/ec/ectt0800.525pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecti0500.600
+pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ectt0800.375pk> </tmp/texfonts/pk/ljfo
+ur/jknappen/ec/ecti0700.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ectt1000.60
+0pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm0700.600pk> </tmp/texfonts/pk/ljf
+our/jknappen/ec/ecrm0500.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbi0500.6
+00pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx0500.600pk> </tmp/texfonts/pk/lj
+four/jknappen/ec/tcrm1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1000.
+600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecti1000.600pk> </tmp/texfonts/pk/l
+jfour/jknappen/ec/ecbx1200.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/tcrm0900
+.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx0900.600pk> </tmp/texfonts/pk/
+ljfour/jknappen/ec/ectt0900.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm090
+0.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm1000.600pk> </tmp/texfonts/pk
+/ljfour/jknappen/ec/ecbx1440.600pk></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbo
+ls/msam5.pfb>
+Output written on main.pdf (15 pages, 421309 bytes).
 PDF statistics:
- 1097 PDF objects out of 1200 (max. 8388607)
- 177 compressed objects within 2 object streams
+ 1009 PDF objects out of 1200 (max. 8388607)
+ 163 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

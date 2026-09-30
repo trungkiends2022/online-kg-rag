@@ -2,7 +2,7 @@
 \centering
 \resizebox{\linewidth}{!}{\input{figures/paradigm-comparison-diagram}}
 \vspace{-2mm}
-\caption{Architectural comparison across four knowledge graph construction and reasoning paradigms for hybrid table-text retrieval. In contrast to offline STI cascades~(a), hallucination-prone zero-shot LLM extraction~(b), and destructive top-$k$ path pruning in persistent GraphRAG systems~(c), the proposed OUEG-RAG framework~(d) dynamically instantiates a schema-preserving multigraph on-the-fly without LLM calls, achieves lossless subgraph prompt encoding preserving all retrieved context, and guides single-turn reasoning via candidate path routing.}
+\caption{Architectural comparison across four knowledge graph construction and reasoning paradigms for hybrid table-text retrieval. In contrast to offline STI cascades~(a), unconstrained zero-shot LLM extraction~(b), and aggressive top-$k$ path pruning in persistent GraphRAG systems~(c), the proposed OUEG-RAG framework~(d) dynamically instantiates a schema-preserving multigraph on-the-fly without LLM calls, retains retrieved multigraph context via compact prompt encoding, and guides single-turn reasoning via candidate path routing.}
 \vspace{-2mm}
 \label{fig:paradigms}
 \end{figure}
