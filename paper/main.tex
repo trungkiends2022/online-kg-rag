@@ -9,6 +9,8 @@
 \usepackage{listings}
 \usepackage{multirow}
 \usepackage{colortbl}
+\usepackage{enumitem}
+\setlist{noitemsep,topsep=2pt,parsep=0pt,partopsep=0pt}
 \lstset{basicstyle=\ttfamily\small,breaklines=true,frame=single,columns=fullflexible,captionpos=b}
 
 \begin{document}
@@ -21,8 +23,8 @@ Van-Vinh Nguyen\inst{1}}
 \authorrunning{T.-K. Nguyen et al.}
 %
 \institute{VNU University of Engineering and Technology, Vietnam National University, Hanoi, Vietnam\\
-\email{trungkiends2022@gmail.com}, \email{vinhnv@vnu.edu.vn} \and
-Vietnam National University, Hanoi, Vietnam\\
+\email{26028002@vnu.edu.vn}, \email{vinhnv@vnu.edu.vn} \and
+Viettel AI, Viettel Group, Hanoi, Vietnam\\
 \email{hoainam.bk2012@gmail.com.vn}}
 \maketitle
 
@@ -111,26 +113,26 @@ We report three complementary accuracy metrics:
 In addition, we measure system efficiency via logical LLM calls, total input/output prompt tokens, and end-to-end wall-clock latency per question.
 
 \begin{table}[t]
-\caption{Main benchmark comparison between Direct LLM and OUEG-RAG on HybridQA ($N=200$) across the GPT-OSS model family (GPT-OSS 20B and GPT-OSS 120B). Higher is better for accuracy (EM, Token F1, Semantic EM, Win margin); lower is better for empty rate and latency.}
+\caption{Main benchmark comparison between Direct LLM and OUEG-RAG on HybridQA ($N=1{,}500$) across the open-weights GPT-OSS model family (GPT-OSS 20B and GPT-OSS 120B). Higher is better for accuracy (EM, Token F1, Semantic EM, Net EM margin); lower is better for empty rate and latency.}
 \label{tab:main-results}
 \centering
 \scriptsize
-\setlength{\tabcolsep}{1.9pt}
+\setlength{\tabcolsep}{1.6pt}
 \begin{tabular}{@{}llrrrrrr@{}}
 \toprule
-Model Scale & Method & EM (\%) & F1 (\%) & Sem.\ EM & Empty & Win / Loss & Lat.\ (s) \\
+Model Scale & Method & EM (\%) & F1 (\%) & Sem.\ EM & Empty & Net Margin & Lat.\ (s) \\
 \midrule
-\multirow{2}{*}{GPT-OSS 20B}  & Direct LLM & 55.50 & 63.07 & 57.00 & 6.50\% & 9 wins & 14.11 \\
-                              & \textbf{OUEG-RAG (Ours)} & \textbf{59.00} & \textbf{67.78} & \textbf{60.50} & \textbf{6.00\%} & \textbf{16 wins (+7)} & 27.66 \\
+\multirow{2}{*}{GPT-OSS 20B}  & Direct LLM & 54.80 & 64.67 & 56.67 & 5.40\% & Baseline & 9.74 \\
+                              & \textbf{OUEG-RAG (Ours)} & \textbf{56.47} & \textbf{67.12} & \textbf{58.47} & \textbf{3.93\%} & \textbf{+25 EM wins} & 25.73 \\
 \midrule
-\multirow{2}{*}{GPT-OSS 120B} & Direct LLM & 58.50 & 67.37 & 60.50 & \textbf{0.50\%} & 10 wins & 11.43 \\
-                              & \textbf{OUEG-RAG (Ours)} & \textbf{63.00} & \textbf{70.55} & \textbf{65.00} & 1.00\% & \textbf{19 wins (+9)} & 25.44 \\
+\multirow{2}{*}{GPT-OSS 120B} & Direct LLM & 58.73 & 69.70 & 60.47 & 1.07\% & Baseline & 6.40 \\
+                              & \textbf{OUEG-RAG (Ours)} & \textbf{61.40} & \textbf{73.11} & \textbf{63.00} & \textbf{0.53\%} & \textbf{+40 EM wins} & 23.65 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{table}[t]
-\caption{Performance breakdown across structural ambiguity partitions on HybridQA ($N=200$) under the GPT-OSS model family. Ambiguous queries represent cases exhibiting candidate score collisions where multiple entities tie on relational graph scores.}
+\caption{Performance breakdown across structural ambiguity partitions on HybridQA ($N=1{,}500$) under the GPT-OSS model family. Ambiguous queries represent cases exhibiting candidate score collisions where multiple entities tie on relational graph scores.}
 \label{tab:ambiguity-breakdown}
 \centering
 \scriptsize
@@ -141,16 +143,17 @@ Partition & Method & \multicolumn{2}{c}{GPT-OSS 20B} & \multicolumn{2}{c}{GPT-OS
 \cmidrule(lr){3-4} \cmidrule(lr){5-6}
 & & EM (\%) & F1 (\%) & EM (\%) & F1 (\%) \\
 \midrule
-\textbf{Ambiguous Subset} & Direct LLM & 52.17 & 59.76 & 55.80 & 63.64 \\
-(Score collisions, 69.0\%) & \textbf{OUEG-RAG (Ours)} & \textbf{57.25} & \textbf{65.94} & \textbf{63.04} & \textbf{69.78} \\
-                           & \emph{Gain ($\Delta$)} & \textbf{+5.08} & \textbf{+6.18} & \textbf{+7.24} & \textbf{+6.14} \\
+\textbf{Ambiguous Subset} & Direct LLM & 52.60 & 61.82 & 56.97 & 67.17 \\
+(Score collisions, 71.2\%) & \textbf{OUEG-RAG (Ours)} & \textbf{54.87} & \textbf{65.75} & \textbf{59.68} & \textbf{71.24} \\
+                           & \emph{Gain ($\Delta$)} & \textbf{+2.27} & \textbf{+3.92} & \textbf{+2.71} & \textbf{+4.07} \\
 \midrule
-\textbf{Unambiguous Subset} & Direct LLM & 62.90 & 70.43 & \textbf{64.52} & \textbf{75.67} \\
-(No collisions, 31.0\%)    & \textbf{OUEG-RAG (Ours)} & \textbf{62.90} & \textbf{71.87} & 62.90 & 72.27 \\
+\textbf{Unambiguous Subset} & Direct LLM & 59.84 & 69.66 & 63.47 & 75.81 \\
+(No collisions, 28.8\%)    & \textbf{OUEG-RAG (Ours)} & \textbf{60.37} & \textbf{70.34} & \textbf{64.80} & \textbf{76.27} \\
+                           & \emph{Gain ($\Delta$)} & \textbf{+0.53} & \textbf{+0.68} & \textbf{+1.33} & \textbf{+0.46} \\
 \midrule
-\textbf{Overall Dataset}   & Direct LLM & 55.50 & 63.07 & 58.50 & 67.37 \\
-($N=200$)                  & \textbf{OUEG-RAG (Ours)} & \textbf{59.00} & \textbf{67.78} & \textbf{63.00} & \textbf{70.55} \\
-                           & \emph{Gain ($\Delta$)} & \textbf{+3.50} & \textbf{+4.71} & \textbf{+4.50} & \textbf{+3.18} \\
+\textbf{Overall Dataset}   & Direct LLM & 54.80 & 64.67 & 58.73 & 69.70 \\
+($N=1{,}500$)              & \textbf{OUEG-RAG (Ours)} & \textbf{56.47} & \textbf{67.12} & \textbf{61.40} & \textbf{73.11} \\
+                           & \emph{Gain ($\Delta$)} & \textbf{+1.67} & \textbf{+2.45} & \textbf{+2.67} & \textbf{+3.41} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -171,16 +174,16 @@ All experiments fix the decoding temperature ($T=0$), context budgets (24,000 ch
 \label{sec:results}
 
 \paragraph{Main benchmark results across model scales.}
-Table~\ref{tab:main-results} presents the comparative evaluation of Direct LLM and OUEG-RAG across model regimes on HybridQA ($N=200$). 
-On the compact model regime (20B parameters), OUEG-RAG achieves a substantial accuracy improvement: Token F1 increases from 63.07\% to 67.78\% ($+4.71\%$), Exact Match increases from 55.50\% to 59.00\% ($+3.50\%$), and Semantic EM advances from 57.00\% to 60.50\% ($+3.50\%$). Furthermore, OUEG-RAG reduces the ungrounded empty rate from 6.50\% to 6.00\% and establishes a decisive pairwise head-to-head advantage of 16 wins vs.\ 9 wins (net $+7$).
-On the frontier model regime (120B parameters), OUEG-RAG reinforces its superiority: Token F1 reaches 70.55\% vs.\ 67.37\% ($+3.18\%$), Exact Match reaches 63.00\% vs.\ 58.50\% ($+4.50\%$), and Semantic EM reaches 65.00\% vs.\ 60.50\% ($+4.50\%$), with a head-to-head margin of 19 wins vs.\ 10 wins (net $+9$). While the empty rate remains negligible across both methods at this scale (1.00\% vs.\ 0.50\%), OUEG-RAG effectively eliminates grounded hallucinations.
-Average response latency increases by an acceptable margin ($+13.55$\,s on 20B and $+14.01$\,s on 120B) for two-stage retrieval, graph assembly, and candidate path traversal, a predictable overhead justified by multi-hop accuracy gains.
+Table~\ref{tab:main-results} presents the comparative evaluation of Direct LLM and OUEG-RAG across model regimes on the full development split of HybridQA ($N=1{,}500$). 
+On the compact model regime (20B parameters), OUEG-RAG achieves a consistent accuracy improvement across all metrics: Token F1 increases from 64.67\% to 67.12\% ($+2.45\%$), Exact Match increases from 54.80\% to 56.47\% ($+1.67\%$), and Semantic EM advances from 56.67\% to 58.47\% ($+1.80\%$). Furthermore, OUEG-RAG reduces the ungrounded empty answer rate from 5.40\% to 3.93\% (a 27.2\% relative error reduction) and yields a net gain of $+25$ exact match successes over Direct LLM.
+On the frontier model regime (120B parameters), OUEG-RAG delivers even higher gains: Token F1 reaches 73.11\% vs.\ 69.70\% ($+3.41\%$), Exact Match reaches 61.40\% vs.\ 58.73\% ($+2.67\%$), and Semantic EM reaches 63.00\% vs.\ 60.47\% ($+2.53\%$), with a net gain of $+40$ exact match successes. Concurrently, OUEG-RAG halves the empty answer rate from 1.07\% down to 0.53\% (a 50.5\% relative reduction).
+Average response latency is 25.73\,s on 20B and 23.65\,s on 120B for two-stage retrieval, graph assembly, and candidate path traversal, representing a predictable, bounded overhead justified by grounded accuracy gains.
 
 \paragraph{Structural ambiguity breakdown.}
-As detailed in Table~\ref{tab:ambiguity-breakdown}, 69.0\% of evaluated questions (138/200) exhibit structural score collisions where multiple candidate entities satisfy query constraints with identical graph relation scores. On this ambiguous subset, Direct LLM struggles severely, achieving only 52.17\% EM (59.76\% F1) on 20B and 55.80\% EM (63.64\% F1) on 120B due to arbitrary guessing. In contrast, OUEG-RAG detects collisions and applies lexical tiebreaks, elevating performance to 57.25\% EM (65.94\% F1, $+6.18\%$ gain) on 20B, and to 63.04\% EM (69.78\% F1, $+6.14\%$ gain) on 120B. On unambiguous questions (31.0\% of cases), both methods perform comparably (62.90\% EM on 20B). This proves empirically that OUEG-RAG's primary advantage stems from principled multi-hop ambiguity resolution.
+As detailed in Table~\ref{tab:ambiguity-breakdown}, 71.2\% of questions (1,068 of 1,500) exhibit structural score collisions where multiple candidate entities satisfy relational constraints with identical graph scores. On this ambiguous subset, Direct LLM struggles due to arbitrary lexical guessing, achieving 52.60\% EM (61.82\% F1) on 20B and 56.97\% EM (67.17\% F1) on 120B. In contrast, OUEG-RAG detects collisions and applies lexical tiebreak scoring, elevating performance to 54.87\% EM (65.75\% F1, $+3.92\%$ F1 gain) on 20B and to 59.68\% EM (71.24\% F1, $+4.07\%$ F1 gain) on 120B. On unambiguous questions (28.8\% of cases), both paradigms achieve high grounding, with OUEG-RAG maintaining a steady margin. This demonstrates that the core empirical advantage of OUEG-RAG stems directly from principled structural collision resolution.
 
 \paragraph{Error taxonomy and context integrity.}
-Error auditing reveals a key failure mode in flat-context prompting: Direct LLM incurs 27 failure cases on 120B and 23 on 20B from table truncation under prompt budgets (\texttt{table\_context\_budget}), pruning target rows and triggering hallucinations. In contrast, OUEG-RAG incurs zero budget errors by anchoring candidate rows within the bounded multigraph (\texttt{Gold Row Recall = 1.0}), preserving structural integrity across complex multi-row tables.
+Error auditing across the 1,500 questions reveals a persistent failure mode in flat-context prompting: Direct LLM suffers from table truncation under prompt budgets (\texttt{table\_context\_budget}), pruning target rows and triggering hallucinations. In contrast, OUEG-RAG incurs zero budget errors by anchoring candidate rows within the bounded multigraph (\texttt{Gold Row Recall = 1.0}), preserving structural integrity across complex multi-row tables.
 
 \section{Limitations}
 While OUEG-RAG delivers strong grounding gains, query-time graph construction incurs latency over direct prompting. Additionally, rule-based text triples bound relation coverage by heuristic patterns to ensure consistency. Finally, while structured evidence graphs prevent hallucination, they depend on upstream retrieval and cannot recover omitted passages.
@@ -197,7 +200,7 @@ We presented OUEG-RAG, an online unified evidence graph framework for grounded t
            {\settowidth\labelwidth{\@biblabel{#1}}%
             \leftmargin\labelwidth
             \advance\leftmargin\labelsep
-            \setlength{\itemsep}{-0.3pt}%
+            \setlength{\itemsep}{-2.2pt}%
             \setlength{\parsep}{0pt}%
             \setlength{\topsep}{0pt}%
             \usecounter{enumiv}%

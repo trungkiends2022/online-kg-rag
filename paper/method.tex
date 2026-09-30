@@ -36,7 +36,7 @@ Benchmark settings supply an oracle table and an associated pool of linked
 passages. Retrieval operates within this supplied context.
 
 \paragraph{Stage 1: Coarse retrieval.}
-BM25 indexes table rows and text passages with respect to question $q$. To
+A lexical retriever indexes table rows and text passages with respect to question $q$. To
 prevent detached cells, table retrieval ranks entire serialized rows and selects
 a budget of $k$ rows (default $k=5$), retaining their original table row
 indices for downstream provenance.
@@ -56,7 +56,7 @@ $q$ for:
     (\texttt{linked\_passage} URLs). The corresponding passages are added to
     the retrieval pool up to a budget $b$ (default $b=3$).
 \end{enumerate}
-Passage retrieval combines direct BM25 passage matches with hyperlink expansions
+Passage retrieval combines direct lexical passage matches with hyperlink expansions
 and bridge-entity queries, deduplicating passages by source identifier.
 
 \subsection{Schema-Preserving Online KG Construction}
