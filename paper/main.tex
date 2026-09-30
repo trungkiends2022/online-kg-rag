@@ -5,7 +5,7 @@
 \usepackage{booktabs}
 \usepackage{url}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning,calc,fit,shapes.geometric}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,shapes.geometric,backgrounds}
 \usepackage{listings}
 \usepackage{multirow}
 \usepackage{colortbl}
@@ -123,10 +123,10 @@ In addition, we measure system efficiency via logical LLM calls, total input/out
 Model Scale & Method & EM (\%) & F1 (\%) & Sem.\ EM & Empty & Net Margin & Lat.\ (s) \\
 \midrule
 \multirow{2}{*}{GPT-OSS 20B}  & Direct LLM & 54.80 & 64.67 & 56.67 & 5.40\% & Baseline & 9.74 \\
-                              & \textbf{OUEG-RAG (Ours)} & \textbf{56.47} & \textbf{67.12} & \textbf{58.47} & \textbf{3.93\%} & \textbf{+25 EM wins} & 25.73 \\
+                              & \textbf{OUEG-RAG} & \textbf{56.47} & \textbf{67.12} & \textbf{58.47} & \textbf{3.93\%} & \textbf{+25 EM wins} & 25.73 \\
 \midrule
 \multirow{2}{*}{GPT-OSS 120B} & Direct LLM & 58.73 & 69.70 & 60.47 & 1.07\% & Baseline & 6.40 \\
-                              & \textbf{OUEG-RAG (Ours)} & \textbf{61.40} & \textbf{73.11} & \textbf{63.00} & \textbf{0.53\%} & \textbf{+40 EM wins} & 23.65 \\
+                              & \textbf{OUEG-RAG} & \textbf{61.40} & \textbf{73.11} & \textbf{63.00} & \textbf{0.53\%} & \textbf{+40 EM wins} & 23.65 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -144,15 +144,15 @@ Partition & Method & \multicolumn{2}{c}{GPT-OSS 20B} & \multicolumn{2}{c}{GPT-OS
 & & EM (\%) & F1 (\%) & EM (\%) & F1 (\%) \\
 \midrule
 \textbf{Ambiguous Subset} & Direct LLM & 52.60 & 61.82 & 56.97 & 67.17 \\
-(Score collisions, 71.2\%) & \textbf{OUEG-RAG (Ours)} & \textbf{54.87} & \textbf{65.75} & \textbf{59.68} & \textbf{71.24} \\
+(Score collisions, 71.2\%) & \textbf{OUEG-RAG} & \textbf{54.87} & \textbf{65.75} & \textbf{59.68} & \textbf{71.24} \\
                            & \emph{Gain ($\Delta$)} & \textbf{+2.27} & \textbf{+3.92} & \textbf{+2.71} & \textbf{+4.07} \\
 \midrule
 \textbf{Unambiguous Subset} & Direct LLM & 59.84 & 69.66 & 63.47 & 75.81 \\
-(No collisions, 28.8\%)    & \textbf{OUEG-RAG (Ours)} & \textbf{60.37} & \textbf{70.34} & \textbf{64.80} & \textbf{76.27} \\
+(No collisions, 28.8\%)    & \textbf{OUEG-RAG} & \textbf{60.37} & \textbf{70.34} & \textbf{64.80} & \textbf{76.27} \\
                            & \emph{Gain ($\Delta$)} & \textbf{+0.53} & \textbf{+0.68} & \textbf{+1.33} & \textbf{+0.46} \\
 \midrule
 \textbf{Overall Dataset}   & Direct LLM & 54.80 & 64.67 & 58.73 & 69.70 \\
-($N=1{,}500$)              & \textbf{OUEG-RAG (Ours)} & \textbf{56.47} & \textbf{67.12} & \textbf{61.40} & \textbf{73.11} \\
+($N=1{,}500$)              & \textbf{OUEG-RAG} & \textbf{56.47} & \textbf{67.12} & \textbf{61.40} & \textbf{73.11} \\
                            & \emph{Gain ($\Delta$)} & \textbf{+1.67} & \textbf{+2.45} & \textbf{+2.67} & \textbf{+3.41} \\
 \bottomrule
 \end{tabular}
