@@ -452,6 +452,18 @@ bash scripts/run_hybridqa_shared_context_ablation.sh \
   --shard 01 --model 120b --baseline path --n-paths 3 --limit 10 --workers 2
 ```
 
+Để dùng server nội bộ tương thích OpenAI (vLLM, SGLang, v.v.), chọn
+`--provider inhouse`. Model ID là tên server công bố; có thể dùng alias `20b`,
+`120b` hoặc truyền tên chính xác. Đặt `COMPAT_API_KEY` trong `.env` nếu server
+cần xác thực; truyền endpoint qua `--base-url` hoặc đặt `COMPAT_BASE_URL` trong
+`.env`.
+
+```bash
+bash scripts/run_hybridqa_shared_context_ablation.sh \
+  --provider inhouse --model gpt-oss-20b --base-url http://llm-server:8000/v1 \
+  --shard 01 --workers 4
+```
+
 Oracle Evidence của HybridQA cần split traced vì file thường không có annotation
 `answer-node`:
 

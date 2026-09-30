@@ -6,34 +6,38 @@
 \citation{lewis2020rag,guu2020realm,gao2023ragsurvey}
 \citation{yasunaga2021qagnn,pan2024unifying,peng2024graphragsurvey}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}\protected@file@percent }
-\citation{lewis2020rag,guu2020realm}
-\citation{karpukhin2020dpr,gao2023ragsurvey}
-\citation{pasupat2015wikitable}
-\citation{herzig2020tapas,yin2020tabert,nan2022fetaqa}
-\citation{chen2024tablerag}
-\citation{yu2025tablerag}
 \citation{hybridqa}
+\citation{eisenschlos2021mate}
+\citation{sun2021dochopper}
+\citation{kumar2021mitqa}
+\citation{chen2022muger2}
+\citation{lei2023s3hqa}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{3}\protected@file@percent }
 \newlabel{sec:related}{{2}{3}}
-\@writefile{toc}{\contentsline {paragraph}{Retrieval-Augmented Generation (RAG) and Table-RAG.}{3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Hybrid Table--Text Question Answering.}{3}\protected@file@percent }
+\citation{cheng2023binder}
+\citation{ye2023dater}
+\citation{wang2024chainoftable}
+\citation{chen2024tablerag,yu2025tablerag}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Architectural comparison across four knowledge graph construction and reasoning paradigms for hybrid table-text retrieval. In contrast to offline STI cascades\nobreakspace  {}(a), hallucination-prone zero-shot LLM extraction\nobreakspace  {}(b), and destructive top-$k$ path pruning in persistent GraphRAG systems\nobreakspace  {}(c), the proposed OUEG-RAG framework\nobreakspace  {}(d) dynamically instantiates a schema-preserving multigraph on-the-fly without LLM calls, achieves lossless subgraph prompt encoding preserving all retrieved context, and guides single-turn reasoning via candidate path routing.}}{4}\protected@file@percent }
+\newlabel{fig:paradigms}{{1}{4}}
+\@writefile{toc}{\contentsline {paragraph}{Table Reasoning with Large Language Models.}{4}\protected@file@percent }
 \citation{ritze2016matching,deng2020turl}
 \citation{edge2024graphrag,pan2024unifying}
 \citation{edge2024graphrag,tan2025hydrarag,peng2024graphragsurvey}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Architectural comparison across four knowledge graph construction and reasoning paradigms for hybrid table-text retrieval. In contrast to offline STI cascades\nobreakspace  {}(a), hallucination-prone zero-shot LLM extraction\nobreakspace  {}(b), and destructive top-$k$ path pruning in persistent GraphRAG systems\nobreakspace  {}(c), the proposed OUEG-RAG framework\nobreakspace  {}(d) dynamically instantiates a schema-preserving multigraph on-the-fly without LLM calls, achieves lossless subgraph prompt encoding preserving all retrieved context, and guides single-turn reasoning via candidate path routing.}}{4}\protected@file@percent }
-\newlabel{fig:paradigms}{{1}{4}}
-\@writefile{toc}{\contentsline {paragraph}{Knowledge Graph Paradigms: SOTA vs.\ OUEG-RAG.}{4}\protected@file@percent }
 \citation{yasunaga2021qagnn}
 \citation{sun2022jointlk}
 \citation{baek2023kaped}
 \citation{he2024gretriever}
 \citation{tan2025hydrarag}
-\@writefile{toc}{\contentsline {paragraph}{Cross-Source Graph Reasoning.}{5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Contextualizing Star-Topology and Knowledge Graph Paradigms.}{5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Cross-Source Graph-Augmented Reasoning.}{5}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {3}Problem Formulation}{5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4}Method}{5}\protected@file@percent }
-\newlabel{sec:method}{{4}{5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Overview}{5}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces End-to-end architecture of OUEG-RAG illustrated with a running HybridQA query. (1)\nobreakspace  {}Multi-source ingestion anchors candidate table rows and expands hyperlinked Wikipedia passages. (2)\nobreakspace  {}Schema-preserving online multigraph construction introduces star-topology record centroids $\rho _i$ to bind cell attributes, bridging tabular entities to external passages via deterministic text triples. (3)\nobreakspace  {}The dual-track engine serializes the complete subgraph via lossless prompt compression while enumerating scored candidate paths as non-filtering reading guides, actively resolving structural score collisions. (4)\nobreakspace  {}The unified prompt payload steers LLM generation to produce the exact grounded answer with an auditable provenance trace.}}{6}\protected@file@percent }
 \newlabel{fig:pipeline}{{2}{6}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Method}{6}\protected@file@percent }
+\newlabel{sec:method}{{4}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Overview}{6}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Query-Driven Two-Stage Retrieval}{6}\protected@file@percent }
 \newlabel{sec:method-retrieval}{{4.2}{6}}
 \@writefile{toc}{\contentsline {paragraph}{Stage 1: Coarse retrieval.}{7}\protected@file@percent }
@@ -43,73 +47,73 @@
 \newlabel{eq:graph-partition}{{1}{7}}
 \@writefile{toc}{\contentsline {paragraph}{Deterministic table edges and record nodes.}{7}\protected@file@percent }
 \newlabel{eq:star-topology}{{2}{7}}
+\@writefile{toc}{\contentsline {paragraph}{Text edges and rule-based extraction.}{7}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Detailed schema-preserving online multigraph construction. (Left) Flattening tables into unstructured strings decouples row attributes and loses column qualifiers. (Right) OUEG-RAG introduces a local centroid record node $\rho _0 \in V_{\text  {rec}}$ with star-topology bindings to preserve intra-row attributes ($E_{\text  {rec}}, E_{\text  {attr}}$). Wikipedia hyperlinks bridge tabular entities directly to external text passages ($E_{\text  {link}}$), from which deterministic rule-based text triples ($E_{\text  {text}}$) are extracted on-the-fly without LLM hallucination.}}{8}\protected@file@percent }
 \newlabel{fig:kg-construction}{{3}{8}}
-\@writefile{toc}{\contentsline {paragraph}{Text edges and rule-based extraction.}{8}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Entity normalization and resolution.}{8}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Grounded Path Generation and Scoring}{8}\protected@file@percent }
 \newlabel{sec:method-paths}{{4.4}{8}}
 \@writefile{toc}{\contentsline {paragraph}{Candidate search.}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Multi-factor path scoring.}{9}\protected@file@percent }
-\newlabel{eq:path-score}{{3}{9}}
+\@writefile{toc}{\contentsline {paragraph}{Multi-factor path scoring.}{8}\protected@file@percent }
+\newlabel{eq:path-score}{{3}{8}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Online Unified Evidence Graph (OUEG) and Prompt Compression}{9}\protected@file@percent }
 \newlabel{sec:method-oueg}{{4.5}{9}}
 \@writefile{toc}{\contentsline {paragraph}{Prompt compression and context deduplication.}{9}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Ambiguity Assessment and Score-Collision Handling}{9}\protected@file@percent }
 \newlabel{sec:method-ambiguity}{{4.6}{9}}
 \newlabel{eq:collision-set}{{4}{9}}
+\newlabel{eq:tiebreak-score}{{5}{9}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Detailed illustration of OUEG dual-track reasoning, structural ambiguity resolution, and unified prompt payload. (Left) Rather than destructive top-$N$ path filtering, Track\nobreakspace  {}3a compresses the complete evidence subgraph with a shared passage dictionary $\mathcal  {S}_p$, while Track\nobreakspace  {}3b enumerates multi-factor scored candidate paths ($S(p)$) as non-filtering reading guides. Track\nobreakspace  {}3c detects structural candidate score collisions, applying a bridge lexical tiebreak $\tau (c)$ to resolve ties deterministically. (Right) The synthesized compact prompt payload provides the backbone LLM with complete evidence and directed reading focus, producing the grounded answer alongside a full provenance trace.}}{10}\protected@file@percent }
 \newlabel{fig:dual-track}{{4}{10}}
-\newlabel{eq:tiebreak-score}{{5}{10}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Answer Generation, Fallback, and Audit Trace}{10}\protected@file@percent }
 \newlabel{sec:method-answer}{{4.7}{10}}
 \newlabel{eq:answer-synthesis}{{6}{10}}
+\@writefile{toc}{\contentsline {paragraph}{Reverse grounding and empty fallback.}{10}\protected@file@percent }
 \citation{hybridqa}
-\@writefile{toc}{\contentsline {paragraph}{Reverse grounding and empty fallback.}{11}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Main benchmark comparison between Direct LLM and OUEG-RAG on HybridQA ($N=1{,}500$) across the open-weights GPT-OSS model family (20B and 120B). Pairwise evaluation yields 105 wins vs.\ 80 losses on 20B (net $+25$, $p=0.078$), and 120 wins vs.\ 80 losses on 120B (net $+40$, McNemar $p = 0.0058 < 0.01$). Higher is better for accuracy; lower is better for empty rate and latency.}}{11}\protected@file@percent }
+\newlabel{tab:main-results}{{1}{11}}
 \@writefile{toc}{\contentsline {paragraph}{Audit record.}{11}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {5}Experimental Protocol}{11}\protected@file@percent }
 \newlabel{sec:experiments}{{5}{11}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Benchmark and Evaluation Metrics}{11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Baselines and Model Configurations}{11}\protected@file@percent }
-\newlabel{sec:baselines}{{5.2}{11}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Main benchmark comparison between Direct LLM and OUEG-RAG on HybridQA ($N=1{,}500$) across the open-weights GPT-OSS model family (20B and 120B). Pairwise evaluation yields 105 wins vs.\ 80 losses on 20B (net $+25$, $p=0.078$), and 120 wins vs.\ 80 losses on 120B (net $+40$, McNemar $p = 0.0058 < 0.01$). Higher is better for accuracy; lower is better for empty rate and latency.}}{12}\protected@file@percent }
-\newlabel{tab:main-results}{{1}{12}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Performance breakdown across structural ambiguity partitions on HybridQA ($N=1{,}500$) under the GPT-OSS model family. Ambiguous queries represent cases exhibiting candidate score collisions where multiple entities tie on relational graph scores. All subset EM values reflect exact discrete counts ($k/1{,}068$ and $m/432$).}}{12}\protected@file@percent }
 \newlabel{tab:ambiguity-breakdown}{{2}{12}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Baselines and Model Configurations}{12}\protected@file@percent }
+\newlabel{sec:baselines}{{5.2}{12}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Controls and Cost}{12}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Results and Error Analysis}{13}\protected@file@percent }
-\newlabel{sec:results}{{6}{13}}
-\@writefile{toc}{\contentsline {paragraph}{Main benchmark results across model scales.}{13}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Results and Error Analysis}{12}\protected@file@percent }
+\newlabel{sec:results}{{6}{12}}
+\@writefile{toc}{\contentsline {paragraph}{Main benchmark results across model scales.}{12}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Component ablation study on the controlled development partition ($N=200$, Shard 01 under GPT-OSS 20B). All ablations strictly isolate individual architectural modules against the full OUEG-RAG framework.}}{13}\protected@file@percent }
+\newlabel{tab:ablation}{{3}{13}}
 \@writefile{toc}{\contentsline {paragraph}{Structural ambiguity breakdown.}{13}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Component ablation analysis.}{13}\protected@file@percent }
 \bibstyle{splncs04}
 \bibdata{refs}
-\bibcite{asai2024selfrag}{1}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Component ablation study on the controlled development partition ($N=200$, Shard 01 under GPT-OSS 20B). All ablations strictly isolate individual architectural modules against the full OUEG-RAG framework.}}{14}\protected@file@percent }
-\newlabel{tab:ablation}{{3}{14}}
+\bibcite{baek2023kaped}{1}
+\bibcite{chen2022muger2}{2}
+\bibcite{chen2024tablerag}{3}
+\@writefile{toc}{\contentsline {paragraph}{Component ablation analysis.}{14}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Error taxonomy and context integrity.}{14}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {7}Limitations}{14}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{14}\protected@file@percent }
-\bibcite{baek2023kaped}{2}
-\bibcite{chen2024tablerag}{3}
 \bibcite{hybridqa}{4}
-\bibcite{deng2020turl}{5}
-\bibcite{edge2024graphrag}{6}
-\bibcite{gao2023ragsurvey}{7}
-\bibcite{guu2020realm}{8}
-\bibcite{he2024gretriever}{9}
-\bibcite{herzig2020tapas}{10}
-\bibcite{karpukhin2020dpr}{11}
-\bibcite{lewis2020rag}{12}
-\bibcite{nan2022fetaqa}{13}
-\bibcite{pan2024unifying}{14}
-\bibcite{pasupat2015wikitable}{15}
+\bibcite{cheng2023binder}{5}
+\bibcite{deng2020turl}{6}
+\bibcite{edge2024graphrag}{7}
+\bibcite{eisenschlos2021mate}{8}
+\bibcite{gao2023ragsurvey}{9}
+\bibcite{guu2020realm}{10}
+\bibcite{he2024gretriever}{11}
+\bibcite{kumar2021mitqa}{12}
+\bibcite{lei2023s3hqa}{13}
+\bibcite{lewis2020rag}{14}
+\bibcite{pan2024unifying}{15}
 \bibcite{peng2024graphragsurvey}{16}
 \bibcite{ritze2016matching}{17}
-\bibcite{sui2023gpt4table}{18}
+\bibcite{sun2021dochopper}{18}
 \bibcite{sun2022jointlk}{19}
 \bibcite{tan2025hydrarag}{20}
-\bibcite{yasunaga2021qagnn}{21}
-\bibcite{yin2020tabert}{22}
-\bibcite{yu2025tablerag}{23}
-\bibcite{zhao2023tablellm}{24}
+\bibcite{wang2024chainoftable}{21}
+\bibcite{yasunaga2021qagnn}{22}
+\bibcite{ye2023dater}{23}
+\bibcite{yu2025tablerag}{24}

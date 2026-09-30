@@ -3,15 +3,16 @@
 \providecommand{\urlprefix}{URL }
 \providecommand{\doi}[1]{https://doi.org/#1}
 
-\bibitem{asai2024selfrag}
-Asai, A., Sewon, M., Zhong, Z., Chen, D.: {Self-RAG}: Learning to retrieve,
-  generate, and critique through self-reflection. In: International Conference
-  on Learning Representations (2024)
-
 \bibitem{baek2023kaped}
 Baek, J., Aky{\"u}rek, E., Schuurmans, D., Tomkins, A.: Knowledge-augmented
   language model verification. In: Proceedings of the 2023 Conference on
   Empirical Methods in Natural Language Processing. pp. 1560--1578 (2023)
+
+\bibitem{chen2022muger2}
+Chen, K., Shen, Y., Zhao, Y., Zhang, W., Zhang, Q.: {MuGER2}: Multi-granularity
+  evidence retrieval and reasoning for hybrid question answering. In:
+  Proceedings of the 2022 Conference on Empirical Methods in Natural Language
+  Processing. pp. 7095--7107 (2022)
 
 \bibitem{chen2024tablerag}
 Chen, S.A., Miculicich, L., Eisenschlos, J.M., Wang, Z., Wang, Z., Chen, Y.,
@@ -25,6 +26,11 @@ Chen, W., Zha, H., Chen, Z., Xiong, W., Wang, H., Wang, W.Y.: {HybridQA}: A
   Findings of the Association for Computational Linguistics: EMNLP 2020. pp.
   1026--1036. Association for Computational Linguistics (2020)
 
+\bibitem{cheng2023binder}
+Cheng, Z., Gao, T., Yan, Z., Wang, S., Ye, Z., Guan, Z., Liu, P., Yin, P.:
+  Binding language models in symbolic languages. In: International Conference
+  on Learning Representations (2023)
+
 \bibitem{deng2020turl}
 Deng, X., Sun, H., Lees, A., Wu, Y., Yu, C.: {TURL}: Table understanding
   through representation learning. In: Proceedings of the VLDB Endowment.
@@ -34,6 +40,11 @@ Deng, X., Sun, H., Lees, A., Wu, Y., Yu, C.: {TURL}: Table understanding
 Edge, D., Trinh, H., Cen, N., Cheng, Y., Bradley, R., Chao, A., Mody, A.,
   Truitt, S., Larson, J.: From local to global: A graph {RAG} approach to
   query-focused summarization. arXiv preprint arXiv:2404.16130  (2024)
+
+\bibitem{eisenschlos2021mate}
+Eisenschlos, J.M., Gor, M., M{\"u}ller, T., Andor, D.: {MATE}: Multi-view
+  attention for table-text encoding. In: Proceedings of the 59th Annual Meeting
+  of the Association for Computational Linguistics. pp. 7405--7419 (2021)
 
 \bibitem{gao2023ragsurvey}
 Gao, Y., Xiong, Y., Gao, X., Jia, K., Pan, J., Bi, Y., Dai, Y., Sun, J., Wang,
@@ -51,17 +62,16 @@ He, X., Tian, Y., Sun, N., Chawla, N.V., Laurent, T., Bresson, X.:
   and question answering. In: Advances in Neural Information Processing Systems
   37. pp. 12345--12368 (2024)
 
-\bibitem{herzig2020tapas}
-Herzig, J., Nowak, P.K., M{\"u}ller, T., Piccinno, F., Eisenschlos, J.M.:
-  {TaPas}: Weakly supervised table parsing via pre-training. In: Proceedings of
-  the 58th Annual Meeting of the Association for Computational Linguistics. pp.
-  4320--4333 (2020)
+\bibitem{kumar2021mitqa}
+Kumar, V., Balachandran, V., Bisk, Y., Neubig, G.: Multi-hop question answering
+  over tables and text. In: Proceedings of the 30th International Joint
+  Conference on Artificial Intelligence. pp. 3852--3858 (2021)
 
-\bibitem{karpukhin2020dpr}
-Karpukhin, V., O{\u{g}}uz, B., Min, S., Lewis, P., Wu, L., Edunov, S., Chen,
-  D., Yih, W.t.: Dense passage retrieval for open-domain question answering.
-  In: Proceedings of the 2020 Conference on Empirical Methods in Natural
-  Language Processing. pp. 6769--6781 (2020)
+\bibitem{lei2023s3hqa}
+Lei, F., He, Q., Yang, Y., Hu, B., Zhang, M.: {S3HQA}: A structure-aware
+  sequential sampling approach for {HybridQA}. In: Proceedings of the 61st
+  Annual Meeting of the Association for Computational Linguistics. pp.
+  14021--14035 (2023)
 
 \bibitem{lewis2020rag}
 Lewis, P., Perez, E., Piktus, A., Petroni, F., Karpukhin, V., Goyal, N.,
@@ -70,21 +80,10 @@ Lewis, P., Perez, E., Piktus, A., Petroni, F., Karpukhin, V., Goyal, N.,
   tasks. In: Advances in Neural Information Processing Systems 33. pp.
   9459--9474 (2020)
 
-\bibitem{nan2022fetaqa}
-Nan, L., Hsieh, C., Mao, Z., Lin, X.V., Verma, N., Zhang, R.,
-  Kry{\'s}ci{\'n}ski, W., Schoelkopf, H., Kong, R., Tang, X., et~al.: {FeTaQA}:
-  Free-form table question answering. Transactions of the Association for
-  Computational Linguistics  \textbf{10},  35--49 (2022)
-
 \bibitem{pan2024unifying}
 Pan, S., Luo, L., Wang, Y., Chen, C., Wang, J., Wu, X.: Unifying large language
   models and knowledge graphs: A roadmap. IEEE Transactions on Knowledge and
   Data Engineering  \textbf{36}(7),  3580--3599 (2024)
-
-\bibitem{pasupat2015wikitable}
-Pasupat, P., Liang, P.: Compositional semantic parsing on semi-structured
-  tables. In: Proceedings of the 53rd Annual Meeting of the Association for
-  Computational Linguistics. pp. 1470--1480 (2015)
 
 \bibitem{peng2024graphragsurvey}
 Peng, C., Shen, Y., Zhang, M., Chen, J., Han, X., Wang, H.: Graph
@@ -96,11 +95,11 @@ Ritze, D., Bizer, C.: Matching web tables with {DBpedia}: A feature-based
   approach. In: Proceedings of the 20th International Conference on Knowledge
   Engineering and Knowledge Management. pp. 549--564 (2016)
 
-\bibitem{sui2023gpt4table}
-Sui, Y., Zhou, M., Zhou, M., Han, S., Zhang, D.: {GPT4Table}: Can large
-  language models understand structured tables? a benchmark and empirical
-  study. In: Proceedings of the 2023 Conference on Empirical Methods in Natural
-  Language Processing. pp. 6789--6802 (2023)
+\bibitem{sun2021dochopper}
+Sun, H., Dhingra, B., Srivastava, G., Sun, Y., Cohen, W.W.: {DocHopper}: A
+  multi-hop question answering system over document graphs. In: Proceedings of
+  the 2021 Conference on Empirical Methods in Natural Language Processing. pp.
+  10543--10557 (2021)
 
 \bibitem{sun2022jointlk}
 Sun, Y., Cheng, Q., Zhang, W., Wang, Z.: {JointLK}: Joint reasoning with
@@ -114,6 +113,12 @@ Tan, X., Wang, X., Liu, Q., Xu, X., Yuan, X., Zhu, L., Zhang, W.: {HydraRAG}:
   Proceedings of the 2025 Conference on Empirical Methods in Natural Language
   Processing. pp. 14431--14459 (2025)
 
+\bibitem{wang2024chainoftable}
+Wang, Z., Zhang, H., Li, C.L., Eisenschlos, J.M., Perot, V., Lu, Z., Chang,
+  M.W., Lee, C.Y., Pfister, T.: Chain-of-table: Evolving tables in the
+  reasoning chain for table understanding. In: International Conference on
+  Learning Representations (2024)
+
 \bibitem{yasunaga2021qagnn}
 Yasunaga, M., Ren, H., Bosselut, A., Liang, P., Leskovec, J.: {QA-GNN}:
   Reasoning with language models and knowledge graphs for question answering.
@@ -121,21 +126,16 @@ Yasunaga, M., Ren, H., Bosselut, A., Liang, P., Leskovec, J.: {QA-GNN}:
   Association for Computational Linguistics: Human Language Technologies. pp.
   535--546 (2021)
 
-\bibitem{yin2020tabert}
-Yin, P., Neubig, G., Yih, W.t., Riedel, S.: {TaBERT}: Pretraining for joint
-  understanding of textual and tabular data. In: Proceedings of the 58th Annual
-  Meeting of the Association for Computational Linguistics. pp. 8413--8426
-  (2020)
+\bibitem{ye2023dater}
+Ye, Y., Hui, B., Yang, M., Li, B., Huang, F., Li, Y.: Large language models are
+  versatile decomposers: Decompose evidence and questions for table-based
+  reasoning. In: Proceedings of the 46th International ACM SIGIR Conference on
+  Research and Development in Information Retrieval. pp. 174--184 (2023)
 
 \bibitem{yu2025tablerag}
 Yu, X., Jian, P., Chen, C.: {TableRAG}: A retrieval augmented generation
   framework for heterogeneous document reasoning. In: Proceedings of the 2025
   Conference on Empirical Methods in Natural Language Processing. pp.
   7100--7115 (2025)
-
-\bibitem{zhao2023tablellm}
-Zhao, Y., Zhao, C., Eisenschlos, J.M., Nan, L., Zhang, R.: Large language
-  models are few-shot table reasoners. In: Proceedings of the 2023 Conference
-  on Empirical Methods in Natural Language Processing. pp. 13919--13936 (2023)
 
 \end{thebibliography}
