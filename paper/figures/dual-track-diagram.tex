@@ -11,7 +11,7 @@
 ]
 
 % ========================================================
-% LEFT COLUMN: TITLEBAR & TRACKS
+% LEFT COLUMN: DUAL-TRACK & TIEBREAK (ORANGE)
 % ========================================================
 \node[titlebar=orange, text width=5.6cm] (t_dual) at (0, 3.5) {Dual-Track Traversal \& Ambiguity Tiebreak};
 
@@ -22,7 +22,7 @@
   $\bullet$ \textbf{100\% evidence recall} (retains all row attributes)
 };
 
-\node[box, text width=5.6cm, fill=orange!8, draw=orange!45, below=6mm of track_a] (track_b) {
+\node[box, text width=5.6cm, fill=orange!8, draw=orange!45, below=5.5mm of track_a] (track_b) {
   \textbf{Track 3b: Grounded Path Enumeration} \\
   \tiny Bounded DFS enumerates non-filtering reading guides: \\
   \vspace{0.6mm}
@@ -32,7 +32,7 @@
   \quad $\bullet$ Multi-factor Score: $S(p_2) = 3.10$ \quad (Year mismatch)
 };
 
-\node[box, text width=5.6cm, fill=orange!16, draw=orange!80!black, line width=0.6pt, below=7mm of track_b] (track_c) {
+\node[box, text width=5.6cm, fill=orange!16, draw=orange!80!black, line width=0.6pt, below=5.5mm of track_b] (track_c) {
   \textbf{Track 3c: Structural Ambiguity Tiebreak} \\
   \tiny When candidate entities tie on relational graph scores: \\
   $\bullet$ Collision condition: $|\mathcal{C}_q| > 1 \implies$ Flag \texttt{SCORE\_COLLISION\_TIE} \\
@@ -53,30 +53,29 @@
 % ========================================================
 % RIGHT COLUMN: TITLEBAR, UNIFIED PROMPT, LLM & OUTPUT
 % ========================================================
-% 2.6cm horizontal gap between columns
-\node[titlebar=teal, text width=6.6cm, right=2.6cm of t_dual.north east, anchor=north west] (t_prompt) {Unified Prompt Payload \& LLM Generation};
+\node[titlebar=teal, text width=6.8cm, right=2.8cm of t_dual.north east, anchor=north west] (t_prompt) {Unified Prompt Payload \& LLM Generation};
 
-\node[box, text width=6.6cm, fill=teal!6, draw=teal!40, inner sep=4pt, below=3.5mm of t_prompt] (prompt_content) {
-  \textbf{Serialized Unified Prompt Payload:} \\
-  \fontsize{4.8pt}{6.0pt}\selectfont
-  \texttt{\textbf{[SYSTEM]}: Answer with exact span from verified evidence. \\
+\node[box, text width=6.8cm, fill=teal!6, draw=teal!40, inner sep=4.5pt, below=3.5mm of t_prompt] (prompt_content) {
+  \textbf{Serialized Unified Prompt Payload:} \\[1mm]
+  \fontsize{4.8pt}{6.4pt}\selectfont
+  \texttt{\textbf{[SYSTEM]}: Answer with exact span from verified evidence. \\[1mm]
   \textbf{[GRAPH EVIDENCE]}: \\
   \ \ Record\_0: \{Club: "Toronto Eagles", Formed: "1989", City: "Toronto"\} \\
-  \ \ Record\_1: \{Club: "Hamilton Tigers", Formed: "1991", City: "Hamilton"\} \\
+  \ \ Record\_1: \{Club: "Hamilton Tigers", Formed: "1991", City: "Hamilton"\} \\[1mm]
   \textbf{[SHARED PASSAGES]}: \\
-  \ \ Doc:Toronto: "Originally established in 1793 as the town of York..." \\
+  \ \ Doc:Toronto: "Originally established in 1793 as the town of York..." \\[1mm]
   \textbf{[SUGGESTED READING GUIDE]}: \\
-  \ \ Path 1 (Score 7.85): Toronto Eagles $\rightarrow$ Record\_0 $\rightarrow$ Toronto $\rightarrow$ York \\
-  \textbf{[AMBIGUITY RESOLUTION]}: Prioritized Candidate: Record\_0 \\
+  \ \ Path 1 (Score 7.85): Toronto Eagles $\rightarrow$ Record\_0 $\rightarrow$ Toronto $\rightarrow$ York \\[1mm]
+  \textbf{[AMBIGUITY RESOLUTION]}: Prioritized Candidate: Record\_0 \\[1mm]
   \textbf{[QUESTION]}: Original name of city with AFL club formed in 1989?}
 };
 
-\node[box, text width=6.6cm, fill=teal!18, draw=teal!70!black, line width=0.6pt, below=6.5mm of prompt_content] (llm_step) {
+\node[box, text width=6.8cm, fill=teal!18, draw=teal!70!black, line width=0.6pt, below=6mm of prompt_content] (llm_step) {
   \textbf{Backbone LLM Forward Pass ($T=0$)} \\
   \tiny Single-turn in-context generation conditioned on complete multigraph context and guided by non-filtering candidate paths.
 };
 
-\node[box, text width=6.6cm, fill=green!15, draw=green!60!black, line width=0.7pt, below=6.5mm of llm_step] (final_output) {
+\node[box, text width=6.8cm, fill=green!15, draw=green!60!black, line width=0.7pt, below=6mm of llm_step] (final_output) {
   \textbf{Grounded Answer:} \texttt{"York"} \\
   \vspace{0.6mm}
   \textbf{Auditable Provenance Record:} \\
@@ -96,7 +95,7 @@
 \end{scope}
 
 % ========================================================
-% INTER-PANEL HORIZONTAL BRIDGING ARROWS (BALANCED & STRAIGHT)
+% INTER-PANEL HORIZONTAL BRIDGING ARROWS (100% PARALLEL & BALANCED)
 % ========================================================
 % 1. From Track 3a (Lossless Multigraph) -> Graph Evidence (100% Horizontal)
 \draw[flow_teal] (track_a.east) -- node[midway, above, lbl] {Evidence Multigraph} (prompt_content.west |- track_a.east);
@@ -104,7 +103,7 @@
 % 2. From Track 3b (Grounded Paths) -> Reading Guide (100% Horizontal)
 \draw[flow_teal] (track_b.east) -- node[midway, above, lbl] {Suggested Paths} (prompt_content.west |- track_b.east);
 
-% 3. From Track 3c (Ambiguity Tiebreak) -> Ambiguity Resolution (Clean L-shape)
-\draw[flow_orange] (track_c.east) -- ++(1.1, 0) |- node[pos=0.25, above, lbl] {Tiebreak Winner} ([yshift=3mm]prompt_content.south west);
+% 3. From Track 3c (Ambiguity Tiebreak) -> Ambiguity Resolution (100% Horizontal)
+\draw[flow_orange] (track_c.east) -- node[midway, above, lbl] {Tiebreak Winner} (prompt_content.west |- track_c.east);
 
 \end{tikzpicture}

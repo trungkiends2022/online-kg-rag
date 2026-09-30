@@ -484,6 +484,12 @@ class OnlineKGPathTextBaseline:
         # Keep all exact/direct evidence ties; avoid attributing the answer to
         # merely adjacent paths whose text did not contain the answer span.
         selected = [(score, path_id, edge_id) for score, path_id, edge_id in scored if score >= max(80.0, best - 0.01)]
+        if not selected:
+            return [], [], {
+                "status": "ungrounded",
+                "reason": "answer_match_below_grounding_threshold",
+                "best_score": round(best, 4),
+            }
         path_ids = list(dict.fromkeys(path_id for _, path_id, _ in selected))
         edge_ids = list(dict.fromkeys(edge_id for _, _, edge_id in selected))
         return path_ids, edge_ids, {

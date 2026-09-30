@@ -341,7 +341,9 @@ Runner `src.run_baselines` hỗ trợ các phương án:
 | `graph_retrieval_no_path` | Dựng Online KG + coarse retrieval (không sinh/thực thi path reasoning) |
 | `direct_llm` | Bảng oracle + passage BM25, một LLM call |
 | `flat_table_bm25` | Flatten từng row, trộn với passage rồi BM25 top-k |
+| `flat_rag_shared_context` | Flat RAG dùng chính evidence từ two-stage retrieval của các baseline KG |
 | `online_kg_path_text` | Dựng KG và sinh path dạng text, không sinh/thực thi code |
+| `path_text_top_n` | Chỉ tổng hợp top-N path của planner cùng evidence trực tiếp của các path đó |
 | `online_unified_evidence_graph` | Toàn bộ subgraph + context dedupe; path chỉ là candidate view, không lọc evidence |
 | `oracle_evidence` | Chỉ dùng supporting facts do dataset annotate |
 | `path_consistency` | Online-KG nhưng chọn output bằng số path đồng ý |
@@ -434,6 +436,20 @@ for method in direct_llm flat_table_bm25 online_kg_path_text path_consistency on
     --output "data/results/hybridqa-${method}.jsonl" \
     --top-k 5 --temperature 0 --limit 100
 done
+```
+
+#### Chạy Flat-RAG shared context và Path-Text top-N với GPT-OSS
+
+Runner dưới đây chạy tuần tự hai baseline mới với `openai/gpt-oss-20b` và
+`openai/gpt-oss-120b`. Mỗi JSONL, manifest, summary và log chứa shard, provider,
+model và tên baseline; cấu hình model, limit, workers và top-N đều nhận qua CLI.
+
+```bash
+bash scripts/run_hybridqa_shared_context_ablation.sh --shard 01
+
+# Smoke test riêng Path-Text top-3 trên GPT-OSS 120B.
+bash scripts/run_hybridqa_shared_context_ablation.sh \
+  --shard 01 --model 120b --baseline path --n-paths 3 --limit 10 --workers 2
 ```
 
 Oracle Evidence của HybridQA cần split traced vì file thường không có annotation

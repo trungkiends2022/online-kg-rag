@@ -30,6 +30,21 @@ resolve_python() {
   return 1
 }
 
+resolve_model_label() {
+  # Resolve through the benchmark's provider factory so the filename mirrors
+  # the actual model and remains safe when a model ID contains `/`.
+  "$python_bin" -c '
+import re
+from src.llm.client import get_provider
+
+provider = get_provider()
+name = getattr(provider, "name", "unknown-provider")
+model = getattr(provider, "model", None) or "unknown-model"
+label = re.sub(r"[^A-Za-z0-9._-]+", "-", f"{name}__{model}").strip("-")
+print(label or "unknown-provider__unknown-model")
+'
+}
+
 usage() {
   cat <<'EOF'
 Usage: scripts/run_hybridqa_oueg_vs_direct.sh [options]
@@ -96,17 +111,19 @@ if ! [[ "$max_output_tokens" =~ ^[1-9][0-9]*$ ]]; then
 fi
 
 python_bin="$(resolve_python)"
+model_label="$(resolve_model_label)"
 input="$repo_root/benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard${shard}.json"
 [[ -f "$input" ]] || { echo "Missing input shard: $input" >&2; exit 1; }
 
 output_dir="${output_dir:-$repo_root/data/results/hybridqa-1500-seed2027/$run_tag}"
 mkdir -p "$output_dir"
 
-prefix="$output_dir/hybridqa_shard${shard}"
-oueg_output="${prefix}_OUEG.jsonl"
-direct_output="${prefix}_directLLM.jsonl"
-markdown_report="${prefix}_comparison.md"
-csv_report="${prefix}_comparison.csv"
+shard_label="shard${shard}-of08"
+prefix="$output_dir/${shard_label}__${model_label}"
+oueg_output="${prefix}__online_unified_evidence_graph.jsonl"
+direct_output="${prefix}__direct_llm.jsonl"
+markdown_report="${prefix}__comparison.md"
+csv_report="${prefix}__comparison.csv"
 
 common_args=(
   --dataset hybridqa
@@ -130,6 +147,7 @@ common_args=(
 [[ "$resume" == true ]] && common_args+=(--resume)
 
 echo "Output folder: $output_dir"
+echo "Run label: ${shard_label}__${model_label}"
 echo "[1/3] OUEG -> $(basename "$oueg_output")"
 PYTHONUNBUFFERED=1 "$python_bin" -m src.run_baselines \
   --method online_unified_evidence_graph \

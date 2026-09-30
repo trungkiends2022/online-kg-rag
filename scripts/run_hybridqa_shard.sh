@@ -36,7 +36,23 @@ resolve_python() {
   return 1
 }
 
+resolve_model_label() {
+  # Keep result names self-describing while avoiding credentials and unsafe
+  # filename characters in provider model IDs such as `vendor/model`.
+  "$python_bin" -c '
+import re
+from src.llm.client import get_provider
+
+provider = get_provider()
+name = getattr(provider, "name", "unknown-provider")
+model = getattr(provider, "model", None) or "unknown-model"
+label = re.sub(r"[^A-Za-z0-9._-]+", "-", f"{name}__{model}").strip("-")
+print(label or "unknown-provider__unknown-model")
+'
+}
+
 python_bin="$(resolve_python)"
+model_label="$(resolve_model_label)"
 
 # Default configuration
 SHARD="01"
@@ -171,6 +187,7 @@ echo "                HYBRIDQA 1500 BENCHMARK RUNNER"
 echo "================================================================================"
 echo "Python:          $python_bin"
 echo "Shards:          ${shards[*]}"
+echo "Model:           $model_label"
 echo "Methods:         ${methods[*]}"
 echo "Song song:       $WORKERS luồng (tối đa cho phép: $MAX_WORKERS_ALLOWED)"
 echo "Output thư mục:  $RESULT_DIR"
@@ -186,13 +203,14 @@ for s in "${shards[@]}"; do
     exit 1
   fi
 
+  shard_label="shard${s}-of08"
   echo ""
-  echo ">>> [SHARD $s] Bắt đầu đánh giá..."
+  echo ">>> [${shard_label}] Bắt đầu đánh giá với model ${model_label}..."
 
   for m in "${methods[@]}"; do
     m_dir="$RESULT_DIR/$m"
     mkdir -p "$m_dir"
-    out_file="$m_dir/shard${s}.jsonl"
+    out_file="$m_dir/${shard_label}__${model_label}__${m}.jsonl"
 
     cmd=(
       "$python_bin" -m src.run_baselines
@@ -224,7 +242,7 @@ for s in "${shards[@]}"; do
       cmd+=(--limit "$LIMIT")
     fi
 
-    echo "--- Chạy phương pháp: $m (Luồng: $WORKERS) ---"
+    echo "--- Chạy phương pháp: $m | $shard_label | $model_label (Luồng: $WORKERS) ---"
     PYTHONUNBUFFERED=1 "${cmd[@]}"
     echo "--- Hoàn thành: $m (Đã lưu: $out_file) ---"
   done
@@ -238,6 +256,8 @@ import json
 from pathlib import Path
 
 shard = '$s'
+shard_label = 'shard${s}-of08'
+model_label = '$model_label'
 res_dir = Path('$RESULT_DIR')
 target_m = '$METHOD'
 methods = [target_m, 'direct_llm']
@@ -247,7 +267,7 @@ print(f'|{\":-\":-<32}|{\":-\":-<24}|{\":-\":-<17}|')
 
 data = {}
 for m in methods:
-    p = res_dir / m / f'shard{shard}.jsonl.summary.json'
+    p = res_dir / m / f'{shard_label}__{model_label}__{m}.jsonl.summary.json'
     if p.exists():
         data[m] = json.loads(p.read_text(encoding='utf-8'))
     else:

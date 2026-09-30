@@ -19,11 +19,13 @@ from src.baselines import (
     FlatTableBM25Baseline,
     HybridQARAGBaseline,
     OnlineKGPathTextBaseline,
+    PathTextTopNBaseline,
     OnlineUnifiedEvidenceGraphBaseline,
     OracleEvidenceBaseline,
     PathConsistencyEvaluator,
     GraphRetrievalNoPathBaseline,
     RAGConfig,
+    SharedContextFlatRAGBaseline,
 )
 from src.baselines.hybridqa_rag import BaselineConfig
 from src.baselines.metrics import (
@@ -44,7 +46,9 @@ from src.evaluation.ir_metrics import numerical_ir_metrics
 METHODS = (
     "direct_llm",
     "flat_table_bm25",
+    "flat_rag_shared_context",
     "online_kg_path_text",
+    "path_text_top_n",
     "online_unified_evidence_graph",
     "oracle_evidence",
     "path_consistency",
@@ -326,10 +330,14 @@ def _make_method(args):
         ))
     if args.method == "flat_table_bm25":
         return FlatTableBM25Baseline(rag_config)
+    if args.method == "flat_rag_shared_context":
+        return SharedContextFlatRAGBaseline(rag_config)
     if args.method == "graph_retrieval_no_path":
         return GraphRetrievalNoPathBaseline(rag_config)
     if args.method == "online_kg_path_text":
         return OnlineKGPathTextBaseline(rag_config, n_paths=args.n_paths)
+    if args.method == "path_text_top_n":
+        return PathTextTopNBaseline(rag_config, n_paths=args.n_paths)
     if args.method == "online_unified_evidence_graph":
         return OnlineUnifiedEvidenceGraphBaseline(rag_config)
     if args.method == "oracle_evidence":

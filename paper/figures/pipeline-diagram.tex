@@ -100,7 +100,7 @@
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Track 3a: Subgraph Compression} \\[0.3mm]
   $\bullet$ Deduplicated edges $+$ shared dict $\mathcal{S}_p$ \\
-  $\bullet$ \textbf{100\% evidence recall} (lossless) \\
+  $\bullet$ Lossless subgraph prompt encoding \\
   \texttt{\{"rec":$\rho_0$, "yr":"1989", "city":"Toronto"\}}
   \par}
 };
@@ -108,17 +108,16 @@
 \node[subcard, text width=3.6cm, fill=orange!7, draw=orange!45, anchor=north] (track_paths) at ([yshift=-3mm]track_comp.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Track 3b: Grounded Path Traversal} \\[0.3mm]
-  $\bullet$ \textbf{Path $p_1$:} Eagles $\rightarrow \rho_0 \rightarrow$ Toronto $\rightarrow$ York \\
-  \quad Score $S(p_1) = 7.85$ \quad (\textbf{Rank 1}) \\
-  $\bullet$ \textbf{Path $p_2$:} Tigers $\rightarrow \rho_1 \dots$ ($S=3.10$, Rank 2)
+  $\bullet$ \textbf{Path $p_1$:} Eagles $\rightarrow \rho_0 \rightarrow$ Toronto $\rightarrow$ York ($S=7.85$) \\
+  $\bullet$ \textbf{Path $p_2$:} Ottawa $\rightarrow \rho_1 \rightarrow$ Bytown ($S=7.85$, Tie)
   \par}
 };
 
 \node[subcard, text width=3.6cm, fill=orange!15, draw=orange!75!black, line width=0.5pt, anchor=north] (track_amb) at ([yshift=-3mm]track_paths.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Track 3c: Ambiguity Resolution} \\[0.3mm]
-  $\bullet$ Collision set $|\mathcal{C}_q|=1$ (unique top) \\
-  $\bullet$ Deterministic tiebreak: $\rho_0$ ($\tau=1.0$)
+  $\bullet$ Collision set $|\mathcal{C}_q|=2$ ($\{\rho_0, \rho_1\}$, Tie on $S^*$) \\
+  $\bullet$ Lexical tiebreak: $\rho_0$ selected ($\tau = 1.84 > 0.42$)
   \par}
 };
 

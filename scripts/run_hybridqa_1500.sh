@@ -36,7 +36,24 @@ resolve_python() {
   return 1
 }
 
+resolve_model_label() {
+  # Use the same factory as the benchmark to make the filename describe the
+  # effective provider/model, without ever exposing credentials. Restrict the
+  # label to portable filename characters because model IDs often contain `/`.
+  "$python_bin" -c '
+import re
+from src.llm.client import get_provider
+
+provider = get_provider()
+name = getattr(provider, "name", "unknown-provider")
+model = getattr(provider, "model", None) or "unknown-model"
+label = re.sub(r"[^A-Za-z0-9._-]+", "-", f"{name}__{model}").strip("-")
+print(label or "unknown-provider__unknown-model")
+'
+}
+
 python_bin="$(resolve_python)"
+model_label="$(resolve_model_label)"
 run_tag="${RUN_TAG:-run_$(date -u +%Y%m%dT%H%M%SZ)}"
 input_prefix="${INPUT_PREFIX:-$repo_root/benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027}"
 result_root="${RESULT_ROOT:-$repo_root/data/results/hybridqa-1500-seed2027/$run_tag}"
@@ -72,6 +89,7 @@ if ! flock -n 9; then
 fi
 
 echo "[$(date --iso-8601=seconds)] run_tag=$run_tag methods=${methods[*]} shards=${shards[*]}"
+echo "model_label=$model_label"
 echo "git_head=$(git rev-parse HEAD)"
 
 for shard in "${shards[@]}"; do
@@ -80,12 +98,13 @@ for shard in "${shards[@]}"; do
     echo "Missing input shard: $input" >&2
     exit 1
   fi
+  shard_label="shard${shard}-of08"
   for method in "${methods[@]}"; do
     method_dir="$result_root/$method"
     mkdir -p "$method_dir"
-    output="$method_dir/shard${shard}.jsonl"
-    method_log="$log_root/${method}-shard${shard}.log"
-    echo "[$(date --iso-8601=seconds)] start method=$method shard=$shard output=$output"
+    output="$method_dir/${shard_label}__${model_label}__${method}.jsonl"
+    method_log="$log_root/${shard_label}__${model_label}__${method}.log"
+    echo "[$(date --iso-8601=seconds)] start method=$method shard=$shard model=$model_label output=$output"
     PYTHONUNBUFFERED=1 "$python_bin" -m src.run_baselines \
       --dataset hybridqa \
       --method "$method" \
