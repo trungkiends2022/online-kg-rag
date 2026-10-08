@@ -725,15 +725,235 @@ class OnlineUnifiedEvidenceGraphBaseline:
         needs_reasoning_budget = bool(getattr(provider, "reasoning_enabled", False))
         return max(configured, 512) if needs_reasoning_budget or "gpt-oss" in model else configured
 
-    def run(self, example: DatasetExample) -> dict:
-        started = time.perf_counter()
-        retrieved = two_stage_retrieve(
-            example.question, example.table_rows, example.text_passages,
-            example.web_snippets, top_k=self.config.top_k,
-            second_stage_k=self.config.second_stage_k,
-            max_table_rows=self.config.max_table_rows_for_kg,
-            use_hyperlink_expansion=self.config.use_hyperlink_expansion,
-        )
+    @staticmethod
+    def _short_answer(value: object) -> str:
+        """Normalise an answer field without turning abstention into an answer."""
+        lines = str(value or "").strip().splitlines()
+        answer = lines[0].strip() if lines else ""
+        return "" if answer.casefold().strip(" .") in {"", "none", "unknown", "n/a", "na", "null"} else answer
+
+    @classmethod
+    def _parse_adaptive_response(cls, raw: str) -> tuple[str, dict]:
+        """Parse an answer or a soft focus handoff from the first reader call.
+
+        The parser deliberately accepts a plain non-empty span for backwards
+        compatibility with models that ignore the protocol.  A malformed or
+        empty response is not silently promoted to a guessed answer.
+        """
+        text = str(raw or "").strip()
+        answer_match = re.search(r"FINAL[ _]+ANSWER\s*:\s*(.+)", text, re.I)
+        answer = cls._short_answer(answer_match.group(1) if answer_match else "")
+        if answer_match:
+            return answer, {}
+        needs_focus = bool(re.search(r"NEED_FOCUS\s*:", text, re.I))
+        if not needs_focus:
+            plain = cls._short_answer(text)
+            return plain, {}
+
+        hint = {"raw": text, "candidates": [], "bottleneck": ""}
+        json_match = re.search(r"NEED_FOCUS\s*:\s*(\{.*\})", text, re.I | re.S)
+        if json_match:
+            try:
+                parsed = json.loads(json_match.group(1))
+            except json.JSONDecodeError:
+                parsed = {}
+            if isinstance(parsed, dict):
+                values = parsed.get("candidates", [])
+                hint["candidates"] = values if isinstance(values, list) else [values]
+                hint["bottleneck"] = str(parsed.get("bottleneck") or parsed.get("reason") or "")
+        if not hint["candidates"]:
+            candidates_match = re.search(r"Candidates\s*:\s*\[([^\]]*)\]", text, re.I | re.S)
+            if candidates_match:
+                hint["candidates"] = [
+                    item.strip().strip("'\"")
+                    for item in candidates_match.group(1).split(",") if item.strip()
+                ]
+        if not hint["bottleneck"]:
+            reason_match = re.search(r"(?:Reason|Bottleneck)\s*:\s*(.+)", text, re.I)
+            hint["bottleneck"] = reason_match.group(1).strip() if reason_match else ""
+        return "", hint
+
+    @staticmethod
+    def _focus_candidate_rows(ambiguity: dict, row_candidates: list[dict]) -> list[dict]:
+        """Return a small *pointer* set; no candidate is removed from evidence."""
+        collision_members = [
+            candidate
+            for group in ambiguity.get("groups", [])
+            if group.get("status") == "SCORE_COLLISION_TIE"
+            for candidate in group.get("candidates", [])
+        ]
+        if collision_members:
+            return collision_members[:3]
+        return [
+            {
+                "entity": candidate.get("anchor_entity"),
+                "row_id": candidate.get("row_id"),
+                "bridge_entity": candidate.get("bridge_entity"),
+                "path_id": candidate.get("path_id"),
+            }
+            for candidate in row_candidates[:3]
+        ]
+
+    @classmethod
+    def _focus_handoff(cls, model_hint: dict, ambiguity: dict, row_candidates: list[dict]) -> dict:
+        """Validate model hints against graph candidates, then add a local fallback.
+
+        Hints never determine which evidence is serialized in the verification
+        prompt.  They only make a few already-present candidate records easier
+        for the reader to locate.
+        """
+        pointer_rows = cls._focus_candidate_rows(ambiguity, row_candidates)
+        known = {
+            str(item.get("entity") or item.get("anchor_entity") or "").casefold()
+            for item in pointer_rows
+        }
+        requested = [str(value).strip() for value in model_hint.get("candidates", []) if str(value).strip()]
+        validated = [value for value in requested if value.casefold() in known]
+        candidates = validated or [
+            str(item.get("entity") or item.get("anchor_entity") or "").strip()
+            for item in pointer_rows if str(item.get("entity") or item.get("anchor_entity") or "").strip()
+        ]
+        return {
+            "origin": "model_need_focus" if model_hint else "empty_response_fallback",
+            "candidates": list(dict.fromkeys(candidates)),
+            "candidate_provenance": pointer_rows,
+            "bottleneck": str(model_hint.get("bottleneck") or "") or (
+                "Resolve the question constraints by comparing the highlighted records with their linked passages."
+            ),
+            "unvalidated_model_candidates": [value for value in requested if value.casefold() not in known],
+            "non_destructive": True,
+        }
+
+    @staticmethod
+    def _adaptive_protocol() -> str:
+        return """\n\nResponse protocol: never return a blank response. If the complete evidence proves one answer, return `FINAL_ANSWER: <shortest answer span>`. Otherwise return `NEED_FOCUS: {\"candidates\":[\"candidate names already in the payload\"],\"bottleneck\":\"missing relation or constraint\"}`. Do not invent candidates or omit evidence."""
+
+    @staticmethod
+    def _verification_prompt(question: str, compact_json: str, handoff: dict) -> str:
+        return f"""Resolve the question using the same complete, losslessly compressed OUEG evidence payload below.\n\nFocus guidance from the first read (attention only; it does not exclude any graph candidate):\n{json.dumps(handoff, ensure_ascii=False)}\n\nCheck every question constraint against row bindings and linked passages. Return only the shortest final answer span; do not return blank or `None`.\n\nQuestion: {question}\nComplete OUEG payload: {compact_json}\nAnswer:"""
+
+    @staticmethod
+    def _source_keys(value: object) -> set[str]:
+        """Normalise a HybridQA hyperlink or passage ID for exact joining."""
+        raw = str(value or "").strip().casefold()
+        if not raw:
+            return set()
+        bare = raw.removeprefix("passage:").removeprefix("/wiki/")
+        return {raw, bare, raw.replace("_", " "), bare.replace("_", " ")}
+
+    def _collision_linked_expansion(
+        self, example: DatasetExample, retrieved: dict, ambiguity: dict,
+    ) -> dict:
+        """Add linked documents for every score-tied table candidate.
+
+        Stage-two retrieval can exhaust its global budget on an early candidate.
+        This post-graph expansion is deliberately conditional on a structural
+        score tie and covers every tied candidate equally; it never selects a
+        winner or deletes context.  It is the evidence-coverage lesson from
+        ODYSSEY's hop-wise traversal, adapted to OUEG's non-pruning policy.
+        """
+        report = {
+            "enabled": self.config.use_collision_evidence_expansion,
+            "triggered": False,
+            "budget": self.config.collision_passage_budget,
+            "candidate_rows": [],
+            "candidate_entities": [],
+            "added_source_ids": [],
+            "unresolved_link_targets": [],
+        }
+        if not self.config.use_collision_evidence_expansion:
+            return report
+        groups = [
+            group for group in ambiguity.get("groups", [])
+            if group.get("status") == "SCORE_COLLISION_TIE"
+        ]
+        if not groups:
+            return report
+        # Only expand the collision group tied to an explicit question value
+        # (e.g. ``21%``). A large table can contain many unrelated duplicate
+        # rates; spending the candidate budget on all of them defeats coverage.
+        question_terms = self._terms(example.question)
+        question_numbers = set(re.findall(r"\d+(?:\.\d+)?", example.question))
+        numeric_groups = [
+            group for group in groups
+            if question_numbers & set(re.findall(r"\d+(?:\.\d+)?", str(group.get("bridge_entity", ""))))
+        ]
+        relevant_groups = numeric_groups or [
+            group for group in groups
+            if self._terms(group.get("bridge_entity", "")) & question_terms
+        ]
+        groups = relevant_groups or groups[:1]
+        report["triggered"] = True
+        rows: list[tuple[str | None, int]] = []
+        seen_rows: set[tuple[str | None, int]] = set()
+        entities: list[str] = []
+        row_pattern = re.compile(r"^table:(?P<table>.+):row:(?P<row>\d+)$")
+        for group in groups:
+            for candidate in group.get("candidates", []):
+                row_index = candidate.get("row_order_index")
+                row_id = str(candidate.get("row_id") or "")
+                match = row_pattern.match(row_id)
+                if isinstance(row_index, int):
+                    row = (match.group("table") if match else None, row_index)
+                    if row not in seen_rows:
+                        rows.append(row)
+                        seen_rows.add(row)
+                entity = str(candidate.get("entity") or "").strip()
+                if entity:
+                    entities.append(entity)
+        report["candidate_rows"] = [
+            {"table": table_name, "row_index": row_index}
+            for table_name, row_index in rows
+        ]
+        report["candidate_entities"] = list(dict.fromkeys(entities))
+
+        passages = [dict(item) for item in example.text_passages]
+        by_key: dict[str, list[dict]] = defaultdict(list)
+        for passage in passages:
+            for key in self._source_keys(passage.get("id") or passage.get("url")):
+                by_key[key].append(passage)
+        selected = retrieved.setdefault("text_passages", [])
+        selected_keys = {
+            key for item in selected
+            for key in self._source_keys(item.get("id") or item.get("url"))
+        }
+        targets: list[str] = []
+        for table_name, row_index in rows:
+            matching_groups = [
+                group for group in example.table_rows
+                if table_name is None or str(group.get("table_name", "")) == table_name
+            ]
+            for group in matching_groups:
+                for link in group.get("cell_links", []):
+                    if int(link.get("row_index", -1)) == row_index:
+                        target = str(link.get("url") or link.get("passage_id") or "").strip()
+                        if target:
+                            targets.append(target)
+        # Some exports omit cell links. An entity-ID match is a conservative
+        # fallback that still only exposes an existing supplied passage.
+        targets.extend(entities)
+        for target in dict.fromkeys(targets):
+            matches = [
+                passage for key in self._source_keys(target)
+                for passage in by_key.get(key, [])
+            ]
+            matches = list({str(item.get("id") or item.get("url")): item for item in matches}.values())
+            if not matches:
+                report["unresolved_link_targets"].append(target)
+                continue
+            for passage in matches:
+                passage_id = str(passage.get("id") or passage.get("url"))
+                if any(key in selected_keys for key in self._source_keys(passage_id)):
+                    continue
+                if len(report["added_source_ids"]) >= self.config.collision_passage_budget:
+                    return report
+                selected.append(dict(passage))
+                selected_keys.update(self._source_keys(passage_id))
+                report["added_source_ids"].append(passage_id)
+        return report
+
+    def _evidence_view(self, retrieved: dict) -> dict:
+        """Build the complete OUEG view once, or again after evidence expansion."""
         kg = self.kg_builder.build(retrieved)
         kg_trace = kg.to_trace()
         records = self._complete_subgraph_records(kg_trace, kg.path_edge_records())
@@ -745,8 +965,43 @@ class OnlineUnifiedEvidenceGraphBaseline:
             for source_id, context in kg.text_contexts.items()
         }
         all_contexts.update(compact["contexts_by_source_id"])
+        row_candidates = self._candidate_rows("", records)
+        return {
+            "kg": kg,
+            "kg_trace": kg_trace,
+            "records": records,
+            "compact": compact,
+            "all_contexts": all_contexts,
+            "row_candidates": row_candidates,
+        }
+
+    def run(self, example: DatasetExample) -> dict:
+        started = time.perf_counter()
+        retrieved = two_stage_retrieve(
+            example.question, example.table_rows, example.text_passages,
+            example.web_snippets, top_k=self.config.top_k,
+            second_stage_k=self.config.second_stage_k,
+            max_table_rows=self.config.max_table_rows_for_kg,
+            use_hyperlink_expansion=self.config.use_hyperlink_expansion,
+        )
+        view = self._evidence_view(retrieved)
+        kg = view["kg"]
+        kg_trace = view["kg_trace"]
+        records = view["records"]
+        compact = view["compact"]
+        all_contexts = view["all_contexts"]
         row_candidates = self._candidate_rows(example.question, records)
         ambiguity = self._ambiguity_assessment(example.question, row_candidates)
+        collision_expansion = self._collision_linked_expansion(example, retrieved, ambiguity)
+        if collision_expansion["added_source_ids"]:
+            view = self._evidence_view(retrieved)
+            kg = view["kg"]
+            kg_trace = view["kg_trace"]
+            records = view["records"]
+            compact = view["compact"]
+            all_contexts = view["all_contexts"]
+            row_candidates = self._candidate_rows(example.question, records)
+            ambiguity = self._ambiguity_assessment(example.question, row_candidates)
         seed_candidates = self._seed_expansion_paths(example.question, records)
         if not self.config.use_lexical_tiebreak:
             for path in [*row_candidates, *seed_candidates]:
@@ -824,9 +1079,19 @@ class OnlineUnifiedEvidenceGraphBaseline:
             compact_json=compressed_prompt["json"],
             tie_break_hint=tie_break_hint,
         )
+        if self.config.use_adaptive_verification:
+            prompt += self._adaptive_protocol()
         provider = get_provider()
         request_max_tokens = self._request_token_limit(provider, self.config.max_output_tokens)
         retry_prompt = None
+        adaptive_verification = {
+            "enabled": self.config.use_adaptive_verification,
+            "triggered": False,
+            "first_response": None,
+            "handoff": None,
+            "second_response": None,
+            "final_decision": "not_run",
+        }
         abstained = False
         llm_calls = 0
         if ambiguity["is_ambiguous"] and self.config.ambiguity_policy == "return_candidates":
@@ -840,12 +1105,39 @@ class OnlineUnifiedEvidenceGraphBaseline:
         ):
             answer = str(ambiguity["selective_prediction"]["lexical_tiebreak_winner"])
         else:
-            answer = llm_call(prompt, max_tokens=request_max_tokens, temperature=self.config.temperature).strip()
+            first_response = llm_call(prompt, max_tokens=request_max_tokens, temperature=self.config.temperature)
             llm_calls = 1
-            if not answer:
-                retry_prompt = prompt + "\n\nYour previous response was empty. Return the shortest non-empty answer span now.\nAnswer:"
-                answer = llm_call(retry_prompt, max_tokens=request_max_tokens, temperature=self.config.temperature).strip()
+            if self.config.use_adaptive_verification:
+                answer, model_hint = self._parse_adaptive_response(first_response)
+                adaptive_verification["first_response"] = str(first_response or "")
+                if answer:
+                    adaptive_verification["final_decision"] = "fast_path_answer"
+                else:
+                    handoff = self._focus_handoff(model_hint, ambiguity, row_candidates)
+                    retry_prompt = self._verification_prompt(
+                        example.question, compressed_prompt["json"], handoff,
+                    )
+                    adaptive_verification["triggered"] = True
+                    adaptive_verification["handoff"] = handoff
+                    second_response = llm_call(
+                        retry_prompt, max_tokens=request_max_tokens,
+                        temperature=self.config.temperature,
+                    )
+                    answer = self._short_answer(second_response)
+                    adaptive_verification["second_response"] = str(second_response or "")
+                    adaptive_verification["final_decision"] = (
+                        "verified_after_focus" if answer else "grounded_abstention"
+                    )
+                    llm_calls = 2
+            else:
+                answer = self._short_answer(first_response)
+                if not answer:
+                    retry_prompt = prompt + "\n\nYour previous response was empty. Return the shortest non-empty answer span now.\nAnswer:"
+                    answer = self._short_answer(llm_call(retry_prompt, max_tokens=request_max_tokens, temperature=self.config.temperature))
+                    llm_calls = 2
                 llm_calls = 2
+        retrieval_trace = dict(retrieved.get("retrieval_trace", {}))
+        retrieval_trace["collision_evidence_expansion"] = collision_expansion
         return {
             "answer": answer,
             "method": self.method_name,
@@ -861,8 +1153,15 @@ class OnlineUnifiedEvidenceGraphBaseline:
             "ambiguity": ambiguity,
             "ambiguity_policy": self.config.ambiguity_policy,
             "abstained_for_ambiguity": abstained,
+            "adaptive_verification": adaptive_verification,
+            "collision_evidence_expansion": collision_expansion,
             "entity_anchor": retrieved.get("retrieval_trace", {}).get("entity_anchor", {}),
-            "retrieval_trace": retrieved.get("retrieval_trace", {}),
+            "retrieval_trace": retrieval_trace,
+            "retrieved_passage_ids": [
+                str(item.get("id") or item.get("url"))
+                for item in retrieved.get("text_passages", [])
+                if item.get("id") or item.get("url")
+            ],
             "prompt": prompt,
             "prompt_chars": len(prompt),
             "request_max_output_tokens": request_max_tokens,

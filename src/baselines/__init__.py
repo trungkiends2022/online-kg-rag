@@ -6,6 +6,7 @@ from src.baselines.graph_retrieval import GraphRetrievalNoPathBaseline
 from src.baselines.online_kg_path_text import OnlineKGPathTextBaseline
 from src.baselines.path_text_top_n import PathTextTopNBaseline
 from src.baselines.online_unified_evidence_graph import OnlineUnifiedEvidenceGraphBaseline
+from src.baselines.odyssey import OdysseyBaseline, OdysseyConfig
 from src.baselines.rag_variants import (
     FlatTableBM25Baseline,
     OracleEvidenceBaseline,
@@ -20,6 +21,8 @@ __all__ = [
     "OnlineKGPathTextBaseline",
     "PathTextTopNBaseline",
     "OnlineUnifiedEvidenceGraphBaseline",
+    "OdysseyBaseline",
+    "OdysseyConfig",
     "OracleEvidenceBaseline",
     "PathConsistencyEvaluator",
     "GraphRetrievalNoPathBaseline",

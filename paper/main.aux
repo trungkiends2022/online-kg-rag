@@ -1,4 +1,5 @@
 \relax 
+\citation{zhou2026tableqasurvey}
 \citation{hybridqa}
 \@writefile{toc}{\contentsline {title}{OUEG-RAG: Schema-Preserving Online Unified Evidence Graphs for Grounded Table--Text Question Answering}{1}\protected@file@percent }
 \@writefile{toc}{\authcount {5}}
@@ -12,19 +13,22 @@
 \citation{kumar2021mitqa}
 \citation{chen2022muger2}
 \citation{lei2023s3hqa}
+\citation{agarwal2025hybrid}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{3}\protected@file@percent }
 \newlabel{sec:related}{{2}{3}}
 \@writefile{toc}{\contentsline {paragraph}{Hybrid Table--Text Question Answering.}{3}\protected@file@percent }
+\citation{zhou2026tableqasurvey}
 \citation{cheng2023binder}
 \citation{ye2023dater}
 \citation{wang2024chainoftable}
 \citation{chen2024tablerag,yu2025tablerag}
-\citation{ritze2016matching,deng2020turl}
-\citation{edge2024graphrag,pan2024unifying}
-\citation{edge2024graphrag,tan2025hydrarag,peng2024graphragsurvey}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Architectural comparison across four knowledge graph construction and reasoning paradigms for hybrid table-text retrieval. In contrast to offline STI cascades\nobreakspace  {}(a), unconstrained zero-shot LLM extraction\nobreakspace  {}(b), and aggressive top-$k$ path pruning in persistent GraphRAG systems\nobreakspace  {}(c), the proposed OUEG-RAG framework\nobreakspace  {}(d) dynamically instantiates a schema-preserving multigraph on-the-fly without LLM calls, retains retrieved multigraph context via compact prompt encoding, and guides single-turn reasoning via candidate path routing.}}{4}\protected@file@percent }
 \newlabel{fig:paradigms}{{1}{4}}
 \@writefile{toc}{\contentsline {paragraph}{Table Reasoning with Large Language Models.}{4}\protected@file@percent }
+\citation{ritze2016matching,deng2020turl}
+\citation{edge2024graphrag,pan2024unifying}
+\citation{edge2024graphrag,tan2025hydrarag,peng2024graphragsurvey}
+\citation{agarwal2025hybrid}
 \citation{yasunaga2021qagnn}
 \citation{sun2022jointlk}
 \citation{baek2023kaped}
@@ -32,21 +36,21 @@
 \citation{tan2025hydrarag}
 \@writefile{toc}{\contentsline {paragraph}{Contextualizing Star-Topology and Knowledge Graph Paradigms.}{5}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Cross-Source Graph-Augmented Reasoning.}{5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}The OUEG-RAG Framework}{5}\protected@file@percent }
-\newlabel{sec:method}{{3}{5}}
-\newlabel{sec:problem}{{3}{5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Problem Formulation and Graph Representation}{5}\protected@file@percent }
-\newlabel{sec:formulation}{{3.1}{5}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}The OUEG-RAG Framework}{6}\protected@file@percent }
+\newlabel{sec:method}{{3}{6}}
+\newlabel{sec:problem}{{3}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Problem Formulation and Graph Representation}{6}\protected@file@percent }
+\newlabel{sec:formulation}{{3.1}{6}}
 \@writefile{toc}{\contentsline {paragraph}{Online Evidence Multigraph Representation.}{6}\protected@file@percent }
 \newlabel{eq:graph-partition}{{1}{6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Stage 1: Multi-Source Evidence Ingestion}{6}\protected@file@percent }
-\newlabel{sec:method-retrieval}{{3.2}{6}}
-\@writefile{toc}{\contentsline {paragraph}{Coarse row retrieval and query anchoring.}{6}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces End-to-end architecture of OUEG-RAG illustrated with a running HybridQA query. (1)\nobreakspace  {}Multi-source ingestion anchors candidate table rows and expands hyperlinked Wikipedia passages. (2)\nobreakspace  {}Schema-preserving online multigraph construction introduces star-topology record centroids $\rho _i$ to bind cell attributes, bridging tabular entities to external passages via deterministic text triples. (3)\nobreakspace  {}The dual-track engine serializes the complete subgraph via compact prompt compression while enumerating scored candidate paths as non-filtering reading guides, actively resolving structural score collisions. (4)\nobreakspace  {}The unified prompt payload steers LLM generation to produce the grounded answer with an auditable provenance trace.}}{7}\protected@file@percent }
 \newlabel{fig:pipeline}{{2}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Stage 1: Multi-Source Evidence Ingestion}{7}\protected@file@percent }
+\newlabel{sec:method-retrieval}{{3.2}{7}}
+\@writefile{toc}{\contentsline {paragraph}{Coarse row retrieval and query anchoring.}{7}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Hyperlink passage expansion.}{7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Stage 2: Schema-Preserving Multigraph Construction}{7}\protected@file@percent }
-\newlabel{sec:method-kg}{{3.3}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Stage 2: Schema-Preserving Multigraph Construction}{8}\protected@file@percent }
+\newlabel{sec:method-kg}{{3.3}{8}}
 \@writefile{toc}{\contentsline {paragraph}{Deterministic table edges and record centroids.}{8}\protected@file@percent }
 \newlabel{eq:star-topology}{{2}{8}}
 \@writefile{toc}{\contentsline {paragraph}{Hyperlink bridging and rule-based text extraction.}{8}\protected@file@percent }
@@ -54,10 +58,9 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Stage 3: Dual-Track Reasoning Engine}{8}\protected@file@percent }
 \newlabel{sec:method-engine}{{3.4}{8}}
 \newlabel{sec:method-oueg}{{3.4}{8}}
-\@writefile{toc}{\contentsline {paragraph}{Track 3a: Compact subgraph compression.}{8}\protected@file@percent }
-\newlabel{sec:method-paths}{{3.4}{8}}
-\@writefile{toc}{\contentsline {paragraph}{Track 3b: Grounded path traversal and scoring.}{8}\protected@file@percent }
-\citation{hybridqa}
+\@writefile{toc}{\contentsline {paragraph}{Track 3a: Compact subgraph compression.}{9}\protected@file@percent }
+\newlabel{sec:method-paths}{{3.4}{9}}
+\@writefile{toc}{\contentsline {paragraph}{Track 3b: Grounded path traversal and scoring.}{9}\protected@file@percent }
 \newlabel{eq:path-score}{{3}{9}}
 \newlabel{sec:method-ambiguity}{{3.4}{9}}
 \@writefile{toc}{\contentsline {paragraph}{Track 3c: Structural ambiguity and collision tiebreaking.}{9}\protected@file@percent }
@@ -65,48 +68,51 @@
 \newlabel{eq:tiebreak-score}{{5}{9}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Stage 4: Grounded Generation and Provenance Audit}{9}\protected@file@percent }
 \newlabel{sec:method-answer}{{3.5}{9}}
-\@writefile{toc}{\contentsline {paragraph}{Prompt assembly and LLM decoding.}{9}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Audit trace and reverse fallback.}{9}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Main benchmark evaluation across prompting and RAG baselines on HybridQA ($N=1{,}500$) across the open-weights GPT-OSS model family (20B and 120B). All RAG variants share identical retrieved evidence ($k_1=5, k_2=3$) and context limits (24,000 chars).}}{10}\protected@file@percent }
-\newlabel{tab:main-results}{{1}{10}}
+\citation{hybridqa}
+\@writefile{toc}{\contentsline {paragraph}{Prompt assembly and LLM decoding.}{10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Audit trace and reverse fallback.}{10}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4}Experimental Protocol}{10}\protected@file@percent }
 \newlabel{sec:experiments}{{4}{10}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Benchmark and Evaluation Metrics}{10}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Baselines and Model Configurations}{10}\protected@file@percent }
 \newlabel{sec:baselines}{{4.2}{10}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Main benchmark evaluation across prompting and RAG baselines on HybridQA ($N=1{,}500$) across the open-weights GPT-OSS model family (20B and 120B). All RAG variants share identical retrieved evidence ($k_1=5, k_2=3$) and context limits (24,000 chars).}}{11}\protected@file@percent }
+\newlabel{tab:main-results}{{1}{11}}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Results and Error Analysis}{11}\protected@file@percent }
 \newlabel{sec:results}{{5}{11}}
 \@writefile{toc}{\contentsline {paragraph}{Main benchmark results across model scales.}{11}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Candidate ambiguity and tiebreak resolution.}{11}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Component ablation study on the controlled development partition ($N=500$, Shards 06--08 under GPT-OSS 20B). All ablations isolate individual architectural modules against the full OUEG-RAG framework.}}{12}\protected@file@percent }
 \newlabel{tab:ablation}{{2}{12}}
-\@writefile{toc}{\contentsline {paragraph}{Component ablation analysis.}{12}\protected@file@percent }
-\bibstyle{splncs04}
-\bibdata{refs}
-\bibcite{baek2023kaped}{1}
+\@writefile{toc}{\contentsline {paragraph}{Candidate ambiguity and tiebreak resolution.}{12}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Component ablation analysis.}{13}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Case study and human audit of provenance traces ($N=100$).}{13}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {6}Limitations}{13}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{13}\protected@file@percent }
-\bibcite{chen2022muger2}{2}
-\bibcite{chen2024tablerag}{3}
-\bibcite{hybridqa}{4}
-\bibcite{cheng2023binder}{5}
-\bibcite{deng2020turl}{6}
-\bibcite{edge2024graphrag}{7}
-\bibcite{eisenschlos2021mate}{8}
-\bibcite{gao2023ragsurvey}{9}
-\bibcite{guu2020realm}{10}
-\bibcite{he2024gretriever}{11}
-\bibcite{kumar2021mitqa}{12}
-\bibcite{lei2023s3hqa}{13}
-\bibcite{lewis2020rag}{14}
-\bibcite{pan2024unifying}{15}
-\bibcite{peng2024graphragsurvey}{16}
-\bibcite{ritze2016matching}{17}
-\bibcite{sun2021dochopper}{18}
-\bibcite{sun2022jointlk}{19}
-\bibcite{tan2025hydrarag}{20}
-\bibcite{wang2024chainoftable}{21}
-\bibcite{yasunaga2021qagnn}{22}
-\bibcite{ye2023dater}{23}
-\bibcite{yu2025tablerag}{24}
+\bibstyle{splncs04}
+\bibdata{refs}
+\bibcite{agarwal2025hybrid}{1}
+\bibcite{baek2023kaped}{2}
+\bibcite{chen2022muger2}{3}
+\bibcite{chen2024tablerag}{4}
+\bibcite{hybridqa}{5}
+\bibcite{cheng2023binder}{6}
+\bibcite{deng2020turl}{7}
+\bibcite{edge2024graphrag}{8}
+\bibcite{eisenschlos2021mate}{9}
+\bibcite{gao2023ragsurvey}{10}
+\bibcite{guu2020realm}{11}
+\bibcite{he2024gretriever}{12}
+\bibcite{kumar2021mitqa}{13}
+\bibcite{lei2023s3hqa}{14}
+\bibcite{lewis2020rag}{15}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{14}\protected@file@percent }
+\bibcite{pan2024unifying}{16}
+\bibcite{peng2024graphragsurvey}{17}
+\bibcite{ritze2016matching}{18}
+\bibcite{sun2021dochopper}{19}
+\bibcite{sun2022jointlk}{20}
+\bibcite{tan2025hydrarag}{21}
+\bibcite{wang2024chainoftable}{22}
+\bibcite{yasunaga2021qagnn}{23}
+\bibcite{ye2023dater}{24}
+\bibcite{yu2025tablerag}{25}
+\bibcite{zhou2026tableqasurvey}{26}

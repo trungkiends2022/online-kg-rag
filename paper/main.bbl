@@ -3,6 +3,12 @@
 \providecommand{\urlprefix}{URL }
 \providecommand{\doi}[1]{https://doi.org/#1}
 
+\bibitem{agarwal2025hybrid}
+Agarwal, A., S, G., Devaguptapu, C.: Hybrid graphs for table-and-text based
+  question answering using {LLMs}. In: Proceedings of the 2025 Conference of
+  the North American Chapter of the Association for Computational Linguistics
+  (NAACL 2025) (2025)
+
 \bibitem{baek2023kaped}
 Baek, J., Aky{\"u}rek, E., Schuurmans, D., Tomkins, A.: Knowledge-augmented
   language model verification. In: Proceedings of the 2023 Conference on
@@ -137,5 +143,11 @@ Yu, X., Jian, P., Chen, C.: {TableRAG}: A retrieval augmented generation
   framework for heterogeneous document reasoning. In: Proceedings of the 2025
   Conference on Empirical Methods in Natural Language Processing. pp.
   7100--7115 (2025)
+
+\bibitem{zhou2026tableqasurvey}
+Zhou, W., Ma, B., Friedrich, A., Mesgar, M.: Table question answering in the
+  era of large language models: A comprehensive survey of tasks, methods, and
+  evaluation. In: Proceedings of the 64th Annual Meeting of the Association for
+  Computational Linguistics (ACL 2026) (2026)
 
 \end{thebibliography}

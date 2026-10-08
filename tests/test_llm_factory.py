@@ -91,6 +91,24 @@ def test_groq_provider_instantiates(monkeypatch):
     assert provider.model == "openai/gpt-oss-20b"
 
 
+def test_groq_provider_passes_optional_reasoning_effort(monkeypatch):
+    from types import SimpleNamespace
+
+    monkeypatch.setenv("GROQ_API_KEY", "fake-key-for-test")
+    monkeypatch.setenv("GROQ_REASONING_EFFORT", "low")
+    provider = create_provider("groq")
+    captured = {}
+
+    class FakeCompletions:
+        def create(self, **kwargs):
+            captured.update(kwargs)
+            return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content="ok"))])
+
+    provider._client = SimpleNamespace(chat=SimpleNamespace(completions=FakeCompletions()))
+    assert provider.complete("hello", max_tokens=12) == "ok"
+    assert captured["reasoning_effort"] == "low"
+
+
 def test_nvidia_nim_provider_instantiates(monkeypatch):
     monkeypatch.setenv("NVIDIA_API_KEY", "fake-key-for-test")
     monkeypatch.setenv("NVIDIA_NIM_MODEL", "openai/gpt-oss-20b")

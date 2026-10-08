@@ -129,6 +129,8 @@ Ví dụ dùng Groq:
 LLM_PROVIDER=groq
 GROQ_API_KEY=gsk_...
 GROQ_MODEL=openai/gpt-oss-20b
+# Optional for GPT-OSS: low, medium (default), or high.
+GROQ_REASONING_EFFORT=low
 
 python -m src.llm.test_prompt "Trả lời ngắn gọn: 1+1 bằng bao nhiêu?" --max-tokens 1024
 ```
@@ -253,6 +255,22 @@ test -d data/WikiTables-WithLinks/request_tok
 test -f data/FinQA/dataset/dev.json
 ```
 
+### OTT-QA (oracle train/dev context)
+
+OTT-QA lưu question split, bảng và passages ở các tệp tách riêng. Adapter hiện
+dùng bảng cùng passages liên kết được cung cấp cho train/dev; đây là smoke test
+cho reader/OUEG, không phải đánh giá retrieval open-domain trên toàn bộ corpus.
+
+```bash
+python -m src.run_baselines \
+  --dataset ottqa --method online_unified_evidence_graph \
+  --input data/OTT-QA/released_data/dev.json \
+  --tables-dir data/OTT-QA/data/traindev_tables_tok \
+  --passages-dir data/OTT-QA/data/traindev_request_tok \
+  --example-id 2b6359edb1b352c3 --limit 1 \
+  --output data/results/ottqa-dev-1-oueg.jsonl
+```
+
 ### HybridQA — bắt đầu bằng oracle context
 
 Tải câu hỏi và bảng/passage chính thức:
@@ -344,11 +362,29 @@ Runner `src.run_baselines` hỗ trợ các phương án:
 | `flat_rag_shared_context` | Flat RAG dùng chính evidence từ two-stage retrieval của các baseline KG |
 | `online_kg_path_text` | Dựng KG và sinh path dạng text, không sinh/thực thi code |
 | `path_text_top_n` | Chỉ tổng hợp top-N path của planner cùng evidence trực tiếp của các path đó |
+| `odyssey` | ODYSSEY: LLM question analysis, header-filtered sub-table, cell--document/entity graph, BFS tối đa 3 hop, hop-wise reader và full-context fallback |
 | `online_unified_evidence_graph` | Toàn bộ subgraph + context dedupe; path chỉ là candidate view, không lọc evidence |
 | `oracle_evidence` | Chỉ dùng supporting facts do dataset annotate |
 | `path_consistency` | Online-KG nhưng chọn output bằng số path đồng ý |
 | `numerical_ir` | Online-KG + typed numerical IR có operator đóng và provenance |
 | `online_kg` | Pipeline đầy đủ với grounded consistency |
+
+`odyssey` tái lập giao thức graph-pruning của Agarwal et al. (NAACL 2025): ba
+LLM call cho question analysis, lọc header để tạo sub-table, hybrid graph giữa
+cell--document/entity, semantic matching, BFS tối đa ba hop, reader theo từng
+hop và fallback sang full context. Mặc định dependency-free dùng NER và semantic
+matching lexical có ghi rõ trong output (`*_mode`); nếu tái lập đúng model gốc,
+truyền custom entity extractor/semantic matcher khi khởi tạo baseline. Ví dụ:
+
+```bash
+python -m src.run_baselines \
+  --dataset hybridqa --method odyssey \
+  --input benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard01.json \
+  --tables-dir data/WikiTables-WithLinks/tables_tok \
+  --passages-dir data/WikiTables-WithLinks/request_tok \
+  --output data/results/hybridqa-shard01-odyssey.jsonl \
+  --odyssey-max-hops 3 --odyssey-semantic-threshold 0.8 --temperature 0
+```
 
 ### Benchmark HybridQA 1500: Chia Shard, Theo dõi Tqdm & Đối sánh Direct LLM
 

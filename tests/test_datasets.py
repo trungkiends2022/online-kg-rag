@@ -4,6 +4,7 @@ import pytest
 
 from src.datasets.finqa import load_finqa
 from src.datasets.hybridqa import load_hybridqa
+from src.datasets.ottqa import load_ottqa
 
 
 def _write_json(path, value):
@@ -63,6 +64,30 @@ def test_hybridqa_requires_tables_dir_for_official_split(tmp_path):
 
     with pytest.raises(ValueError, match="tables-dir"):
         next(load_hybridqa(split))
+
+
+def test_load_ottqa_uses_official_separate_table_and_passages(tmp_path):
+    split = tmp_path / "dev.json"
+    tables = tmp_path / "traindev_tables_tok"
+    passages = tmp_path / "traindev_request_tok"
+    tables.mkdir()
+    passages.mkdir()
+    _write_json(split, [{
+        "question_id": "ott-1", "question": "Who made it?", "answer-text": "Ada",
+        "table_id": "table-1",
+    }])
+    _write_json(tables / "table-1.json", {
+        "title": "Credits", "header": [["Work", []], ["Creator", []]],
+        "data": [[["Example", ["/wiki/Example"]], ["Ada", []]]],
+    })
+    _write_json(passages / "table-1.json", {"/wiki/Example": "Example was made by Ada."})
+
+    example = next(load_ottqa(split, tables_dir=tables, passages_dir=passages))
+
+    assert example.example_id == "ott-1"
+    assert example.table_rows[0]["rows"] == [{"Work": "Example", "Creator": "Ada"}]
+    assert example.text_passages == [{"id": "/wiki/Example", "text": "Example was made by Ada."}]
+    assert example.metadata["evaluation_context"] == "oracle_train_dev_table_and_passages"
 
 
 def test_load_finqa_retains_gold_program(tmp_path):

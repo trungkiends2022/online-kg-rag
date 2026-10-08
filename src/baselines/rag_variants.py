@@ -29,6 +29,13 @@ class RAGConfig:
     use_path_guidance: bool = True
     use_lexical_tiebreak: bool = True
     use_hyperlink_expansion: bool = True
+    # When structural candidates tie, add a linked passage for each candidate
+    # before synthesis. This expands evidence only; it never prunes the graph.
+    use_collision_evidence_expansion: bool = True
+    collision_passage_budget: int = 12
+    # On a blank or explicitly uncertain first response, make one
+    # non-destructive re-read with an auditable focus pointer.
+    use_adaptive_verification: bool = True
     use_prompt_compression: bool = True
     # OUEG-only: prompt keeps the ambiguity visible by default. The two other
     # modes are explicit selective-prediction behaviours.
@@ -44,11 +51,14 @@ class RAGConfig:
             raise ValueError("max_table_rows_for_kg must be positive when set")
         if self.max_context_chars < 1 or self.max_output_tokens < 1:
             raise ValueError("context and output limits must be positive")
+        if self.collision_passage_budget < 1:
+            raise ValueError("collision_passage_budget must be positive")
         if not isinstance(self.use_rule_text_triples, bool):
             raise ValueError("use_rule_text_triples must be boolean")
         for name in (
             "use_record_nodes", "use_path_guidance", "use_lexical_tiebreak",
-            "use_hyperlink_expansion", "use_prompt_compression",
+            "use_hyperlink_expansion", "use_collision_evidence_expansion",
+            "use_adaptive_verification", "use_prompt_compression",
         ):
             if not isinstance(getattr(self, name), bool):
                 raise ValueError(f"{name} must be boolean")

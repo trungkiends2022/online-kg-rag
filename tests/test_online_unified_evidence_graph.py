@@ -242,6 +242,55 @@ def test_oueg_score_collision_marks_ambiguity_and_exposes_lexical_tiebreak():
     assert assessment["selective_prediction"]["lexical_tiebreak_is_safe"] is True
 
 
+def test_oueg_collision_expansion_covers_each_relevant_tied_row():
+    example = DatasetExample(
+        example_id="collision", question="Which jurisdiction has a rate of 21% and is named after a river?",
+        table_rows=[{
+            "table_name": "Rates",
+            "rows": [
+                {"Jurisdiction": "Alpha", "Rate": "21%"},
+                {"Jurisdiction": "Beta", "Rate": "21%"},
+                {"Jurisdiction": "Gamma", "Rate": "20%"},
+            ],
+            "cell_links": [
+                {"row_index": 0, "column_name": "Jurisdiction", "url": "/wiki/Alpha"},
+                {"row_index": 1, "column_name": "Jurisdiction", "url": "/wiki/Beta"},
+                {"row_index": 2, "column_name": "Jurisdiction", "url": "/wiki/Gamma"},
+            ],
+        }],
+        text_passages=[
+            {"id": "/wiki/Alpha", "text": "Alpha has no river-name origin."},
+            {"id": "/wiki/Beta", "text": "Beta is named after the Beta River."},
+            {"id": "/wiki/Gamma", "text": "Gamma is unrelated."},
+        ], answer="Beta",
+    )
+    ambiguity = {
+        "groups": [
+            {
+                "bridge_entity": "21%", "status": "SCORE_COLLISION_TIE",
+                "candidates": [
+                    {"row_id": "table:Rates:row:0", "row_order_index": 0, "entity": "Alpha"},
+                    {"row_id": "table:Rates:row:1", "row_order_index": 1, "entity": "Beta"},
+                ],
+            },
+            {
+                "bridge_entity": "20%", "status": "SCORE_COLLISION_TIE",
+                "candidates": [{"row_id": "table:Rates:row:2", "row_order_index": 2, "entity": "Gamma"}],
+            },
+        ],
+    }
+
+    retrieved = {"text_passages": []}
+    report = OnlineUnifiedEvidenceGraphBaseline(
+        RAGConfig(collision_passage_budget=2),
+    )._collision_linked_expansion(example, retrieved, ambiguity)
+
+    assert report["triggered"] is True
+    assert [item["row_index"] for item in report["candidate_rows"]] == [0, 1]
+    assert report["added_source_ids"] == ["/wiki/Alpha", "/wiki/Beta"]
+    assert [item["id"] for item in retrieved["text_passages"]] == ["/wiki/Alpha", "/wiki/Beta"]
+
+
 def test_oueg_return_candidates_policy_abstains_without_llm(monkeypatch):
     kg = _kg_with_rows()
 
@@ -315,6 +364,57 @@ def test_oueg_prompt_injects_tie_break_hint_for_score_collision(monkeypatch):
     )
 
     assert "Warning: More than one candidate satisfies the same bridge condition." in prompts[0]
+
+
+def test_oueg_empty_first_response_uses_non_destructive_focus_handoff(monkeypatch):
+    kg = _kg_with_rows()
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    responses = iter(["", "Club Early"])
+    prompts = []
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda prompt, **kwargs: prompts.append(prompt) or next(responses),
+    )
+
+    result = OnlineUnifiedEvidenceGraphBaseline(
+        RAGConfig(max_output_tokens=32), kg_builder=Builder(),
+    ).run(DatasetExample(
+        example_id="empty", question="Which club is in Gaborone?",
+        table_rows=[], text_passages=[], answer="Club Early",
+    ))
+
+    verification = result["adaptive_verification"]
+    assert result["answer"] == "Club Early"
+    assert result["llm_calls"] == 2
+    assert verification["triggered"] is True
+    assert verification["final_decision"] == "verified_after_focus"
+    assert verification["handoff"]["origin"] == "empty_response_fallback"
+    assert verification["handoff"]["non_destructive"] is True
+    assert "Focus guidance from the first read" in prompts[1]
+    assert "does not exclude any graph candidate" in prompts[1]
+    assert result["compact_oueg_payload"]
+
+
+def test_oueg_need_focus_parser_keeps_only_a_valid_handoff_shape():
+    answer, hint = OnlineUnifiedEvidenceGraphBaseline._parse_adaptive_response(
+        'NEED_FOCUS: {"candidates":["Alpha","Beta"],"bottleneck":"check origin"}',
+    )
+
+    assert answer == ""
+    assert hint["candidates"] == ["Alpha", "Beta"]
+    assert hint["bottleneck"] == "check origin"
 
 
 

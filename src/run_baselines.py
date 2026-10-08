@@ -37,7 +37,7 @@ from src.baselines.metrics import (
     hitab_strict_denotation_match,
     token_f1,
 )
-from src.datasets import load_finqa, load_hitab, load_hybridqa
+from src.datasets import load_finqa, load_hitab, load_hybridqa, load_ottqa
 from src.pipeline import OnlineKGPipeline
 from src.llm.client import capture_llm_metrics, get_provider
 from src.evaluation.ir_metrics import numerical_ir_metrics
@@ -49,6 +49,7 @@ METHODS = (
     "flat_rag_shared_context",
     "online_kg_path_text",
     "path_text_top_n",
+    "odyssey",
     "online_unified_evidence_graph",
     "oracle_evidence",
     "path_consistency",
@@ -118,6 +119,7 @@ def _provider_options() -> dict[str, str | None]:
     option_names = (
         "COMPAT_BASE_URL",
         "OPENROUTER_REASONING_ENABLED",
+        "GROQ_REASONING_EFFORT",
         "LLM_RATE_LIMIT_RETRIES",
     )
     return {name: os.environ.get(name) for name in option_names}
@@ -157,10 +159,15 @@ def _build_run_manifest(args, *, max_workers: int) -> dict:
         "use_path_guidance": args.use_path_guidance,
         "use_lexical_tiebreak": args.use_lexical_tiebreak,
         "use_hyperlink_expansion": args.use_hyperlink_expansion,
+        "use_collision_evidence_expansion": args.use_collision_evidence_expansion,
+        "collision_passage_budget": args.collision_passage_budget,
+        "use_adaptive_verification": args.use_adaptive_verification,
         "use_prompt_compression": args.use_prompt_compression,
         "ambiguity_policy": args.ambiguity_policy,
         "oueg_context_mode": args.oueg_context_mode,
         "n_paths": args.n_paths,
+        "odyssey_max_hops": args.odyssey_max_hops,
+        "odyssey_semantic_threshold": args.odyssey_semantic_threshold,
         "max_replans": args.max_replans,
         "finqa_table_format": args.finqa_table_format,
         "llm_timeout_seconds": args.llm_timeout_seconds,
@@ -222,7 +229,7 @@ def _prepare_run_manifest(args, *, max_workers: int) -> tuple[dict, Path]:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dataset", choices=("hybridqa", "finqa", "hitab"), required=True)
+    parser.add_argument("--dataset", choices=("hybridqa", "finqa", "hitab", "ottqa"), required=True)
     parser.add_argument(
         "--method", choices=METHODS, default="online_kg_path_text",
         help="Default: online_kg_path_text (direct text context; no code/sandbox).",
@@ -256,6 +263,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--no-path-guidance", action="store_false", dest="use_path_guidance", help="OUEG ablation: send the full subgraph without suggested paths or ordering guidance.")
     parser.add_argument("--no-lexical-tiebreak", action="store_false", dest="use_lexical_tiebreak", help="OUEG ablation: hide lexical collision scores, winners, and tie-break instructions from the answer model.")
     parser.add_argument("--no-hyperlink-expansion", action="store_false", dest="use_hyperlink_expansion", help="Ablation: disable selected-row and witness hyperlink passage expansion in stage two.")
+    parser.add_argument("--no-collision-evidence-expansion", action="store_false", dest="use_collision_evidence_expansion", help="OUEG ablation: do not add linked passages for every candidate in a score collision.")
+    parser.add_argument("--collision-passage-budget", type=int, default=12, help="OUEG: maximum linked passages added for a score-collision candidate set.")
+    parser.add_argument("--no-adaptive-verification", action="store_false", dest="use_adaptive_verification", help="OUEG ablation: do not re-read the complete evidence after an empty or NEED_FOCUS response.")
     parser.add_argument("--no-prompt-compression", action="store_false", dest="use_prompt_compression", help="OUEG ablation: serialize the full uncompressed evidence payload.")
     parser.add_argument(
         "--ambiguity-policy", choices=("prompt", "return_candidates", "lexical_tiebreak"), default="prompt",
@@ -266,6 +276,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="OUEG prompt context serialization; extractive only shortens long contexts.",
     )
     parser.add_argument("--n-paths", type=int, default=5)
+    parser.add_argument(
+        "--odyssey-max-hops", type=int, default=3,
+        help="ODYSSEY: maximum hop-wise reader iterations (1--3; default 3).",
+    )
+    parser.add_argument(
+        "--odyssey-semantic-threshold", type=float, default=0.8,
+        help="ODYSSEY: minimum semantic-match score used to seed BFS (default 0.8).",
+    )
     parser.add_argument("--max-replans", type=int, default=2)
     parser.add_argument(
         "--max-workers", type=int,
@@ -312,6 +330,15 @@ def _examples(args):
         )
     if args.dataset == "finqa":
         return load_finqa(args.input, table_format=args.finqa_table_format)
+    if args.dataset == "ottqa":
+        if args.tables_dir is None:
+            raise ValueError("OTT-QA requires --tables-dir")
+        return load_ottqa(
+            args.input,
+            tables_dir=args.tables_dir,
+            passages_dir=args.passages_dir,
+            example_id=args.example_id,
+        )
     tables_dir = args.hitab_tables_dir or args.tables_dir
     if tables_dir is None:
         raise ValueError("HiTab requires --hitab-tables-dir or --tables-dir")
@@ -329,6 +356,9 @@ def _make_method(args):
         use_path_guidance=args.use_path_guidance,
         use_lexical_tiebreak=args.use_lexical_tiebreak,
         use_hyperlink_expansion=args.use_hyperlink_expansion,
+        use_collision_evidence_expansion=args.use_collision_evidence_expansion,
+        collision_passage_budget=args.collision_passage_budget,
+        use_adaptive_verification=args.use_adaptive_verification,
         use_prompt_compression=args.use_prompt_compression,
         ambiguity_policy=args.ambiguity_policy,
         oueg_context_mode=args.oueg_context_mode,
@@ -353,6 +383,15 @@ def _make_method(args):
         return OnlineKGPathTextBaseline(rag_config, n_paths=args.n_paths)
     if args.method == "path_text_top_n":
         return PathTextTopNBaseline(rag_config, n_paths=args.n_paths)
+    if args.method == "odyssey":
+        from src.baselines.odyssey import OdysseyBaseline, OdysseyConfig
+        return OdysseyBaseline(
+            rag_config,
+            OdysseyConfig(
+                max_hops=args.odyssey_max_hops,
+                semantic_threshold=args.odyssey_semantic_threshold,
+            ),
+        )
     if args.method == "online_unified_evidence_graph":
         return OnlineUnifiedEvidenceGraphBaseline(rag_config)
     if args.method == "oracle_evidence":
@@ -474,7 +513,7 @@ def _evaluate_example(example, args) -> dict:
         "gold_answer": example.answer,
         **prediction,
     }
-    if args.dataset == "hybridqa":
+    if args.dataset in {"hybridqa", "ottqa"}:
         record["exact_match"] = exact_match(example.answer, answer)
         record["semantic_exact_match"] = semantic_exact_match(
             example.answer, answer, question=example.question,
@@ -668,7 +707,7 @@ def main() -> None:
         code_revision=run_manifest["code_revision"],
         input_sha256=run_manifest["input"]["sha256"],
     )
-    if args.dataset == "hybridqa":
+    if args.dataset in {"hybridqa", "ottqa"}:
         em = sum(row["exact_match"] for row in records) / len(records) if records else 0.0
         f1 = sum(row["f1"] for row in records) / len(records) if records else 0.0
         summary.update(exact_match=em, f1=f1, exact_match_percent=100 * em, f1_percent=100 * f1)
@@ -774,6 +813,9 @@ def main() -> None:
         "use_path_guidance": args.use_path_guidance,
         "use_lexical_tiebreak": args.use_lexical_tiebreak,
         "use_hyperlink_expansion": args.use_hyperlink_expansion,
+        "use_collision_evidence_expansion": args.use_collision_evidence_expansion,
+        "collision_passage_budget": args.collision_passage_budget,
+        "use_adaptive_verification": args.use_adaptive_verification,
         "use_prompt_compression": args.use_prompt_compression,
         "ambiguity_policy": args.ambiguity_policy,
         "oueg_context_mode": args.oueg_context_mode,
