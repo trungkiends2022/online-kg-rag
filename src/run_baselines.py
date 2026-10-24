@@ -163,6 +163,8 @@ def _build_run_manifest(args, *, max_workers: int) -> dict:
         "collision_passage_budget": args.collision_passage_budget,
         "use_adaptive_verification": args.use_adaptive_verification,
         "use_prompt_compression": args.use_prompt_compression,
+        "use_path_focused_prompt": args.use_path_focused_prompt,
+        "prompt_path_budget": args.prompt_path_budget,
         "ambiguity_policy": args.ambiguity_policy,
         "oueg_context_mode": args.oueg_context_mode,
         "n_paths": args.n_paths,
@@ -267,6 +269,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--collision-passage-budget", type=int, default=12, help="OUEG: maximum linked passages added for a score-collision candidate set.")
     parser.add_argument("--no-adaptive-verification", action="store_false", dest="use_adaptive_verification", help="OUEG ablation: do not re-read the complete evidence after an empty or NEED_FOCUS response.")
     parser.add_argument("--no-prompt-compression", action="store_false", dest="use_prompt_compression", help="OUEG ablation: serialize the full uncompressed evidence payload.")
+    parser.add_argument("--no-path-focused-prompt", action="store_false", dest="use_path_focused_prompt", help="OUEG ablation: send every retrieved KG record to the answer model instead of path-focused evidence.")
+    parser.add_argument("--prompt-path-budget", type=int, default=8, help="OUEG: maximum grounded path guides retained in the answer-time payload (default: 8).")
     parser.add_argument(
         "--ambiguity-policy", choices=("prompt", "return_candidates", "lexical_tiebreak"), default="prompt",
         help="OUEG ambiguity handling: expose it to the LLM, return all candidates, or use a unique lexical tie-break.",
@@ -360,6 +364,8 @@ def _make_method(args):
         collision_passage_budget=args.collision_passage_budget,
         use_adaptive_verification=args.use_adaptive_verification,
         use_prompt_compression=args.use_prompt_compression,
+        use_path_focused_prompt=args.use_path_focused_prompt,
+        prompt_path_budget=args.prompt_path_budget,
         ambiguity_policy=args.ambiguity_policy,
         oueg_context_mode=args.oueg_context_mode,
         max_output_tokens=args.max_output_tokens,
@@ -817,6 +823,8 @@ def main() -> None:
         "collision_passage_budget": args.collision_passage_budget,
         "use_adaptive_verification": args.use_adaptive_verification,
         "use_prompt_compression": args.use_prompt_compression,
+        "use_path_focused_prompt": args.use_path_focused_prompt,
+        "prompt_path_budget": args.prompt_path_budget,
         "ambiguity_policy": args.ambiguity_policy,
         "oueg_context_mode": args.oueg_context_mode,
         "max_context_chars": args.max_context_chars,

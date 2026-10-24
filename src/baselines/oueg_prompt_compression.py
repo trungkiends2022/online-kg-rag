@@ -347,9 +347,9 @@ class CompactOUEGPromptBuilder:
         }
 
     def prompt(self, *, question: str, compact_json: str, tie_break_hint: str = "") -> str:
-        return f"""Answer the question using the complete compact OUEG payload.
+        return f"""Answer the question using the grounded compact OUEG payload.
 
-`rows` retains every table row, its original order, values, passage references, and edge IDs. `edges` uses the legend schema and contains every KG edge not already represented in a row; no candidate or fact has been pruned. `contexts` are deduplicated by passage ID. `paths` are reading guides only. Their `score` is rounded relevance metadata. `lex`, when present, is a weak lexical tie-break rather than factual proof. Follow `ordering` when present; use `edges` and `contexts` for multi-hop evidence. Return only the shortest answer span.{tie_break_hint}
+`rows` retains table rows selected by grounded paths, their original order, values, passage references, and edge IDs. `edges` uses the legend schema and contains the other selected KG edges. `contexts` are deduplicated by passage ID. `paths` are reading guides only. Their `score` is rounded relevance metadata. `lex`, when present, is a weak lexical tie-break rather than factual proof. Follow `ordering` when present; use `edges` and `contexts` for multi-hop evidence. Copy the shortest answer span exactly as written in the evidence; do not translate or expand names. Return only that span.{tie_break_hint}
 
 Question: {question}
 Compact OUEG payload: {compact_json}

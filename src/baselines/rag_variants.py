@@ -37,6 +37,10 @@ class RAGConfig:
     # non-destructive re-read with an auditable focus pointer.
     use_adaptive_verification: bool = True
     use_prompt_compression: bool = True
+    # Keep the complete KG in the audit artifact, while presenting the answer
+    # model with a bounded set of grounded paths and their evidence.
+    use_path_focused_prompt: bool = True
+    prompt_path_budget: int = 8
     # OUEG-only: prompt keeps the ambiguity visible by default. The two other
     # modes are explicit selective-prediction behaviours.
     ambiguity_policy: str = "prompt"
@@ -59,9 +63,12 @@ class RAGConfig:
             "use_record_nodes", "use_path_guidance", "use_lexical_tiebreak",
             "use_hyperlink_expansion", "use_collision_evidence_expansion",
             "use_adaptive_verification", "use_prompt_compression",
+            "use_path_focused_prompt",
         ):
             if not isinstance(getattr(self, name), bool):
                 raise ValueError(f"{name} must be boolean")
+        if self.prompt_path_budget < 1:
+            raise ValueError("prompt_path_budget must be positive")
         if self.ambiguity_policy not in {"prompt", "return_candidates", "lexical_tiebreak"}:
             raise ValueError("ambiguity_policy must be prompt, return_candidates, or lexical_tiebreak")
         if self.oueg_context_mode not in {"lossless", "extractive"}:

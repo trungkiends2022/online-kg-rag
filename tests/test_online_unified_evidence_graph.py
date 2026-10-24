@@ -158,9 +158,40 @@ def test_oueg_prompt_keeps_full_subgraph_while_paths_are_only_guides(monkeypatch
         and edge["tail"] == "table:League:column:City / Town"
         for edge in payload["subgraph"]["kg_edges"]
     )
-    assert "`rows` retains every table row" in prompts[0]
+    assert "`rows` retains table rows selected by grounded paths" in prompts[0]
     assert result["prompt_compression"]["all_edges_represented"] is True
+    assert result["answer_time_evidence"]["enabled"] is True
+    assert result["answer_time_evidence"]["selected_record_count"] < result["answer_time_evidence"]["full_record_count"]
     assert "nodes" not in result["compact_oueg_payload"]
+
+
+def test_oueg_answer_time_evidence_keeps_only_top_grounded_paths():
+    baseline = OnlineUnifiedEvidenceGraphBaseline(RAGConfig(prompt_path_budget=1))
+    records = [
+        {"edge_id": "e0", "tail": "passage:/wiki/Alpha", "contexts": []},
+        {"edge_id": "e1", "tail": "passage:/wiki/Beta", "contexts": []},
+    ]
+    selected_records, selected_contexts, selected_paths, audit = baseline._answer_time_evidence(
+        records,
+        {
+            "/wiki/Alpha": {"source_id": "/wiki/Alpha", "text": "alpha"},
+            "/wiki/Beta": {"source_id": "/wiki/Beta", "text": "beta"},
+        },
+        [
+            {"path_id": "lower", "score": 1.0, "edge_ids": ["e1"]},
+            {"path_id": "higher", "score": 2.0, "edge_ids": ["e0"]},
+        ],
+    )
+
+    assert [record["edge_id"] for record in selected_records] == ["e0"]
+    assert list(selected_contexts) == ["/wiki/Alpha"]
+    assert [path["path_id"] for path in selected_paths] == ["higher"]
+    assert audit["full_record_count"] == 2
+    assert audit["selected_record_count"] == 1
+
+
+def test_oueg_short_answer_removes_common_labels_and_quotes():
+    assert OnlineUnifiedEvidenceGraphBaseline._short_answer('Final Answer: "Mitre"') == "Mitre"
 
 
 def test_oueg_seed_dfs_crosses_text_edges_and_scores_without_filtering():

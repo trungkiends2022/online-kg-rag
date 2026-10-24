@@ -730,7 +730,89 @@ class OnlineUnifiedEvidenceGraphBaseline:
         """Normalise an answer field without turning abstention into an answer."""
         lines = str(value or "").strip().splitlines()
         answer = lines[0].strip() if lines else ""
+        answer = re.sub(r"^(?:final[ _]+)?answer\s*:\s*", "", answer, flags=re.I)
+        answer = answer.strip().strip("`\"'").strip()
         return "" if answer.casefold().strip(" .") in {"", "none", "unknown", "n/a", "na", "null"} else answer
+
+    def _answer_time_evidence(
+        self,
+        records: list[dict],
+        contexts_by_source_id: dict[str, dict],
+        suggested_paths: list[dict],
+    ) -> tuple[list[dict], dict[str, dict], list[dict], dict]:
+        """Return a bounded grounded reader view; the full KG remains audited.
+
+        Serializing the complete union graph proved counterproductive for the
+        20B reader: it had to search hundreds of irrelevant records in one
+        call.  The existing path scores are reader priorities, so retain their
+        top grounded paths and every context they reference.
+        """
+        if not self.config.use_path_focused_prompt:
+            return records, contexts_by_source_id, suggested_paths, {
+                "enabled": False,
+                "full_record_count": len(records),
+                "selected_record_count": len(records),
+                "full_context_count": len(contexts_by_source_id),
+                "selected_context_count": len(contexts_by_source_id),
+                "selected_path_ids": [path.get("path_id") for path in suggested_paths],
+            }
+
+        ranked_paths = sorted(
+            suggested_paths,
+            key=lambda path: (
+                -float(path.get("presentation_score", path.get("score", 0.0))),
+                str(path.get("path_id", "")),
+            ),
+        )
+        selected_paths = ranked_paths[:self.config.prompt_path_budget]
+        selected_edge_ids = {
+            str(edge_id)
+            for path in selected_paths
+            for edge_id in path.get("edge_ids", [])
+            if edge_id is not None
+        }
+        selected_records = [
+            record for record in records
+            if str(record.get("edge_id")) in selected_edge_ids
+        ]
+        # Do not turn a malformed path guide into an empty reader payload.
+        if not selected_records:
+            selected_records = records
+            selected_paths = suggested_paths
+
+        context_ids = {
+            str(source_id)
+            for record in selected_records
+            for source_id in (record.get("context_ids") or [])
+            if source_id
+        }
+        context_ids.update(
+            str(context.get("source_id"))
+            for record in selected_records
+            for context in record.get("contexts", [])
+            if context.get("source_id")
+        )
+        # Linked-passage edges identify their context in the tail, rather than
+        # in an inline context list.
+        context_ids.update(
+            str(record.get("tail", "")).removeprefix("passage:")
+            for record in selected_records
+            if str(record.get("tail", "")).startswith("passage:")
+        )
+        selected_contexts = {
+            source_id: context
+            for source_id, context in contexts_by_source_id.items()
+            if str(source_id) in context_ids
+        }
+        return selected_records, selected_contexts, selected_paths, {
+            "enabled": True,
+            "path_budget": self.config.prompt_path_budget,
+            "full_record_count": len(records),
+            "selected_record_count": len(selected_records),
+            "full_context_count": len(contexts_by_source_id),
+            "selected_context_count": len(selected_contexts),
+            "selected_path_ids": [path.get("path_id") for path in selected_paths],
+        }
 
     @classmethod
     def _parse_adaptive_response(cls, raw: str) -> tuple[str, dict]:
@@ -830,7 +912,7 @@ class OnlineUnifiedEvidenceGraphBaseline:
 
     @staticmethod
     def _verification_prompt(question: str, compact_json: str, handoff: dict) -> str:
-        return f"""Resolve the question using the same complete, losslessly compressed OUEG evidence payload below.\n\nFocus guidance from the first read (attention only; it does not exclude any graph candidate):\n{json.dumps(handoff, ensure_ascii=False)}\n\nCheck every question constraint against row bindings and linked passages. Return only the shortest final answer span; do not return blank or `None`.\n\nQuestion: {question}\nComplete OUEG payload: {compact_json}\nAnswer:"""
+        return f"""Resolve the question using the same grounded OUEG evidence payload below.\n\nFocus guidance from the first read (attention only; it does not exclude any graph candidate in this payload):\n{json.dumps(handoff, ensure_ascii=False)}\n\nCheck every question constraint against row bindings and linked passages. Copy the shortest answer span exactly as it appears in the evidence; do not translate, expand a name, or return blank/`None`.\n\nQuestion: {question}\nGrounded OUEG payload: {compact_json}\nAnswer:"""
 
     @staticmethod
     def _source_keys(value: object) -> set[str]:
@@ -1065,11 +1147,14 @@ class OnlineUnifiedEvidenceGraphBaseline:
                 "present in the cross-referenced context, but treat this only as a weak tie-break "
                 "and do not discard other valid candidates."
             )
+        answer_records, answer_contexts, answer_paths, answer_evidence_audit = self._answer_time_evidence(
+            records, all_contexts, suggested_paths,
+        )
         compressed_prompt = self.prompt_builder.build(
             question=example.question,
-            records=records,
-            contexts_by_source_id=all_contexts,
-            suggested_paths=suggested_paths,
+            records=answer_records,
+            contexts_by_source_id=answer_contexts,
+            suggested_paths=answer_paths,
             ordering_hint=ordering_hint,
             ambiguity=prompt_ambiguity,
             path_generation=path_generation,
@@ -1148,6 +1233,7 @@ class OnlineUnifiedEvidenceGraphBaseline:
             "oueg_payload": payload,
             "compact_oueg_payload": compressed_prompt["payload"],
             "prompt_compression": compressed_prompt["stats"],
+            "answer_time_evidence": answer_evidence_audit,
             "suggested_paths": suggested_paths,
             "ordering_hint": ordering_hint,
             "ambiguity": ambiguity,
