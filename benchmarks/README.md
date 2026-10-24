@@ -188,3 +188,39 @@ scripts/run_hybridqa_1500.sh 01 02
 
 This is a controlled, trace-eligible unique-table subset, not the complete
 HybridQA development split; state that scope when reporting results.
+
+## OTT-QA ODYSSEY-style 500
+
+This benchmark fixes a uniform 500-example sample from OTT-QA dev, then writes
+five non-overlapping batches of 100. It excludes question IDs shared with
+HybridQA dev and requires the local OTT table and linked-text files that the
+adapter consumes. It deliberately does **not** enforce unique tables or apply
+stratification: those controls are useful for the HybridQA stress test, but are
+not part of the ODYSSEY sampling protocol. The exact seed and selected IDs live
+in the distribution sidecars.
+
+```bash
+"$PYTHON_BIN" -m src.sample_ottqa \
+  --input data/OTT-QA/released_data/dev.json \
+  --tables-dir data/OTT-QA/data/traindev_tables_tok \
+  --passages-dir data/OTT-QA/data/traindev_request_tok \
+  --exclude-question-ids-from data/HybridQA/released_data/dev.json \
+  --output benchmarks/ottqa/ottqa-dev-odyssey-500-seed2027.json \
+  --size 500 --seed 2027 --shard-size 100
+```
+
+Run one batch at a time (replace `shard01` with `shard02` through `shard05`):
+
+```bash
+LLM_PROVIDER=groq "$PYTHON_BIN" -m src.run_baselines \
+  --dataset ottqa --method online_kg \
+  --input benchmarks/ottqa/ottqa-dev-odyssey-500-seed2027-shard01.json \
+  --tables-dir data/OTT-QA/data/traindev_tables_tok \
+  --passages-dir data/OTT-QA/data/traindev_request_tok \
+  --output data/results/ottqa-dev-odyssey-500-shard01.jsonl \
+  --temperature 0 --resume
+```
+
+This is ODYSSEY-style rather than an exact reproduction: it shares its 500-dev
+sample scale and table-plus-linked-text setting, but uses this repository's
+fixed seed and local oracle table/text adapter.
