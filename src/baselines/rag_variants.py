@@ -27,15 +27,34 @@ class RAGConfig:
     # each False value removes one answer-time signal.
     use_record_nodes: bool = True
     use_path_guidance: bool = True
-    use_lexical_tiebreak: bool = True
+    # Scores can order reader presentation, but lexical overlap is not proof.
+    # Keep this off unless explicitly running the historical ablation.
+    use_lexical_tiebreak: bool = False
     use_hyperlink_expansion: bool = True
     # When structural candidates tie, add a linked passage for each candidate
     # before synthesis. This expands evidence only; it never prunes the graph.
     use_collision_evidence_expansion: bool = True
     collision_passage_budget: int = 12
+    # L2 may fetch candidate-linked passages that were absent from the first
+    # retrieval, but only after the reader explicitly reports missing
+    # evidence.  The per-candidate limit prevents a popular early candidate
+    # from consuming the evidence budget of the others.
+    use_focus_evidence_augmentation: bool = True
+    focus_passage_budget_per_candidate: int = 2
+    # Resolve L1 diagnostics against grounded table values before asking L2
+    # for more text. This avoids treating Rank/Year cells as entities.
+    use_diagnostic_focus_resolution: bool = True
+    focus_query_fallback_budget: int = 2
+    l2_existing_witness_budget: int = 2
+    l2_max_edges_per_candidate: int = 16
+    l2_max_contexts_per_candidate: int = 3
+    l2_context_snippet_chars: int = 900
     # On a blank or explicitly uncertain first response, make one
     # non-destructive re-read with an auditable focus pointer.
     use_adaptive_verification: bool = True
+    # L2 normally receives a small sufficient state capsule, not the L1
+    # prompt. ``complete_re_read`` is retained solely as a diagnostic ablation.
+    l2_evidence_mode: str = "delta_only"
     use_prompt_compression: bool = True
     # Keep the complete KG in the audit artifact, while presenting the answer
     # model with a bounded set of grounded paths and their evidence.
@@ -57,11 +76,22 @@ class RAGConfig:
             raise ValueError("context and output limits must be positive")
         if self.collision_passage_budget < 1:
             raise ValueError("collision_passage_budget must be positive")
+        if self.focus_passage_budget_per_candidate < 1:
+            raise ValueError("focus_passage_budget_per_candidate must be positive")
+        for name in (
+            "focus_query_fallback_budget", "l2_existing_witness_budget",
+            "l2_max_edges_per_candidate", "l2_max_contexts_per_candidate",
+            "l2_context_snippet_chars",
+        ):
+            if getattr(self, name) < 1:
+                raise ValueError(f"{name} must be positive")
         if not isinstance(self.use_rule_text_triples, bool):
             raise ValueError("use_rule_text_triples must be boolean")
         for name in (
             "use_record_nodes", "use_path_guidance", "use_lexical_tiebreak",
             "use_hyperlink_expansion", "use_collision_evidence_expansion",
+            "use_focus_evidence_augmentation",
+            "use_diagnostic_focus_resolution",
             "use_adaptive_verification", "use_prompt_compression",
             "use_path_focused_prompt",
         ):
@@ -71,6 +101,8 @@ class RAGConfig:
             raise ValueError("prompt_path_budget must be positive")
         if self.ambiguity_policy not in {"prompt", "return_candidates", "lexical_tiebreak"}:
             raise ValueError("ambiguity_policy must be prompt, return_candidates, or lexical_tiebreak")
+        if self.l2_evidence_mode not in {"delta_only", "complete_re_read"}:
+            raise ValueError("l2_evidence_mode must be delta_only or complete_re_read")
         if self.oueg_context_mode not in {"lossless", "extractive"}:
             raise ValueError("oueg_context_mode must be lossless or extractive")
 

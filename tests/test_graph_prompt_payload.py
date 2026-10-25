@@ -31,3 +31,26 @@ def test_graph_prompt_payload_keeps_structural_table_records():
 
     assert [edge["relation"] for edge in payload["edges"]] == ["has_record", "city_town"]
     assert all(edge["structural"] is True for edge in payload["edges"])
+
+
+def test_graph_prompt_payload_respects_budget_and_keeps_valid_references():
+    payload, truncated = GraphRetrievalNoPathBaseline._bounded_prompt_kg_payload([
+        {
+            "edge_id": "0", "head": "Club A", "relation": "city_town",
+            "tail": "Gaborone", "contexts": [{
+                "source_id": "/wiki/Gaborone", "text": "x" * 1_000,
+            }],
+        },
+        {
+            "edge_id": "1", "head": "Club B", "relation": "city_town",
+            "tail": "Francistown",
+        },
+    ], limit=500)
+
+    assert truncated is True
+    assert len(__import__("json").dumps(payload)) <= 500
+    context_ids = {
+        source_id for edge in payload["edges"]
+        for source_id in edge.get("context_ids", [])
+    }
+    assert context_ids <= set(payload["contexts_by_source_id"])

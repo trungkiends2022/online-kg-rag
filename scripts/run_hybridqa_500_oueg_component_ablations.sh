@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run four OUEG component ablations over a selected HybridQA shard. By default
+# Run causal OUEG component ablations over a selected HybridQA shard. By default
 # it uses shards 06, 07, and 08 (200 + 200 + 100 = 500 records per ablation).
 set -euo pipefail
 
@@ -49,7 +49,7 @@ usage() {
   cat <<'EOF'
 Usage: scripts/run_hybridqa_500_oueg_component_ablations.sh [options]
 
-Run four OUEG component ablations on HybridQA. By default this runs shards 06,
+Run five OUEG component ablations on HybridQA. By default this runs shards 06,
 07, and 08 (500 records per ablation); use --shard for a single shard. Provider,
 model, API key, base URL, and timeout are inherited from .env exactly as in the
 OUEG/Direct runner.
@@ -62,11 +62,16 @@ Options:
   --no-resume               Do not pass --resume; use only with a new output folder.
   -h, --help                Show this help.
 
-The four ablations are:
+The five causal ablations are:
+  l1_only                          --no-adaptive-verification
+  no_l2_new_evidence               --no-focus-evidence-augmentation
+  no_diagnostic_focus_resolution   --no-diagnostic-focus-resolution
   no_path_guidance                 --no-path-guidance
-  no_collision_tiebreaker          --no-lexical-tiebreak
   no_hyperlink_expansion           --no-hyperlink-expansion
-  no_subgraph_compression          --no-prompt-compression
+
+Lexical tie-breaking is intentionally absent: it is disabled in the full
+method, so --no-lexical-tiebreak is now a compatibility no-op rather than an
+experiment.
 
 Each log name contains: benchmark, shard, provider/model, method, and ablation.
 
@@ -134,6 +139,14 @@ common_args=(
   --max-context-chars 24000
   --max-output-tokens 1024
   --temperature 0
+  --no-path-focused-prompt
+  --focus-passage-budget-per-candidate 2
+  --focus-query-fallback-budget 2
+  --l2-existing-witness-budget 2
+  --l2-max-edges-per-candidate 16
+  --l2-max-contexts-per-candidate 3
+  --l2-context-snippet-chars 900
+  --l2-evidence-mode delta_only
   --max-workers "$workers"
   --llm-max-concurrent-requests "$workers"
   --quiet-records
@@ -172,10 +185,11 @@ echo "Model from .env: $model_label"
 echo "Shards: ${shards[*]} (500 records per ablation)"
 echo "Workers: $workers"
 
+run_ablation l1_only --no-adaptive-verification
+run_ablation no_l2_new_evidence --no-focus-evidence-augmentation
+run_ablation no_diagnostic_focus_resolution --no-diagnostic-focus-resolution
 run_ablation no_path_guidance --no-path-guidance
-run_ablation no_collision_tiebreaker --no-lexical-tiebreak
 run_ablation no_hyperlink_expansion --no-hyperlink-expansion
-run_ablation no_subgraph_compression --no-prompt-compression
 
 echo "Completed. Results: $output_dir"
 echo "Logs: $log_dir"

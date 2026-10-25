@@ -1,0 +1,157 @@
+\begin{tikzpicture}[
+  >=Latex,
+  font=\scriptsize,
+  row_panel/.style={draw=gray!38, fill=gray!3, rounded corners=3.5pt, line width=0.5pt, inner sep=3pt},
+  row_panel_ours/.style={draw=teal!85!black, fill=teal!3, rounded corners=3.5pt, line width=0.85pt, inner sep=3pt},
+  tag_badge/.style={fill=gray!15, draw=gray!50, rounded corners=2pt, font=\fontsize{5.2pt}{6.2pt}\selectfont\bfseries, inner sep=2pt},
+  tag_ours/.style={fill=teal!18, draw=teal!80!black, text=teal!90!black, rounded corners=2pt, font=\fontsize{5.2pt}{6.2pt}\selectfont\bfseries, inner sep=2pt},
+  flow_box/.style={draw=gray!45, fill=white, rounded corners=2pt, font=\fontsize{5.2pt}{6.3pt}\selectfont, align=center, inner sep=2.5pt, line width=0.4pt, minimum height=1.12cm},
+  flow_box_ours/.style={draw=teal!70!black, fill=white, rounded corners=2pt, font=\fontsize{5.2pt}{6.3pt}\selectfont, align=center, inner sep=2.5pt, line width=0.6pt, minimum height=1.12cm},
+  arrow_flow/.style={->, line width=0.6pt, draw=gray!70!black},
+  arrow_flow_ours/.style={->, line width=0.7pt, draw=teal!85!black},
+  critique_bad/.style={fill=red!5, draw=red!45!black, text=red!80!black, font=\fontsize{5.1pt}{6.2pt}\selectfont, rounded corners=2pt, inner sep=2.8pt, align=left, minimum height=1.12cm},
+  critique_good/.style={fill=teal!8, draw=teal!70!black, text=teal!90!black, font=\fontsize{5.1pt}{6.2pt}\selectfont, rounded corners=2pt, inner sep=2.8pt, align=left, minimum height=1.12cm}
+]
+
+% ========================================================
+% ROW 1: (a) Direct Prompting & Flat-RAG
+% ========================================================
+\def\yA{0}
+\node[tag_badge, anchor=south west] (lbl_a) at (0.1, \yA+0.66) {(a) Flattened In-Context Prompting \textit{[e.g., Direct LLM, Flat-RAG]}};
+
+\node[flow_box, text width=1.75cm, anchor=west] (a_in) at (0.1, \yA) {
+  \textbf{Table \& Text}\\
+  Raw row strings \& text chunks
+};
+
+\node[flow_box, text width=2.45cm, anchor=west] (a_proc) at (2.25, \yA) {
+  \textbf{Naive Concatenation}\\
+  Flattened serialization into linear prompt
+};
+
+\node[flow_box, text width=1.95cm, anchor=west] (a_out) at (5.05, \yA) {
+  \textbf{Unguided LLM}\\
+  Free-form attention over token sea
+};
+
+\node[critique_bad, text width=4.3cm, anchor=west] (a_crit) at (7.35, \yA) {
+  $\times$ \textbf{Destroys tabular bindings} (row conflation)\\
+  $\times$ Disperses attention across long passages\\
+  $\times$ Arbitrary guessing under symmetric rows
+};
+
+\draw[arrow_flow] (a_in) -- (a_proc);
+\draw[arrow_flow] (a_proc) -- (a_out);
+\draw[arrow_flow] (a_out) -- (a_crit);
+
+\begin{scope}[on background layer]
+  \node[row_panel, fit=(lbl_a)(a_in)(a_proc)(a_out)(a_crit)] (p_a) {};
+\end{scope}
+
+% ========================================================
+% ROW 2: (b) Question-Driven Graph Pruning (ODYSSEY)
+% ========================================================
+\def\yB{-1.85}
+\node[tag_badge, anchor=south west] (lbl_b) at (0.1, \yB+0.66) {(b) Destructive Graph Pruning \textit{[e.g., ODYSSEY (NAACL 2025)]}};
+
+\node[flow_box, text width=1.75cm, anchor=west] (b_in) at (0.1, \yB) {
+  \textbf{Hybrid Entity Graph}\\
+  Unstructured entity-node pool
+};
+
+\node[flow_box, text width=2.45cm, anchor=west] (b_proc) at (2.25, \yB) {
+  \textbf{Question Pruning}\\
+  Heuristic pruning of non-matching nodes
+};
+
+\node[flow_box, text width=1.95cm, anchor=west] (b_out) at (5.05, \yB) {
+  \textbf{Pruned Fragment}\\
+  Isolated subgraphs (53\% token cut)
+};
+
+\node[critique_bad, text width=4.3cm, anchor=west] (b_crit) at (7.35, \yB) {
+  $\times$ \textbf{Severe evidence loss}: drops peripheral row cells\\
+  $\times$ Lacks intra-row binding ($\rho_i$) for ad-hoc tables\\
+  $\times$ Zero collision handling $\rightarrow$ blind guessing
+};
+
+\draw[arrow_flow] (b_in) -- (b_proc);
+\draw[arrow_flow] (b_proc) -- (b_out);
+\draw[arrow_flow] (b_out) -- (b_crit);
+
+\begin{scope}[on background layer]
+  \node[row_panel, fit=(lbl_b)(b_in)(b_proc)(b_out)(b_crit)] (p_b) {};
+\end{scope}
+
+% ========================================================
+% ROW 3: (c) Persistent KG Agentic Exploration (HydraRAG)
+% ========================================================
+\def\yC{-3.70}
+\node[tag_badge, anchor=south west] (lbl_c) at (0.1, \yC+0.66) {(c) Persistent KG Agentic Exploration \textit{[e.g., HydraRAG (EMNLP 2025)]}};
+
+\node[flow_box, text width=1.75cm, anchor=west] (c_in) at (0.1, \yC) {
+  \textbf{Static Global KG}\\
+  Curated triple store (Wikidata)
+};
+
+\node[flow_box, text width=2.45cm, anchor=west] (c_proc) at (2.25, \yC) {
+  \textbf{Agentic Loop}\\
+  Multi-turn LLM querying \& Tri-factor verification
+};
+
+\node[flow_box, text width=1.95cm, anchor=west] (c_out) at (5.05, \yC) {
+  \textbf{Iterative Paths}\\
+  Explored reasoning chains
+};
+
+\node[critique_bad, text width=4.3cm, anchor=west] (c_crit) at (7.35, \yC) {
+  $\times$ \textbf{Prohibitive latency \& cost}: dozens of LLM calls\\
+  $\times$ Requires pre-indexed global KG (fails on raw tables)\\
+  $\times$ Unbounded multi-turn agentic drift
+};
+
+\draw[arrow_flow] (c_in) -- (c_proc);
+\draw[arrow_flow] (c_proc) -- (c_out);
+\draw[arrow_flow] (c_out) -- (c_crit);
+
+\begin{scope}[on background layer]
+  \node[row_panel, fit=(lbl_c)(c_in)(c_proc)(c_out)(c_crit)] (p_c) {};
+\end{scope}
+
+% ========================================================
+% ROW 4: (d) Proposed OUEG-RAG (Controlled Evidence Scaffolding)
+% ========================================================
+\def\yD{-5.55}
+\node[tag_ours, anchor=south west] (lbl_d) at (0.1, \yD+0.66) {(d) Proposed OUEG-RAG: Controlled Evidence Scaffolding \& Diagnostic Grounding};
+
+\node[flow_box_ours, text width=1.75cm, anchor=west] (d_in) at (0.1, \yD) {
+  \textbf{Ad-Hoc Table \& Text}\\
+  Query context $(q, T, \mathcal{D}_T)$
+};
+
+\node[flow_box_ours, text width=2.45cm, anchor=west] (d_proc) at (2.25, \yD) {
+  \textbf{Schema Multigraph}\\
+  Star hubs $\rho_i$ + deterministic links ($<20$\,ms, 0 LLM calls)
+};
+
+\node[flow_box_ours, text width=1.95cm, anchor=west] (d_out) at (5.05, \yD) {
+  \textbf{Two-Tier Guidance}\\
+  Full context + Scored path guide + L1 Diagnostic / L2 Augment
+};
+
+\node[critique_good, text width=4.3cm, anchor=west] (d_crit) at (7.35, \yD) {
+  $\checkmark$ \textbf{100\% evidence preservation} (lossless compression)\\
+  $\checkmark$ \textbf{Non-filtering path guidance} steers LLM attention\\
+  $\checkmark$ Self-auditing diagnostic handoff resolves ambiguity\\
+  $\checkmark$ Bounded two-tier execution (1 or 2 calls, low cost)
+};
+
+\draw[arrow_flow_ours] (d_in) -- (d_proc);
+\draw[arrow_flow_ours] (d_proc) -- (d_out);
+\draw[arrow_flow_ours] (d_out) -- (d_crit);
+
+\begin{scope}[on background layer]
+  \node[row_panel_ours, fit=(lbl_d)(d_in)(d_proc)(d_out)(d_crit)] (p_d) {};
+\end{scope}
+
+\end{tikzpicture}

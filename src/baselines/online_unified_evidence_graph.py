@@ -13,7 +13,7 @@ from src.baselines.oueg_prompt_compression import (
     CompactOUEGPromptBuilder,
     OUEGPromptCompressionConfig,
 )
-from src.baselines.rag_variants import RAGConfig
+from src.baselines.rag_variants import RAGConfig, rank_documents
 from src.datasets.schema import DatasetExample
 from src.extraction.extractor import EntityRelationExtractor
 from src.kg.builder import OnlineKGBuilder
@@ -757,14 +757,24 @@ class OnlineUnifiedEvidenceGraphBaseline:
                 "selected_path_ids": [path.get("path_id") for path in suggested_paths],
             }
 
-        ranked_paths = sorted(
-            suggested_paths,
+        # Table row bundles are the complete structural candidate set.  Keep
+        # all of them so path focus cannot silently discard a valid table
+        # binding; apply the budget only to exploratory text/seed paths.
+        row_paths = [
+            path for path in suggested_paths
+            if path.get("path_kind") == "row_bundle"
+        ]
+        ranked_expansion_paths = sorted(
+            [path for path in suggested_paths if path.get("path_kind") != "row_bundle"],
             key=lambda path: (
                 -float(path.get("presentation_score", path.get("score", 0.0))),
                 str(path.get("path_id", "")),
             ),
         )
-        selected_paths = ranked_paths[:self.config.prompt_path_budget]
+        selected_paths = [
+            *row_paths,
+            *ranked_expansion_paths[:self.config.prompt_path_budget],
+        ]
         selected_edge_ids = {
             str(edge_id)
             for path in selected_paths
@@ -807,6 +817,10 @@ class OnlineUnifiedEvidenceGraphBaseline:
         return selected_records, selected_contexts, selected_paths, {
             "enabled": True,
             "path_budget": self.config.prompt_path_budget,
+            "retained_row_bundle_count": len(row_paths),
+            "retained_expansion_path_count": min(
+                len(ranked_expansion_paths), self.config.prompt_path_budget,
+            ),
             "full_record_count": len(records),
             "selected_record_count": len(selected_records),
             "full_context_count": len(contexts_by_source_id),
@@ -816,7 +830,7 @@ class OnlineUnifiedEvidenceGraphBaseline:
 
     @classmethod
     def _parse_adaptive_response(cls, raw: str) -> tuple[str, dict]:
-        """Parse an answer or a soft focus handoff from the first reader call.
+        """Parse an answer or a diagnostic focus handoff from a reader call.
 
         The parser deliberately accepts a plain non-empty span for backwards
         compatibility with models that ignore the protocol.  A malformed or
@@ -827,13 +841,23 @@ class OnlineUnifiedEvidenceGraphBaseline:
         answer = cls._short_answer(answer_match.group(1) if answer_match else "")
         if answer_match:
             return answer, {}
+        unresolved = bool(re.search(r"UNRESOLVED\s*:", text, re.I))
         needs_focus = bool(re.search(r"NEED_FOCUS\s*:", text, re.I))
-        if not needs_focus:
+        if not needs_focus and not unresolved:
             plain = cls._short_answer(text)
             return plain, {}
 
-        hint = {"raw": text, "candidates": [], "bottleneck": ""}
-        json_match = re.search(r"NEED_FOCUS\s*:\s*(\{.*\})", text, re.I | re.S)
+        hint = {
+            "raw": text,
+            "response_type": "unresolved" if unresolved else "need_focus",
+            "candidates": [],
+            "bottleneck": "",
+            "blocker_type": "",
+            "needed_check": "",
+        }
+        json_match = re.search(
+            r"(?:NEED_FOCUS|UNRESOLVED)\s*:\s*(\{.*\})", text, re.I | re.S,
+        )
         if json_match:
             try:
                 parsed = json.loads(json_match.group(1))
@@ -843,6 +867,8 @@ class OnlineUnifiedEvidenceGraphBaseline:
                 values = parsed.get("candidates", [])
                 hint["candidates"] = values if isinstance(values, list) else [values]
                 hint["bottleneck"] = str(parsed.get("bottleneck") or parsed.get("reason") or "")
+                hint["blocker_type"] = str(parsed.get("blocker_type") or "")
+                hint["needed_check"] = str(parsed.get("needed_check") or "")
         if not hint["candidates"]:
             candidates_match = re.search(r"Candidates\s*:\s*\[([^\]]*)\]", text, re.I | re.S)
             if candidates_match:
@@ -854,6 +880,33 @@ class OnlineUnifiedEvidenceGraphBaseline:
             reason_match = re.search(r"(?:Reason|Bottleneck)\s*:\s*(.+)", text, re.I)
             hint["bottleneck"] = reason_match.group(1).strip() if reason_match else ""
         return "", hint
+
+    @staticmethod
+    def _evidence_path_audit(raw: str, allowed_refs: set[str]) -> dict:
+        """Extract model-selected evidence IDs and reject IDs outside its prompt."""
+        match = re.search(r"EVIDENCE_PATH\s*:\s*(\{.*?\}|\[.*?\])", str(raw or ""), re.I | re.S)
+        if match is None:
+            return {"required": True, "provided": False, "selected_refs": [], "invalid_refs": []}
+        try:
+            value = json.loads(match.group(1))
+        except json.JSONDecodeError:
+            return {"required": True, "provided": True, "selected_refs": [], "invalid_refs": [match.group(1)]}
+        if isinstance(value, dict):
+            refs = [item for items in value.values() for item in (items if isinstance(items, list) else [items])]
+        else:
+            refs = value if isinstance(value, list) else [value]
+        rendered = [str(item) for item in refs if str(item).strip()]
+        return {
+            "required": True,
+            "provided": True,
+            "selected_refs": [item for item in rendered if item in allowed_refs],
+            "invalid_refs": [item for item in rendered if item not in allowed_refs],
+        }
+
+    @staticmethod
+    def _serialized_evidence_refs(serialized: str) -> set[str]:
+        """Collect compact/raw edge and passage IDs that are visible to a reader."""
+        return set(re.findall(r"(?:\be\d+\b|\bp\d+\b|\bkg:\d+\b|/wiki/[A-Za-z0-9_()'.,%\-]+)", serialized))
 
     @staticmethod
     def _focus_candidate_rows(ambiguity: dict, row_candidates: list[dict]) -> list[dict]:
@@ -876,15 +929,93 @@ class OnlineUnifiedEvidenceGraphBaseline:
             for candidate in row_candidates[:3]
         ]
 
-    @classmethod
-    def _focus_handoff(cls, model_hint: dict, ambiguity: dict, row_candidates: list[dict]) -> dict:
+    @staticmethod
+    def _is_low_information_focus(value: object) -> bool:
+        text = str(value or "").strip()
+        return not text or bool(re.fullmatch(r"[#№]?\s*\d+(?:[.,]\d+)?(?:st|nd|rd|th)?", text, re.I))
+
+    @staticmethod
+    def _path_values(path: dict) -> list[str]:
+        values = []
+        for value in path.get("sort_keys", {}).values():
+            values.extend(value if isinstance(value, list) else [value])
+        values.append(path.get("bridge_entity"))
+        return [str(value).strip() for value in values if str(value or "").strip()]
+
+    def _diagnostic_focus_rows(
+        self, question: str, model_hint: dict, row_candidates: list[dict],
+    ) -> list[dict]:
+        """Ground an L1 diagnostic in table values, never in a default column.
+
+        A row anchor can be a rank or year because of table column order.  L1
+        often names the useful entity in ``needed_check`` instead; resolve that
+        mention against already-grounded row values before retrieving text.
+        """
+        diagnostic = " ".join(str(model_hint.get(key) or "") for key in (
+            "needed_check", "bottleneck",
+        )).casefold()
+        requested = [str(value).strip() for value in model_hint.get("candidates", []) if str(value).strip()]
+        selected: list[tuple[dict, str, int]] = []
+        for path in row_candidates:
+            matches = []
+            for value in self._path_values(path):
+                if self._is_low_information_focus(value):
+                    continue
+                lowered = value.casefold()
+                if lowered in diagnostic or any(lowered == item.casefold() for item in requested):
+                    matches.append(value)
+            if matches:
+                entity = max(matches, key=len)
+                selected.append((path, entity, len(entity)))
+        # Explicit ordinal questions have a deterministic row binding even if
+        # the L1 prose names only the derived entity (e.g. tenth metro area).
+        ordinal = _ordinal_rank(question)
+        if ordinal is not None:
+            for path in row_candidates:
+                if path.get("row_order_index") != ordinal - 1:
+                    continue
+                options = [
+                    value for value in self._path_values(path)
+                    if not self._is_low_information_focus(value)
+                ]
+                if options:
+                    selected.append((path, max(options, key=len), 1))
+        if not selected:
+            return []
+        # One row can match multiple diagnostic strings; retain its strongest
+        # non-numeric entity and no more than three grounded focus rows.
+        by_row: dict[str, tuple[dict, str, int]] = {}
+        for path, entity, strength in selected:
+            row_id = str(path.get("row_id") or path.get("path_id"))
+            if row_id not in by_row or strength > by_row[row_id][2]:
+                by_row[row_id] = (path, entity, strength)
+        return [
+            {
+                "entity": entity,
+                "row_id": path.get("row_id"),
+                "row_order_index": path.get("row_order_index"),
+                "bridge_entity": path.get("bridge_entity"),
+                "path_id": path.get("path_id"),
+                "row_binding": path.get("sort_keys", {}),
+            }
+            for path, entity, _ in sorted(
+                by_row.values(), key=lambda item: (-item[2], str(item[0].get("path_id")))
+            )[:3]
+        ]
+
+    def _focus_handoff(
+        self, question: str, model_hint: dict, ambiguity: dict, row_candidates: list[dict],
+    ) -> dict:
         """Validate model hints against graph candidates, then add a local fallback.
 
         Hints never determine which evidence is serialized in the verification
         prompt.  They only make a few already-present candidate records easier
         for the reader to locate.
         """
-        pointer_rows = cls._focus_candidate_rows(ambiguity, row_candidates)
+        pointer_rows = (
+            self._diagnostic_focus_rows(question, model_hint, row_candidates)
+            if self.config.use_diagnostic_focus_resolution else []
+        ) or self._focus_candidate_rows(ambiguity, row_candidates)
         known = {
             str(item.get("entity") or item.get("anchor_entity") or "").casefold()
             for item in pointer_rows
@@ -895,12 +1026,33 @@ class OnlineUnifiedEvidenceGraphBaseline:
             str(item.get("entity") or item.get("anchor_entity") or "").strip()
             for item in pointer_rows if str(item.get("entity") or item.get("anchor_entity") or "").strip()
         ]
+        # Scores and lexical features are useful for L1 ordering, but are not
+        # evidence.  Do not anchor the L2 reader on them.
+        safe_provenance = [
+            {
+                key: item.get(key)
+                for key in ("entity", "anchor_entity", "row_id", "row_order_index", "bridge_entity", "path_id")
+                if item.get(key) is not None
+            }
+            for item in pointer_rows
+        ]
         return {
-            "origin": "model_need_focus" if model_hint else "empty_response_fallback",
+            "origin": (
+                "model_unresolved" if model_hint.get("response_type") == "unresolved"
+                else "model_need_focus" if model_hint
+                else "empty_model_response"
+            ),
             "candidates": list(dict.fromkeys(candidates)),
-            "candidate_provenance": pointer_rows,
+            "candidate_provenance": safe_provenance,
+            "focus_rows": safe_provenance,
+            "blocker_type": str(model_hint.get("blocker_type") or (
+                "empty_model_response" if not model_hint else "unspecified"
+            )),
             "bottleneck": str(model_hint.get("bottleneck") or "") or (
                 "Resolve the question constraints by comparing the highlighted records with their linked passages."
+            ),
+            "needed_check": str(model_hint.get("needed_check") or "") or (
+                "Check the highlighted row bindings and linked passages for the unresolved question constraint."
             ),
             "unvalidated_model_candidates": [value for value in requested if value.casefold() not in known],
             "non_destructive": True,
@@ -908,11 +1060,13 @@ class OnlineUnifiedEvidenceGraphBaseline:
 
     @staticmethod
     def _adaptive_protocol() -> str:
-        return """\n\nResponse protocol: never return a blank response. If the complete evidence proves one answer, return `FINAL_ANSWER: <shortest answer span>`. Otherwise return `NEED_FOCUS: {\"candidates\":[\"candidate names already in the payload\"],\"bottleneck\":\"missing relation or constraint\"}`. Do not invent candidates or omit evidence."""
+        return """\n\nResponse protocol: never return a blank response. Return exactly one of these forms:\n1. `FINAL_ANSWER: <shortest answer span>\nEVIDENCE_PATH: {\"edges\":[\"edge IDs from the payload\"],\"passages\":[\"passage IDs from the payload\"]}` when the evidence proves one answer. Cite at least one supplied edge or passage ID.\n2. `NEED_FOCUS: {\"candidates\":[\"candidate names already in the payload\"],\"blocker_type\":\"candidate_collision|missing_link|conflicting_evidence|answer_type_uncertain\",\"bottleneck\":\"why the answer is not yet unique\",\"needed_check\":\"exact row, relation, year, rank, or passage fact to compare\"}` when a focused re-read can resolve it.\n3. `UNRESOLVED: {\"blocker_type\":\"missing_link|insufficient_evidence|conflicting_evidence\",\"bottleneck\":\"what evidence is absent or contradictory\",\"needed_check\":\"what fact would be required\"}` when this payload cannot prove an answer.\nDo not invent candidates or evidence."""
 
     @staticmethod
-    def _verification_prompt(question: str, compact_json: str, handoff: dict) -> str:
-        return f"""Resolve the question using the same grounded OUEG evidence payload below.\n\nFocus guidance from the first read (attention only; it does not exclude any graph candidate in this payload):\n{json.dumps(handoff, ensure_ascii=False)}\n\nCheck every question constraint against row bindings and linked passages. Copy the shortest answer span exactly as it appears in the evidence; do not translate, expand a name, or return blank/`None`.\n\nQuestion: {question}\nGrounded OUEG payload: {compact_json}\nAnswer:"""
+    def _verification_prompt(question: str, compact_json: str, handoff: dict, *, mode: str) -> str:
+        if mode == "delta_only":
+            return f"""Resolve the question using only the grounded L2 state capsule below. This is a new request: do not assume you remember L1 or use facts absent from this capsule.\n\nThe capsule contains the original question, the unresolved constraint, complete row bindings for the focus candidates, and their relevant evidence. `coverage` says whether retrieval found new text; absence of evidence is not a negative fact. Scores are intentionally omitted.\n\nReturn `FINAL_ANSWER: <shortest evidence span>\nEVIDENCE_PATH: {{\"edges\":[\"edge IDs in this capsule\"],\"passages\":[\"source IDs in this capsule\"]}}` only if exactly one candidate is proven. Cite at least one supplied ID. Otherwise return `UNRESOLVED: {{\"blocker_type\":\"...\",\"bottleneck\":\"...\",\"needed_check\":\"...\"}}`. Never return blank or invent evidence.\n\nQuestion: {question}\nL2 state capsule: {compact_json}\nAnswer:"""
+        return f"""Resolve the question using the complete grounded OUEG evidence payload below.\n\nFocus guidance from the first read (attention only; it does not exclude any graph candidate or evidence in this payload):\n{json.dumps(handoff, ensure_ascii=False)}\n\nCheck the stated needed_check against row bindings and linked passages. Copy the shortest answer span exactly as it appears in the evidence; do not translate or expand a name. Never return blank: use `FINAL_ANSWER: <span>` if proven, otherwise return `UNRESOLVED: {{\"blocker_type\":\"...\",\"bottleneck\":\"...\",\"needed_check\":\"...\"}}`.\n\nQuestion: {question}\nComplete grounded OUEG payload: {compact_json}\nAnswer:"""
 
     @staticmethod
     def _source_keys(value: object) -> set[str]:
@@ -1034,6 +1188,342 @@ class OnlineUnifiedEvidenceGraphBaseline:
                 report["added_source_ids"].append(passage_id)
         return report
 
+    @staticmethod
+    def _record_source_ids(record: dict) -> set[str]:
+        """Return all source IDs referenced by a compact OUEG record."""
+        values = set(str(value) for value in record.get("context_ids", []) if value)
+        values.update(
+            str(context.get("source_id"))
+            for context in record.get("contexts", [])
+            if context.get("source_id")
+        )
+        tail = str(record.get("tail") or "")
+        if tail.startswith("passage:"):
+            values.add(tail.removeprefix("passage:"))
+        return values
+
+    def _focus_evidence_augmentation(
+        self, example: DatasetExample, retrieved: dict, handoff: dict,
+    ) -> dict:
+        """Retrieve missing candidate-linked passages for L2, symmetrically.
+
+        This is deliberately not a new answer-selection stage.  It may only
+        add user-supplied passages linked to *each* validated focus candidate;
+        it cannot remove first-read evidence or pick a winner.
+        """
+        blocker_type = str(handoff.get("blocker_type") or "").casefold()
+        eligible = {"missing_link", "insufficient_evidence"}
+        report = {
+            "enabled": self.config.use_focus_evidence_augmentation,
+            "triggered": False,
+            "reason": blocker_type,
+            "per_candidate_budget": self.config.focus_passage_budget_per_candidate,
+            "query_fallback_budget": self.config.focus_query_fallback_budget,
+            "candidate_sources": {},
+            "linked_source_ids": {},
+            "query_source_ids": {},
+            "added_source_ids": [],
+            "unresolved_candidates": [],
+        }
+        if not self.config.use_focus_evidence_augmentation or blocker_type not in eligible:
+            return report
+        candidates = [str(value).strip() for value in handoff.get("candidates", []) if str(value).strip()]
+        if not candidates:
+            return report
+        report["triggered"] = True
+        passages = [dict(item) for item in example.text_passages]
+        by_key: dict[str, list[dict]] = defaultdict(list)
+        for passage in passages:
+            for key in self._source_keys(passage.get("id") or passage.get("url")):
+                by_key[key].append(passage)
+        selected = retrieved.setdefault("text_passages", [])
+        selected_keys = {
+            key for item in selected
+            for key in self._source_keys(item.get("id") or item.get("url"))
+        }
+        # Map candidate entities and *grounded focus rows* to their links.
+        # The latter matters when the physical row anchor is a Rank/Year cell.
+        links_by_entity: dict[str, list[str]] = defaultdict(list)
+        links_by_focus_row: dict[str, list[str]] = defaultdict(list)
+        row_pattern = re.compile(r"^table:(?P<table>.+):row:(?P<row>\d+)$")
+        focus_row_keys: dict[tuple[str | None, int], list[str]] = defaultdict(list)
+        for focus in handoff.get("focus_rows", []):
+            match = row_pattern.match(str(focus.get("row_id") or ""))
+            row_index = focus.get("row_order_index")
+            if isinstance(row_index, int):
+                focus_row_keys[(match.group("table") if match else None, row_index)].append(
+                    str(focus.get("entity") or ""),
+                )
+        for group in example.table_rows:
+            table_name = str(group.get("table_name") or "")
+            for link in group.get("cell_links", []):
+                row_index = link.get("row_index")
+                column = str(link.get("column_name") or "")
+                if not isinstance(row_index, int):
+                    continue
+                rows = group.get("rows", [])
+                if row_index < 0 or row_index >= len(rows):
+                    continue
+                entity = str(rows[row_index].get(column) or "").strip()
+                target = str(link.get("url") or link.get("passage_id") or "").strip()
+                if entity and target:
+                    links_by_entity[entity.casefold()].append(target)
+                    for focus_entity in focus_row_keys.get((table_name, row_index), []) + focus_row_keys.get((None, row_index), []):
+                        if focus_entity:
+                            links_by_focus_row[focus_entity.casefold()].append(target)
+        for candidate in dict.fromkeys(candidates):
+            targets = [
+                *links_by_focus_row.get(candidate.casefold(), []),
+                *links_by_entity.get(candidate.casefold(), []),
+                candidate,
+            ]
+            matches: list[dict] = []
+            seen_match_ids: set[str] = set()
+            for target in dict.fromkeys(targets):
+                for key in self._source_keys(target):
+                    for passage in by_key.get(key, []):
+                        passage_id = str(passage.get("id") or passage.get("url"))
+                        if passage_id and passage_id not in seen_match_ids:
+                            matches.append(passage)
+                            seen_match_ids.add(passage_id)
+            linked_match_ids = [str(item.get("id") or item.get("url")) for item in matches]
+            # If links are absent or unrelated, search only the supplied
+            # example corpus with a grounded entity + diagnostic query.
+            query = " ".join((
+                example.question, candidate, str(handoff.get("needed_check") or ""),
+            ))
+            ranked = rank_documents(
+                query,
+                [{"id": str(item.get("id") or item.get("url")), "text": str(item.get("text") or "")}
+                 for item in passages],
+                self.config.focus_query_fallback_budget,
+            )
+            query_matches = [
+                next((item for item in passages if str(item.get("id") or item.get("url")) == ranked_item["id"]), None)
+                for ranked_item in ranked
+            ]
+            query_matches = [item for item in query_matches if item is not None]
+            added_for_candidate: list[str] = []
+            query_added: list[str] = []
+            for passage, origin in [
+                *((passage, "linked") for passage in matches),
+                *((passage, "query") for passage in query_matches),
+            ]:
+                if len(added_for_candidate) >= self.config.focus_passage_budget_per_candidate:
+                    break
+                passage_id = str(passage.get("id") or passage.get("url"))
+                if any(key in selected_keys for key in self._source_keys(passage_id)):
+                    continue
+                selected.append(dict(passage))
+                selected_keys.update(self._source_keys(passage_id))
+                added_for_candidate.append(passage_id)
+                report["added_source_ids"].append(passage_id)
+                if origin == "query":
+                    query_added.append(passage_id)
+            report["candidate_sources"][candidate] = added_for_candidate
+            report["linked_source_ids"][candidate] = linked_match_ids
+            report["query_source_ids"][candidate] = query_added
+            if not matches and not query_matches:
+                report["unresolved_candidates"].append(candidate)
+        return report
+
+    def _semantic_delta(
+        self, records: list[dict], added_source_ids: list[str], candidates: list[str],
+    ) -> list[dict]:
+        """Expose newly retrieved grounded facts as a small L2 attention card."""
+        added_keys = {
+            key for source_id in added_source_ids for key in self._source_keys(source_id)
+        }
+        candidate_keys = {str(candidate).casefold() for candidate in candidates}
+        delta = []
+        for record in records:
+            source_match = any(
+                key in added_keys
+                for source_id in self._record_source_ids(record)
+                for key in self._source_keys(source_id)
+            )
+            entity_match = str(record.get("head") or "").casefold() in candidate_keys
+            if not source_match and not entity_match:
+                continue
+            delta.append({
+                key: record.get(key)
+                for key in ("edge_id", "head", "relation", "tail", "context_ids")
+                if record.get(key) is not None
+            })
+        # This is only an orientation aid: the full rebuilt graph remains the
+        # source of truth, so cap the card rather than selecting an answer.
+        return delta[:24]
+
+    def _l2_existing_witnesses(
+        self, question: str, handoff: dict, l1_contexts: dict[str, dict],
+    ) -> list[str]:
+        """Retain a few L1 passages that directly answer the missing check."""
+        if not l1_contexts:
+            return []
+        query = " ".join((
+            question,
+            str(handoff.get("needed_check") or ""),
+            *[str(value) for value in handoff.get("candidates", [])],
+        ))
+        ranked = rank_documents(
+            query,
+            [
+                {"id": source_id, "text": str(context.get("text") or "")}
+                for source_id, context in l1_contexts.items()
+            ],
+            self.config.l2_existing_witness_budget,
+        )
+        return [str(item["id"]) for item in ranked]
+
+    @staticmethod
+    def _l2_record(record: dict) -> dict:
+        """Serialize an evidence edge without reader-priority metadata."""
+        return {
+            key: record.get(key)
+            for key in ("edge_id", "head", "relation", "tail", "context_ids")
+            if record.get(key) is not None
+        }
+
+    @classmethod
+    def _l2_excerpt(cls, text: object, candidate: str, needed_check: str, max_chars: int) -> str:
+        """Keep only local sentence evidence; do not ask another model to trim it."""
+        value = str(text or "").strip()
+        if len(value) <= max_chars:
+            return value
+        terms = cls._terms(candidate) | cls._terms(needed_check)
+        sentences = [item.strip() for item in re.split(r"(?<=[.!?])\s+", value) if item.strip()]
+        ranked = sorted(
+            range(len(sentences)),
+            key=lambda index: (-len(cls._terms(sentences[index]) & terms), index),
+        )
+        chosen: list[str] = []
+        used = 0
+        for index in ranked:
+            sentence = sentences[index]
+            if not (cls._terms(sentence) & terms):
+                continue
+            if used + len(sentence) + 1 > max_chars:
+                continue
+            chosen.append(sentence)
+            used += len(sentence) + 1
+            if len(chosen) >= 3:
+                break
+        return " ".join(chosen) or value[:max_chars]
+
+    def _l2_state_capsule(
+        self,
+        *,
+        question: str,
+        handoff: dict,
+        row_candidates: list[dict],
+        records: list[dict],
+        contexts_by_source_id: dict[str, dict],
+        augmentation: dict,
+        existing_witness_source_ids: list[str],
+    ) -> dict:
+        """Build the small sufficient context passed from L1 to an L2 reader.
+
+        L2 calls are stateless.  This capsule therefore repeats the minimal
+        row constraints plus evidence needed to resolve the L1 diagnostic,
+        rather than assuming the model can remember the large L1 OUEG prompt.
+        """
+        candidates = [str(value) for value in handoff.get("candidates", [])]
+        candidate_lookup = {
+            str(item.get("anchor_entity") or "").casefold(): item
+            for item in row_candidates
+        }
+        rows_by_id = {str(item.get("row_id") or ""): item for item in row_candidates}
+        for focus in handoff.get("focus_rows", []):
+            entity = str(focus.get("entity") or "").casefold()
+            row = rows_by_id.get(str(focus.get("row_id") or ""))
+            if entity and row is not None:
+                candidate_lookup[entity] = row
+        candidate_sources = dict(augmentation.get("candidate_sources", {}))
+        packets = []
+        for entity in candidates:
+            path = candidate_lookup.get(entity.casefold(), {})
+            source_ids = list(candidate_sources.get(entity, []))
+            # Existing linked evidence is needed for collision/comparison
+            # diagnostics even when no new retrieval was eligible.
+            for record in records:
+                if str(record.get("head") or "").casefold() != entity.casefold():
+                    continue
+                source_ids.extend(self._record_source_ids(record))
+            source_ids = list(dict.fromkeys(source_id for source_id in source_ids if source_id))
+            source_keys = {
+                key for source_id in source_ids for key in self._source_keys(source_id)
+            }
+            path_edge_ids = {str(value) for value in path.get("edge_ids", []) if value is not None}
+            evidence = []
+            used_edge_ids: set[str] = set()
+            for record in records:
+                record_id = str(record.get("edge_id") or "")
+                touches_entity = (
+                    str(record.get("head") or "").casefold() == entity.casefold()
+                    or str(record.get("tail") or "").casefold() == entity.casefold()
+                )
+                touches_source = any(
+                    key in source_keys
+                    for source_id in self._record_source_ids(record)
+                    for key in self._source_keys(source_id)
+                )
+                if not (record_id in path_edge_ids or touches_entity or touches_source):
+                    continue
+                if record_id in used_edge_ids or len(evidence) >= self.config.l2_max_edges_per_candidate:
+                    continue
+                evidence.append(self._l2_record(record))
+                used_edge_ids.add(record_id)
+            passages = []
+            for source_id in source_ids[:self.config.l2_max_contexts_per_candidate]:
+                context = contexts_by_source_id.get(str(source_id))
+                if context is None:
+                    continue
+                passages.append({
+                    "source_id": source_id,
+                    "text": self._l2_excerpt(
+                        context.get("text", ""), entity, str(handoff.get("needed_check") or ""),
+                        self.config.l2_context_snippet_chars,
+                    ),
+                })
+            packets.append({
+                "entity": entity,
+                "row_id": path.get("row_id"),
+                "row_binding": path.get("sort_keys", {}),
+                "evidence": evidence,
+                "passages": passages,
+                "retrieval_coverage": (
+                    "new_linked_evidence" if candidate_sources.get(entity)
+                    else "no_new_linked_evidence"
+                ),
+            })
+        witnesses = []
+        for source_id in existing_witness_source_ids:
+            context = contexts_by_source_id.get(source_id)
+            if context is None:
+                continue
+            witnesses.append({
+                "source_id": source_id,
+                "text": self._l2_excerpt(
+                    context.get("text", ""), " ".join(candidates),
+                    str(handoff.get("needed_check") or ""), self.config.l2_context_snippet_chars,
+                ),
+            })
+        return {
+            "format": "oueg-l2-state-capsule-v1",
+            "question": question,
+            "l1_diagnostic": {
+                key: handoff.get(key)
+                for key in ("blocker_type", "bottleneck", "needed_check")
+            },
+            "candidate_packets": packets,
+            "l1_witnesses": witnesses,
+            "coverage": {
+                "augmentation_triggered": augmentation.get("triggered", False),
+                "added_source_ids": augmentation.get("added_source_ids", []),
+                "unresolved_candidates": augmentation.get("unresolved_candidates", []),
+            },
+        }
+
     def _evidence_view(self, retrieved: dict) -> dict:
         """Build the complete OUEG view once, or again after evidence expansion."""
         kg = self.kg_builder.build(retrieved)
@@ -1150,6 +1640,9 @@ class OnlineUnifiedEvidenceGraphBaseline:
         answer_records, answer_contexts, answer_paths, answer_evidence_audit = self._answer_time_evidence(
             records, all_contexts, suggested_paths,
         )
+        # Preserve only a later-ranked subset of these L1-visible contexts for
+        # the small L2 packet; do not assume a fresh API call remembers them.
+        l1_contexts = dict(answer_contexts)
         compressed_prompt = self.prompt_builder.build(
             question=example.question,
             records=answer_records,
@@ -1169,6 +1662,8 @@ class OnlineUnifiedEvidenceGraphBaseline:
         provider = get_provider()
         request_max_tokens = self._request_token_limit(provider, self.config.max_output_tokens)
         retry_prompt = None
+        verification_evidence = None
+        focus_evidence_augmentation = None
         adaptive_verification = {
             "enabled": self.config.use_adaptive_verification,
             "triggered": False,
@@ -1177,6 +1672,7 @@ class OnlineUnifiedEvidenceGraphBaseline:
             "second_response": None,
             "final_decision": "not_run",
         }
+        answer_evidence_path = None
         abstained = False
         llm_calls = 0
         if ambiguity["is_ambiguous"] and self.config.ambiguity_policy == "return_candidates":
@@ -1195,12 +1691,97 @@ class OnlineUnifiedEvidenceGraphBaseline:
             if self.config.use_adaptive_verification:
                 answer, model_hint = self._parse_adaptive_response(first_response)
                 adaptive_verification["first_response"] = str(first_response or "")
+                first_evidence_path = self._evidence_path_audit(
+                    first_response, self._serialized_evidence_refs(compressed_prompt["json"]),
+                )
+                adaptive_verification["first_evidence_path"] = first_evidence_path
                 if answer:
+                    answer_evidence_path = first_evidence_path
                     adaptive_verification["final_decision"] = "fast_path_answer"
                 else:
-                    handoff = self._focus_handoff(model_hint, ambiguity, row_candidates)
+                    handoff = self._focus_handoff(
+                        example.question, model_hint, ambiguity, row_candidates,
+                    )
+                    existing_witness_source_ids = self._l2_existing_witnesses(
+                        example.question, handoff, l1_contexts,
+                    )
+                    handoff["existing_witness_source_ids"] = existing_witness_source_ids
+                    focus_evidence_augmentation = self._focus_evidence_augmentation(
+                        example, retrieved, handoff,
+                    )
+                    if focus_evidence_augmentation["added_source_ids"]:
+                        # Rebuild, rather than append text to the old prompt:
+                        # added passages can contribute new grounded triples,
+                        # links, and contexts to the OUEG.
+                        augmented_view = self._evidence_view(retrieved)
+                        kg = augmented_view["kg"]
+                        kg_trace = augmented_view["kg_trace"]
+                        records = augmented_view["records"]
+                        compact = augmented_view["compact"]
+                        all_contexts = augmented_view["all_contexts"]
+                        handoff["semantic_delta"] = self._semantic_delta(
+                            records,
+                            focus_evidence_augmentation["added_source_ids"],
+                            handoff["candidates"],
+                        )
+                    handoff["evidence_augmentation"] = focus_evidence_augmentation
+                    if self.config.l2_evidence_mode == "delta_only":
+                        state_capsule = self._l2_state_capsule(
+                            question=example.question,
+                            handoff=handoff,
+                            row_candidates=row_candidates,
+                            records=records,
+                            contexts_by_source_id=all_contexts,
+                            augmentation=focus_evidence_augmentation,
+                            existing_witness_source_ids=existing_witness_source_ids,
+                        )
+                        verification_json = json.dumps(
+                            state_capsule, ensure_ascii=False, separators=(",", ":"),
+                        )
+                        adaptive_verification["l2_state_capsule"] = state_capsule
+                        verification_evidence = {
+                            "mode": "delta_only",
+                            "augmentation_applied": bool(focus_evidence_augmentation["added_source_ids"]),
+                            "full_record_count": len(records),
+                            "full_context_count": len(all_contexts),
+                            "l2_record_count": sum(
+                                len(packet["evidence"])
+                                for packet in state_capsule["candidate_packets"]
+                            ),
+                            "l2_context_count": sum(
+                                len(packet["passages"])
+                                for packet in state_capsule["candidate_packets"]
+                            ) + len(state_capsule["l1_witnesses"]),
+                            "payload_chars": len(verification_json),
+                        }
+                    else:
+                        # Diagnostic ablation: restore all evidence after a
+                        # focused first read, retaining the old full re-read.
+                        verification_payload = self.prompt_builder.build(
+                            question=example.question,
+                            records=records,
+                            contexts_by_source_id=all_contexts,
+                            suggested_paths=suggested_paths,
+                            ordering_hint=ordering_hint,
+                            ambiguity=prompt_ambiguity,
+                            path_generation=path_generation,
+                        )
+                        verification_json = verification_payload["json"]
+                        verification_evidence = {
+                            "mode": "complete_re_read",
+                            "augmentation_applied": bool(focus_evidence_augmentation["added_source_ids"]),
+                            "full_record_count": len(records),
+                            "full_context_count": len(all_contexts),
+                            "first_read_record_count": len(answer_records),
+                            "first_read_context_count": len(answer_contexts),
+                            "all_edges_represented": verification_payload["stats"].get(
+                                "all_edges_represented", False,
+                            ),
+                            "payload_chars": len(verification_json),
+                        }
                     retry_prompt = self._verification_prompt(
-                        example.question, compressed_prompt["json"], handoff,
+                        example.question, verification_json, handoff,
+                        mode=self.config.l2_evidence_mode,
                     )
                     adaptive_verification["triggered"] = True
                     adaptive_verification["handoff"] = handoff
@@ -1208,8 +1789,15 @@ class OnlineUnifiedEvidenceGraphBaseline:
                         retry_prompt, max_tokens=request_max_tokens,
                         temperature=self.config.temperature,
                     )
-                    answer = self._short_answer(second_response)
+                    answer, second_diagnostic = self._parse_adaptive_response(second_response)
                     adaptive_verification["second_response"] = str(second_response or "")
+                    second_evidence_path = self._evidence_path_audit(
+                        second_response, self._serialized_evidence_refs(verification_json),
+                    )
+                    adaptive_verification["second_evidence_path"] = second_evidence_path
+                    adaptive_verification["second_diagnostic"] = second_diagnostic or None
+                    if answer:
+                        answer_evidence_path = second_evidence_path
                     adaptive_verification["final_decision"] = (
                         "verified_after_focus" if answer else "grounded_abstention"
                     )
@@ -1223,6 +1811,12 @@ class OnlineUnifiedEvidenceGraphBaseline:
                 llm_calls = 2
         retrieval_trace = dict(retrieved.get("retrieval_trace", {}))
         retrieval_trace["collision_evidence_expansion"] = collision_expansion
+        retrieval_trace["focus_evidence_augmentation"] = focus_evidence_augmentation
+        answer_evidence_verified = bool(
+            answer_evidence_path
+            and answer_evidence_path.get("selected_refs")
+            and not answer_evidence_path.get("invalid_refs")
+        )
         return {
             "answer": answer,
             "method": self.method_name,
@@ -1234,13 +1828,17 @@ class OnlineUnifiedEvidenceGraphBaseline:
             "compact_oueg_payload": compressed_prompt["payload"],
             "prompt_compression": compressed_prompt["stats"],
             "answer_time_evidence": answer_evidence_audit,
+            "verification_evidence": verification_evidence,
             "suggested_paths": suggested_paths,
             "ordering_hint": ordering_hint,
             "ambiguity": ambiguity,
             "ambiguity_policy": self.config.ambiguity_policy,
             "abstained_for_ambiguity": abstained,
             "adaptive_verification": adaptive_verification,
+            "answer_evidence_path": answer_evidence_path,
+            "answer_evidence_verified": answer_evidence_verified,
             "collision_evidence_expansion": collision_expansion,
+            "focus_evidence_augmentation": focus_evidence_augmentation,
             "entity_anchor": retrieved.get("retrieval_trace", {}).get("entity_anchor", {}),
             "retrieval_trace": retrieval_trace,
             "retrieved_passage_ids": [

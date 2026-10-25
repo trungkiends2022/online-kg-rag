@@ -43,11 +43,55 @@ class GraphRetrievalNoPathBaseline:
         """Keep all edge evidence while storing each passage once by source id."""
         return deduplicate_edge_contexts(kg_edges)
 
+    @staticmethod
+    def _bounded_prompt_kg_payload(kg_edges: list[dict], limit: int) -> tuple[dict, bool]:
+        """Serialize an audit-preserving, valid KG view within the prompt budget.
+
+        The unbounded graph remains in the returned run trace.  This view is
+        deliberately an unordered edge set (so it does not introduce path
+        reasoning), but only retains source contexts that fit alongside their
+        linked edge records.  An edge can still be exposed without its context
+        when its source text alone would exhaust the budget.
+        """
+        full_payload = GraphRetrievalNoPathBaseline._prompt_kg_payload(kg_edges)
+        if len(json.dumps(full_payload, ensure_ascii=False, default=str)) <= limit:
+            return full_payload, False
+
+        all_contexts = full_payload["contexts_by_source_id"]
+        bounded = {"edges": [], "contexts_by_source_id": {}}
+        for edge in full_payload["edges"]:
+            candidate = {
+                "edges": [*bounded["edges"], edge],
+                "contexts_by_source_id": dict(bounded["contexts_by_source_id"]),
+            }
+            for source_id in edge.get("context_ids", []):
+                if source_id in all_contexts:
+                    candidate["contexts_by_source_id"].setdefault(
+                        source_id, all_contexts[source_id]
+                    )
+            if len(json.dumps(candidate, ensure_ascii=False, default=str)) <= limit:
+                bounded = candidate
+                continue
+
+            # Retain the structural/semantic edge if it fits on its own, but
+            # do not leave an unresolved context reference in the prompt.
+            edge_without_context = dict(edge)
+            edge_without_context.pop("context_ids", None)
+            candidate = {
+                "edges": [*bounded["edges"], edge_without_context],
+                "contexts_by_source_id": dict(bounded["contexts_by_source_id"]),
+            }
+            if len(json.dumps(candidate, ensure_ascii=False, default=str)) <= limit:
+                bounded = candidate
+
+        return bounded, True
+
     def run(self, example: DatasetExample) -> dict:
         started = time.perf_counter()
         retrieved = two_stage_retrieve(
             example.question, example.table_rows, example.text_passages,
-            example.web_snippets, top_k=self.config.top_k, second_stage_k=3,
+            example.web_snippets, top_k=self.config.top_k,
+            second_stage_k=self.config.second_stage_k,
             max_table_rows=self.config.max_table_rows_for_kg,
         )
         kg = self.kg_builder.build(retrieved)
@@ -65,7 +109,9 @@ class GraphRetrievalNoPathBaseline:
         # Preserve every KG edge attribute and all linked passage contexts in
         # the exact payload sent to the answer model, without repeating the
         # same passage for every linked table edge.
-        prompt_kg_edges = self._prompt_kg_payload(kg_edges)
+        prompt_kg_edges, prompt_truncated = self._bounded_prompt_kg_payload(
+            kg_edges, self.config.max_context_chars
+        )
         prompt_payload = json.dumps(prompt_kg_edges, ensure_ascii=False, default=str)
         prompt = f"""Answer using only these retrieved KG edge records. Records with `structural: true` preserve the table row/column topology; records with `structural: false` are semantic facts. Each record may reference text evidence through `context_ids`; resolve them in `contexts_by_source_id`. The records are an unordered set;
 do not assume a reasoning path not supported by them. Return only the shortest answer span.
@@ -100,6 +146,8 @@ Answer:"""
             "entity_anchor": retrieved["retrieval_trace"].get("entity_anchor", {}),
             "retrieval_trace": retrieved["retrieval_trace"], "prompt_chars": len(prompt),
             "request_max_output_tokens": request_max_tokens,
+            "prompt_context_budget_chars": self.config.max_context_chars,
+            "prompt_context_truncated": prompt_truncated,
             "answer_retry_attempted": retry_prompt is not None,
             "retry_prompt": retry_prompt,
             "retry_prompt_chars": len(retry_prompt) if retry_prompt else 0,

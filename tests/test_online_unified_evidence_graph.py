@@ -1,3 +1,5 @@
+import pytest
+
 from src.baselines.online_unified_evidence_graph import (
     OnlineUnifiedEvidenceGraphBaseline,
     _VerbatimOUEGPromptBuilder,
@@ -26,6 +28,36 @@ def _kg_with_rows():
     kg.add_triple(Triple(
         "Gaborone", "situated_between_landmark", "Oodi Hills",
         Provenance("text", "/wiki/Gaborone", "situated between", source_group="rule_text"),
+    ))
+    return kg
+
+
+def _kg_with_rate_collision(*, uniquely_river_named: bool) -> OnlineKG:
+    """Two structurally tied rows; text either resolves or preserves the tie."""
+    kg = OnlineKG()
+    rows = [
+        {"Jurisdiction": "Alpha", "Rate": "21%"},
+        {"Jurisdiction": "Beta", "Rate": "21%"},
+    ]
+    kg.register_table_structure("Rates", rows, cell_links=[
+        {"row_index": 0, "column_name": "Jurisdiction", "cell_value": "Alpha", "url": "/wiki/Alpha"},
+        {"row_index": 1, "column_name": "Jurisdiction", "cell_value": "Beta", "url": "/wiki/Beta"},
+    ])
+    alpha_text = (
+        "Alpha is not named after a river."
+        if uniquely_river_named else "Alpha is named after the Alpha River."
+    )
+    beta_text = "Beta is named after the Beta River."
+    kg.register_passage("/wiki/Alpha", alpha_text)
+    kg.register_passage("/wiki/Beta", beta_text)
+    kg.add_triple(Triple(
+        "Alpha", "origin",
+        "not named after a river" if uniquely_river_named else "Alpha River",
+        Provenance("text", "/wiki/Alpha", alpha_text, source_group="rule_text"),
+    ))
+    kg.add_triple(Triple(
+        "Beta", "named_after", "Beta River",
+        Provenance("text", "/wiki/Beta", beta_text, source_group="rule_text"),
     ))
     return kg
 
@@ -178,8 +210,8 @@ def test_oueg_answer_time_evidence_keeps_only_top_grounded_paths():
             "/wiki/Beta": {"source_id": "/wiki/Beta", "text": "beta"},
         },
         [
-            {"path_id": "lower", "score": 1.0, "edge_ids": ["e1"]},
-            {"path_id": "higher", "score": 2.0, "edge_ids": ["e0"]},
+            {"path_id": "lower", "path_kind": "seed_expansion", "score": 1.0, "edge_ids": ["e1"]},
+            {"path_id": "higher", "path_kind": "seed_expansion", "score": 2.0, "edge_ids": ["e0"]},
         ],
     )
 
@@ -387,7 +419,9 @@ def test_oueg_prompt_injects_tie_break_hint_for_score_collision(monkeypatch):
         lambda prompt, **kwargs: prompts.append(prompt) or "Club Early",
     )
 
-    OnlineUnifiedEvidenceGraphBaseline(RAGConfig(max_output_tokens=32), kg_builder=Builder()).run(
+    OnlineUnifiedEvidenceGraphBaseline(RAGConfig(
+        max_output_tokens=32, use_lexical_tiebreak=True,
+    ), kg_builder=Builder()).run(
         DatasetExample(
             example_id="tie", question="Which club is in Gaborone?",
             table_rows=[], text_passages=[], answer="",
@@ -431,11 +465,348 @@ def test_oueg_empty_first_response_uses_non_destructive_focus_handoff(monkeypatc
     assert result["llm_calls"] == 2
     assert verification["triggered"] is True
     assert verification["final_decision"] == "verified_after_focus"
-    assert verification["handoff"]["origin"] == "empty_response_fallback"
+    assert verification["handoff"]["origin"] == "empty_model_response"
     assert verification["handoff"]["non_destructive"] is True
-    assert "Focus guidance from the first read" in prompts[1]
-    assert "does not exclude any graph candidate" in prompts[1]
+    assert "L2 state capsule" in prompts[1]
+    assert "do not assume you remember L1" in prompts[1]
     assert result["compact_oueg_payload"]
+
+
+def test_oueg_ambiguous_need_focus_explains_blocker_then_uses_small_state_capsule(monkeypatch):
+    """L2 repeats only sufficient candidate state; it does not assume L1 memory."""
+    kg = _kg_with_rows()
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    responses = iter([
+        'NEED_FOCUS: {"candidates":["Club Late","Club Early"],'
+        '"blocker_type":"candidate_collision",'
+        '"bottleneck":"Both clubs share Gaborone as their bridge city.",'
+        '"needed_check":"Compare the linked passage for the city-between-hills constraint."}',
+        "FINAL_ANSWER: Club Early",
+    ])
+    prompts = []
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda prompt, **kwargs: prompts.append(prompt) or next(responses),
+    )
+
+    result = OnlineUnifiedEvidenceGraphBaseline(
+        RAGConfig(max_output_tokens=32, prompt_path_budget=1), kg_builder=Builder(),
+    ).run(DatasetExample(
+        example_id="need-focus", question="Which club is in Gaborone?",
+        table_rows=[], text_passages=[], answer="Club Early",
+    ))
+
+    verification = result["adaptive_verification"]
+    assert result["answer"] == "Club Early"
+    assert result["llm_calls"] == 2
+    assert verification["triggered"] is True
+    assert verification["final_decision"] == "verified_after_focus"
+    assert verification["handoff"]["origin"] == "model_need_focus"
+    assert verification["handoff"]["blocker_type"] == "candidate_collision"
+    assert "linked passage" in verification["handoff"]["needed_check"]
+    assert "UNRESOLVED:" in prompts[0]
+    assert "never return a blank response" in prompts[0]
+    assert "candidate_collision" in prompts[1]
+    assert "L2 state capsule" in prompts[1]
+    assert result["verification_evidence"]["mode"] == "delta_only"
+    assert result["verification_evidence"]["l2_record_count"] < (
+        result["verification_evidence"]["full_record_count"]
+    )
+
+
+def test_oueg_unresolved_response_keeps_a_diagnostic_instead_of_becoming_an_answer():
+    answer, hint = OnlineUnifiedEvidenceGraphBaseline._parse_adaptive_response(
+        'UNRESOLVED: {"blocker_type":"missing_link",'
+        '"bottleneck":"No passage identifies the city.",'
+        '"needed_check":"A linked city passage is required."}',
+    )
+
+    assert answer == ""
+    assert hint["response_type"] == "unresolved"
+    assert hint["blocker_type"] == "missing_link"
+    assert hint["needed_check"] == "A linked city passage is required."
+
+
+def test_oueg_evidence_path_audit_accepts_only_ids_visible_to_reader():
+    audit = OnlineUnifiedEvidenceGraphBaseline._evidence_path_audit(
+        'FINAL_ANSWER: Beta\nEVIDENCE_PATH: {"edges":["e7","e999"],"passages":["p2"]}',
+        {"e7", "p2"},
+    )
+
+    assert audit["provided"] is True
+    assert audit["selected_refs"] == ["e7", "p2"]
+    assert audit["invalid_refs"] == ["e999"]
+
+
+def test_oueg_diagnostic_focus_resolves_named_table_value_not_rank_anchor():
+    baseline = OnlineUnifiedEvidenceGraphBaseline(RAGConfig())
+    rows = [
+        {
+            "path_id": "row_0", "row_id": "table:Results:row:0", "row_order_index": 0,
+            "anchor_entity": "1", "bridge_entity": "Other School",
+            "sort_keys": {"Year": "2002", "Second place": "Other School"},
+        },
+        {
+            "path_id": "row_1", "row_id": "table:Results:row:1", "row_order_index": 1,
+            "anchor_entity": "2", "bridge_entity": "Stuartholme School",
+            "sort_keys": {"Year": "2002", "Second place": "Stuartholme School"},
+        },
+    ]
+
+    handoff = baseline._focus_handoff(
+        "Who established the school that was the 2nd place winner?",
+        {
+            "response_type": "unresolved", "candidates": [], "blocker_type": "missing_link",
+            "bottleneck": "history is missing",
+            "needed_check": "founder information for Stuartholme School",
+        },
+        {"groups": []}, rows,
+    )
+
+    assert handoff["candidates"] == ["Stuartholme School"]
+    assert handoff["focus_rows"][0]["row_id"] == "table:Results:row:1"
+    assert "2" not in handoff["candidates"]
+
+
+def test_oueg_diagnostic_focus_uses_ordinal_row_instead_of_first_rank_rows():
+    baseline = OnlineUnifiedEvidenceGraphBaseline(RAGConfig())
+    rows = [
+        {
+            "path_id": f"row_{index}", "row_id": f"table:Metro:row:{index}",
+            "row_order_index": index, "anchor_entity": str(index + 1),
+            "bridge_entity": f"Greater City {index + 1}",
+            "sort_keys": {"Metropolitan area": f"Greater City {index + 1}"},
+        }
+        for index in range(10)
+    ]
+    rows[9]["bridge_entity"] = "Greater Querétaro"
+    rows[9]["sort_keys"] = {"Metropolitan area": "Greater Querétaro"}
+
+    handoff = baseline._focus_handoff(
+        "How many boroughs does the 10th most populated metro area have?",
+        {"response_type": "unresolved", "candidates": [], "blocker_type": "missing_link",
+         "bottleneck": "missing borough count", "needed_check": "borough count for Greater Querétaro"},
+        {"groups": []}, rows,
+    )
+
+    assert handoff["candidates"] == ["Greater Querétaro"]
+    assert handoff["focus_rows"][0]["row_order_index"] == 9
+
+
+def test_oueg_focus_augmentation_uses_links_from_grounded_row_not_rank_value():
+    example = DatasetExample(
+        example_id="focus-row-link", question="Who established Stuartholme School?",
+        table_rows=[{
+            "table_name": "Results",
+            "rows": [{"Rank": "2", "School": "Stuartholme School"}],
+            "cell_links": [
+                {"row_index": 0, "column_name": "School", "url": "/wiki/Stuartholme_School"},
+            ],
+        }],
+        text_passages=[{
+            "id": "/wiki/Stuartholme_School",
+            "text": "Stuartholme School was established by the Society of the Sacred Heart.",
+        }], answer="Society of the Sacred Heart",
+    )
+    handoff = {
+        "blocker_type": "missing_link", "needed_check": "founder of Stuartholme School",
+        "candidates": ["Stuartholme School"],
+        "focus_rows": [{
+            "entity": "Stuartholme School", "row_id": "table:Results:row:0",
+            "row_order_index": 0,
+        }],
+    }
+    retrieved = {"text_passages": []}
+
+    report = OnlineUnifiedEvidenceGraphBaseline(RAGConfig(
+        focus_passage_budget_per_candidate=1, focus_query_fallback_budget=1,
+    ))._focus_evidence_augmentation(example, retrieved, handoff)
+
+    assert report["candidate_sources"] == {"Stuartholme School": ["/wiki/Stuartholme_School"]}
+    assert report["linked_source_ids"]["Stuartholme School"] == ["/wiki/Stuartholme_School"]
+    assert [item["id"] for item in retrieved["text_passages"]] == ["/wiki/Stuartholme_School"]
+
+
+def test_oueg_l2_augments_missing_linked_text_for_each_focus_candidate(monkeypatch):
+    """L2 fetches a balanced semantic delta only after an L1 missing-link report."""
+    rows = [
+        {"Jurisdiction": "Alpha", "Rate": "21%"},
+        {"Jurisdiction": "Beta", "Rate": "21%"},
+    ]
+
+    class Builder:
+        def build(self, retrieved):
+            kg = OnlineKG()
+            kg.register_table_structure("Rates", rows, cell_links=[
+                {"row_index": 0, "column_name": "Jurisdiction", "cell_value": "Alpha", "url": "/wiki/Alpha"},
+                {"row_index": 1, "column_name": "Jurisdiction", "cell_value": "Beta", "url": "/wiki/Beta"},
+            ])
+            for passage in retrieved.get("text_passages", []):
+                source_id, text = passage["id"], passage["text"]
+                kg.register_passage(source_id, text)
+                if source_id == "/wiki/Alpha":
+                    kg.add_triple(Triple(
+                        "Alpha", "origin", "not named after a river",
+                        Provenance("text", source_id, text, source_group="rule_text"),
+                    ))
+                if source_id == "/wiki/Beta":
+                    kg.add_triple(Triple(
+                        "Beta", "named_after", "Beta River",
+                        Provenance("text", source_id, text, source_group="rule_text"),
+                    ))
+            return kg
+
+    example = DatasetExample(
+        example_id="l2-augment",
+        question="Which jurisdiction has a 21% rate and is named after a river?",
+        table_rows=[{
+            "table_name": "Rates", "rows": rows,
+            "cell_links": [
+                {"row_index": 0, "column_name": "Jurisdiction", "url": "/wiki/Alpha"},
+                {"row_index": 1, "column_name": "Jurisdiction", "url": "/wiki/Beta"},
+            ],
+        }],
+        text_passages=[
+            {"id": "/wiki/Alpha", "text": "Alpha is not named after a river."},
+            {"id": "/wiki/Beta", "text": "Beta is named after the Beta River."},
+        ],
+        answer="Beta",
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}, "text_passages": []},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    responses = iter([
+        'NEED_FOCUS: {"candidates":["Alpha","Beta"],"blocker_type":"missing_link",'
+        '"bottleneck":"The river-origin passages are absent.",'
+        '"needed_check":"Retrieve the linked origin passage for each jurisdiction."}',
+        "FINAL_ANSWER: Beta",
+    ])
+    prompts = []
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda prompt, **kwargs: prompts.append(prompt) or next(responses),
+    )
+
+    result = OnlineUnifiedEvidenceGraphBaseline(RAGConfig(
+        max_output_tokens=32,
+        use_path_focused_prompt=False,
+        use_collision_evidence_expansion=False,
+        focus_passage_budget_per_candidate=1,
+    ), kg_builder=Builder()).run(example)
+
+    augmentation = result["focus_evidence_augmentation"]
+    assert result["answer"] == "Beta"
+    assert result["llm_calls"] == 2
+    assert augmentation["triggered"] is True
+    assert augmentation["candidate_sources"] == {
+        "Alpha": ["/wiki/Alpha"], "Beta": ["/wiki/Beta"],
+    }
+    assert augmentation["added_source_ids"] == ["/wiki/Alpha", "/wiki/Beta"]
+    assert result["verification_evidence"]["mode"] == "delta_only"
+    assert result["verification_evidence"]["augmentation_applied"] is True
+    assert "Alpha is not named after a river" not in prompts[0]
+    assert "Alpha is not named after a river" in prompts[1]
+    assert "Beta is named after the Beta River" in prompts[1]
+    handoff = result["adaptive_verification"]["handoff"]
+    assert handoff["semantic_delta"]
+    assert all("score" not in item for item in handoff["candidate_provenance"])
+    capsule = result["adaptive_verification"]["l2_state_capsule"]
+    assert capsule["question"] == example.question
+    assert [packet["entity"] for packet in capsule["candidate_packets"]] == ["Alpha", "Beta"]
+    assert all(packet["row_binding"] for packet in capsule["candidate_packets"])
+
+
+@pytest.mark.parametrize(
+    ("uniquely_river_named", "second_response", "expected_answer", "expected_decision"),
+    [
+        (
+            True,
+            "FINAL_ANSWER: Beta",
+            "Beta",
+            "verified_after_focus",
+        ),
+        (
+            False,
+            'UNRESOLVED: {"blocker_type":"conflicting_evidence",'
+            '"bottleneck":"Both jurisdictions satisfy the river-origin condition.",'
+            '"needed_check":"A fact that uniquely selects one jurisdiction is required."}',
+            "",
+            "grounded_abstention",
+        ),
+    ],
+    ids=["semantic-text-resolves-collision", "semantic-text-preserves-logical-ambiguity"],
+)
+def test_oueg_two_case_focus_experiment(monkeypatch, uniquely_river_named, second_response, expected_answer, expected_decision):
+    """Exercise the proposed full-OUEG L1 → semantic L2 policy on two outcomes."""
+    kg = _kg_with_rate_collision(uniquely_river_named=uniquely_river_named)
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    responses = iter([
+        'NEED_FOCUS: {"candidates":["Alpha","Beta"],'
+        '"blocker_type":"candidate_collision",'
+        '"bottleneck":"Both rows have the same 21% rate.",'
+        '"needed_check":"Compare each jurisdiction text for whether it is named after a river."}',
+        second_response,
+    ])
+    prompts = []
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda prompt, **kwargs: prompts.append(prompt) or next(responses),
+    )
+
+    result = OnlineUnifiedEvidenceGraphBaseline(
+        # This is the proposed L1 policy: no path-focused pruning.
+        RAGConfig(max_output_tokens=32, use_path_focused_prompt=False),
+        kg_builder=Builder(),
+    ).run(DatasetExample(
+        example_id="rate-collision",
+        question="Which jurisdiction has a 21% rate and is named after a river?",
+        table_rows=[], text_passages=[], answer=expected_answer,
+    ))
+
+    assert result["ambiguity"]["status"] == "SCORE_COLLISION_TIE"
+    assert result["llm_calls"] == 2
+    assert result["answer"] == expected_answer
+    assert result["adaptive_verification"]["final_decision"] == expected_decision
+    assert result["answer_time_evidence"]["enabled"] is False
+    assert "Alpha is" in prompts[0] and "Beta is named after" in prompts[0]
+    assert "Compare each jurisdiction text" in prompts[1]
+    assert result["verification_evidence"]["mode"] == "delta_only"
+    assert result["verification_evidence"]["l2_record_count"] < (
+        result["verification_evidence"]["full_record_count"]
+    )
+    if expected_answer:
+        assert result["adaptive_verification"]["second_diagnostic"] is None
+    else:
+        assert result["adaptive_verification"]["second_diagnostic"]["blocker_type"] == "conflicting_evidence"
 
 
 def test_oueg_need_focus_parser_keeps_only_a_valid_handoff_shape():

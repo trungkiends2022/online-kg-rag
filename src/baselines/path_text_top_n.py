@@ -8,17 +8,25 @@ from src.baselines.online_kg_path_text import OnlineKGPathTextBaseline
 
 
 class PathTextTopNBaseline(OnlineKGPathTextBaseline):
-    """Answer solely from the planner's top-N paths and their direct evidence."""
+    """Answer from the planner's top-N paths and their direct evidence.
+
+    ``strict_path_only`` removes table witnesses/constraints from the reader
+    payload.  This is the destructive-pruning comparator used in controlled
+    experiments; the historical default retains those retrieval artifacts for
+    backwards-compatible diagnostic runs.
+    """
 
     method_name = "path_text_top_n"
+
+    def __init__(self, *args, strict_path_only: bool = False, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.strict_path_only = strict_path_only
 
     def _bounded_kg_context(
         self, question: str, path_records: list[dict], kg, retrieval_trace: dict,
     ) -> str:
         question_terms = self._terms(question)
         payload = {
-            "table_constraints": retrieval_trace.get("table_constraints", []),
-            "table_witnesses": retrieval_trace.get("table_witnesses", []),
             "reasoning_paths": [
                 self._path_view(path, rank)
                 for rank, path in enumerate(path_records, start=1)
@@ -26,6 +34,12 @@ class PathTextTopNBaseline(OnlineKGPathTextBaseline):
             "kg_edges": [],
             "text_contexts": [],
         }
+        if not self.strict_path_only:
+            payload = {
+                "table_constraints": retrieval_trace.get("table_constraints", []),
+                "table_witnesses": retrieval_trace.get("table_witnesses", []),
+                **payload,
+            }
         selected_edge_ids: set[str] = set()
         for path in path_records:
             for edge in path.get("edges", []):
@@ -65,6 +79,10 @@ class PathTextTopNBaseline(OnlineKGPathTextBaseline):
 
     def run(self, example):
         result = super().run(example)
-        result["path_context_policy"] = "planner_top_n_paths_only"
+        result["path_context_policy"] = (
+            "strict_planner_top_n_paths_only"
+            if self.strict_path_only else "planner_top_n_paths_with_retrieval_witnesses"
+        )
         result["top_n_paths"] = self.n_paths
+        result["strict_path_only"] = self.strict_path_only
         return result

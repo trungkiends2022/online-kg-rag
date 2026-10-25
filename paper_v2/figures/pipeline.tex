@@ -1,0 +1,8 @@
+\begin{figure}[t]
+\centering
+\resizebox{\linewidth}{!}{\input{figures/pipeline-diagram}}
+\vspace{-2mm}
+\caption{End-to-end architecture of OUEG-RAG. (1) Multi-source ingestion retrieves relevant table rows and candidate hyperlink passages. (2) Dynamic schema multigraph instantiates star centroids $\rho_i$ and deterministic text relations ($<20$\,ms). (3) Two-tier controlled reasoning engine: Tier~1 evaluates the lossless compressed multigraph with guided reading path $p_1$. Confident outputs yield an immediate verified span (Fast Exit, 1 call); ambiguous or incomplete queries emit a structured diagnostic handoff (\texttt{NEED\_FOCUS}), triggering targeted symmetric bridge retrieval and a minimal L2 state capsule. (4) Grounded answer generation and verified provenance trace.}
+\vspace{-2mm}
+\label{fig:pipeline}
+\end{figure}

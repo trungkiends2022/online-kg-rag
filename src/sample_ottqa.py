@@ -9,6 +9,12 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+from src.sample_hybridqa import (
+    balanced_sample,
+    stratified_shards,
+    _distribution as _hybridqa_distribution,
+)
+
 
 def _has_text_context(passages_dir: Path, table_id: str) -> bool:
     path = passages_dir / f"{table_id}.json"
@@ -35,12 +41,11 @@ def load_question_ids(path: Path) -> set[str]:
 def select_eligible_records(
     records: list[dict[str, Any]], *, tables_dir: Path, passages_dir: Path,
     excluded_question_ids: set[str] | None = None,
+    require_answer_node: bool = False,
 ) -> tuple[list[dict[str, Any]], Counter[str]]:
     """Keep runnable OTT-QA records and report filtering reasons.
 
-    The local adapter requires the table and linked-text JSON files.  Unlike the
-    controlled HybridQA benchmark, this keeps repeated tables and does not
-    stratify: the final sample is a uniform draw from this eligible population.
+    The local adapter requires the table and linked-text JSON files.
     """
     excluded_question_ids = excluded_question_ids or set()
     eligible: list[dict[str, Any]] = []
@@ -58,6 +63,8 @@ def select_eligible_records(
             skipped["missing_or_empty_linked_text_file"] += 1
         elif not str(item.get("answer-text", "")).strip():
             skipped["missing_gold_answer"] += 1
+        elif require_answer_node and not item.get("answer-node"):
+            skipped["missing_answer_node"] += 1
         else:
             eligible.append(item)
     return eligible, skipped
@@ -85,16 +92,20 @@ def _answer_shape(item: dict[str, Any]) -> str:
 
 
 def _distribution(records: list[dict[str, Any]]) -> dict[str, Any]:
-    return {
+    dist: dict[str, Any] = {
         "answer_shape": dict(sorted(Counter(_answer_shape(item) for item in records).items())),
         "unique_table_count": len({str(item.get("table_id", "")) for item in records}),
     }
+    dist.update(_hybridqa_distribution(records))
+    return dist
 
 
 def _report(
     *, input_path: Path, output: Path, seed: int, requested_size: int,
     population_size: int, eligible: list[dict[str, Any]], skipped: Counter[str],
     sample: list[dict[str, Any]], excluded_question_ids_path: Path | None,
+    require_answer_node: bool = False,
+    stratify_reasoning: bool = False,
 ) -> dict[str, Any]:
     return {
         "source": str(input_path),
@@ -108,12 +119,13 @@ def _report(
             str(excluded_question_ids_path) if excluded_question_ids_path else None
         ),
         "selection": {
-            "method": "uniform_without_replacement",
-            "keeps_repeated_tables": True,
-            "stratified": False,
+            "method": "balanced_stratified" if stratify_reasoning else "uniform_without_replacement",
+            "unique_tables": stratify_reasoning,
+            "stratified": stratify_reasoning,
             "has_table_file": True,
             "has_nonempty_linked_text_file": True,
             "has_gold_answer": True,
+            "has_answer_node": require_answer_node,
         },
         "skipped": dict(sorted(skipped.items())),
         "eligible_distribution": _distribution(eligible),
@@ -134,6 +146,14 @@ def main() -> None:
     parser.add_argument("--size", type=int, default=500)
     parser.add_argument("--seed", type=int, default=2027)
     parser.add_argument("--shard-size", type=int, default=100)
+    parser.add_argument(
+        "--require-answer-node", action="store_true",
+        help="keep only traced examples with answer-node provenance",
+    )
+    parser.add_argument(
+        "--stratify-reasoning", action="store_true",
+        help="balance answer kind/source, table-to-text proxy, and reasoning cues, enforcing unique tables",
+    )
     args = parser.parse_args()
 
     records = json.loads(args.input.read_text(encoding="utf-8"))
@@ -148,8 +168,18 @@ def main() -> None:
         tables_dir=args.tables_dir,
         passages_dir=args.passages_dir,
         excluded_question_ids=excluded,
+        require_answer_node=args.require_answer_node,
     )
-    sample = uniform_sample(eligible, size=args.size, seed=args.seed)
+    if args.stratify_reasoning:
+        sample = balanced_sample(
+            eligible,
+            size=args.size,
+            seed=args.seed,
+            stratify_reasoning=True,
+        )
+    else:
+        sample = uniform_sample(eligible, size=args.size, seed=args.seed)
+
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(sample, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
@@ -163,11 +193,17 @@ def main() -> None:
         skipped=skipped,
         sample=sample,
         excluded_question_ids_path=args.exclude_question_ids_from,
+        require_answer_node=args.require_answer_node,
+        stratify_reasoning=args.stratify_reasoning,
     )
     report_path = args.report or args.output.with_suffix(".distribution.json")
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-    shards = split_sample(sample, shard_size=args.shard_size)
+    if args.stratify_reasoning:
+        shards = stratified_shards(sample, shard_size=args.shard_size, seed=args.seed)
+    else:
+        shards = split_sample(sample, shard_size=args.shard_size)
+
     shard_reports = []
     for index, shard in enumerate(shards, start=1):
         shard_output = args.output.with_name(

@@ -10,7 +10,7 @@ import os
 import subprocess
 import sys
 import time
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from tqdm import tqdm
@@ -161,19 +161,30 @@ def _build_run_manifest(args, *, max_workers: int) -> dict:
         "use_hyperlink_expansion": args.use_hyperlink_expansion,
         "use_collision_evidence_expansion": args.use_collision_evidence_expansion,
         "collision_passage_budget": args.collision_passage_budget,
+        "use_focus_evidence_augmentation": args.use_focus_evidence_augmentation,
+        "focus_passage_budget_per_candidate": args.focus_passage_budget_per_candidate,
+        "use_diagnostic_focus_resolution": args.use_diagnostic_focus_resolution,
+        "focus_query_fallback_budget": args.focus_query_fallback_budget,
+        "l2_existing_witness_budget": args.l2_existing_witness_budget,
+        "l2_max_edges_per_candidate": args.l2_max_edges_per_candidate,
+        "l2_max_contexts_per_candidate": args.l2_max_contexts_per_candidate,
+        "l2_context_snippet_chars": args.l2_context_snippet_chars,
         "use_adaptive_verification": args.use_adaptive_verification,
+        "l2_evidence_mode": args.l2_evidence_mode,
         "use_prompt_compression": args.use_prompt_compression,
         "use_path_focused_prompt": args.use_path_focused_prompt,
         "prompt_path_budget": args.prompt_path_budget,
         "ambiguity_policy": args.ambiguity_policy,
         "oueg_context_mode": args.oueg_context_mode,
         "n_paths": args.n_paths,
+        "strict_path_text_top_n": args.strict_path_text_top_n,
         "odyssey_max_hops": args.odyssey_max_hops,
         "odyssey_semantic_threshold": args.odyssey_semantic_threshold,
         "max_replans": args.max_replans,
         "finqa_table_format": args.finqa_table_format,
         "llm_timeout_seconds": args.llm_timeout_seconds,
         "llm_sdk_retries": args.llm_sdk_retries,
+        "write_completion_order": args.write_completion_order,
         "max_workers": max_workers,
         "llm_max_concurrent_requests": int(
             os.environ.get(
@@ -263,11 +274,21 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--no-rule-text-triples", action="store_false", dest="use_rule_text_triples", help="Disable deterministic rule-based text triples when building a KG.")
     parser.add_argument("--no-record-nodes", action="store_false", dest="use_record_nodes", help="OUEG ablation: replace row-record hubs with direct subject--value edges.")
     parser.add_argument("--no-path-guidance", action="store_false", dest="use_path_guidance", help="OUEG ablation: send the full subgraph without suggested paths or ordering guidance.")
-    parser.add_argument("--no-lexical-tiebreak", action="store_false", dest="use_lexical_tiebreak", help="OUEG ablation: hide lexical collision scores, winners, and tie-break instructions from the answer model.")
+    parser.add_argument("--lexical-tiebreak", action="store_true", dest="use_lexical_tiebreak", default=False, help="Historical OUEG ablation: expose lexical collision overlap as a weak reader hint; disabled by default because it is not evidence.")
+    parser.add_argument("--no-lexical-tiebreak", action="store_false", dest="use_lexical_tiebreak", help="Deprecated compatibility flag; lexical tie-break is already disabled by default.")
     parser.add_argument("--no-hyperlink-expansion", action="store_false", dest="use_hyperlink_expansion", help="Ablation: disable selected-row and witness hyperlink passage expansion in stage two.")
     parser.add_argument("--no-collision-evidence-expansion", action="store_false", dest="use_collision_evidence_expansion", help="OUEG ablation: do not add linked passages for every candidate in a score collision.")
     parser.add_argument("--collision-passage-budget", type=int, default=12, help="OUEG: maximum linked passages added for a score-collision candidate set.")
+    parser.add_argument("--no-focus-evidence-augmentation", action="store_false", dest="use_focus_evidence_augmentation", help="OUEG ablation: do not retrieve candidate-linked passages after an L1 missing-link or insufficient-evidence diagnostic.")
+    parser.add_argument("--focus-passage-budget-per-candidate", type=int, default=2, help="OUEG: linked-passage budget for each validated L2 focus candidate.")
+    parser.add_argument("--no-diagnostic-focus-resolution", action="store_false", dest="use_diagnostic_focus_resolution", help="OUEG ablation: fall back to structural row anchors instead of grounding L1 diagnostics in table values.")
+    parser.add_argument("--focus-query-fallback-budget", type=int, default=2, help="OUEG: per-focus lexical fallback passages from the supplied example corpus.")
+    parser.add_argument("--l2-existing-witness-budget", type=int, default=2, help="OUEG: L1-visible passages retained in the small L2 capsule for its needed_check.")
+    parser.add_argument("--l2-max-edges-per-candidate", type=int, default=16, help="OUEG: evidence-edge cap for each L2 candidate packet.")
+    parser.add_argument("--l2-max-contexts-per-candidate", type=int, default=3, help="OUEG: passage cap for each L2 candidate packet.")
+    parser.add_argument("--l2-context-snippet-chars", type=int, default=900, help="OUEG: maximum chars for each L2 passage snippet.")
     parser.add_argument("--no-adaptive-verification", action="store_false", dest="use_adaptive_verification", help="OUEG ablation: do not re-read the complete evidence after an empty or NEED_FOCUS response.")
+    parser.add_argument("--l2-evidence-mode", choices=("delta_only", "complete_re_read"), default="delta_only", help="OUEG L2 context: small sufficient state capsule (default) or full-graph diagnostic ablation.")
     parser.add_argument("--no-prompt-compression", action="store_false", dest="use_prompt_compression", help="OUEG ablation: serialize the full uncompressed evidence payload.")
     parser.add_argument("--no-path-focused-prompt", action="store_false", dest="use_path_focused_prompt", help="OUEG ablation: send every retrieved KG record to the answer model instead of path-focused evidence.")
     parser.add_argument("--prompt-path-budget", type=int, default=8, help="OUEG: maximum grounded path guides retained in the answer-time payload (default: 8).")
@@ -280,6 +301,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="OUEG prompt context serialization; extractive only shortens long contexts.",
     )
     parser.add_argument("--n-paths", type=int, default=5)
+    parser.add_argument(
+        "--strict-path-text-top-n", action="store_true",
+        help=(
+            "Path-Text Top-N controlled comparator: expose only selected path "
+            "edges and their direct contexts, excluding table retrieval witnesses."
+        ),
+    )
     parser.add_argument(
         "--odyssey-max-hops", type=int, default=3,
         help="ODYSSEY: maximum hop-wise reader iterations (1--3; default 3).",
@@ -316,6 +344,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--quiet-records", action="store_true",
         help="Do not print raw example JSON to stdout (keeps tqdm progress bar clean).",
+    )
+    parser.add_argument(
+        "--write-completion-order", action="store_true",
+        help="Write parallel examples as they complete; supports resume in short-lived sessions.",
     )
     parser.add_argument(
         "--fail-fast", action="store_true",
@@ -362,7 +394,16 @@ def _make_method(args):
         use_hyperlink_expansion=args.use_hyperlink_expansion,
         use_collision_evidence_expansion=args.use_collision_evidence_expansion,
         collision_passage_budget=args.collision_passage_budget,
+        use_focus_evidence_augmentation=args.use_focus_evidence_augmentation,
+        focus_passage_budget_per_candidate=args.focus_passage_budget_per_candidate,
+        use_diagnostic_focus_resolution=args.use_diagnostic_focus_resolution,
+        focus_query_fallback_budget=args.focus_query_fallback_budget,
+        l2_existing_witness_budget=args.l2_existing_witness_budget,
+        l2_max_edges_per_candidate=args.l2_max_edges_per_candidate,
+        l2_max_contexts_per_candidate=args.l2_max_contexts_per_candidate,
+        l2_context_snippet_chars=args.l2_context_snippet_chars,
         use_adaptive_verification=args.use_adaptive_verification,
+        l2_evidence_mode=args.l2_evidence_mode,
         use_prompt_compression=args.use_prompt_compression,
         use_path_focused_prompt=args.use_path_focused_prompt,
         prompt_path_budget=args.prompt_path_budget,
@@ -388,7 +429,11 @@ def _make_method(args):
     if args.method == "online_kg_path_text":
         return OnlineKGPathTextBaseline(rag_config, n_paths=args.n_paths)
     if args.method == "path_text_top_n":
-        return PathTextTopNBaseline(rag_config, n_paths=args.n_paths)
+        return PathTextTopNBaseline(
+            rag_config,
+            n_paths=args.n_paths,
+            strict_path_only=args.strict_path_text_top_n,
+        )
     if args.method == "odyssey":
         from src.baselines.odyssey import OdysseyBaseline, OdysseyConfig
         return OdysseyBaseline(
@@ -667,10 +712,13 @@ def main() -> None:
         pending.append(example)
 
     with args.output.open(mode, encoding="utf-8") as output:
-        # executor.map yields in input order: reproducible JSONL/resume behaviour,
-        # while requests themselves run concurrently.
         with ThreadPoolExecutor(max_workers=min(max_workers, len(pending) or 1)) as executor:
-            records_to_write = executor.map(lambda example: _evaluate_example(example, args), pending)
+            if args.write_completion_order:
+                futures = [executor.submit(_evaluate_example, example, args) for example in pending]
+                records_to_write = (future.result() for future in as_completed(futures))
+            else:
+                # Default ordering keeps JSONL reproducible for ordinary runs.
+                records_to_write = executor.map(lambda example: _evaluate_example(example, args), pending)
             disable_progress = args.no_progress or (not args.force_progress and not sys.stderr.isatty())
             with tqdm(
                 total=len(pending),
@@ -821,7 +869,16 @@ def main() -> None:
         "use_hyperlink_expansion": args.use_hyperlink_expansion,
         "use_collision_evidence_expansion": args.use_collision_evidence_expansion,
         "collision_passage_budget": args.collision_passage_budget,
+        "use_focus_evidence_augmentation": args.use_focus_evidence_augmentation,
+        "focus_passage_budget_per_candidate": args.focus_passage_budget_per_candidate,
+        "use_diagnostic_focus_resolution": args.use_diagnostic_focus_resolution,
+        "focus_query_fallback_budget": args.focus_query_fallback_budget,
+        "l2_existing_witness_budget": args.l2_existing_witness_budget,
+        "l2_max_edges_per_candidate": args.l2_max_edges_per_candidate,
+        "l2_max_contexts_per_candidate": args.l2_max_contexts_per_candidate,
+        "l2_context_snippet_chars": args.l2_context_snippet_chars,
         "use_adaptive_verification": args.use_adaptive_verification,
+        "l2_evidence_mode": args.l2_evidence_mode,
         "use_prompt_compression": args.use_prompt_compression,
         "use_path_focused_prompt": args.use_path_focused_prompt,
         "prompt_path_budget": args.prompt_path_budget,
@@ -831,10 +888,12 @@ def main() -> None:
         "max_output_tokens": args.max_output_tokens,
         "temperature": args.temperature,
         "n_paths": args.n_paths,
+        "strict_path_text_top_n": args.strict_path_text_top_n,
         "max_replans": args.max_replans,
         "max_table_rows_for_kg": args.max_table_rows_for_kg,
         "finqa_table_format": args.finqa_table_format,
         "second_stage_k": args.second_stage_k,
+        "write_completion_order": args.write_completion_order,
         "max_workers": max_workers,
         "llm_max_concurrent_requests": int(
             os.environ.get(

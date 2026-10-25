@@ -91,9 +91,44 @@ def test_path_text_top_n_excludes_auxiliary_graph_edges(monkeypatch):
     assert result["answer"] == "Liverpool"
     assert result["method"] == "path_text_top_n"
     assert result["top_n_paths"] == 1
-    assert result["path_context_policy"] == "planner_top_n_paths_only"
+    assert result["path_context_policy"] == "planner_top_n_paths_with_retrieval_witnesses"
     assert "Liverpool" in prompts[0]
     assert "Do not include" not in prompts[0]
+
+
+def test_strict_path_text_top_n_excludes_retrieval_witnesses(monkeypatch):
+    kg = OnlineKG()
+    kg.add_triple(Triple("Alice", "club", "Liverpool", Provenance("table", "Managers")))
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    class Planner:
+        def generate_candidates(self, question, graph, n, constraint_context=None):
+            return [ReasoningPath(
+                "p1", [PathStep(1, "Follow Alice to her club")],
+                edges=[graph.path_edge_records()[0]],
+            )]
+
+    prompts = []
+    monkeypatch.setattr(
+        "src.baselines.online_kg_path_text.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "m"})(),
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_kg_path_text.llm_call",
+        lambda prompt, **kwargs: prompts.append(prompt) or "Liverpool",
+    )
+    result = PathTextTopNBaseline(
+        RAGConfig(top_k=2), n_paths=1, strict_path_only=True,
+        kg_builder=Builder(), planner=Planner(),
+    ).run(_example())
+
+    assert result["strict_path_only"] is True
+    assert result["path_context_policy"] == "strict_planner_top_n_paths_only"
+    assert '"table_constraints"' not in prompts[0]
+    assert '"table_witnesses"' not in prompts[0]
 
 
 def test_path_text_marks_low_confidence_answer_as_ungrounded(monkeypatch):

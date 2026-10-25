@@ -42,3 +42,25 @@ def test_ottqa_sampler_splits_fixed_batches_with_short_final_batch():
     assert [item["question_id"] for shard in shards for item in shard] == [
         "0", "1", "2", "3", "4"
     ]
+
+
+def test_ottqa_sampler_requires_answer_node(tmp_path):
+    tables = tmp_path / "tables"
+    passages = tmp_path / "passages"
+    tables.mkdir()
+    passages.mkdir()
+    for table_id in ("t1", "t2"):
+        _write_json(tables / f"{table_id}.json", {"header": ["Name"], "data": [["A"]]})
+        _write_json(passages / f"{table_id}.json", {"A": ["linked passage"]})
+    records = [
+        {"question_id": "q1", "table_id": "t1", "answer-text": "A", "answer-node": [["A", "/wiki/A", "A", "passage"]]},
+        {"question_id": "q2", "table_id": "t2", "answer-text": "B", "answer-node": []},
+    ]
+
+    eligible, skipped = select_eligible_records(
+        records, tables_dir=tables, passages_dir=passages, require_answer_node=True
+    )
+
+    assert {item["question_id"] for item in eligible} == {"q1"}
+    assert skipped == {"missing_answer_node": 1}
+
