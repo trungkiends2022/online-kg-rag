@@ -49,29 +49,28 @@ usage() {
   cat <<'EOF'
 Usage: scripts/run_hybridqa_500_oueg_component_ablations.sh [options]
 
-Run five OUEG component ablations on HybridQA. By default this runs shards 06,
-07, and 08 (500 records per ablation); use --shard for a single shard. Provider,
+Run the OUEG full control plus six causal ablations on HybridQA. By default this
+runs shards 06, 07, and 08 (500 records per configuration); use --shard for a
+single shard. Provider,
 model, API key, base URL, and timeout are inherited from .env exactly as in the
 OUEG/Direct runner.
 
 Options:
   -s, --shard <01..08>      Run one shard instead of the default 06, 07, and 08.
-  -w, --workers <N>         Parallel examples and concurrent LLM requests (default: 64).
+  -w, --workers <N>         Parallel examples and concurrent LLM requests (default: 4).
   --output-dir <path>       Parent folder for results and logs.
   --tag <string>            Default output-folder tag if --output-dir is omitted.
   --no-resume               Do not pass --resume; use only with a new output folder.
   -h, --help                Show this help.
 
-The five causal ablations are:
-  l1_only                          --no-adaptive-verification
-  no_l2_new_evidence               --no-focus-evidence-augmentation
-  no_diagnostic_focus_resolution   --no-diagnostic-focus-resolution
-  no_path_guidance                 --no-path-guidance
-  no_hyperlink_expansion           --no-hyperlink-expansion
-
-Lexical tie-breaking is intentionally absent: it is disabled in the full
-method, so --no-lexical-tiebreak is now a compatibility no-op rather than an
-experiment.
+Configurations and their causal role:
+  full                             complete OUEG control
+  no_record_nodes                  tests row-binding record centroids
+  no_path_guidance                 tests non-filtering traversal guidance
+  l1_only                          tests the value of adaptive L2 verification
+  no_l2_new_evidence               tests targeted new evidence versus re-reading
+  no_diagnostic_focus_resolution   tests grounding diagnostics to exact row values
+  no_prompt_compression            tests lossless compact serialization; report coverage/tokens too
 
 Each log name contains: benchmark, shard, provider/model, method, and ablation.
 
@@ -80,14 +79,14 @@ Example:
     --workers 64 \
     --output-dir data/results/hybridqa_500_oueg_component_ablations
 
-  # Run the same four ablations on shard 03 only.
+  # Run the full control and ablations on shard 03 only.
   bash scripts/run_hybridqa_500_oueg_component_ablations.sh \
     --shard 03 --workers 64 \
     --output-dir data/results/hybridqa_shard03_oueg_component_ablations
 EOF
 }
 
-workers=64
+workers=4
 single_shard=""
 run_tag="oueg_component_ablations_500_$(date -u +%Y%m%dT%H%M%SZ)"
 output_dir=""
@@ -139,7 +138,6 @@ common_args=(
   --max-context-chars 24000
   --max-output-tokens 1024
   --temperature 0
-  --no-path-focused-prompt
   --focus-passage-budget-per-candidate 2
   --focus-query-fallback-budget 2
   --l2-existing-witness-budget 2
@@ -185,11 +183,13 @@ echo "Model from .env: $model_label"
 echo "Shards: ${shards[*]} (500 records per ablation)"
 echo "Workers: $workers"
 
+run_ablation full
+run_ablation no_record_nodes --no-record-nodes
+run_ablation no_path_guidance --no-path-guidance
 run_ablation l1_only --no-adaptive-verification
 run_ablation no_l2_new_evidence --no-focus-evidence-augmentation
 run_ablation no_diagnostic_focus_resolution --no-diagnostic-focus-resolution
-run_ablation no_path_guidance --no-path-guidance
-run_ablation no_hyperlink_expansion --no-hyperlink-expansion
+run_ablation no_prompt_compression --no-prompt-compression
 
 echo "Completed. Results: $output_dir"
 echo "Logs: $log_dir"

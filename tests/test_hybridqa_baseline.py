@@ -77,6 +77,9 @@ def test_prompt_keeps_full_oracle_table_and_ranks_only_passages():
 
     assert '"Manager": "Bob"' in prompt
     assert passage_ids[0] == "alice"
+    assert set(passage_ids) == {"alice", "history", "irrelevant"}
+    assert "[history]" in prompt
+    assert retrieval_trace["context_selection_policy"] == "all_instance_evidence_no_top_k"
     assert retrieval_trace["passage_reranker_query"] == "question_plus_selected_rows"
     assert table_truncated is False
 
@@ -90,7 +93,7 @@ def test_run_uses_one_deterministic_llm_call(monkeypatch):
 
     def fake_llm_call(prompt, *, max_tokens, temperature):
         calls.append((prompt, max_tokens, temperature))
-        return " Liverpool \n"
+        return 'FINAL_ANSWER: Liverpool\nEVIDENCE_PATH: {"context_ids":["Managers:0"]}'
 
     monkeypatch.setattr("src.baselines.hybridqa_rag.get_provider", lambda: FakeProvider())
     monkeypatch.setattr("src.baselines.hybridqa_rag.llm_call", fake_llm_call)
@@ -102,11 +105,23 @@ def test_run_uses_one_deterministic_llm_call(monkeypatch):
     assert result["llm_calls"] == 1
     assert result["provider"] == "fake"
     assert calls[0][1:] == (64, 0.0)
-    assert "non-empty, single-line answer span" in calls[0][0]
+    assert "Never guess" in calls[0][0]
+    assert result["evidence_context_ids"] == ["Managers:0"]
 
 
-def test_direct_rag_retries_empty_and_placeholder_answers():
-    assert HybridQARAGBaseline._needs_retry("")
-    assert HybridQARAGBaseline._needs_retry("N/A")
-    assert HybridQARAGBaseline._needs_retry("unknown")
-    assert not HybridQARAGBaseline._needs_retry("Liverpool")
+def test_direct_rag_abstains_when_the_model_cannot_ground_an_answer(monkeypatch):
+    class FakeProvider:
+        name = "fake"
+        model = "fake-model"
+
+    monkeypatch.setattr("src.baselines.hybridqa_rag.get_provider", lambda: FakeProvider())
+    monkeypatch.setattr(
+        "src.baselines.hybridqa_rag.llm_call",
+        lambda *args, **kwargs: 'UNRESOLVED: {"blocker_type":"insufficient_evidence","bottleneck":"missing passage","needed_check":"linked text"}',
+    )
+
+    result = HybridQARAGBaseline().run(_example())
+
+    assert result["answer"] == ""
+    assert result["abstained_for_missing_grounding"] is True
+    assert result["grounding_diagnostic"]["blocker_type"] == "insufficient_evidence"

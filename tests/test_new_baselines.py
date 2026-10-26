@@ -35,7 +35,7 @@ def test_shared_context_flat_rag_uses_two_stage_retrieval(monkeypatch):
     )
     monkeypatch.setattr(
         "src.baselines.rag_variants.llm_call",
-        lambda prompt, **kwargs: calls.append(prompt) or "Liverpool",
+        lambda prompt, **kwargs: calls.append(prompt) or 'FINAL_ANSWER: Liverpool\nEVIDENCE_PATH: {"context_ids":["alice"]}',
     )
 
     def retrieve(*args, **kwargs):
@@ -47,13 +47,15 @@ def test_shared_context_flat_rag_uses_two_stage_retrieval(monkeypatch):
         }
 
     monkeypatch.setattr("src.baselines.shared_context_flat_rag.two_stage_retrieve", retrieve)
-    result = SharedContextFlatRAGBaseline(RAGConfig(top_k=2)).run(_example())
+    result = SharedContextFlatRAGBaseline(RAGConfig(top_k=1)).run(_example())
 
     assert result["answer"] == "Liverpool"
     assert result["method"] == "flat_rag_shared_context"
     assert result["retrieved_passage_ids"] == ["alice"]
     assert result["retrieval_trace"]["strategy"] == "two_stage"
-    assert retrieval_calls == [{"top_k": 2, "second_stage_k": 3, "max_table_rows": None}]
+    assert result["evidence_context_ids"] == ["alice"]
+    assert retrieval_calls == [{"top_k": 2, "second_stage_k": 0, "max_table_rows": None}]
+    assert result["retrieval_trace"]["context_selection_policy"] == "all_instance_evidence_no_top_k"
     assert "Retrieved table rows" in calls[0]
     assert "Alice" in calls[0]
 

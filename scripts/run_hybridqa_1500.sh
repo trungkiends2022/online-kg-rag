@@ -59,15 +59,16 @@ input_prefix="${INPUT_PREFIX:-$repo_root/benchmarks/hybridqa/hybridqa-dev-table-
 result_root="${RESULT_ROOT:-$repo_root/data/results/hybridqa-1500-seed2027/$run_tag}"
 log_root="${LOG_ROOT:-$repo_root/data/logs/hybridqa-1500-seed2027/$run_tag}"
 
-# Oracle evidence is a retrieval upper bound and numerical_ir targets arithmetic
-# datasets, so the controlled HybridQA comparison uses these six methods.
+# Main zero-shot, context-grounded comparison.  Flat context is intentionally
+# omitted because Direct LLM already receives the same complete raw context;
+# keeping both would be a near-duplicate rather than an independent baseline.
+# Oracle evidence is reported separately as a retrieval ceiling.
 default_methods=(
-  graph_retrieval_no_path
+  online_unified_evidence_graph
   direct_llm
-  flat_table_bm25
-  online_kg_path_text
-  path_consistency
-  online_kg
+  odyssey
+  graph_retrieval_no_path
+  path_text_top_n
 )
 if [[ -n "${METHODS:-}" ]]; then
   read -r -a methods <<< "$METHODS"
@@ -91,6 +92,8 @@ fi
 echo "[$(date --iso-8601=seconds)] run_tag=$run_tag methods=${methods[*]} shards=${shards[*]}"
 echo "model_label=$model_label"
 echo "git_head=$(git rev-parse HEAD)"
+max_workers="${MAX_WORKERS:-4}"
+llm_max_concurrent_requests="${LLM_MAX_CONCURRENT_REQUESTS:-$max_workers}"
 
 for shard in "${shards[@]}"; do
   input="${input_prefix}-shard${shard}.json"
@@ -100,6 +103,12 @@ for shard in "${shards[@]}"; do
   fi
   shard_label="shard${shard}-of08"
   for method in "${methods[@]}"; do
+    method_args=()
+    # This is the destructive-pruning comparator: do not let it retain the
+    # table witnesses that the lossless methods can see.
+    if [[ "$method" == "path_text_top_n" ]]; then
+      method_args+=(--strict-path-text-top-n)
+    fi
     method_dir="$result_root/$method"
     mkdir -p "$method_dir"
     output="$method_dir/${shard_label}__${model_label}__${method}.jsonl"
@@ -117,12 +126,15 @@ for shard in "${shards[@]}"; do
       --n-paths 5 \
       --max-replans 0 \
       --max-context-chars 24000 \
-      --max-output-tokens 128 \
+      --max-output-tokens 1024 \
       --temperature 0 \
+      --max-workers "$max_workers" \
+      --llm-max-concurrent-requests "$llm_max_concurrent_requests" \
       --llm-timeout-seconds 120 \
       --llm-sdk-retries 2 \
       --fail-fast \
-      --resume >> "$method_log" 2>&1
+      --resume \
+      "${method_args[@]}" >> "$method_log" 2>&1
     echo "[$(date --iso-8601=seconds)] done method=$method shard=$shard"
   done
 done

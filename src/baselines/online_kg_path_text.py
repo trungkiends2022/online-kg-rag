@@ -7,6 +7,8 @@ import re
 import time
 
 from src.baselines.rag_variants import RAGConfig
+from src.baselines.context_policy import all_instance_evidence_retrieval_args
+from src.baselines.grounded_response import parse_response
 from src.datasets.schema import DatasetExample
 from src.extraction.extractor import EntityRelationExtractor
 from src.kg.builder import OnlineKGBuilder
@@ -507,8 +509,10 @@ first determine the final answer from the union of this evidence. Table values m
 be bridge entities, and a linked-passage context can contain the final fact.
 {self._constraint_instruction(retrieval_trace)}
 Answer contract: {self._answer_shape_instruction(question)}
-Return exactly one non-empty answer span on one line, with no JSON, label, explanation,
-or chain-of-thought.
+If the merged evidence cannot prove one answer, return exactly
+`UNRESOLVED: {{"blocker_type":"insufficient_evidence|missing_link|conflicting_evidence|answer_type_uncertain","bottleneck":"...","needed_check":"..."}}`.
+Otherwise return exactly one short answer span on one line, with no explanation or
+chain-of-thought. Never use facts absent from this payload.
 
 Question: {question}
 
@@ -542,9 +546,7 @@ Final answer:"""
             example.table_rows,
             example.text_passages,
             example.web_snippets,
-            top_k=self.config.top_k,
-            second_stage_k=self.config.second_stage_k,
-            max_table_rows=self.config.max_table_rows_for_kg,
+            **all_instance_evidence_retrieval_args(example),
         )
         kg = self.kg_builder.build(retrieved)
         if kg.is_empty():
@@ -554,7 +556,10 @@ Final answer:"""
                 "method": self.method_name,
                 "kg_summary": kg.summary(),
             }
-        retrieval_trace = retrieved.get("retrieval_trace", {})
+        retrieval_trace = {
+            **retrieved.get("retrieval_trace", {}),
+            "context_selection_policy": "all_instance_evidence_no_top_k",
+        }
         paths = self.planner.generate_candidates(
             example.question, kg, n=self.n_paths, constraint_context=retrieval_trace,
         )
@@ -610,15 +615,12 @@ Final answer:"""
         raw_synthesis_response = llm_call(
             synthesis_prompt, max_tokens=request_max_tokens, temperature=self.config.temperature,
         )
-        answer = self._synthesized_answer(raw_synthesis_response)
+        l1_response = parse_response(raw_synthesis_response, [])
+        explicit_abstention = bool(
+            re.match(r"^\s*(?:NEED_FOCUS|UNRESOLVED)\s*:", str(raw_synthesis_response or ""), re.I)
+        )
+        answer = "" if explicit_abstention else self._synthesized_answer(raw_synthesis_response)
         synthesis_retry_attempted = False
-        if not answer:
-            synthesis_retry_attempted = True
-            raw_synthesis_response = llm_call(
-                self._answer_synthesis_prompt(example.question, context, retrieval_trace, retry=True),
-                max_tokens=max(512, request_max_tokens), temperature=self.config.temperature,
-            )
-            answer = self._synthesized_answer(raw_synthesis_response)
         answer = self._canonicalize_kg_alias(answer, kg)
         answer = self._canonicalize_candidate(answer, retrieval_trace)
 
@@ -631,6 +633,12 @@ Final answer:"""
             example.question, answer, path_records,
         ) if answer else ([], [], {"status": "ungrounded", "reason": "empty_synthesis_answer"})
         validation_error = None if evidence_edge_ids else grounding_audit["reason"]
+        unsupported_answer = answer if validation_error else None
+        # A correct-looking answer without a supporting graph edge is not a
+        # grounded prediction.  Treat it as the same abstention state exposed
+        # by OUEG L1 rather than allowing parametric recall to receive EM.
+        if validation_error:
+            answer = ""
 
         return {
             "answer": answer,
@@ -657,6 +665,14 @@ Final answer:"""
             "final_judge_valid": validation_error is None,
             "final_judge_failure_reason": validation_error,
             "grounding_audit": grounding_audit,
+            "abstained_for_missing_grounding": validation_error is not None,
+            "grounding_diagnostic": (
+                l1_response["diagnostic"] if explicit_abstention else
+                {"blocker_type": "insufficient_evidence", "bottleneck": validation_error,
+                 "needed_check": "Find an answer-bearing table or passage edge in the supplied payload."}
+                if validation_error else None
+            ),
+            "unsupported_answer": unsupported_answer,
             "kg_summary": kg.summary(),
             "entity_anchor": retrieval_trace.get("entity_anchor", {}),
             "retrieval_trace": retrieval_trace,

@@ -25,7 +25,7 @@ def test_odyssey_runs_question_analysis_then_hopwise_reader(monkeypatch):
         '{"entities": ["position 4", "nationality"]}',
         '{"headers": ["Pos", "Driver"]}',
         '{"mapping": {"position 4": ["Pos"], "nationality": ["Others"]}}',
-        "Final Answer: British\nRelevant Passages: []",
+        'FINAL_ANSWER: British\nEVIDENCE_PATH: {"context_ids":["Grand Prix:0"]}',
     ])
     monkeypatch.setattr("src.baselines.odyssey.llm_call", lambda prompt, **kwargs: calls.append(prompt) or next(responses))
 
@@ -45,8 +45,8 @@ def test_odyssey_falls_back_to_full_context_after_none(monkeypatch):
         '{"entities": ["position 4"]}',
         '{"headers": ["Pos", "Driver"]}',
         '{"mapping": {"position 4": ["Pos"]}}',
-        "Final Answer: None\nRelevant Passages: [\"Jenson_Button\"]",
-        "Final Answer: British\nRelevant Passages: []",
+        'UNRESOLVED: {"blocker_type":"missing_link","bottleneck":"passage not reached","needed_check":"linked passage"}',
+        'FINAL_ANSWER: British\nEVIDENCE_PATH: {"context_ids":["Jenson_Button"]}',
     ])
     monkeypatch.setattr("src.baselines.odyssey.llm_call", lambda *args, **kwargs: next(responses))
 

@@ -6,6 +6,8 @@ import json
 import time
 
 from src.baselines.rag_variants import RAGConfig, _RAGBaseline
+from src.baselines.context_policy import all_instance_evidence_retrieval_args
+from src.baselines.grounded_response import response_contract
 from src.datasets.schema import DatasetExample
 from src.retrieval.coarse_retrieval import two_stage_retrieve
 
@@ -63,9 +65,7 @@ class SharedContextFlatRAGBaseline(_RAGBaseline):
             example.table_rows,
             example.text_passages,
             example.web_snippets,
-            top_k=self.config.top_k,
-            second_stage_k=self.config.second_stage_k,
-            max_table_rows=self.config.max_table_rows_for_kg,
+            **all_instance_evidence_retrieval_args(example),
         )
         table_text, row_indices, table_truncated = self._bounded_table_context(
             retrieved["table_rows"]
@@ -81,7 +81,7 @@ class SharedContextFlatRAGBaseline(_RAGBaseline):
                 remaining -= len(block)
         prompt = f"""Answer the question using only the retrieved evidence below.
 The table rows and passages are flat evidence: do not infer facts absent from them.
-Return exactly one non-empty answer span on one line, with no explanation or label.
+{response_contract(source_label='a table row ID (`table_name:row_index`) or passage ID')}
 
 Question: {example.question}
 
@@ -95,6 +95,11 @@ Answer:"""
         retrieval_trace = dict(retrieved.get("retrieval_trace", {}))
         retrieval_trace.update(
             selected_table_row_indices=row_indices,
+            selected_table_row_ids=[
+                f"{block['table_name']}:{block['row_index']}"
+                for block in json.loads(table_text)
+            ],
+            context_selection_policy="all_instance_evidence_no_top_k",
             table_context_budget_chars=self.config.max_context_chars // 2,
             passage_context_budget_chars=self.config.max_context_chars - len(table_text),
         )
@@ -102,6 +107,7 @@ Answer:"""
             prompt,
             llm_calls=1,
             started=started,
+            context_ids=retrieval_trace["selected_table_row_ids"] + passage_ids,
             metadata={
                 "retrieved_passage_ids": passage_ids,
                 "table_truncated": table_truncated,

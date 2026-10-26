@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 import time
 
+from src.baselines.grounded_response import parse_response, response_contract
+from src.baselines.context_policy import all_instance_evidence_retrieval_args
 from src.baselines.rag_variants import RAGConfig
 from src.datasets.schema import DatasetExample
 from src.extraction.extractor import EntityRelationExtractor
@@ -90,9 +92,7 @@ class GraphRetrievalNoPathBaseline:
         started = time.perf_counter()
         retrieved = two_stage_retrieve(
             example.question, example.table_rows, example.text_passages,
-            example.web_snippets, top_k=self.config.top_k,
-            second_stage_k=self.config.second_stage_k,
-            max_table_rows=self.config.max_table_rows_for_kg,
+            example.web_snippets, **all_instance_evidence_retrieval_args(example),
         )
         kg = self.kg_builder.build(retrieved)
         kg_trace = kg.to_trace()
@@ -114,28 +114,23 @@ class GraphRetrievalNoPathBaseline:
         )
         prompt_payload = json.dumps(prompt_kg_edges, ensure_ascii=False, default=str)
         prompt = f"""Answer using only these retrieved KG edge records. Records with `structural: true` preserve the table row/column topology; records with `structural: false` are semantic facts. Each record may reference text evidence through `context_ids`; resolve them in `contexts_by_source_id`. The records are an unordered set;
-do not assume a reasoning path not supported by them. Return only the shortest answer span.
+do not assume a reasoning path not supported by them.
+{response_contract(source_label='edge ID or passage ID')}
 
 Question: {example.question}
 KG payload: {prompt_payload}
 Answer:"""
         provider = get_provider()
         request_max_tokens = self._request_token_limit(provider, self.config.max_output_tokens)
-        answer = llm_call(prompt, max_tokens=request_max_tokens,
-                          temperature=self.config.temperature).strip()
-        retry_prompt = None
-        if not answer:
-            retry_prompt = prompt + """
-
-Your previous response was empty. Return the shortest non-empty answer span now.
-Answer:"""
-            answer = llm_call(
-                retry_prompt,
-                max_tokens=request_max_tokens,
-                temperature=self.config.temperature,
-            ).strip()
+        raw_answer = llm_call(prompt, max_tokens=request_max_tokens,
+                              temperature=self.config.temperature)
+        allowed_context_ids = [
+            str(edge.get("edge_id")) for edge in prompt_kg_edges["edges"]
+            if edge.get("edge_id") is not None
+        ] + list(prompt_kg_edges["contexts_by_source_id"])
+        parsed = parse_response(raw_answer, allowed_context_ids)
         return {
-            "answer": answer, "method": self.method_name, "provider": provider.name,
+            "answer": parsed["answer"], "method": self.method_name, "provider": provider.name,
             "model": getattr(provider, "model", None), "kg_summary": kg.summary(),
             # Keep the complete KG and the exact answer-time payload for audit.
             "graph_kg_trace": kg_trace,
@@ -144,12 +139,20 @@ Answer:"""
             "prompt_kg_edges": prompt_kg_edges,
             "prompt_triples": prompt_triples, "prompt": prompt,
             "entity_anchor": retrieved["retrieval_trace"].get("entity_anchor", {}),
-            "retrieval_trace": retrieved["retrieval_trace"], "prompt_chars": len(prompt),
+            "retrieval_trace": {
+                **retrieved["retrieval_trace"],
+                "context_selection_policy": "all_instance_evidence_no_top_k",
+            }, "prompt_chars": len(prompt),
             "request_max_output_tokens": request_max_tokens,
             "prompt_context_budget_chars": self.config.max_context_chars,
             "prompt_context_truncated": prompt_truncated,
-            "answer_retry_attempted": retry_prompt is not None,
-            "retry_prompt": retry_prompt,
-            "retry_prompt_chars": len(retry_prompt) if retry_prompt else 0,
+            "answer_retry_attempted": False,
+            "retry_prompt": None,
+            "retry_prompt_chars": 0,
+            "answer_response_valid": parsed["response_valid"],
+            "abstained_for_missing_grounding": parsed["abstained"],
+            "evidence_context_ids": parsed["evidence_context_ids"],
+            "grounding_diagnostic": parsed["diagnostic"],
+            "raw_answer": parsed["raw_response"],
             "llm_calls": 1, "latency_ms": round((time.perf_counter() - started) * 1000, 2),
         }

@@ -167,7 +167,7 @@ the master split and all eight shards with:
   --stratify-reasoning
 ```
 
-Run all eight shards through the six controlled HybridQA methods. Each JSONL
+Run all eight shards through the five controlled HybridQA methods. Each JSONL
 also receives a `.jsonl.manifest.json` sidecar containing the model/provider,
 code revision, input checksum, resource revisions, configuration, and a
 fingerprint. `--resume` is allowed only when that fingerprint is identical;
@@ -224,3 +224,10 @@ LLM_PROVIDER=groq "$PYTHON_BIN" -m src.run_baselines \
 This is ODYSSEY-style rather than an exact reproduction: it shares its 500-dev
 sample scale and table-plus-linked-text setting, but uses this repository's
 fixed seed and local oracle table/text adapter.
+
+Run the same five controlled methods used for HybridQA over all OTT-QA shards:
+
+```bash
+RUN_TAG=openrouter-gpt-oss-20b-ottqa500 \
+bash scripts/run_ottqa_500.sh
+```

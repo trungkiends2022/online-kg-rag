@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 from rank_bm25 import BM25Okapi
 
+from src.baselines.grounded_response import parse_response, response_contract
 from src.datasets.schema import DatasetExample
 from src.llm.client import get_provider, llm_call
 
@@ -162,7 +163,7 @@ def _bounded_context(documents: list[dict], limit: int) -> tuple[str, list[str]]
 
 def _answer_prompt(question: str, context: str) -> str:
     return f"""Answer the question using only the evidence below.
-Return only the shortest answer span or numeric answer. Do not explain.
+{response_contract(source_label='document ID')}
 
 Question: {question}
 
@@ -180,23 +181,30 @@ class _RAGBaseline:
         self.config.validate()
 
     def _complete(
-        self, prompt: str, *, llm_calls: int, metadata: dict, started: float | None = None
+        self, prompt: str, *, llm_calls: int, metadata: dict, context_ids: list[str],
+        started: float | None = None,
     ) -> dict:
         provider = get_provider()
         started = started if started is not None else time.perf_counter()
-        answer = llm_call(
+        raw_response = llm_call(
             prompt,
             max_tokens=self.config.max_output_tokens,
             temperature=self.config.temperature,
         ).strip()
+        parsed = parse_response(raw_response, context_ids)
         return {
-            "answer": answer,
+            "answer": parsed["answer"],
             "method": self.method_name,
             "provider": provider.name,
             "model": getattr(provider, "model", None),
             "llm_calls": llm_calls,
             "latency_ms": round((time.perf_counter() - started) * 1000, 2),
             "temperature": self.config.temperature,
+            "answer_response_valid": parsed["response_valid"],
+            "abstained_for_missing_grounding": parsed["abstained"],
+            "evidence_context_ids": parsed["evidence_context_ids"],
+            "grounding_diagnostic": parsed["diagnostic"],
+            "raw_answer": parsed["raw_response"],
             **metadata,
         }
 
@@ -207,15 +215,15 @@ class FlatTableBM25Baseline(_RAGBaseline):
     method_name = "flat_table_bm25"
 
     def run(self, example: DatasetExample) -> dict:
-        selected = rank_documents(
-            example.question, flatten_documents(example), self.config.top_k
-        )
+        documents = flatten_documents(example)
+        selected = rank_documents(example.question, documents, len(documents))
         context, ids = _bounded_context(selected, self.config.max_context_chars)
         prompt = _answer_prompt(example.question, context)
-        return self._complete(prompt, llm_calls=1, metadata={
+        return self._complete(prompt, llm_calls=1, context_ids=ids, metadata={
             "retrieved_document_ids": ids,
             "prompt_chars": len(prompt),
             "top_k": self.config.top_k,
+            "context_selection_policy": "all_instance_evidence_no_top_k",
         })
 
 
@@ -267,7 +275,7 @@ class OracleEvidenceBaseline(_RAGBaseline):
             )
         context, ids = _bounded_context(documents, self.config.max_context_chars)
         prompt = _answer_prompt(example.question, context)
-        return self._complete(prompt, llm_calls=1, metadata={
+        return self._complete(prompt, llm_calls=1, context_ids=ids, metadata={
             "oracle_document_ids": ids,
             "prompt_chars": len(prompt),
         })

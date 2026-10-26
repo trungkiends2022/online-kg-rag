@@ -17,6 +17,7 @@ from dataclasses import dataclass
 from difflib import SequenceMatcher
 from typing import Callable
 
+from src.baselines.grounded_response import parse_response, response_contract
 from src.baselines.rag_variants import RAGConfig
 from src.datasets.schema import DatasetExample
 from src.llm.client import get_provider, llm_call
@@ -236,22 +237,27 @@ class OdysseyBaseline:
         return json.dumps(bounded, ensure_ascii=False), [item["id"] for item in bounded["passages"]]
 
     @staticmethod
-    def _reader_response(raw: str) -> tuple[str | None, list[str]]:
-        match = re.search(r"final\s+answer\s*:\s*(.+)", str(raw), re.I)
-        answer = match.group(1).splitlines()[0].strip() if match else str(raw).strip().splitlines()[0] if raw else ""
-        if answer.casefold().strip(" .") in {"", "none", "unknown", "n/a", "na", "null"}:
-            answer = None
-        passages = re.search(r"relevant\s+passages\s*:\s*(\[[^\]]*\])", str(raw), re.I | re.S)
-        if not passages:
-            return answer, []
+    def _context_ids(context: str) -> list[str]:
+        """Derive the exact table/passage IDs represented in an ODYSSEY prompt."""
         try:
-            parsed = json.loads(passages.group(1).replace("'", '"'))
-            return answer, _unique([str(value) for value in parsed]) if isinstance(parsed, list) else []
+            payload = json.loads(context)
         except json.JSONDecodeError:
-            return answer, []
+            return []
+        return [
+            f"{item.get('table')}:{item.get('row_index')}"
+            for item in payload.get("table_rows", [])
+        ] + [str(item.get("id")) for item in payload.get("passages", [])]
+
+    @staticmethod
+    def _reader_response(raw: str, context_ids: list[str]) -> tuple[str | None, dict]:
+        parsed = parse_response(raw, context_ids)
+        return (parsed["answer"] or None), parsed
 
     def _reader_prompt(self, question: str, context: str, scope: str) -> str:
-        return f"""You are an ODYSSEY Hybrid-QA reader. Answer using only {scope}.\nQuestion: {question}\nContext: {context}\nReturn exactly two lines:\nFinal Answer: <short answer, or None if insufficient>\nRelevant Passages: [<passage ids relevant for the next hop>]"""
+        return f"""You are an ODYSSEY Hybrid-QA reader. Answer using only {scope}.
+{response_contract(source_label='a table row ID (`table:row_index`) or passage ID')}
+Question: {question}
+Context: {context}"""
 
     def run(self, example: DatasetExample) -> dict:
         started = time.perf_counter()
@@ -260,22 +266,20 @@ class OdysseyBaseline:
         seeds, seed_audit = self._seeds(graph, analysis)
         hops = self._hops(graph, seeds)
         included, attempts, answer = set(seeds), [], None
-        carried = []
         for hop, reached in enumerate(hops, 1):
             included.update(reached)
-            included.update(node_id for node_id, node in graph["nodes"].items() if node["type"] == "document" and node.get("source_id") in carried)
             context, exposed = self._context(graph, included, example)
             raw = llm_call(self._reader_prompt(example.question, context, f"the ODYSSEY pruned graph through hop {hop}"), max_tokens=self._max_tokens(), temperature=self.config.temperature)
-            answer, requested = self._reader_response(raw)
-            carried = [passage for passage in requested if passage in exposed]
-            attempts.append({"hop": hop, "fallback": False, "prompt_chars": len(context), "exposed_passage_ids": exposed, "requested_passage_ids": carried, "raw_response": raw, "answer": answer})
+            answer, parsed = self._reader_response(raw, self._context_ids(context))
+            attempts.append({"hop": hop, "fallback": False, "prompt_chars": len(context), "exposed_passage_ids": exposed, "raw_response": raw, "answer": answer, "grounding_diagnostic": parsed["diagnostic"], "evidence_context_ids": parsed["evidence_context_ids"]})
             if answer:
                 break
         fallback = not bool(answer)
         if fallback:
             context, exposed = self._context(graph, set(graph["nodes"]), example)
             raw = llm_call(self._reader_prompt(example.question, context, "the full table-and-text fallback context"), max_tokens=self._max_tokens(), temperature=self.config.temperature)
-            answer, _ = self._reader_response(raw)
-            attempts.append({"hop": "full", "fallback": True, "prompt_chars": len(context), "exposed_passage_ids": exposed, "requested_passage_ids": [], "raw_response": raw, "answer": answer})
+            answer, parsed = self._reader_response(raw, self._context_ids(context))
+            attempts.append({"hop": "full", "fallback": True, "prompt_chars": len(context), "exposed_passage_ids": exposed, "raw_response": raw, "answer": answer, "grounding_diagnostic": parsed["diagnostic"], "evidence_context_ids": parsed["evidence_context_ids"]})
         provider = get_provider()
-        return {"answer": answer, "method": self.method_name, "provider": provider.name, "model": getattr(provider, "model", None), "temperature": self.config.temperature, "latency_ms": round((time.perf_counter() - started) * 1000, 2), "execution_mode": "odyssey_hybrid_graph_hopwise", "odyssey_question_analysis": analysis, "odyssey_graph": graph_audit, "odyssey_seed_matches": seed_audit, "odyssey_seed_node_ids": seeds, "odyssey_hop_node_counts": [len(hop) for hop in hops], "odyssey_reader_attempts": attempts, "odyssey_full_context_fallback": fallback, "entity_extraction_mode": self.entity_extraction_mode, "semantic_matching_mode": self.semantic_matching_mode, "max_hops": self.odyssey_config.max_hops, "semantic_threshold": self.odyssey_config.semantic_threshold}
+        final_protocol = attempts[-1] if attempts else {}
+        return {"answer": answer, "method": self.method_name, "provider": provider.name, "model": getattr(provider, "model", None), "temperature": self.config.temperature, "latency_ms": round((time.perf_counter() - started) * 1000, 2), "execution_mode": "odyssey_hybrid_graph_hopwise", "odyssey_question_analysis": analysis, "odyssey_graph": graph_audit, "odyssey_seed_matches": seed_audit, "odyssey_seed_node_ids": seeds, "odyssey_hop_node_counts": [len(hop) for hop in hops], "odyssey_reader_attempts": attempts, "odyssey_full_context_fallback": fallback, "answer_response_valid": bool(answer) or bool(final_protocol.get("grounding_diagnostic")), "abstained_for_missing_grounding": not bool(answer), "evidence_context_ids": final_protocol.get("evidence_context_ids", []), "grounding_diagnostic": final_protocol.get("grounding_diagnostic"), "entity_extraction_mode": self.entity_extraction_mode, "semantic_matching_mode": self.semantic_matching_mode, "max_hops": self.odyssey_config.max_hops, "semantic_threshold": self.odyssey_config.semantic_threshold}

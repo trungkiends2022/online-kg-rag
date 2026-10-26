@@ -350,7 +350,53 @@ nhất EM, F1, số LLM call/câu và latency trung bình. Bảng kết quả đ
 so sánh với nghiên cứu trước, cần bổ sung riêng các số chính thức từ HybridQA và
 ghi rõ khác biệt về model, split và retrieval setting.
 
-### Bộ baseline thống nhất
+### Protocol benchmark đã chốt: grounded table--text QA
+
+Các bảng kết quả chính dùng năm phương pháp dưới đây trên cùng model, `T=0`,
+`max_context_chars=24,000`, và context do instance cung cấp. Direct/flat/graph
+baselines phải trả `FINAL_ANSWER` kèm context ID; khi evidence không đủ chúng
+trả `NEED_FOCUS` hoặc `UNRESOLVED`, không được đoán từ parametric memory.
+
+| Method | Vai trò trong bảng chính |
+|---|---|
+| `online_unified_evidence_graph` | Phương pháp đề xuất: row bindings, guided paths và diagnostic L2 grounding. |
+| `direct_llm` | Đối chứng tối giản: một lần đọc raw table--text context đầy đủ. |
+| `odyssey` | Đối chứng graph-pruning zero-shot theo giao thức ODYSSEY. |
+| `graph_retrieval_no_path` | Tách hiệu quả của graph evidence khỏi connected path reasoning. |
+| `path_text_top_n` | Đối chứng destructive pruning; chỉ thấy top-$N$ path evidence (`--strict-path-text-top-n`). |
+
+Không đưa `flat_rag_shared_context` vào bảng chính: sau khi Direct LLM đã nhận
+cùng full context, nó là một biến thể gần trùng. Có thể để ở Appendix nếu cần
+so sánh serialization. `oracle_evidence` là ceiling retrieval, không phải đối
+chứng cùng điều kiện; các phương pháp numerical/programmatic không thuộc
+table--text QA zero-shot không nằm trong bảng này.
+
+HybridQA dùng full 1,500 cho bảng chính và 500 mẫu (shards 06--08) cho
+ablation. OTT-QA dùng full 500 cho external validation; không cần lặp toàn bộ
+ablation trên OTT-QA. Hai runner tương ứng là:
+
+```bash
+bash scripts/run_hybridqa_1500.sh
+bash scripts/run_ottqa_500.sh
+```
+
+### Ablation OUEG đã chốt
+
+| Configuration | Vai trò nhân quả |
+|---|---|
+| `full` | Control: toàn bộ OUEG. |
+| `no_record_nodes` | Kiểm tra row-record centroids có bảo toàn binding giữa các cell trong cùng hàng hay không. |
+| `no_path_guidance` | Kiểm tra scored paths có giúp điều hướng attention mà không cắt evidence hay không. |
+| `l1_only` | Đo giá trị của diagnostic-triggered L2 verification. |
+| `no_l2_new_evidence` | Tách giá trị của targeted new evidence khỏi việc chỉ đọc lại evidence cũ. |
+| `no_diagnostic_focus_resolution` | Kiểm tra việc grounding diagnostic vào row/candidate cụ thể. |
+| `no_prompt_compression` | Kiểm tra lossless compact serialization; phải báo cáo context coverage, token/latency và empty rate cùng EM/F1. |
+
+Chạy bằng `scripts/run_hybridqa_500_oueg_component_ablations.sh`; chạy một
+model chính trước, sau đó chỉ lặp những ablation quan trọng nếu ngân sách cho
+phép.
+
+### Các baseline khác được hỗ trợ
 
 Runner `src.run_baselines` hỗ trợ các phương án:
 

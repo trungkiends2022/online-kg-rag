@@ -59,7 +59,7 @@ def test_flat_table_baseline_retrieves_and_calls_once(monkeypatch):
     )
     monkeypatch.setattr(
         "src.baselines.rag_variants.llm_call",
-        lambda prompt, **kwargs: calls.append(prompt) or "Liverpool",
+        lambda prompt, **kwargs: calls.append(prompt) or 'FINAL_ANSWER: Liverpool\nEVIDENCE_PATH: {"context_ids":["table:Managers:row:0"]}',
     )
 
     result = FlatTableBM25Baseline(RAGConfig(top_k=2)).run(_example())
@@ -391,7 +391,7 @@ def test_finqa_numeric_answer_metrics():
     assert finqa_ratio_percentage_match(21.65053, 0.2165053) == 1.0
     assert finqa_ratio_percentage_match(0.21651, 18.0) == 0.0
 
-def test_path_text_retries_blank_answer_then_uses_grounded_fallback(monkeypatch):
+def test_path_text_abstains_after_blank_answer_without_a_forced_retry(monkeypatch):
     kg = OnlineKG()
     kg.add_triple(Triple("Edna Work Hall", "located_in", "Chadron", Provenance("table", "places")))
 
@@ -420,4 +420,6 @@ def test_path_text_retries_blank_answer_then_uses_grounded_fallback(monkeypatch)
         RAGConfig(top_k=1), n_paths=1, kg_builder=Builder(), planner=Planner(),
     ).run(_example())
 
-    assert len(calls) == 2
+    assert len(calls) == 1
+    assert result["answer"] == ""
+    assert result["abstained_for_missing_grounding"] is True
