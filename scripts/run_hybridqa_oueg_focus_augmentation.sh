@@ -120,9 +120,7 @@ args=(
   --llm-sdk-retries 2
   --quiet-records
 )
-if [[ "$path_focused" == false ]]; then
-  args+=(--no-path-focused-prompt)
-fi
+[[ "$path_focused" == true ]] && args+=(--path-focused-prompt)
 [[ -n "$limit" ]] && args+=(--limit "$limit")
 [[ "$resume" == true ]] && args+=(--resume)
 [[ "$collision_expansion" == true ]] || args+=(--no-collision-evidence-expansion)

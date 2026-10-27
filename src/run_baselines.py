@@ -288,10 +288,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--l2-max-edges-per-candidate", type=int, default=16, help="OUEG: evidence-edge cap for each L2 candidate packet.")
     parser.add_argument("--l2-max-contexts-per-candidate", type=int, default=3, help="OUEG: passage cap for each L2 candidate packet.")
     parser.add_argument("--l2-context-snippet-chars", type=int, default=900, help="OUEG: maximum chars for each L2 passage snippet.")
-    parser.add_argument("--no-adaptive-verification", action="store_false", dest="use_adaptive_verification", help="OUEG ablation: do not re-read the complete evidence after an empty or NEED_FOCUS response.")
+    parser.add_argument("--no-adaptive-verification", action="store_false", dest="use_adaptive_verification", help="OUEG ablation: disable the diagnostic-triggered L2 recovery branch after an empty or NEED_FOCUS response.")
     parser.add_argument("--l2-evidence-mode", choices=("delta_only", "complete_re_read"), default="delta_only", help="OUEG L2 context: small sufficient state capsule (default) or full-graph diagnostic ablation.")
     parser.add_argument("--no-prompt-compression", action="store_false", dest="use_prompt_compression", help="OUEG ablation: serialize the full uncompressed evidence payload.")
-    parser.add_argument("--no-path-focused-prompt", action="store_false", dest="use_path_focused_prompt", help="OUEG ablation: send every retrieved KG record to the answer model instead of path-focused evidence.")
+    parser.add_argument("--path-focused-prompt", action="store_true", dest="use_path_focused_prompt", help="OUEG ablation: prune the L1 reader payload to path-focused evidence instead of the full compact OUEG.")
+    parser.add_argument("--no-path-focused-prompt", action="store_false", dest="use_path_focused_prompt", help="Deprecated compatibility flag; Full OUEG already uses the complete compact L1 graph.")
+    parser.set_defaults(use_path_focused_prompt=False)
     parser.add_argument("--prompt-path-budget", type=int, default=8, help="OUEG: maximum grounded path guides retained in the answer-time payload (default: 8).")
     parser.add_argument(
         "--ambiguity-policy", choices=("prompt", "return_candidates", "lexical_tiebreak"), default="prompt",

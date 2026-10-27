@@ -135,7 +135,6 @@ common_args=(
   --tables-dir data/WikiTables-WithLinks/tables_tok
   --passages-dir data/WikiTables-WithLinks/request_tok
   --top-k 5
-  --max-table-rows-for-kg 999999
   --max-context-chars 24000
   --max-output-tokens 1024
   --temperature 0

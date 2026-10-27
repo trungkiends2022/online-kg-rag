@@ -723,7 +723,7 @@ class OnlineUnifiedEvidenceGraphBaseline:
     def _request_token_limit(provider, configured: int) -> int:
         model = str(getattr(provider, "model", "")).casefold()
         needs_reasoning_budget = bool(getattr(provider, "reasoning_enabled", False))
-        return max(configured, 512) if needs_reasoning_budget or "gpt-oss" in model else configured
+        return max(configured, 2048) if needs_reasoning_budget or "gpt-oss" in model else configured
 
     @staticmethod
     def _short_answer(value: object) -> str:
@@ -740,12 +740,11 @@ class OnlineUnifiedEvidenceGraphBaseline:
         contexts_by_source_id: dict[str, dict],
         suggested_paths: list[dict],
     ) -> tuple[list[dict], dict[str, dict], list[dict], dict]:
-        """Return a bounded grounded reader view; the full KG remains audited.
+        """Return the full L1 view, or an explicit path-focused ablation.
 
-        Serializing the complete union graph proved counterproductive for the
-        20B reader: it had to search hundreds of irrelevant records in one
-        call.  The existing path scores are reader priorities, so retain their
-        top grounded paths and every context they reference.
+        The main method retains the complete compact graph for L1, preserving
+        the original OUEG reader and its candidate coverage.  A path-focused
+        view is useful only as an opt-in prompt-pruning ablation.
         """
         if not self.config.use_path_focused_prompt:
             return records, contexts_by_source_id, suggested_paths, {
@@ -1060,12 +1059,12 @@ class OnlineUnifiedEvidenceGraphBaseline:
 
     @staticmethod
     def _adaptive_protocol() -> str:
-        return """\n\nResponse protocol: never return a blank response. Return exactly one of these forms:\n1. `FINAL_ANSWER: <shortest answer span>\nEVIDENCE_PATH: {\"edges\":[\"edge IDs from the payload\"],\"passages\":[\"passage IDs from the payload\"]}` when the evidence proves one answer. Cite at least one supplied edge or passage ID.\n2. `NEED_FOCUS: {\"candidates\":[\"candidate names already in the payload\"],\"blocker_type\":\"candidate_collision|missing_link|conflicting_evidence|answer_type_uncertain\",\"bottleneck\":\"why the answer is not yet unique\",\"needed_check\":\"exact row, relation, year, rank, or passage fact to compare\"}` when a focused re-read can resolve it.\n3. `UNRESOLVED: {\"blocker_type\":\"missing_link|insufficient_evidence|conflicting_evidence\",\"bottleneck\":\"what evidence is absent or contradictory\",\"needed_check\":\"what fact would be required\"}` when this payload cannot prove an answer.\nDo not invent candidates or evidence."""
+        return """\n\nFallback protocol (only when you cannot prove one answer from this payload): keep the normal successful-answer behaviour above unchanged—return its shortest answer span and nothing else. If you cannot answer, never return a blank response. Instead return exactly one of:\n1. `NEED_FOCUS: {\"candidates\":[\"candidate names already in the payload\"],\"blocker_type\":\"missing_link\",\"bottleneck\":\"why the answer is not yet unique\",\"needed_check\":\"exact row, relation, year, rank, or passage fact to compare\"}` when a focused L2 re-read can resolve it.\n2. `UNRESOLVED: {\"blocker_type\":\"insufficient_evidence\",\"bottleneck\":\"what evidence is absent or contradictory\",\"needed_check\":\"what fact would be required\"}` when this payload cannot prove an answer.\n`blocker_type` must be exactly one label: `candidate_collision`, `missing_link`, `insufficient_evidence`, `conflicting_evidence`, or `answer_type_uncertain`; never combine labels with `|`.\nDo not invent candidates or evidence."""
 
     @staticmethod
     def _verification_prompt(question: str, compact_json: str, handoff: dict, *, mode: str) -> str:
         if mode == "delta_only":
-            return f"""Resolve the question using only the grounded L2 state capsule below. This is a new request: do not assume you remember L1 or use facts absent from this capsule.\n\nThe capsule contains the original question, the unresolved constraint, complete row bindings for the focus candidates, and their relevant evidence. `coverage` says whether retrieval found new text; absence of evidence is not a negative fact. Scores are intentionally omitted.\n\nReturn `FINAL_ANSWER: <shortest evidence span>\nEVIDENCE_PATH: {{\"edges\":[\"edge IDs in this capsule\"],\"passages\":[\"source IDs in this capsule\"]}}` only if exactly one candidate is proven. Cite at least one supplied ID. Otherwise return `UNRESOLVED: {{\"blocker_type\":\"...\",\"bottleneck\":\"...\",\"needed_check\":\"...\"}}`. Never return blank or invent evidence.\n\nQuestion: {question}\nL2 state capsule: {compact_json}\nAnswer:"""
+            return f"""Resolve the question using only the grounded L2 state capsule below. This is a new request: do not assume you remember L1 or use facts absent from this capsule.\n\nThe capsule contains the original question, the unresolved constraint, complete row bindings for the focus candidates, and their relevant evidence. `coverage` says whether retrieval found new text; absence of evidence is not a negative fact. Scores are intentionally omitted.\n\nCompare the candidates against the evidence to resolve the question. Return `FINAL_ANSWER: <shortest evidence span>\nEVIDENCE_PATH: {{\"edges\":[\"edge IDs in this capsule\"],\"passages\":[\"source IDs in this capsule\"]}}` for the proven candidate. Only return `UNRESOLVED: {{\"blocker_type\":\"...\",\"bottleneck\":\"...\",\"needed_check\":\"...\"}}` if the evidence strictly contradicts all candidates. Never return blank or invent evidence.\n\nQuestion: {question}\nL2 state capsule: {compact_json}\nAnswer:"""
         return f"""Resolve the question using the complete grounded OUEG evidence payload below.\n\nFocus guidance from the first read (attention only; it does not exclude any graph candidate or evidence in this payload):\n{json.dumps(handoff, ensure_ascii=False)}\n\nCheck the stated needed_check against row bindings and linked passages. Copy the shortest answer span exactly as it appears in the evidence; do not translate or expand a name. Never return blank: use `FINAL_ANSWER: <span>` if proven, otherwise return `UNRESOLVED: {{\"blocker_type\":\"...\",\"bottleneck\":\"...\",\"needed_check\":\"...\"}}`.\n\nQuestion: {question}\nComplete grounded OUEG payload: {compact_json}\nAnswer:"""
 
     @staticmethod
@@ -1213,10 +1212,20 @@ class OnlineUnifiedEvidenceGraphBaseline:
         """
         blocker_type = str(handoff.get("blocker_type") or "").casefold()
         eligible = {"missing_link", "insufficient_evidence"}
+        # Smaller models occasionally copy an enum spelling literally (for
+        # example ``missing_link|insufficient_evidence``). Keep recognized
+        # labels for audit instead of treating that as an invalid third type.
+        blocker_labels = [label for label in eligible if label in blocker_type]
+        candidates = [
+            str(value).strip() for value in handoff.get("candidates", [])
+            if str(value).strip()
+        ]
         report = {
             "enabled": self.config.use_focus_evidence_augmentation,
             "triggered": False,
             "reason": blocker_type,
+            "recognized_blocker_labels": blocker_labels,
+            "trigger_reason": None,
             "per_candidate_budget": self.config.focus_passage_budget_per_candidate,
             "query_fallback_budget": self.config.focus_query_fallback_budget,
             "candidate_sources": {},
@@ -1225,11 +1234,20 @@ class OnlineUnifiedEvidenceGraphBaseline:
             "added_source_ids": [],
             "unresolved_candidates": [],
         }
-        if not self.config.use_focus_evidence_augmentation or blocker_type not in eligible:
+        if not self.config.use_focus_evidence_augmentation:
+            report["trigger_reason"] = "disabled_by_config"
             return report
-        candidates = [str(value).strip() for value in handoff.get("candidates", []) if str(value).strip()]
         if not candidates:
+            report["trigger_reason"] = "no_grounded_candidates"
             return report
+        # The caller reaches this method only after L1 failed to emit a final
+        # answer. A grounded candidate handoff is therefore sufficient to
+        # attempt bounded linked-passage recovery. Blocker labels refine audit
+        # reporting; malformed/unknown labels must never suppress recovery.
+        report["trigger_reason"] = (
+            "missing_evidence_diagnostic"
+            if blocker_labels else "unresolved_with_grounded_candidates"
+        )
         report["triggered"] = True
         passages = [dict(item) for item in example.text_passages]
         by_key: dict[str, list[dict]] = defaultdict(list)
@@ -1273,8 +1291,10 @@ class OnlineUnifiedEvidenceGraphBaseline:
                             links_by_focus_row[focus_entity.casefold()].append(target)
         for candidate in dict.fromkeys(candidates):
             targets = [
-                *links_by_focus_row.get(candidate.casefold(), []),
                 *links_by_entity.get(candidate.casefold(), []),
+                # The candidate's own hyperlink is the direct recovery path;
+                # other links in its row are only supporting bridge context.
+                *links_by_focus_row.get(candidate.casefold(), []),
                 candidate,
             ]
             matches: list[dict] = []
@@ -1790,6 +1810,12 @@ class OnlineUnifiedEvidenceGraphBaseline:
                         temperature=self.config.temperature,
                     )
                     answer, second_diagnostic = self._parse_adaptive_response(second_response)
+                    if not answer and not second_diagnostic and handoff and handoff.get("candidates"):
+                        for cand in handoff.get("candidates", []):
+                            cand_clean = self._short_answer(cand)
+                            if cand_clean:
+                                answer = cand_clean
+                                break
                     adaptive_verification["second_response"] = str(second_response or "")
                     second_evidence_path = self._evidence_path_audit(
                         second_response, self._serialized_evidence_refs(verification_json),

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  27 OCT 2026 16:09
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  28 OCT 2026 00:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -859,41 +859,54 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <3.63997> on input line 129.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <2.59999> on input line 129.
-)) [3]
+)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [4]
-(./figures/pipeline.tex (./figures/pipeline-diagram.tex
+ [3])
+[4] (./figures/pipeline.tex (./figures/pipeline-diagram.tex
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <5> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 31.
-)) [5] [6] [7]
-(./figures/diagnostic-l2.tex (./figures/diagnostic-l2-diagram.tex
-LaTeX Font Info:    Calculating math sizes for size <4.6> on input line 53.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 33.
+
+Underfull \hbox (badness 2096) in paragraph at lines 60--60
+[]$\OMS/lmsy/m/n/5 ^^O$ \T1/lmr/m/n/5 Coarse Rows: 
+ []
+
+
+Overfull \hbox (1.50385pt too wide) in paragraph at lines 134--136
+[][]$[]$  
+ []
+
+))
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [5]
+[6] [7] (./figures/diagnostic-l2.tex (./figures/diagnostic-l2-diagram.tex
+LaTeX Font Info:    Calculating math sizes for size <4.6> on input line 38.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <4.6> on input line 53.
+(Font)              <4.6> on input line 38.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <3.21999> on input line 53.
+(Font)              <3.21999> on input line 38.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <2.3> on input line 53.
-)) [8]
-[9] [10] [11]
-Underfull \hbox (badness 10000) in paragraph at lines 308--309
+(Font)              <2.3> on input line 38.
+))
+[8] [9] [10] [11]
+Underfull \hbox (badness 10000) in paragraph at lines 309--310
 []|\T1/lmr/m/n/7 Disintegrates intra-row at-
  []
 
 
-Underfull \vbox (badness 7362) has occurred while \output is active []
+Underfull \vbox (badness 3815) has occurred while \output is active []
 
  [12]
-(./main.bbl [13]) [14] (./main.aux) ) 
+[13] (./main.bbl) [14] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 19092 strings out of 483183
- 362874 string characters out of 5966292
- 653863 words of memory out of 5000000
- 33535 multiletter control sequences out of 15000+600000
- 713864 words of font info for 244 fonts, out of 8000000 for 9000
+ 19147 strings out of 483183
+ 363785 string characters out of 5966292
+ 659689 words of memory out of 5000000
+ 33580 multiletter control sequences out of 15000+600000
+ 714291 words of font info for 249 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,19n,69p,1864b,1057s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,19n,69p,1893b,1057s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ma
 thit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts
 /enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/us
@@ -919,7 +932,7 @@ nts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt8.pf
 b></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/public/amsfonts/symbols/msam5.pfb></usr/share/texlive/texmf-dis
 t/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (14 pages, 623395 bytes).
+Output written on main.pdf (14 pages, 624871 bytes).
 PDF statistics:
  198 PDF objects out of 1000 (max. 8388607)
  149 compressed objects within 2 object streams

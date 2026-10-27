@@ -1,64 +1,99 @@
-<mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="450" background="#ffffff">
+<mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1550" pageHeight="500" background="#ffffff">
   <root>
     <mxCell id="0" />
     <mxCell id="1" parent="0" />
 
     <!-- Paradigm A: Direct LLM Prompting -->
     <mxCell id="p_a" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#bdc3c7;strokeWidth=1.5;" vertex="1" parent="1">
-      <mxGeometry x="30" y="30" width="370" height="380" as="geometry" />
+      <mxGeometry x="30" y="30" width="340" height="420" as="geometry" />
     </mxCell>
-    <mxCell id="t_a" value="&lt;b&gt;(A) Direct LLM Prompting&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eaeded;strokeColor=#bdc3c7;fontSize=13;fontColor=#2c3e50;" vertex="1" parent="1">
-      <mxGeometry x="45" y="45" width="340" height="35" as="geometry" />
+    <mxCell id="t_a" value="&lt;b&gt;(A) Flattened In-Context Prompting&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:10px; color:#7f8c8d;'&gt;[Direct LLM, Flat-RAG]&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eaeded;strokeColor=#bdc3c7;fontSize=12;fontColor=#2c3e50;" vertex="1" parent="1">
+      <mxGeometry x="45" y="45" width="310" height="40" as="geometry" />
     </mxCell>
-    <mxCell id="b_a_in" value="&lt;b&gt;Serialized Context Pool&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10.5px;'&gt;• Table rows flattened into text strings&lt;br&gt;• External text passages concatenated&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#bdc3c7;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="45" y="95" width="340" height="70" as="geometry" />
+    <mxCell id="b_a_in" value="&lt;b&gt;Table &amp;amp; Text Context&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10.5px;'&gt;• Raw row strings &amp;amp; cell values&lt;br&gt;• Unstructured external passages&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#bdc3c7;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="45" y="100" width="310" height="65" as="geometry" />
     </mxCell>
-    <mxCell id="b_a_model" value="&lt;b&gt;Frozen Backbone LLM&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;Single unguided forward pass&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eaf2f8;strokeColor=#aed6f1;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="45" y="190" width="340" height="55" as="geometry" />
+    <mxCell id="b_a_proc" value="&lt;b&gt;Naive Concatenation&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;Flattened into linear prompt token sea&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eaf2f8;strokeColor=#aed6f1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="45" y="180" width="310" height="50" as="geometry" />
     </mxCell>
-    <mxCell id="b_a_lim" value="&lt;b style='color:#c0392b;'&gt;Key Limitations&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10.5px; color:#922b21;'&gt;• Loss of tabular row-column bindings&lt;br&gt;• Hallucinates under candidate collisions&lt;br&gt;• Unguided attention across long context&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdedec;strokeColor=#f5b7b1;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="45" y="270" width="340" height="90" as="geometry" />
+    <mxCell id="b_a_out" value="&lt;b&gt;Unguided LLM Attention&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;Free-form generation without structure&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#bdc3c7;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="45" y="245" width="310" height="50" as="geometry" />
     </mxCell>
-    <mxCell id="e_a_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#7f8c8d;strokeWidth=1.5;" edge="1" source="b_a_in" target="b_a_model" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="e_a_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#7f8c8d;strokeWidth=1.5;" edge="1" source="b_a_model" target="b_a_lim" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="b_a_lim" value="&lt;b style='color:#c0392b;'&gt;Key Structural Limitations&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10px; color:#922b21;'&gt;• &lt;b&gt;Lacks tabular bindings&lt;/b&gt;: cross-row conflation&lt;br&gt;• Attention dispersed across long passages&lt;br&gt;• Arbitrary guessing under candidate ties&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdedec;strokeColor=#f5b7b1;fontSize=10.5;" vertex="1" parent="1">
+      <mxGeometry x="45" y="310" width="310" height="120" as="geometry" />
+    </mxCell>
+    <mxCell id="e_a_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#7f8c8d;strokeWidth=1.5;" edge="1" source="b_a_in" target="b_a_proc" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="e_a_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#7f8c8d;strokeWidth=1.5;" edge="1" source="b_a_proc" target="b_a_out" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="e_a_3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#7f8c8d;strokeWidth=1.5;" edge="1" source="b_a_out" target="b_a_lim" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
 
-    <!-- Paradigm B: Destructive Graph Pruning (ODYSSEY) -->
+    <!-- Paradigm B: Online Graph with Destructive Pruning (ODYSSEY) -->
     <mxCell id="p_b" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdf7f7;strokeColor=#e6b8af;strokeWidth=1.5;" vertex="1" parent="1">
-      <mxGeometry x="450" y="30" width="370" height="380" as="geometry" />
+      <mxGeometry x="400" y="30" width="340" height="420" as="geometry" />
     </mxCell>
-    <mxCell id="t_b" value="&lt;b&gt;(B) Destructive Graph Pruning&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f4cccc;strokeColor=#e06666;fontSize=13;fontColor=#990000;" vertex="1" parent="1">
-      <mxGeometry x="465" y="45" width="340" height="35" as="geometry" />
+    <mxCell id="t_b" value="&lt;b&gt;(B) Destructive Graph Pruning&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:10px; color:#c0392b;'&gt;[e.g., ODYSSEY (NAACL 2025)]&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f4cccc;strokeColor=#e06666;fontSize=12;fontColor=#990000;" vertex="1" parent="1">
+      <mxGeometry x="415" y="45" width="310" height="40" as="geometry" />
     </mxCell>
-    <mxCell id="b_b_in" value="&lt;b&gt;Question-Guided Graph Pruning&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10.5px;'&gt;• Constructs hybrid graph over entities&lt;br&gt;• Discards ~53% nodes/edges via heuristics&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e06666;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="465" y="95" width="340" height="70" as="geometry" />
+    <mxCell id="b_b_in" value="&lt;b&gt;Online Entity Graph&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10.5px;'&gt;• Dynamic entity triples extracted per query&lt;br&gt;• Table rows split into pairwise entity edges&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e06666;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="415" y="100" width="310" height="65" as="geometry" />
     </mxCell>
-    <mxCell id="b_b_model" value="&lt;b&gt;Pruned Subgraph Prompting&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;Linearized surviving triples&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce5cd;strokeColor=#f6b26b;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="465" y="190" width="340" height="55" as="geometry" />
+    <mxCell id="b_b_proc" value="&lt;b&gt;Aggressive Question Pruning&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;Heuristic cut of up to 53% nodes &amp;amp; edges&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce5cd;strokeColor=#f6b26b;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="415" y="180" width="310" height="50" as="geometry" />
     </mxCell>
-    <mxCell id="b_b_lim" value="&lt;b style='color:#c0392b;'&gt;Key Limitations&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10.5px; color:#922b21;'&gt;• Peripheral evidence loss (drops key facts)&lt;br&gt;• Arbitrary tie-breaking when candidates tie&lt;br&gt;• Exact match collapses on multi-hop spans&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdedec;strokeColor=#f5b7b1;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="465" y="270" width="340" height="90" as="geometry" />
+    <mxCell id="b_b_out" value="&lt;b&gt;Unorganized Bag of Triples&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;Disordered edge collection fed into LLM&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e06666;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="415" y="245" width="310" height="50" as="geometry" />
     </mxCell>
-    <mxCell id="e_b_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#e06666;strokeWidth=1.5;" edge="1" source="b_b_in" target="b_b_model" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="e_b_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#e06666;strokeWidth=1.5;" edge="1" source="b_b_model" target="b_b_lim" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="b_b_lim" value="&lt;b style='color:#c0392b;'&gt;Key Structural Limitations&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10px; color:#922b21;'&gt;• &lt;b&gt;Loss of tabular semantics&lt;/b&gt;: triples decouple cells&lt;br&gt;• &lt;b&gt;Evidence loss&lt;/b&gt;: discards peripheral cell qualifiers&lt;br&gt;• &lt;b&gt;No reasoning guidance&lt;/b&gt;: attention dispersed&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdedec;strokeColor=#f5b7b1;fontSize=10.5;" vertex="1" parent="1">
+      <mxGeometry x="415" y="310" width="310" height="120" as="geometry" />
+    </mxCell>
+    <mxCell id="e_b_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#e06666;strokeWidth=1.5;" edge="1" source="b_b_in" target="b_b_proc" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="e_b_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#e06666;strokeWidth=1.5;" edge="1" source="b_b_proc" target="b_b_out" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="e_b_3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#e06666;strokeWidth=1.5;" edge="1" source="b_b_out" target="b_b_lim" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
 
-    <!-- Paradigm C: OUEG-RAG (Ours) -->
-    <mxCell id="p_c" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf9;strokeColor=#27ae60;strokeWidth=2;" vertex="1" parent="1">
-      <mxGeometry x="870" y="30" width="390" height="380" as="geometry" />
+    <!-- Paradigm C: Persistent KG Agentic Exploration (HydraRAG) -->
+    <mxCell id="p_c" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdfaf4;strokeColor=#d4ac0d;strokeWidth=1.5;" vertex="1" parent="1">
+      <mxGeometry x="770" y="30" width="340" height="420" as="geometry" />
     </mxCell>
-    <mxCell id="t_c" value="&lt;b&gt;(C) OUEG-RAG (Controlled Scaffolding)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5f5e3;strokeColor=#27ae60;fontSize=13;fontColor=#1e8449;" vertex="1" parent="1">
-      <mxGeometry x="885" y="45" width="360" height="35" as="geometry" />
+    <mxCell id="t_c" value="&lt;b&gt;(C) Persistent KG Agentic Loops&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:10px; color:#b7950b;'&gt;[e.g., HydraRAG (EMNLP 2025)]&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fcf3cf;strokeColor=#f1c40f;fontSize=12;fontColor=#7d6608;" vertex="1" parent="1">
+      <mxGeometry x="785" y="45" width="310" height="40" as="geometry" />
     </mxCell>
-    <mxCell id="b_c_in" value="&lt;b&gt;Complete Evidence Graph + Guided Path&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10.5px;'&gt;• 100% evidence preserved via prompt compression&lt;br&gt;• Deterministic path p₁ (S(p)) as non-filtering guide&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#27ae60;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="885" y="95" width="360" height="70" as="geometry" />
+    <mxCell id="b_c_in" value="&lt;b&gt;Static Global KG&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10.5px;'&gt;• Pre-indexed triple store (e.g., Wikidata)&lt;br&gt;• Cannot ingest ad-hoc, raw table schemas&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f1c40f;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="785" y="100" width="310" height="65" as="geometry" />
     </mxCell>
-    <mxCell id="b_c_model" value="&lt;b&gt;Bounded Two-Tier Controlled Execution&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;L1 Fast Exit OR L2 Targeted Diagnostic Augmentation&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5f5e3;strokeColor=#27ae60;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="885" y="190" width="360" height="55" as="geometry" />
+    <mxCell id="b_c_proc" value="&lt;b&gt;Unbounded Agentic Loops&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;Multi-turn LLM reasoning &amp;amp; verification cycles&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9e7;strokeColor=#f9e79f;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="785" y="180" width="310" height="50" as="geometry" />
     </mxCell>
-    <mxCell id="b_c_lim" value="&lt;b style='color:#1e8449;'&gt;Key Advantages&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10.5px; color:#145a32;'&gt;• Zero peripheral evidence loss&lt;br&gt;• Resolves collisions factually via bridge retrieval&lt;br&gt;• High provenance faithfulness (92.0%)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f8f5;strokeColor=#a3e4d7;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="885" y="270" width="360" height="90" as="geometry" />
+    <mxCell id="b_c_out" value="&lt;b&gt;Iterative Multi-Turn Paths&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;Explored traversal chains across LLM turns&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f1c40f;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="785" y="245" width="310" height="50" as="geometry" />
     </mxCell>
-    <mxCell id="e_c_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#27ae60;strokeWidth=1.5;" edge="1" source="b_c_in" target="b_c_model" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="e_c_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#27ae60;strokeWidth=1.5;" edge="1" source="b_c_model" target="b_c_lim" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="b_c_lim" value="&lt;b style='color:#b7950b;'&gt;Key Operational Limitations&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10px; color:#7d6608;'&gt;• &lt;b&gt;High latency &amp;amp; API overhead&lt;/b&gt; (dozens of calls)&lt;br&gt;• &lt;b&gt;Cannot ingest raw tables&lt;/b&gt; at query time&lt;br&gt;• Search drift over unbounded agent steps&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fefde8;strokeColor=#f9e79f;fontSize=10.5;" vertex="1" parent="1">
+      <mxGeometry x="785" y="310" width="310" height="120" as="geometry" />
+    </mxCell>
+    <mxCell id="e_c_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#f1c40f;strokeWidth=1.5;" edge="1" source="b_c_in" target="b_c_proc" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="e_c_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#f1c40f;strokeWidth=1.5;" edge="1" source="b_c_proc" target="b_c_out" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="e_c_3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#f1c40f;strokeWidth=1.5;" edge="1" source="b_c_out" target="b_c_lim" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <!-- Paradigm D: Proposed OUEG-RAG -->
+    <mxCell id="p_d" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf9;strokeColor=#0e8a75;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="1140" y="30" width="360" height="420" as="geometry" />
+    </mxCell>
+    <mxCell id="t_d" value="&lt;b&gt;(D) Proposed OUEG-RAG&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:10px; color:#0e8a75;'&gt;[Guided Reasoning &amp;amp; Bounded Tiers]&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1f2eb;strokeColor=#1abc9c;fontSize=12;fontColor=#0e6251;" vertex="1" parent="1">
+      <mxGeometry x="1155" y="45" width="330" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="b_d_in" value="&lt;b&gt;Ad-Hoc Table &amp;amp; Text Ingestion&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10.5px;'&gt;• Coarse row anchor + hyperlinked passages&lt;br&gt;• Online multigraph instantiated in &amp;lt; 20 ms&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1abc9c;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1155" y="100" width="330" height="65" as="geometry" />
+    </mxCell>
+    <mxCell id="b_d_proc" value="&lt;b&gt;Star Centroids &amp;amp; Explicit Scaffolding&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;Hubs &amp;rho;&lt;sub&gt;i&lt;/sub&gt; preserve semantics; Scored path p&lt;sub&gt;1&lt;/sub&gt; (S(p)) guides&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f8f5;strokeColor=#a3e4d7;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1155" y="180" width="330" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="b_d_out" value="&lt;b&gt;Bounded Two-Tier Engine&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;L1 Fast Exit (1 call) OR L2 Targeted Augment (2 calls)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1abc9c;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1155" y="245" width="330" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="b_d_lim" value="&lt;b style='color:#0e6251;'&gt;Key Structural Advantages&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10px; color:#0e6251;'&gt;• &lt;b&gt;Preserves tabular semantics&lt;/b&gt;: &amp;rho;&lt;sub&gt;i&lt;/sub&gt; prevents conflation&lt;br&gt;• &lt;b&gt;Explicit path guidance&lt;/b&gt;: S(p) steers attention&lt;br&gt;• &lt;b&gt;Zero evidence loss&lt;/b&gt;: complete multigraph retained&lt;br&gt;• &lt;b&gt;Bounded query efficiency&lt;/b&gt;: 1 primary / 1 targeted call&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f8f5;strokeColor=#1abc9c;fontSize=10.5;" vertex="1" parent="1">
+      <mxGeometry x="1155" y="310" width="330" height="120" as="geometry" />
+    </mxCell>
+    <mxCell id="e_d_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#1abc9c;strokeWidth=1.5;" edge="1" source="b_d_in" target="b_d_proc" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="e_d_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#1abc9c;strokeWidth=1.5;" edge="1" source="b_d_proc" target="b_d_out" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="e_d_3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#1abc9c;strokeWidth=1.5;" edge="1" source="b_d_out" target="b_d_lim" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
 
   </root>
 </mxGraphModel>

@@ -152,7 +152,7 @@ run_method() {
 # matching the focus-augmentation runner. Path-focused mode is opt-in for
 # studying prompt-order/path-salience effects.
 oueg_view_args=()
-[[ "$path_focused" == true ]] || oueg_view_args+=(--no-path-focused-prompt)
+[[ "$path_focused" == true ]] && oueg_view_args+=(--path-focused-prompt)
 
 echo "Output folder: $output_dir"
 echo "Model: ${LLM_PROVIDER}/${OPENROUTER_MODEL}; shard=$shard; track=$track; workers=$workers"

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  27 OCT 2026 10:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  28 OCT 2026 00:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -615,20 +615,20 @@ LaTeX Font Warning: Size substitutions with differences
 Here is how much of TeX's memory you used:
  14711 strings out of 483183
  292342 string characters out of 5966292
- 537591 words of memory out of 5000000
+ 535343 words of memory out of 5000000
  29460 multiletter control sequences out of 15000+600000
  541921 words of font info for 56 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 68i,12n,65p,424b,934s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 68i,12n,65p,424b,932s stack positions out of 5000i,500n,10000p,200000b,80000s
  </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm0500.600pk> </tmp/texfonts/pk/ljfou
 r/jknappen/ec/ecbi0500.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx0500.600
 pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/
 texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/public/amsfonts/symbols/msam5.pfb>
-Output written on fig1_standalone.pdf (1 page, 72520 bytes).
+Output written on fig1_standalone.pdf (1 page, 72539 bytes).
 PDF statistics:
- 185 PDF objects out of 1000 (max. 8388607)
+ 182 PDF objects out of 1000 (max. 8388607)
  31 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)

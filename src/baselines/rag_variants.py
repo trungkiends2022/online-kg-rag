@@ -57,9 +57,10 @@ class RAGConfig:
     # prompt. ``complete_re_read`` is retained solely as a diagnostic ablation.
     l2_evidence_mode: str = "delta_only"
     use_prompt_compression: bool = True
-    # Keep the complete KG in the audit artifact, while presenting the answer
-    # model with a bounded set of grounded paths and their evidence.
-    use_path_focused_prompt: bool = True
+    # Full OUEG preserves the established L1 reader: it sees the complete,
+    # losslessly compacted graph.  Path-focused presentation is opt-in for a
+    # prompt-pruning ablation; it must not change the main L1 comparison.
+    use_path_focused_prompt: bool = False
     prompt_path_budget: int = 8
     # OUEG-only: prompt keeps the ambiguity visible by default. The two other
     # modes are explicit selective-prediction behaviours.

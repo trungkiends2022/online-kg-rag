@@ -192,13 +192,15 @@ def test_oueg_prompt_keeps_full_subgraph_while_paths_are_only_guides(monkeypatch
     )
     assert "`rows` retains table rows selected by grounded paths" in prompts[0]
     assert result["prompt_compression"]["all_edges_represented"] is True
-    assert result["answer_time_evidence"]["enabled"] is True
-    assert result["answer_time_evidence"]["selected_record_count"] < result["answer_time_evidence"]["full_record_count"]
+    assert result["answer_time_evidence"]["enabled"] is False
+    assert result["answer_time_evidence"]["selected_record_count"] == result["answer_time_evidence"]["full_record_count"]
     assert "nodes" not in result["compact_oueg_payload"]
 
 
-def test_oueg_answer_time_evidence_keeps_only_top_grounded_paths():
-    baseline = OnlineUnifiedEvidenceGraphBaseline(RAGConfig(prompt_path_budget=1))
+def test_oueg_path_focused_ablation_keeps_only_top_grounded_paths():
+    baseline = OnlineUnifiedEvidenceGraphBaseline(
+        RAGConfig(prompt_path_budget=1, use_path_focused_prompt=True),
+    )
     records = [
         {"edge_id": "e0", "tail": "passage:/wiki/Alpha", "contexts": []},
         {"edge_id": "e1", "tail": "passage:/wiki/Beta", "contexts": []},
@@ -637,6 +639,64 @@ def test_oueg_focus_augmentation_uses_links_from_grounded_row_not_rank_value():
     assert report["candidate_sources"] == {"Stuartholme School": ["/wiki/Stuartholme_School"]}
     assert report["linked_source_ids"]["Stuartholme School"] == ["/wiki/Stuartholme_School"]
     assert [item["id"] for item in retrieved["text_passages"]] == ["/wiki/Stuartholme_School"]
+
+
+def test_oueg_focus_augmentation_recovers_compound_blocker_and_direct_song_link():
+    """A malformed L1 label cannot suppress recovery of a grounded song link."""
+    example = DatasetExample(
+        example_id="compound-blocker", question="Who wrote the 2008 song?",
+        table_rows=[{
+            "table_name": "Songs",
+            "rows": [{"Artist": "Josh Turner", "Song Title": "Another Try"}],
+            "cell_links": [
+                {"row_index": 0, "column_name": "Artist", "url": "/wiki/Josh_Turner"},
+                {"row_index": 0, "column_name": "Song Title", "url": "/wiki/Another_Try"},
+            ],
+        }],
+        text_passages=[
+            {"id": "/wiki/Josh_Turner", "text": "Josh Turner recorded country music."},
+            {"id": "/wiki/Another_Try", "text": "Another Try was written by Jeremy Spillman and Chris Stapleton."},
+        ], answer="Jeremy Spillman and Chris Stapleton",
+    )
+    handoff = {
+        "blocker_type": "missing_link|insufficient_evidence",
+        "needed_check": "writer of Another Try",
+        "candidates": ["Another Try"],
+        "focus_rows": [{
+            "entity": "Another Try", "row_id": "table:Songs:row:0", "row_order_index": 0,
+        }],
+    }
+    retrieved = {"text_passages": []}
+
+    report = OnlineUnifiedEvidenceGraphBaseline(RAGConfig(
+        focus_passage_budget_per_candidate=1, focus_query_fallback_budget=1,
+    ))._focus_evidence_augmentation(example, retrieved, handoff)
+
+    assert report["triggered"] is True
+    assert set(report["recognized_blocker_labels"]) == {"missing_link", "insufficient_evidence"}
+    assert report["trigger_reason"] == "missing_evidence_diagnostic"
+    assert report["candidate_sources"] == {"Another Try": ["/wiki/Another_Try"]}
+    assert [item["id"] for item in retrieved["text_passages"]] == ["/wiki/Another_Try"]
+
+
+def test_oueg_focus_augmentation_recovers_unknown_blocker_with_grounded_candidates():
+    example = DatasetExample(
+        example_id="unknown-blocker", question="Who founded Alpha?",
+        table_rows=[{
+            "table_name": "T", "rows": [{"Place": "Alpha"}],
+            "cell_links": [{"row_index": 0, "column_name": "Place", "url": "/wiki/Alpha"}],
+        }],
+        text_passages=[{"id": "/wiki/Alpha", "text": "Alpha was founded by Ada."}], answer="Ada",
+    )
+    retrieved = {"text_passages": []}
+    report = OnlineUnifiedEvidenceGraphBaseline(RAGConfig())._focus_evidence_augmentation(
+        example, retrieved,
+        {"blocker_type": "empty_model_response", "candidates": ["Alpha"], "focus_rows": []},
+    )
+
+    assert report["triggered"] is True
+    assert report["trigger_reason"] == "unresolved_with_grounded_candidates"
+    assert report["added_source_ids"] == ["/wiki/Alpha"]
 
 
 def test_oueg_l2_augments_missing_linked_text_for_each_focus_candidate(monkeypatch):

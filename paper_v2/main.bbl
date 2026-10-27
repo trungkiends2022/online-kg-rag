@@ -42,44 +42,17 @@ Eisenschlos, J.M., Gor, M., M{\"u}ller, T., Andor, D.: {MATE}: Multi-view
   attention for table-text encoding. In: Proceedings of the 59th Annual Meeting
   of the Association for Computational Linguistics. pp. 7405--7419 (2021)
 
-\bibitem{gao2023ragsurvey}
-Gao, Y., Xiong, Y., Gao, X., Jia, K., Pan, J., Bi, Y., Dai, Y., Sun, J., Wang,
-  M., Wang, H.: Retrieval-augmented generation for large language models: A
-  survey. arXiv preprint arXiv:2312.10997  (2023)
-
-\bibitem{guu2020realm}
-Guu, K., Lee, K., Tung, Z., Pasupat, P., Chang, M.W.: {REALM}:
-  Retrieval-augmented language model pre-training. In: Proceedings of the 37th
-  International Conference on Machine Learning. pp. 3929--3938 (2020)
-
 \bibitem{he2024gretriever}
 He, X., Tian, Y., Sun, N., Chawla, N.V., Laurent, T., Bresson, X.:
   {G-Retriever}: Retrieval-augmented generation for textual graph understanding
   and question answering. In: Advances in Neural Information Processing Systems
   37. pp. 12345--12368 (2024)
 
-\bibitem{kumar2021mitqa}
-Kumar, V., Balachandran, V., Bisk, Y., Neubig, G.: Multi-hop question answering
-  over tables and text. In: Proceedings of the 30th International Joint
-  Conference on Artificial Intelligence. pp. 3852--3858 (2021)
-
 \bibitem{lei2023s3hqa}
 Lei, F., He, Q., Yang, Y., Hu, B., Zhang, M.: {S3HQA}: A structure-aware
   sequential sampling approach for {HybridQA}. In: Proceedings of the 61st
   Annual Meeting of the Association for Computational Linguistics. pp.
   14021--14035 (2023)
-
-\bibitem{lewis2020rag}
-Lewis, P., Perez, E., Piktus, A., Petroni, F., Karpukhin, V., Goyal, N.,
-  K{\"u}ttler, H., Lewis, M., Yih, W.t., Rockt{\"a}schel, T., Riedel, S.,
-  Kiela, D.: Retrieval-augmented generation for knowledge-intensive {NLP}
-  tasks. In: Advances in Neural Information Processing Systems 33. pp.
-  9459--9474 (2020)
-
-\bibitem{pan2024unifying}
-Pan, S., Luo, L., Wang, Y., Chen, C., Wang, J., Wu, X.: Unifying large language
-  models and knowledge graphs: A roadmap. IEEE Transactions on Knowledge and
-  Data Engineering  \textbf{36}(7),  3580--3599 (2024)
 
 \bibitem{peng2024graphragsurvey}
 Peng, C., Shen, Y., Zhang, M., Chen, J., Han, X., Wang, H.: Graph

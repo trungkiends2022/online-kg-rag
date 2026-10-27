@@ -359,7 +359,7 @@ trả `NEED_FOCUS` hoặc `UNRESOLVED`, không được đoán từ parametric m
 
 | Method | Vai trò trong bảng chính |
 |---|---|
-| `online_unified_evidence_graph` | Phương pháp đề xuất: row bindings, guided paths và diagnostic L2 grounding. |
+| `online_unified_evidence_graph` | Phương pháp đề xuất: L1 đọc toàn bộ compact OUEG lossless (giữ nguyên reader cũ); chỉ khi L1 trả `NEED_FOCUS`/`UNRESOLVED` mới chạy L2 diagnostic grounding. |
 | `direct_llm` | Đối chứng tối giản: một lần đọc raw table--text context đầy đủ. |
 | `odyssey` | Đối chứng graph-pruning zero-shot theo giao thức ODYSSEY. |
 | `graph_retrieval_no_path` | Tách hiệu quả của graph evidence khỏi connected path reasoning. |
@@ -391,7 +391,7 @@ bash scripts/run_grounded_baselines_server.sh --dataset both --model both --work
 
 | Configuration | Vai trò nhân quả |
 |---|---|
-| `full` | Control: toàn bộ OUEG. |
+| `full` | Control: L1 full compact OUEG như hệ cũ; L2 chỉ là nhánh recovery sau diagnostic, không thay L1 khi đã có đáp án. |
 | `no_record_nodes` | Kiểm tra row-record centroids có bảo toàn binding giữa các cell trong cùng hàng hay không. |
 | `no_path_guidance` | Kiểm tra scored paths có giúp điều hướng attention mà không cắt evidence hay không. |
 | `l1_only` | Đo giá trị của diagnostic-triggered L2 verification. |

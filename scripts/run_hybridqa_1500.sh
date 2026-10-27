@@ -114,6 +114,11 @@ for shard in "${shards[@]}"; do
         --prompt-path-budget 8
         --collision-passage-budget 12
         --focus-passage-budget-per-candidate 2
+        --focus-query-fallback-budget 2
+        --l2-existing-witness-budget 2
+        --l2-max-edges-per-candidate 16
+        --l2-max-contexts-per-candidate 3
+        --l2-context-snippet-chars 900
         --l2-evidence-mode delta_only
         --ambiguity-policy prompt
         --oueg-context-mode lossless
