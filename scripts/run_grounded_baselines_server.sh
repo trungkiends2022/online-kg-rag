@@ -18,8 +18,11 @@ Run the five finalized baselines, sequentially:
 Options:
   --dataset <hybridqa|ottqa|both>  Dataset suite to run (default: both).
   --model <20b|120b|both>          GPT-OSS model scale (default: both).
+  --shards "01 02..."              Specific shard(s) to run (e.g. "01" or "01 02").
   --workers <N>                    Example/request concurrency (default: 4).
   --run-tag <name>                 Result tag prefix (default: grounded-baselines-v1).
+  --with-ablations                 Run both main benchmarks and 7-component ablations.
+  --ablations-only                 Run only the 7-component ablations (HybridQA 500).
   --dry-run                        Print exact launches without calling a model.
   -h, --help                       Show this help.
 
@@ -32,14 +35,20 @@ dataset_selector="both"
 model_selector="both"
 workers="${MAX_WORKERS:-4}"
 run_tag_prefix="${RUN_TAG_PREFIX:-grounded-baselines-v1}"
+selected_shards=()
 dry_run=false
+with_ablations=false
+ablations_only=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --dataset) dataset_selector="$2"; shift 2 ;;
     --model) model_selector="$2"; shift 2 ;;
+    --shards) read -r -a selected_shards <<< "$2"; shift 2 ;;
     --workers) workers="$2"; shift 2 ;;
     --run-tag) run_tag_prefix="$2"; shift 2 ;;
+    --with-ablations) with_ablations=true; shift ;;
+    --ablations-only) ablations_only=true; with_ablations=true; shift ;;
     --dry-run) dry_run=true; shift ;;
     -h|--help) usage; exit 0 ;;
     *) echo "Unknown option: $1" >&2; usage >&2; exit 2 ;;
@@ -78,7 +87,7 @@ run_suite() {
     "LLM_MAX_CONCURRENT_REQUESTS=$workers"
     "METHODS=$methods"
     "RUN_TAG=$tag"
-    bash "$script"
+    bash "$script" "${selected_shards[@]}"
   )
   printf '\n[%s] %s / GPT-OSS-%s\n' "$(date --iso-8601=seconds)" "$dataset" "$scale"
   if [[ "$dry_run" == true ]]; then
@@ -88,11 +97,48 @@ run_suite() {
   fi
 }
 
-for scale in "${models[@]}"; do
-  for dataset in "${datasets[@]}"; do
-    run_suite "$scale" "$dataset"
+run_ablation_suite() {
+  local scale="$1" model tag out_dir
+  case "$scale" in
+    20b) model="openai/gpt-oss-20b" ;;
+    120b) model="openai/gpt-oss-120b" ;;
+  esac
+  tag="${run_tag_prefix}-ablations-gpt-oss-${scale}"
+  out_dir="data/results/$tag"
+  local extra_ablation_args=()
+  if (( ${#selected_shards[@]} == 1 )); then
+    extra_ablation_args+=(--shard "${selected_shards[0]}")
+  fi
+  local command=(env
+    "LLM_PROVIDER=openrouter"
+    "OPENROUTER_MODEL=$model"
+    "OPENROUTER_REASONING_ENABLED=${OPENROUTER_REASONING_ENABLED:-true}"
+    bash "scripts/run_hybridqa_500_oueg_component_ablations.sh"
+    --workers "$workers"
+    --output-dir "$out_dir"
+    "${extra_ablation_args[@]}"
+  )
+  printf '\n[%s] hybridqa-ablations / GPT-OSS-%s\n' "$(date --iso-8601=seconds)" "$scale"
+  if [[ "$dry_run" == true ]]; then
+    printf '  '; printf '%q ' "${command[@]}"; printf '\n'
+  else
+    "${command[@]}"
+  fi
+}
+
+if [[ "$ablations_only" == false ]]; then
+  for scale in "${models[@]}"; do
+    for dataset in "${datasets[@]}"; do
+      run_suite "$scale" "$dataset"
+    done
   done
-done
+fi
+
+if [[ "$with_ablations" == true ]]; then
+  for scale in "${models[@]}"; do
+    run_ablation_suite "$scale"
+  done
+fi
 
 echo ""
 echo "=========================================================================="
@@ -100,18 +146,30 @@ echo "Completed requested grounded-baseline suites."
 echo "=========================================================================="
 
 if [[ "$dry_run" == false ]]; then
-  for scale in "${models[@]}"; do
-    for dataset in "${datasets[@]}"; do
-      tag="${run_tag_prefix}-gpt-oss-${scale}"
-      case "$dataset" in
-        hybridqa) res_dir="data/results/hybridqa-1500-seed2027/$tag" ;;
-        ottqa) res_dir="data/results/ottqa-500-seed2027/$tag" ;;
-      esac
-      if [[ -d "$res_dir" ]]; then
+  if [[ "$ablations_only" == false ]]; then
+    for scale in "${models[@]}"; do
+      for dataset in "${datasets[@]}"; do
+        tag="${run_tag_prefix}-gpt-oss-${scale}"
+        case "$dataset" in
+          hybridqa) res_dir="data/results/hybridqa-1500-seed2027/$tag" ;;
+          ottqa) res_dir="data/results/ottqa-500-seed2027/$tag" ;;
+        esac
+        if [[ -d "$res_dir" ]]; then
+          echo ""
+          echo ">>> Summary: [$dataset / GPT-OSS-$scale] ($res_dir)"
+          python3 scripts/fast_benchmark_summary.py "$res_dir" || true
+        fi
+      done
+    done
+  fi
+  if [[ "$with_ablations" == true ]]; then
+    for scale in "${models[@]}"; do
+      ablation_dir="data/results/${run_tag_prefix}-ablations-gpt-oss-${scale}"
+      if [[ -d "$ablation_dir" ]]; then
         echo ""
-        echo ">>> Summary: [$dataset / GPT-OSS-$scale] ($res_dir)"
-        python3 scripts/fast_benchmark_summary.py "$res_dir" || true
+        echo ">>> Summary: [HybridQA Ablations / GPT-OSS-$scale] ($ablation_dir)"
+        python3 scripts/fast_benchmark_summary.py "$ablation_dir" || true
       fi
     done
-  done
+  fi
 fi

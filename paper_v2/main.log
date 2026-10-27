@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  27 OCT 2026 14:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  27 OCT 2026 16:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -840,48 +840,10 @@ LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 3
 
 (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
+) [1
 
-LaTeX Warning: Citation `zhou2026tableqasurvey' on page 1 undefined on input li
-ne 43.
-
-
-LaTeX Warning: Citation `hybridqa' on page 1 undefined on input line 43.
-
-[1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-
-LaTeX Warning: Citation `lewis2020rag' on page 2 undefined on input line 45.
-
-
-LaTeX Warning: Citation `guu2020realm' on page 2 undefined on input line 45.
-
-
-LaTeX Warning: Citation `gao2023ragsurvey' on page 2 undefined on input line 45
-.
-
-
-LaTeX Warning: Citation `yasunaga2021qagnn' on page 2 undefined on input line 5
-1.
-
-
-LaTeX Warning: Citation `pan2024unifying' on page 2 undefined on input line 51.
-
-
-
-LaTeX Warning: Citation `peng2024graphragsurvey' on page 2 undefined on input l
-ine 51.
-
-
-LaTeX Warning: Citation `agarwal2025hybrid' on page 2 undefined on input line 5
-2.
-
-
-LaTeX Warning: Citation `tan2025hydrarag' on page 2 undefined on input line 53.
-
-
-[2] (./figures/paradigm-comparison.tex
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] (./figures/paradigm-co
+mparison.tex
 (./figures/paradigm-comparison-diagram.tex
 LaTeX Font Info:    Calculating math sizes for size <5.1> on input line 38.
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -897,77 +859,10 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <3.63997> on input line 129.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <2.59999> on input line 129.
-))
-
-LaTeX Warning: Citation `hybridqa' on page 3 undefined on input line 81.
-
-
-LaTeX Warning: Citation `eisenschlos2021mate' on page 3 undefined on input line
- 81.
-
-
-LaTeX Warning: Citation `sun2021dochopper' on page 3 undefined on input line 81
-.
-
-
-LaTeX Warning: Citation `kumar2021mitqa' on page 3 undefined on input line 81.
-
-
-LaTeX Warning: Citation `chen2022muger2' on page 3 undefined on input line 81.
-
-
-LaTeX Warning: Citation `lei2023s3hqa' on page 3 undefined on input line 81.
-
-[3]
-
-LaTeX Warning: Citation `agarwal2025hybrid' on page 4 undefined on input line 8
-3.
-
-
-LaTeX Warning: Citation `zhou2026tableqasurvey' on page 4 undefined on input li
-ne 86.
-
-
-LaTeX Warning: Citation `cheng2023binder' on page 4 undefined on input line 86.
-
-
-
-LaTeX Warning: Citation `ye2023dater' on page 4 undefined on input line 86.
-
-
-LaTeX Warning: Citation `wang2024chainoftable' on page 4 undefined on input lin
-e 86.
-
-
-LaTeX Warning: Citation `chen2024tablerag' on page 4 undefined on input line 86
-.
-
-
-LaTeX Warning: Citation `yu2025tablerag' on page 4 undefined on input line 86.
-
-
+)) [3]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [4]
-
-LaTeX Warning: Citation `yasunaga2021qagnn' on page 5 undefined on input line 8
-9.
-
-
-LaTeX Warning: Citation `sun2022jointlk' on page 5 undefined on input line 89.
-
-
-LaTeX Warning: Citation `he2024gretriever' on page 5 undefined on input line 89
-.
-
-
-LaTeX Warning: Citation `edge2024graphrag' on page 5 undefined on input line 89
-.
-
-
-LaTeX Warning: Citation `tan2025hydrarag' on page 5 undefined on input line 89.
-
-
 (./figures/pipeline.tex (./figures/pipeline-diagram.tex
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <5> not available
 (Font)              Font shape `T1/lmtt/b/n' tried instead on input line 31.
@@ -981,24 +876,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <2.3> on input line 53.
 )) [8]
-[9]
-
-LaTeX Warning: Citation `hybridqa' on page 10 undefined on input line 241.
-
-[10]
-
-LaTeX Warning: Citation `agarwal2025hybrid' on page 11 undefined on input line 
-250.
-
-
-LaTeX Warning: Citation `agarwal2025hybrid' on page 11 undefined on input line 
-267.
-
-
-LaTeX Warning: Citation `agarwal2025hybrid' on page 11 undefined on input line 
-273.
-
-[11]
+[9] [10] [11]
 Underfull \hbox (badness 10000) in paragraph at lines 308--309
 []|\T1/lmr/m/n/7 Disintegrates intra-row at-
  []
@@ -1007,44 +885,44 @@ Underfull \hbox (badness 10000) in paragraph at lines 308--309
 Underfull \vbox (badness 7362) has occurred while \output is active []
 
  [12]
-(./main.bbl) [13] (./main.aux) ) 
+(./main.bbl [13]) [14] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 19072 strings out of 483183
- 362511 string characters out of 5966292
- 653772 words of memory out of 5000000
- 33511 multiletter control sequences out of 15000+600000
- 714077 words of font info for 246 fonts, out of 8000000 for 9000
+ 19092 strings out of 483183
+ 362874 string characters out of 5966292
+ 653863 words of memory out of 5000000
+ 33535 multiletter control sequences out of 15000+600000
+ 713864 words of font info for 244 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,19n,69p,1864b,1057s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.
-enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/
-dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/sha
-re/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/
-lm-ts1.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf
-/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx5
-.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx7.pfb></usr/share/texmf/fonts/
-type1/public/lm/lmbx9.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb><
-/usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1
-/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi5.pfb></usr/s
-hare/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public
-/lm/lmmi7.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/tex
-mf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lm
-r10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr5.pfb></usr/share/texmf/font
-s/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr7.pfb></u
-sr/share/texmf/fonts/type1/public/lm/lmr9.pfb></usr/share/texmf/fonts/type1/pub
-lic/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmri7.pfb></usr/share
-/texmf/fonts/type1/public/lm/lmri9.pfb></usr/share/texmf/fonts/type1/public/lm/
-lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy5.pfb></usr/share/texmf/
-fonts/type1/public/lm/lmsy7.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.p
-fb></usr/share/texmf/fonts/type1/public/lm/lmtk10.pfb></usr/share/texmf/fonts/t
-ype1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt8.pfb></u
-sr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/symbols/msam5.pfb></usr/share/texlive/texmf-dist/fon
-ts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (13 pages, 616895 bytes).
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-ma
+thit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts
+/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/us
+r/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvip
+s/lm/lm-ts1.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/
+texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/
+lmbx5.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx7.pfb></usr/share/texmf/f
+onts/type1/public/lm/lmbx9.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.
+pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/
+type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi5.pfb></
+usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/p
+ublic/lm/lmmi7.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/shar
+e/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/
+lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr5.pfb></usr/share/texmf
+/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr7.pf
+b></usr/share/texmf/fonts/type1/public/lm/lmr9.pfb></usr/share/texmf/fonts/type
+1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmri7.pfb></usr/
+share/texmf/fonts/type1/public/lm/lmri9.pfb></usr/share/texmf/fonts/type1/publi
+c/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy5.pfb></usr/share/t
+exmf/fonts/type1/public/lm/lmsy7.pfb></usr/share/texmf/fonts/type1/public/lm/lm
+sy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtk10.pfb></usr/share/texmf/fo
+nts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt8.pf
+b></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/symbols/msam5.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on main.pdf (14 pages, 623395 bytes).
 PDF statistics:
- 195 PDF objects out of 1000 (max. 8388607)
- 147 compressed objects within 2 object streams
+ 198 PDF objects out of 1000 (max. 8388607)
+ 149 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  39437 words of extra memory for PDF output out of 42996 (max. 10000000)
 
