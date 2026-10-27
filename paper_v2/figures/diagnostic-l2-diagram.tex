@@ -1,80 +1,43 @@
 \begin{tikzpicture}[
   >=Latex,
   font=\scriptsize,
-  box/.style={draw=gray!40, fill=white, rounded corners=3pt, line width=0.45pt, inner sep=4pt},
-  panel/.style={draw=#1!75!black, fill=#1!3, rounded corners=6pt, line width=0.7pt, inner sep=5pt},
-  titlebar/.style={fill=#1!18, draw=#1!75!black, line width=0.5pt, rounded corners=2pt, font=\bfseries\scriptsize, text=#1!90!black, align=center, inner sep=2.5pt},
-  flow/.style={->, line width=0.75pt, draw=gray!75!black},
-  flow_orange/.style={->, line width=0.8pt, draw=orange!85!black},
-  flow_teal/.style={->, line width=0.8pt, draw=teal!85!black},
-  lbl/.style={font=\tiny\bfseries, fill=white, inner sep=1.8pt, rounded corners=2pt, draw=gray!40}
+  box/.style={draw=gray!40, fill=white, rounded corners=3pt, line width=0.45pt, inner sep=4.5pt},
+  panel/.style={draw=#1!75!black, fill=#1!3, rounded corners=6pt, line width=0.7pt, inner sep=6pt},
+  titlebar/.style={fill=#1!18, draw=#1!75!black, line width=0.5pt, rounded corners=2.5pt, font=\bfseries\scriptsize, text=#1!90!black, align=center, inner sep=3pt},
+  flow/.style={->, line width=0.85pt, draw=gray!70!black},
+  flow_orange/.style={->, line width=0.9pt, draw=orange!85!black},
+  flow_purple/.style={->, line width=0.9pt, draw=purple!85!black},
+  flow_teal/.style={->, line width=0.9pt, draw=teal!85!black},
+  lbl/.style={font=\tiny\bfseries, fill=white, inner sep=1.8pt, rounded corners=2pt, draw=gray!30}
 ]
 
 % ========================================================
-% LEFT COLUMN: L1 CONTROLLED AUDIT & DIAGNOSTIC HANDOFF
+% TOP ROW: THREE STAGE HEADERS (aligned horizontally at y=3.5)
 % ========================================================
-\node[titlebar=orange, text width=4.3cm] (t_l1) at (0, 3.5) {Tier 1: L1 Self-Audit \& Diagnostic};
+\node[titlebar=orange, text width=4.4cm] (t_l1) at (0, 3.5) {Tier 1: L1 Controlled Audit};
+\node[titlebar=purple, text width=4.2cm] (t_ret) at (5.7, 3.5) {Targeted Evidence Retrieval};
+\node[titlebar=teal, text width=4.5cm] (t_l2) at (11.5, 3.5) {Tier 2: Grounded Resolution};
 
-\node[box, text width=4.3cm, fill=orange!8, draw=orange!45, below=3.5mm of t_l1] (l1_scaffold) {
+% ========================================================
+% UPPER BOXES IN EACH COLUMN (aligned horizontally below titlebars)
+% ========================================================
+% L1 Upper: Reasoning Scaffold
+\node[box, text width=4.4cm, fill=orange!8, draw=orange!45, below=3.5mm of t_l1] (l1_scaffold) {
   \textbf{Guided Reasoning Scaffold} \\
-  \tiny $\bullet$ Complete compressed multigraph $G_q^*$ \\
-  $\bullet$ Multi-factor scored path $p_1$ ($S=7.85$) \\
-  $\bullet$ Non-filtering attention steer
+  \tiny $\bullet$ Complete compressed multigraph $G_q^*$ (no row pruning) \\
+  $\bullet$ Multi-factor scored path $p_1$ ($S=7.85$) as guide \\
+  $\bullet$ Non-filtering attention anchor
 };
 
-\node[box, text width=4.3cm, fill=orange!16, draw=orange!80!black, line width=0.55pt, below=4mm of l1_scaffold] (l1_diag) {
-  \textbf{Controlled Decoding Protocol} \\
-  \tiny Model detects structural ambiguity: \\
-  $\bullet$ Condition: Multiple rows match criteria or passage link missing \\
-  $\bullet$ \textbf{Strict Prohibition}: No guessing \\
-  $\bullet$ Output structured diagnostic:
-  \vspace{1mm}
-  \fontsize{4.6pt}{5.8pt}\selectfont
-  \texttt{\{"candidates": ["$\rho_0$", "$\rho_1$"],\\
-  \ "blocker\_type": "missing\_link",\\
-  \ "needed\_check": "check town name\\
-  \ \ in linked passage"\}}
-};
-
-\draw[flow_orange] (l1_scaffold.south) -- (l1_diag.north)
-  node[midway, right=1mm, font=\tiny, text=orange!90!black] {if ambiguous};
-
-\begin{scope}[on background layer]
-\node[panel=orange, fit=(t_l1)(l1_scaffold)(l1_diag)] (p_l1) {};
-\end{scope}
-
-% ========================================================
-% MIDDLE COLUMN: TARGETED SYMMETRIC RETRIEVAL
-% ========================================================
-\node[titlebar=purple, text width=3.8cm, right=1.2cm of t_l1.north east, anchor=north west] (t_ret) {Targeted Evidence Retrieval};
-
-\node[box, text width=3.8cm, fill=purple!8, draw=purple!45, below=3.5mm of t_ret] (ret_sym) {
+% Middle Upper: Symmetric Expansion
+\node[box, text width=4.2cm, fill=purple!8, draw=purple!45, below=3.5mm of t_ret] (ret_sym) {
   \textbf{Symmetric Candidate Expansion} \\
-  \tiny $\bullet$ Parse focus candidates: $\rho_0, \rho_1$ \\
-  $\bullet$ Harvest Wikipedia URLs for each candidate row symmetrically \\
-  $\bullet$ Budget: 2 passages/candidate
+  \tiny $\bullet$ Parse focus candidates: $\mathcal{C}_q = \{\rho_0, \rho_1\}$ \\
+  $\bullet$ Balanced Wikipedia passage harvest per row \\
+  $\bullet$ Fixed minimal budget: 2 passages/candidate
 };
 
-\node[box, text width=3.8cm, fill=purple!15, draw=purple!75!black, line width=0.5pt, below=4mm of ret_sym] (ret_delta) {
-  \textbf{Delta Evidence Cards} \\
-  \tiny $\bullet$ Candidate $\rho_0$: \texttt{Doc:Toronto} \\
-  \quad \textit{``...town of York (1793)...''} \\
-  $\bullet$ Candidate $\rho_1$: \texttt{Doc:Hamilton} \\
-  \quad \textit{``...founded in 1816...''} \\
-  $\bullet$ Filters ungrounded distractors
-};
-
-\draw[flow] (ret_sym.south) -- (ret_delta.north);
-
-\begin{scope}[on background layer]
-\node[panel=purple, fit=(t_ret)(ret_sym)(ret_delta)] (p_ret) {};
-\end{scope}
-
-% ========================================================
-% RIGHT COLUMN: L2 STATE CAPSULE & CONCLUSIVE DECISION
-% ========================================================
-\node[titlebar=teal, text width=4.5cm, right=1.2cm of t_ret.north east, anchor=north west] (t_l2) {Tier 2: L2 Grounded Resolution};
-
+% Right Upper: Minimal Sufficient State Capsule
 \node[box, text width=4.5cm, fill=teal!6, draw=teal!45, below=3.5mm of t_l2] (l2_capsule) {
   \textbf{Minimal Sufficient State Capsule} \\
   \fontsize{4.6pt}{5.8pt}\selectfont
@@ -85,30 +48,76 @@
   \ \ \{"rec": "$\rho_1$", "club": "Tigers", "yr": 1991\}\\
   \ ],\\
   \ "delta\_evidence": [\\
-  \ \ \{"target": "$\rho_0$", "doc": "town of York"\},\\
-  \ \ \{"target": "$\rho_1$", "doc": "city of Hamilton"\}\\
+  \ \ \{"target": "$\rho_0$", "doc": "town of York (1793)"\},\\
+  \ \ \{"target": "$\rho_1$", "doc": "founded in 1816"\}\\
   \ ]\}}
 };
 
-\node[box, text width=4.5cm, fill=green!15, draw=green!60!black, line width=0.7pt, below=4mm of l2_capsule] (l2_res) {
-  \textbf{Conclusive Factual Decision ($T=0$)} \\
-  \tiny $\bullet$ Evaluates ground factual delta evidence \\
-  $\bullet$ Discards heuristic lexical guesswork \\
-  $\bullet$ \textbf{Verified Answer}: \texttt{"York"} \\
-  $\bullet$ Zero-guesswork provenance chain
+% ========================================================
+% LOWER BOXES IN EACH COLUMN (aligned horizontally below upper boxes)
+% ========================================================
+% L1 Lower: Diagnostic Handoff
+\node[box, text width=4.4cm, fill=orange!16, draw=orange!80!black, line width=0.55pt, below=5mm of l1_scaffold] (l1_diag) {
+  \textbf{Diagnostic Handoff (Under Ambiguity)} \\
+  \tiny $\bullet$ Ambiguity detected: $|\mathcal{C}_q| > 1$ or missing link \\
+  $\bullet$ Protocol: Defer rather than guess heuristically \\
+  $\bullet$ Emit structured diagnostic handoff:
+  \vspace{1mm}
+  \fontsize{4.6pt}{5.8pt}\selectfont
+  \texttt{\{"candidates": ["$\rho_0$", "$\rho_1$"],\\
+  \ "blocker\_type": "missing\_link",\\
+  \ "needed\_check": "check town name in passage"\}}
 };
 
-\draw[flow_teal] (l2_capsule.south) -- (l2_res.north)
-  node[midway, right=1mm, font=\tiny, text=teal!90!black] {L2 reader call};
+% Middle Lower: Delta Evidence Cards
+\node[box, text width=4.2cm, fill=purple!15, draw=purple!75!black, line width=0.5pt, below=5mm of ret_sym] (ret_delta) {
+  \textbf{Targeted Delta Evidence Cards} \\
+  \tiny $\bullet$ Row $\rho_0$ candidate: \texttt{Doc:Toronto} \\
+  \quad \textit{``...historical town of York (1793)...''} \\
+  $\bullet$ Row $\rho_1$ candidate: \texttt{Doc:Hamilton} \\
+  \quad \textit{``...founded in 1816...''} \\
+  $\bullet$ Eliminates ungrounded distractors
+};
 
+% Right Lower: Conclusive Resolution
+\node[box, text width=4.5cm, fill=green!15, draw=green!60!black, line width=0.7pt, below=5mm of l2_capsule] (l2_res) {
+  \textbf{Factual Grounded Resolution ($T=0$)} \\
+  \tiny $\bullet$ Grounded evaluation over minimal state $\mathcal{K}_{\text{L2}}$ \\
+  $\bullet$ Resolves candidate ties purely factually \\
+  $\bullet$ \textbf{Verified Output}: \texttt{"York"} \\
+  $\bullet$ Explicit and verifiable provenance chain
+};
+
+% ========================================================
+% BACKGROUND PANELS
+% ========================================================
 \begin{scope}[on background layer]
-\node[panel=teal, fit=(t_l2)(l2_capsule)(l2_res)] (p_l2) {};
+  \node[panel=orange, fit=(t_l1)(l1_scaffold)(l1_diag)] (p_l1) {};
+  \node[panel=purple, fit=(t_ret)(ret_sym)(ret_delta)] (p_ret) {};
+  \node[panel=teal, fit=(t_l2)(l2_capsule)(l2_res)] (p_l2) {};
 \end{scope}
 
 % ========================================================
-% INTER-PANEL BRIDGING ARROWS
+% VERTICAL INTRA-COLUMN FLOWS (perfectly vertical)
 % ========================================================
-\draw[flow_orange] (l1_diag.east) -- node[above, font=\tiny, text=orange!90!black] {Handoff} (ret_sym.west);
-\draw[flow_teal] (ret_delta.east) -- node[above, font=\tiny, text=teal!90!black] {Package} (l2_capsule.west);
+\draw[flow_orange] (l1_scaffold.south) -- (l1_diag.north)
+  node[midway, fill=orange!8, inner sep=1.2pt, rounded corners=1.5pt, font=\tiny, text=orange!90!black] {if ambiguous};
+
+\draw[flow_purple] (ret_sym.south) -- (ret_delta.north)
+  node[midway, fill=purple!8, inner sep=1.2pt, rounded corners=1.5pt, font=\tiny, text=purple!90!black] {extract delta};
+
+\draw[flow_teal] (l2_capsule.south) -- (l2_res.north)
+  node[midway, fill=teal!6, inner sep=1.2pt, rounded corners=1.5pt, font=\tiny, text=teal!90!black] {L2 reader call};
+
+% ========================================================
+% HORIZONTAL INTER-COLUMN BRIDGING ARROWS (Orthogonal, perfectly neat)
+% ========================================================
+% 1. From L1 Diagnostic to Symmetric Retrieval:
+% Exits L1 diagnostic east, steps up orthogonally to enter Symmetric retrieval west
+\draw[flow_orange] (l1_diag.east) -- ++(0.35,0) |- node[pos=0.6, above, font=\tiny\bfseries, text=orange!90!black] {Diagnostic Handoff} (ret_sym.west);
+
+% 2. From Delta Evidence to L2 Capsule:
+% Exits Delta evidence east, steps up orthogonally to enter L2 capsule west
+\draw[flow_purple] (ret_delta.east) -- ++(0.4,0) |- node[pos=0.6, above, font=\tiny\bfseries, text=purple!90!black] {Packaged State $\mathcal{K}_{\text{L2}}$} (l2_capsule.west);
 
 \end{tikzpicture}

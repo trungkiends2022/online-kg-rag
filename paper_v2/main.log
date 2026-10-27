@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  25 OCT 2026 11:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  27 OCT 2026 14:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -150,12 +150,78 @@ LaTeX Info: Redefining \vec on input line 394.
 \c@remark=\count270
 \headlineindent=\dimen156
 )
+(/usr/share/texmf/tex/latex/lm/lmodern.sty
+Package: lmodern 2009/10/30 v1.6 Latin Modern Fonts
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> OT1/lmr/m/n on input line 22.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
+(Font)                  OML/cmm/m/it --> OML/lmm/m/it on input line 23.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/cmsy/m/n --> OMS/lmsy/m/n on input line 24.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> OMX/lmex/m/n on input line 25.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 26.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/cmm/b/it --> OML/lmm/b/it on input line 27.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/cmsy/b/n --> OMS/lmsy/b/n on input line 28.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> OMX/lmex/m/n on input line 29.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 31.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/cmss/m/n --> OT1/lmss/m/n on input line 32.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> OT1/lmr/m/it on input line 33.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 34.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 35.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/cmss/bx/n --> OT1/lmss/bx/n on input line 36.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> OT1/lmr/bx/it on input line 37.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 38.
+)
 (/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2020/02/11 v2.0o Standard LaTeX package
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 11
+2.
+
+(/usr/share/texmf/tex/latex/lm/t1lmr.fd
+File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+))
+(/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype.sty
+Package: microtype 2019/11/18 v2.7d Micro-typographical refinements (RS)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks18
 )
+\MT@toks=\toks19
+\MT@count=\count271
+LaTeX Info: Redefining \textls on input line 790.
+\MT@outer@kern=\dimen157
+LaTeX Info: Redefining \textmicrotypecontext on input line 1354.
+\MT@listname@count=\count272
+
+(/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype-pdftex.def
+File: microtype-pdftex.def 2019/11/18 v2.7d Definitions specific to pdftex (RS)
+
+LaTeX Info: Redefining \lsstyle on input line 914.
+LaTeX Info: Redefining \lslig on input line 914.
+\MT@outer@space=\skip51
+)
+Package microtype Info: Loading configuration file microtype.cfg.
+
+(/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype.cfg
+File: microtype.cfg 2019/11/18 v2.7d microtype main configuration file (RS)
+))
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2020/01/20 v2.17e AMS math features
-\@mathmargin=\skip51
+\@mathmargin=\skip52
 
 For additional information on amsmath, use the `?' option.
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
@@ -163,55 +229,55 @@ Package: amstext 2000/06/29 v2.01 AMS text
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks18
-\ex@=\dimen157
+\@emptytoks=\toks20
+\ex@=\dimen158
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen158
+\pmbraise@=\dimen159
 )
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
-\inf@bad=\count271
+\inf@bad=\count273
 LaTeX Info: Redefining \frac on input line 227.
-\uproot@=\count272
-\leftroot@=\count273
+\uproot@=\count274
+\leftroot@=\count275
 LaTeX Info: Redefining \overline on input line 389.
-\classnum@=\count274
-\DOTSCASE@=\count275
+\classnum@=\count276
+\DOTSCASE@=\count277
 LaTeX Info: Redefining \ldots on input line 486.
 LaTeX Info: Redefining \dots on input line 489.
 LaTeX Info: Redefining \cdots on input line 610.
 \Mathstrutbox@=\box93
 \strutbox@=\box94
-\big@size=\dimen159
+\big@size=\dimen160
 LaTeX Font Info:    Redeclaring font encoding OML on input line 733.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
 
 
 Package amsmath Warning: Unable to redefine math accent \vec.
 
-\macc@depth=\count276
-\c@MaxMatrixCols=\count277
+\macc@depth=\count278
+\c@MaxMatrixCols=\count279
 \dotsspace@=\muskip16
-\c@parentequation=\count278
-\dspbrk@lvl=\count279
-\tag@help=\toks19
-\row@=\count280
-\column@=\count281
-\maxfields@=\count282
-\andhelp@=\toks20
-\eqnshift@=\dimen160
-\alignsep@=\dimen161
-\tagshift@=\dimen162
-\tagwidth@=\dimen163
-\totwidth@=\dimen164
-\lineht@=\dimen165
-\@envbody=\toks21
-\multlinegap=\skip52
-\multlinetaggap=\skip53
-\mathdisplay@stack=\toks22
+\c@parentequation=\count280
+\dspbrk@lvl=\count281
+\tag@help=\toks21
+\row@=\count282
+\column@=\count283
+\maxfields@=\count284
+\andhelp@=\toks22
+\eqnshift@=\dimen161
+\alignsep@=\dimen162
+\tagshift@=\dimen163
+\tagwidth@=\dimen164
+\totwidth@=\dimen165
+\lineht@=\dimen166
+\@envbody=\toks23
+\multlinegap=\skip53
+\multlinetaggap=\skip54
+\mathdisplay@stack=\toks24
 LaTeX Info: Redefining \[ on input line 2859.
 LaTeX Info: Redefining \] on input line 2860.
 ) (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
@@ -228,10 +294,6 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks23
-)
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
 
@@ -246,28 +308,28 @@ Package graphics Info: Driver file: pdftex.def on input line 105.
 (/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
-\Gin@req@height=\dimen166
-\Gin@req@width=\dimen167
+\Gin@req@height=\dimen167
+\Gin@req@width=\dimen168
 )
 (/usr/share/texlive/texmf-dist/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
-\heavyrulewidth=\dimen168
-\lightrulewidth=\dimen169
-\cmidrulewidth=\dimen170
-\belowrulesep=\dimen171
-\belowbottomsep=\dimen172
-\aboverulesep=\dimen173
-\abovetopsep=\dimen174
-\cmidrulesep=\dimen175
-\cmidrulekern=\dimen176
-\defaultaddspace=\dimen177
-\@cmidla=\count283
-\@cmidlb=\count284
-\@aboverulesep=\dimen178
-\@belowrulesep=\dimen179
-\@thisruleclass=\count285
-\@lastruleclass=\count286
-\@thisrulewidth=\dimen180
+\heavyrulewidth=\dimen169
+\lightrulewidth=\dimen170
+\cmidrulewidth=\dimen171
+\belowrulesep=\dimen172
+\belowbottomsep=\dimen173
+\aboverulesep=\dimen174
+\abovetopsep=\dimen175
+\cmidrulesep=\dimen176
+\cmidrulekern=\dimen177
+\defaultaddspace=\dimen178
+\@cmidla=\count285
+\@cmidlb=\count286
+\@aboverulesep=\dimen179
+\@belowrulesep=\dimen180
+\@thisruleclass=\count287
+\@lastruleclass=\count288
+\@thisrulewidth=\dimen181
 )
 (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip17
@@ -277,9 +339,9 @@ Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
-\pgfutil@everybye=\toks24
-\pgfutil@tempdima=\dimen181
-\pgfutil@tempdimb=\dimen182
+\pgfutil@everybye=\toks25
+\pgfutil@tempdima=\dimen182
+\pgfutil@tempdimb=\dimen183
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-common-lists.t
 ex)) (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
@@ -299,33 +361,33 @@ Package: pgf 2020/01/08 v3.1.5b (3.1.5b)
 Package: pgfsys 2020/01/08 v3.1.5b (3.1.5b)
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
-\pgfkeys@pathtoks=\toks25
-\pgfkeys@temptoks=\toks26
+\pgfkeys@pathtoks=\toks26
+\pgfkeys@temptoks=\toks27
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeysfiltered.code.t
 ex
-\pgfkeys@tmptoks=\toks27
+\pgfkeys@tmptoks=\toks28
 ))
-\pgf@x=\dimen183
-\pgf@y=\dimen184
-\pgf@xa=\dimen185
-\pgf@ya=\dimen186
-\pgf@xb=\dimen187
-\pgf@yb=\dimen188
-\pgf@xc=\dimen189
-\pgf@yc=\dimen190
-\pgf@xd=\dimen191
-\pgf@yd=\dimen192
+\pgf@x=\dimen184
+\pgf@y=\dimen185
+\pgf@xa=\dimen186
+\pgf@ya=\dimen187
+\pgf@xb=\dimen188
+\pgf@yb=\dimen189
+\pgf@xc=\dimen190
+\pgf@yc=\dimen191
+\pgf@xd=\dimen192
+\pgf@yd=\dimen193
 \w@pgf@writea=\write3
 \r@pgf@reada=\read2
-\c@pgf@counta=\count287
-\c@pgf@countb=\count288
-\c@pgf@countc=\count289
-\c@pgf@countd=\count290
-\t@pgf@toka=\toks28
-\t@pgf@tokb=\toks29
-\t@pgf@tokc=\toks30
-\pgf@sys@id@count=\count291
+\c@pgf@counta=\count289
+\c@pgf@countb=\count290
+\c@pgf@countc=\count291
+\c@pgf@countd=\count292
+\t@pgf@toka=\toks29
+\t@pgf@tokb=\toks30
+\t@pgf@tokc=\toks31
+\pgf@sys@id@count=\count293
  (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
 File: pgf.cfg 2020/01/08 v3.1.5b (3.1.5b)
 )
@@ -341,8 +403,8 @@ File: pgfsys-common-pdf.def 2020/01/08 v3.1.5b (3.1.5b)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.
 tex
 File: pgfsyssoftpath.code.tex 2020/01/08 v3.1.5b (3.1.5b)
-\pgfsyssoftpath@smallbuffer@items=\count292
-\pgfsyssoftpath@bigbuffer@items=\count293
+\pgfsyssoftpath@smallbuffer@items=\count294
+\pgfsyssoftpath@bigbuffer@items=\count295
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.
 tex
@@ -371,12 +433,12 @@ Package: pgfcore 2020/01/08 v3.1.5b (3.1.5b)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
-\pgfmath@dimen=\dimen193
-\pgfmath@count=\count294
+\pgfmath@dimen=\dimen194
+\pgfmath@count=\count296
 \pgfmath@box=\box96
-\pgfmath@toks=\toks31
-\pgfmath@stack@operand=\toks32
-\pgfmath@stack@operation=\toks33
+\pgfmath@toks=\toks32
+\pgfmath@stack@operand=\toks33
+\pgfmath@stack@operation=\toks34
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code
@@ -396,38 +458,38 @@ tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerari
 thmetics.code.tex)))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
-\c@pgfmathroundto@lastzeros=\count295
+\c@pgfmathroundto@lastzeros=\count297
 ))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfint.code.tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.te
 x
 File: pgfcorepoints.code.tex 2020/01/08 v3.1.5b (3.1.5b)
-\pgf@picminx=\dimen194
-\pgf@picmaxx=\dimen195
-\pgf@picminy=\dimen196
-\pgf@picmaxy=\dimen197
-\pgf@pathminx=\dimen198
-\pgf@pathmaxx=\dimen199
-\pgf@pathminy=\dimen256
-\pgf@pathmaxy=\dimen257
-\pgf@xx=\dimen258
-\pgf@xy=\dimen259
-\pgf@yx=\dimen260
-\pgf@yy=\dimen261
-\pgf@zx=\dimen262
-\pgf@zy=\dimen263
+\pgf@picminx=\dimen195
+\pgf@picmaxx=\dimen196
+\pgf@picminy=\dimen197
+\pgf@picmaxy=\dimen198
+\pgf@pathminx=\dimen199
+\pgf@pathmaxx=\dimen256
+\pgf@pathminy=\dimen257
+\pgf@pathmaxy=\dimen258
+\pgf@xx=\dimen259
+\pgf@xy=\dimen260
+\pgf@yx=\dimen261
+\pgf@yy=\dimen262
+\pgf@zx=\dimen263
+\pgf@zy=\dimen264
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.
 code.tex
 File: pgfcorepathconstruct.code.tex 2020/01/08 v3.1.5b (3.1.5b)
-\pgf@path@lastx=\dimen264
-\pgf@path@lasty=\dimen265
+\pgf@path@lastx=\dimen265
+\pgf@path@lasty=\dimen266
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code
 .tex
 File: pgfcorepathusage.code.tex 2020/01/08 v3.1.5b (3.1.5b)
-\pgf@shorten@end@additional=\dimen266
-\pgf@shorten@start@additional=\dimen267
+\pgf@shorten@end@additional=\dimen267
+\pgf@shorten@start@additional=\dimen268
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.te
 x
@@ -435,19 +497,19 @@ File: pgfcorescopes.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 \pgfpic=\box97
 \pgf@hbox=\box98
 \pgf@layerbox@main=\box99
-\pgf@picture@serial@count=\count296
+\pgf@picture@serial@count=\count298
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.c
 ode.tex
 File: pgfcoregraphicstate.code.tex 2020/01/08 v3.1.5b (3.1.5b)
-\pgflinewidth=\dimen268
+\pgflinewidth=\dimen269
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformation
 s.code.tex
 File: pgfcoretransformations.code.tex 2020/01/08 v3.1.5b (3.1.5b)
-\pgf@pt@x=\dimen269
-\pgf@pt@y=\dimen270
-\pgf@pt@temp=\dimen271
+\pgf@pt@x=\dimen270
+\pgf@pt@y=\dimen271
+\pgf@pt@temp=\dimen272
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
 File: pgfcorequick.code.tex 2020/01/08 v3.1.5b (3.1.5b)
@@ -463,13 +525,13 @@ File: pgfcorepathprocessing.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.te
 x
 File: pgfcorearrows.code.tex 2020/01/08 v3.1.5b (3.1.5b)
-\pgfarrowsep=\dimen272
+\pgfarrowsep=\dimen273
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
 File: pgfcoreshade.code.tex 2020/01/08 v3.1.5b (3.1.5b)
-\pgf@max=\dimen273
-\pgf@sys@shading@range@num=\count297
-\pgf@shadingcount=\count298
+\pgf@max=\dimen274
+\pgf@sys@shading@range@num=\count299
+\pgf@shadingcount=\count300
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
 File: pgfcoreimage.code.tex 2020/01/08 v3.1.5b (3.1.5b)
@@ -503,8 +565,8 @@ File: pgfmoduleplot.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65
 .sty
 Package: pgfcomp-version-0-65 2020/01/08 v3.1.5b (3.1.5b)
-\pgf@nodesepstart=\dimen274
-\pgf@nodesepend=\dimen275
+\pgf@nodesepstart=\dimen275
+\pgf@nodesepend=\dimen276
 )
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18
 .sty
@@ -518,10 +580,10 @@ Package: pgfcomp-version-1-18 2020/01/08 v3.1.5b (3.1.5b)
 Package: pgffor 2020/01/08 v3.1.5b (3.1.5b)
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)
-\pgffor@iter=\dimen276
-\pgffor@skip=\dimen277
-\pgffor@stack=\toks34
-\pgffor@toks=\toks35
+\pgffor@iter=\dimen277
+\pgffor@skip=\dimen278
+\pgffor@stack=\toks35
+\pgffor@toks=\toks36
 ))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
 Package: tikz 2020/01/08 v3.1.5b (3.1.5b)
@@ -529,33 +591,33 @@ Package: tikz 2020/01/08 v3.1.5b (3.1.5b)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers
 .code.tex
 File: pgflibraryplothandlers.code.tex 2020/01/08 v3.1.5b (3.1.5b)
-\pgf@plot@mark@count=\count299
-\pgfplotmarksize=\dimen278
+\pgf@plot@mark@count=\count301
+\pgfplotmarksize=\dimen279
 )
-\tikz@lastx=\dimen279
-\tikz@lasty=\dimen280
-\tikz@lastxsaved=\dimen281
-\tikz@lastysaved=\dimen282
-\tikz@lastmovetox=\dimen283
-\tikz@lastmovetoy=\dimen284
-\tikzleveldistance=\dimen285
-\tikzsiblingdistance=\dimen286
+\tikz@lastx=\dimen280
+\tikz@lasty=\dimen281
+\tikz@lastxsaved=\dimen282
+\tikz@lastysaved=\dimen283
+\tikz@lastmovetox=\dimen284
+\tikz@lastmovetoy=\dimen285
+\tikzleveldistance=\dimen286
+\tikzsiblingdistance=\dimen287
 \tikz@figbox=\box102
 \tikz@figbox@bg=\box103
 \tikz@tempbox=\box104
 \tikz@tempbox@bg=\box105
-\tikztreelevel=\count300
-\tikznumberofchildren=\count301
-\tikznumberofcurrentchild=\count302
-\tikz@fig@count=\count303
+\tikztreelevel=\count302
+\tikznumberofchildren=\count303
+\tikznumberofcurrentchild=\count304
+\tikz@fig@count=\count305
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
 File: pgfmodulematrix.code.tex 2020/01/08 v3.1.5b (3.1.5b)
-\pgfmatrixcurrentrow=\count304
-\pgfmatrixcurrentcolumn=\count305
-\pgf@matrix@numberofcolumns=\count306
+\pgfmatrixcurrentrow=\count306
+\pgfmatrixcurrentcolumn=\count307
+\pgf@matrix@numberofcolumns=\count308
 )
-\tikz@expandcount=\count307
+\tikz@expandcount=\count309
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
 zlibrarytopaths.code.tex
@@ -564,10 +626,10 @@ File: tikzlibrarytopaths.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.meta.
 code.tex
 File: pgflibraryarrows.meta.code.tex 2020/01/08 v3.1.5b (3.1.5b)
-\pgfarrowinset=\dimen287
-\pgfarrowlength=\dimen288
-\pgfarrowwidth=\dimen289
-\pgfarrowlinewidth=\dimen290
+\pgfarrowinset=\dimen288
+\pgfarrowlength=\dimen289
+\pgfarrowwidth=\dimen290
+\pgfarrowlinewidth=\dimen291
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
 zlibrarypositioning.code.tex
@@ -596,23 +658,23 @@ File: tikzlibrarybackgrounds.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 \pgf@layerboxsaved@background=\box107
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count308
+\lst@mode=\count310
 \lst@gtempboxa=\box108
-\lst@token=\toks36
-\lst@length=\count309
-\lst@currlwidth=\dimen291
-\lst@column=\count310
-\lst@pos=\count311
-\lst@lostspace=\dimen292
-\lst@width=\dimen293
-\lst@newlines=\count312
-\lst@lineno=\count313
-\lst@maxwidth=\dimen294
+\lst@token=\toks37
+\lst@length=\count311
+\lst@currlwidth=\dimen292
+\lst@column=\count312
+\lst@pos=\count313
+\lst@lostspace=\dimen293
+\lst@width=\dimen294
+\lst@newlines=\count314
+\lst@lineno=\count315
+\lst@maxwidth=\dimen295
 
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2019/09/10 1.8c (Carsten Heinz)
-\c@lstnumber=\count314
-\lst@skipnumbers=\count315
+\c@lstnumber=\count316
+\lst@skipnumbers=\count317
 \lst@framebox=\box109
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
@@ -622,71 +684,86 @@ Package: listings 2019/09/10 1.8c (Carsten Heinz)
 
 (/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2019/05/31 v2.5 Span multiple rows of a table
-\multirow@colwidth=\skip54
-\multirow@cntb=\count316
-\multirow@dima=\skip55
-\bigstrutjot=\dimen295
+\multirow@colwidth=\skip55
+\multirow@cntb=\count318
+\multirow@dima=\skip56
+\bigstrutjot=\dimen296
 )
 (/usr/share/texlive/texmf-dist/tex/latex/colortbl/colortbl.sty
 Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
 
 (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
 Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
-\col@sep=\dimen296
+\col@sep=\dimen297
 \ar@mcellbox=\box110
-\extrarowheight=\dimen297
-\NC@list=\toks37
-\extratabsurround=\skip56
-\backup@length=\skip57
+\extrarowheight=\dimen298
+\NC@list=\toks38
+\extratabsurround=\skip57
+\backup@length=\skip58
 \ar@cellbox=\box111
 )
-\everycr=\toks38
-\minrowclearance=\skip58
+\everycr=\toks39
+\minrowclearance=\skip59
 )
 (/usr/share/texlive/texmf-dist/tex/latex/enumitem/enumitem.sty
 Package: enumitem 2019/06/20 v3.9 Customized lists
-\labelindent=\skip59
-\enit@outerparindent=\dimen298
-\enit@toks=\toks39
+\labelindent=\skip60
+\enit@outerparindent=\dimen299
+\enit@toks=\toks40
 \enit@inbox=\box112
-\enit@count@id=\count317
-\enitdp@description=\count318
+\enit@count@id=\count319
+\enitdp@description=\count320
 )
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
 File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
-\l__kernel_color_stack_int=\count319
+\l__kernel_color_stack_int=\count321
 \l__pdf_internal_box=\box113
 )
 (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
- (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Info: Redefining \microtypecontext on input line 19.
+Package microtype Info: Generating PDF output.
+Package microtype Info: Character protrusion enabled (level 2).
+Package microtype Info: Using default protrusion set `alltext'.
+Package microtype Info: Automatic font expansion enabled (level 2),
+(microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
+Package microtype Info: Using default expansion set `basictext'.
+LaTeX Info: Redefining \showhyphens on input line 19.
+Package microtype Info: No adjustment of tracking.
+Package microtype Info: No adjustment of interword spacing.
+Package microtype Info: No adjustment of character kerning.
+ (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-cmr.cfg
+File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
+(RS)
+)
+(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count320
-\scratchdimen=\dimen299
+\scratchcounter=\count322
+\scratchdimen=\dimen300
 \scratchbox=\box114
-\nofMPsegments=\count321
-\nofMParguments=\count322
-\everyMPshowfont=\toks40
-\MPscratchCnt=\count323
-\MPscratchDim=\dimen300
-\MPnumerator=\count324
-\makeMPintoPDFobject=\count325
-\everyMPtoPDFconversion=\toks41
+\nofMPsegments=\count323
+\nofMParguments=\count324
+\everyMPshowfont=\toks41
+\MPscratchCnt=\count325
+\MPscratchDim=\dimen301
+\MPnumerator=\count326
+\makeMPintoPDFobject=\count327
+\everyMPtoPDFconversion=\toks42
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -697,259 +774,277 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 ABD: EveryShipout initializing macros
-\c@lstlisting=\count326
-LaTeX Font Info:    Trying to load font information for U+msa on input line 32.
+\c@lstlisting=\count328
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 3
+4.
+ (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
+File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 3
+4.
+(/usr/share/texmf/tex/latex/lm/omllmm.fd
+File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
+34.
+
+(/usr/share/texmf/tex/latex/lm/omslmsy.fd
+File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
+34.
+
+(/usr/share/texmf/tex/latex/lm/omxlmex.fd
+File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 34.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 34.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 34.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 34.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 32.
+(/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msa.cfg
+File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 34.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 3
-2.
-
-(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
-File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+(/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg
+File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-Overfull \hbox (23.75697pt too wide) in paragraph at lines 35--36
-[]\T1/cmr/m/n/9 Answering multi-hop ques-tions over het-ero-ge-neous semi-struc
-tured
- []
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 3
+4.
+
+(/usr/share/texmf/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `lmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <9> on input line 34.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <6> on input line 34.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 3
+9.
+
+(/usr/share/texmf/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+
+LaTeX Warning: Citation `zhou2026tableqasurvey' on page 1 undefined on input li
+ne 43.
+
+
+LaTeX Warning: Citation `hybridqa' on page 1 undefined on input line 43.
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (0.34973pt too wide) in paragraph at lines 52--53
-[]\T1/cmr/m/n/10 To re-solve this dilemma, we pro-pose \T1/cmr/bx/n/10 OUEG-RAG
- \T1/cmr/m/n/10 (\T1/cmr/bx/n/10 O\T1/cmr/m/n/10 nline \T1/cmr/bx/n/10 U\T1/cmr
-/m/n/10 nified \T1/cmr/bx/n/10 E\T1/cmr/m/n/10 vidence
- []
+
+LaTeX Warning: Citation `lewis2020rag' on page 2 undefined on input line 45.
 
 
-Overfull \hbox (2.30736pt too wide) in paragraph at lines 52--53
-\T1/cmr/m/it/10 preser-va-tion cou-pled with con-trolled rea-son-ing guid-ance\
-T1/cmr/m/n/10 . Rather than us-ing graphs
- []
+LaTeX Warning: Citation `guu2020realm' on page 2 undefined on input line 45.
 
-[2]
-Overfull \hbox (6.96945pt too wide) in paragraph at lines 62--63
-\T1/cmr/m/n/10 RAG achieves con-sis-tent gains over di-rect prompt-ing, flat re
--trieval, and ODYSSEY
- []
 
-(./figures/paradigm-comparison.tex (./figures/paradigm-comparison-diagram.tex
+LaTeX Warning: Citation `gao2023ragsurvey' on page 2 undefined on input line 45
+.
+
+
+LaTeX Warning: Citation `yasunaga2021qagnn' on page 2 undefined on input line 5
+1.
+
+
+LaTeX Warning: Citation `pan2024unifying' on page 2 undefined on input line 51.
+
+
+
+LaTeX Warning: Citation `peng2024graphragsurvey' on page 2 undefined on input l
+ine 51.
+
+
+LaTeX Warning: Citation `agarwal2025hybrid' on page 2 undefined on input line 5
+2.
+
+
+LaTeX Warning: Citation `tan2025hydrarag' on page 2 undefined on input line 53.
+
+
+[2] (./figures/paradigm-comparison.tex
+(./figures/paradigm-comparison-diagram.tex
 LaTeX Font Info:    Calculating math sizes for size <5.1> on input line 38.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.56998> not available
-(Font)              size <5> substituted on input line 38.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.55> not available
-(Font)              size <5> substituted on input line 38.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.56998> not available
-(Font)              size <5> substituted on input line 38.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.55> not available
-(Font)              size <5> substituted on input line 38.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.56998> not available
-(Font)              size <5> substituted on input line 38.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.55> not available
-(Font)              size <5> substituted on input line 38.
-
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5.1> on input line 38.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <3.56998> on input line 38.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <2.55> on input line 38.
 LaTeX Font Info:    Calculating math sizes for size <5.2> on input line 129.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5.2> on input line 129.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <3.63997> on input line 129.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <2.59999> on input line 129.
+))
 
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.63997> not available
-(Font)              size <5> substituted on input line 129.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.59999> not available
-(Font)              size <5> substituted on input line 129.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.63997> not available
-(Font)              size <5> substituted on input line 129.
+LaTeX Warning: Citation `hybridqa' on page 3 undefined on input line 81.
 
 
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.59999> not available
-(Font)              size <5> substituted on input line 129.
+LaTeX Warning: Citation `eisenschlos2021mate' on page 3 undefined on input line
+ 81.
 
 
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.63997> not available
-(Font)              size <5> substituted on input line 129.
+LaTeX Warning: Citation `sun2021dochopper' on page 3 undefined on input line 81
+.
 
 
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.59999> not available
-(Font)              size <5> substituted on input line 129.
+LaTeX Warning: Citation `kumar2021mitqa' on page 3 undefined on input line 81.
 
 
-LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <3.56998> not available
-(Font)              size <5> substituted on input line 143.
+LaTeX Warning: Citation `chen2022muger2' on page 3 undefined on input line 81.
 
 
-LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <2.55> not available
-(Font)              size <5> substituted on input line 143.
+LaTeX Warning: Citation `lei2023s3hqa' on page 3 undefined on input line 81.
 
-)) [3]
+[3]
+
+LaTeX Warning: Citation `agarwal2025hybrid' on page 4 undefined on input line 8
+3.
+
+
+LaTeX Warning: Citation `zhou2026tableqasurvey' on page 4 undefined on input li
+ne 86.
+
+
+LaTeX Warning: Citation `cheng2023binder' on page 4 undefined on input line 86.
+
+
+
+LaTeX Warning: Citation `ye2023dater' on page 4 undefined on input line 86.
+
+
+LaTeX Warning: Citation `wang2024chainoftable' on page 4 undefined on input lin
+e 86.
+
+
+LaTeX Warning: Citation `chen2024tablerag' on page 4 undefined on input line 86
+.
+
+
+LaTeX Warning: Citation `yu2025tablerag' on page 4 undefined on input line 86.
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [4]
-Overfull \hbox (24.91061pt too wide) in paragraph at lines 86--87
-\T1/cmr/m/n/10 that key-word and dense re-trieval miss, as demon-strated by QA-
-GNN [20], JointLK [17],
- []
+
+LaTeX Warning: Citation `yasunaga2021qagnn' on page 5 undefined on input line 8
+9.
 
 
-Overfull \hbox (2.69382pt too wide) in paragraph at lines 86--87
-\T1/cmr/m/n/10 and G-Retriever [10]. In retrieval-augmented gen-er-a-tion, Mi-c
-rosoft GraphRAG [6]
- []
+LaTeX Warning: Citation `sun2022jointlk' on page 5 undefined on input line 89.
+
+
+LaTeX Warning: Citation `he2024gretriever' on page 5 undefined on input line 89
+.
+
+
+LaTeX Warning: Citation `edge2024graphrag' on page 5 undefined on input line 89
+.
+
+
+LaTeX Warning: Citation `tan2025hydrarag' on page 5 undefined on input line 89.
+
 
 (./figures/pipeline.tex (./figures/pipeline-diagram.tex
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <5> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 31.
-)) [5] [6]
-Overfull \hbox (3.09143pt too wide) detected at line 123
-\OMS/cmsy/m/n/10 G[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 ^^Z[]\OT1/cmr/m/n/10 ) = 
-[]\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 ^^Z[]; u[]\OMS/cmsy/m/n/10 g [ f\OML/cmm/m
-/it/10 v[]\OMS/cmsy/m/n/10 g[]\OML/cmm/m/it/10 ;  \OMS/cmsy/m/n/10 f\OT1/cmr/m/
-n/10 (\OML/cmm/m/it/10 u[]; []; ^^Z[]\OT1/cmr/m/n/10 )\OMS/cmsy/m/n/10 g [ f\OT
-1/cmr/m/n/10 (\OML/cmm/m/it/10 ^^Z[]; []\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 H[]\O
-T1/cmr/m/n/10 )\OML/cmm/m/it/10 ; v[]\OT1/cmr/m/n/10 )\OMS/cmsy/m/n/10 g[][]\OM
-L/cmm/m/it/10 :
- []
-
-
-Overfull \hbox (23.51207pt too wide) in paragraph at lines 148--149
-\T1/cmr/m/n/10 con-nect ta-ble cell en-ti-ties to ex-ter-nal pas-sage nodes (e.
-g., $[] [] []$).
- []
-
-
-Overfull \hbox (61.15076pt too wide) in paragraph at lines 148--149
-\T1/cmr/m/n/10 Intra-passage triples $\OML/cmm/m/it/10 E[]$ \T1/cmr/m/n/10 con-
-nect en-ti-ties to tex-tual at-tributes (e.g., $[] []
- []
-
-[7] (./figures/diagnostic-l2.tex (./figures/diagnostic-l2-diagram.tex
-LaTeX Font Info:    Calculating math sizes for size <4.6> on input line 36.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.21999> not available
-(Font)              size <5> substituted on input line 36.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.3> not available
-(Font)              size <5> substituted on input line 36.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.21999> not available
-(Font)              size <5> substituted on input line 36.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.3> not available
-(Font)              size <5> substituted on input line 36.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.21999> not available
-(Font)              size <5> substituted on input line 36.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.3> not available
-(Font)              size <5> substituted on input line 36.
-
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <5> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 31.
+)) [5] [6] [7]
+(./figures/diagnostic-l2.tex (./figures/diagnostic-l2-diagram.tex
+LaTeX Font Info:    Calculating math sizes for size <4.6> on input line 53.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <4.6> on input line 53.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <3.21999> on input line 53.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <2.3> on input line 53.
 )) [8]
-Overfull \hbox (0.72902pt too wide) in paragraph at lines 181--182
-[]\T1/cmr/m/n/10 At Tier 1 (L1), the model eval-u-ates the prompt $\OMS/cmsy/m/
-n/10 X[] \OT1/cmr/m/n/10 = [](\OML/cmm/m/it/10 q; \OMS/cmsy/m/n/10 X[]\OT1/cmr/
-m/n/10 (\OML/cmm/m/it/10 G[]\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ; p[]\OT1/cmr/m/n
-/10 )$\T1/cmr/m/n/10 ,
- []
+[9]
+
+LaTeX Warning: Citation `hybridqa' on page 10 undefined on input line 241.
+
+[10]
+
+LaTeX Warning: Citation `agarwal2025hybrid' on page 11 undefined on input line 
+250.
 
 
-Overfull \hbox (191.55005pt too wide) in paragraph at lines 196--198
-\T1/cmr/m/n/10 where $\OMS/cmsy/m/n/10 C[] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 C
-[]$ \T1/cmr/m/n/10 de-notes the com-pet-ing can-di-date cen-troids, $\OML/cmm/m
-/it/10 ^^L \OMS/cmsy/m/n/10 2 f[]\OML/cmm/m/it/10 ; []; []\OMS/cmsy/m/n/10 g$
- []
+LaTeX Warning: Citation `agarwal2025hybrid' on page 11 undefined on input line 
+267.
 
-[9] [10]
-Overfull \hbox (7.85564pt too wide) in paragraph at lines 255--272
- [][] 
- []
+
+LaTeX Warning: Citation `agarwal2025hybrid' on page 11 undefined on input line 
+273.
 
 [11]
-Underfull \hbox (badness 10000) in paragraph at lines 301--302
-[]|\T1/cmr/m/n/7 Raw triples over-flow con-text
+Underfull \hbox (badness 10000) in paragraph at lines 308--309
+[]|\T1/lmr/m/n/7 Disintegrates intra-row at-
  []
 
 
-Overfull \hbox (16.72758pt too wide) in paragraph at lines 291--305
- [][] 
- []
+Underfull \vbox (badness 7362) has occurred while \output is active []
 
-[12] (./main.bbl [13]) [14] (./main.aux)
-
-LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 3.725pt have occurred.
-
- ) 
+ [12]
+(./main.bbl) [13] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 17084 strings out of 483183
- 325843 string characters out of 5966292
- 586781 words of memory out of 5000000
- 31759 multiletter control sequences out of 15000+600000
- 563651 words of font info for 115 fonts, out of 8000000 for 9000
+ 19072 strings out of 483183
+ 362511 string characters out of 5966292
+ 653772 words of memory out of 5000000
+ 33511 multiletter control sequences out of 15000+600000
+ 714077 words of font info for 246 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,19n,69p,1911b,1057s stack positions out of 5000i,500n,10000p,200000b,80000s
- </tmp/texfonts/pk/ljfour/jknappen/ec/ectt0800.525pk> </tmp/texfonts/pk/ljfou
-r/jknappen/ec/ecbx0700.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ectt1000.600
-pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm0700.600pk> </tmp/texfonts/pk/ljfo
-ur/jknappen/ec/ecti0500.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ectt0800.37
-5pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecti0700.600pk> </tmp/texfonts/pk/ljf
-our/jknappen/ec/tcrm1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm0500.6
-00pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbi0500.600pk> </tmp/texfonts/pk/lj
-four/jknappen/ec/ecbx0500.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1000.
-600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecti1000.600pk> </tmp/texfonts/pk/l
-jfour/jknappen/ec/ecbx1200.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/tcrm0900
-.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecti0900.600pk> </tmp/texfonts/pk/
-ljfour/jknappen/ec/ecbx0900.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ectt090
-0.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm0900.600pk> </tmp/texfonts/pk
-/ljfour/jknappen/ec/ecrm1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx14
-40.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.p
-fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/symbols/msam5.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (14 pages, 485662 bytes).
+ 60i,19n,69p,1864b,1057s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.
+enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/
+dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/sha
+re/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/
+lm-ts1.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf
+/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx5
+.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx7.pfb></usr/share/texmf/fonts/
+type1/public/lm/lmbx9.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb><
+/usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1
+/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi5.pfb></usr/s
+hare/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public
+/lm/lmmi7.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/tex
+mf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lm
+r10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr5.pfb></usr/share/texmf/font
+s/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr7.pfb></u
+sr/share/texmf/fonts/type1/public/lm/lmr9.pfb></usr/share/texmf/fonts/type1/pub
+lic/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmri7.pfb></usr/share
+/texmf/fonts/type1/public/lm/lmri9.pfb></usr/share/texmf/fonts/type1/public/lm/
+lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy5.pfb></usr/share/texmf/
+fonts/type1/public/lm/lmsy7.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.p
+fb></usr/share/texmf/fonts/type1/public/lm/lmtk10.pfb></usr/share/texmf/fonts/t
+ype1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt8.pfb></u
+sr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/symbols/msam5.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on main.pdf (13 pages, 616895 bytes).
 PDF statistics:
- 1131 PDF objects out of 1200 (max. 8388607)
- 177 compressed objects within 2 object streams
+ 195 PDF objects out of 1000 (max. 8388607)
+ 147 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 13 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 39437 words of extra memory for PDF output out of 42996 (max. 10000000)
 

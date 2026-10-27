@@ -380,6 +380,13 @@ bash scripts/run_hybridqa_1500.sh
 bash scripts/run_ottqa_500.sh
 ```
 
+Trên server, dùng launcher để chạy tuần tự năm baseline trên một hoặc cả hai
+GPT-OSS scales và cả hai benchmark suites:
+
+```bash
+bash scripts/run_grounded_baselines_server.sh --dataset both --model both --workers 4
+```
+
 ### Ablation OUEG đã chốt
 
 | Configuration | Vai trò nhân quả |

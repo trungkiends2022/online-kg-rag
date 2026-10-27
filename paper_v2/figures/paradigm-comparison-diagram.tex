@@ -35,9 +35,9 @@
 };
 
 \node[critique_bad, text width=4.3cm, anchor=west] (a_crit) at (7.35, \yA) {
-  $\times$ \textbf{Destroys tabular bindings} (row conflation)\\
+  $\times$ \textbf{Lacks tabular bindings} (cross-row conflation)\\
   $\times$ Disperses attention across long passages\\
-  $\times$ Arbitrary guessing under symmetric rows
+  $\times$ Sensitive to symmetric row candidate ties
 };
 
 \draw[arrow_flow] (a_in) -- (a_proc);
@@ -70,9 +70,9 @@
 };
 
 \node[critique_bad, text width=4.3cm, anchor=west] (b_crit) at (7.35, \yB) {
-  $\times$ \textbf{Severe evidence loss}: drops peripheral row cells\\
+  $\times$ \textbf{Evidence loss}: discards peripheral cell attributes\\
   $\times$ Lacks intra-row binding ($\rho_i$) for ad-hoc tables\\
-  $\times$ Zero collision handling $\rightarrow$ blind guessing
+  $\times$ No collision handling under candidate ties
 };
 
 \draw[arrow_flow] (b_in) -- (b_proc);
@@ -105,9 +105,9 @@
 };
 
 \node[critique_bad, text width=4.3cm, anchor=west] (c_crit) at (7.35, \yC) {
-  $\times$ \textbf{Prohibitive latency \& cost}: dozens of LLM calls\\
+  $\times$ \textbf{High inference latency}: iterative multi-turn LLM calls\\
   $\times$ Requires pre-indexed global KG (fails on raw tables)\\
-  $\times$ Unbounded multi-turn agentic drift
+  $\times$ Susceptible to multi-turn agentic search drift
 };
 
 \draw[arrow_flow] (c_in) -- (c_proc);
@@ -140,10 +140,10 @@
 };
 
 \node[critique_good, text width=4.3cm, anchor=west] (d_crit) at (7.35, \yD) {
-  $\checkmark$ \textbf{100\% evidence preservation} (lossless compression)\\
+  $\checkmark$ \textbf{Full evidence retention} via prompt compression\\
   $\checkmark$ \textbf{Non-filtering path guidance} steers LLM attention\\
   $\checkmark$ Self-auditing diagnostic handoff resolves ambiguity\\
-  $\checkmark$ Bounded two-tier execution (1 or 2 calls, low cost)
+  $\checkmark$ Bounded two-tier execution (1--2 calls, low latency)
 };
 
 \draw[arrow_flow_ours] (d_in) -- (d_proc);

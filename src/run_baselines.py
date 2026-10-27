@@ -41,6 +41,7 @@ from src.datasets import load_finqa, load_hitab, load_hybridqa, load_ottqa
 from src.pipeline import OnlineKGPipeline
 from src.llm.client import capture_llm_metrics, get_provider
 from src.evaluation.ir_metrics import numerical_ir_metrics
+from src.evaluation.async_logger import AsyncBenchmarkLogger
 
 
 METHODS = (
@@ -692,13 +693,21 @@ def main() -> None:
     completed, mode = set(), "w"
     run_manifest, manifest_path = _prepare_run_manifest(args, max_workers=max_workers)
 
+    completed: set[str] = set()
+    initial_records: list[dict] = []
     if args.resume and args.output.exists():
-        mode = "a"
-        completed = {
-            json.loads(line)["id"]
-            for line in args.output.read_text(encoding="utf-8").splitlines()
-            if line.strip()
-        }
+        for line in args.output.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                rec = json.loads(line)
+                qid = rec.get("id") or rec.get("question_id")
+                if qid:
+                    completed.add(str(qid))
+                initial_records.append(rec)
+            except Exception:
+                continue
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     pending = []
@@ -711,200 +720,41 @@ def main() -> None:
             break
         pending.append(example)
 
-    with args.output.open(mode, encoding="utf-8") as output:
-        with ThreadPoolExecutor(max_workers=min(max_workers, len(pending) or 1)) as executor:
-            if args.write_completion_order:
-                futures = [executor.submit(_evaluate_example, example, args) for example in pending]
-                records_to_write = (future.result() for future in as_completed(futures))
-            else:
-                # Default ordering keeps JSONL reproducible for ordinary runs.
-                records_to_write = executor.map(lambda example: _evaluate_example(example, args), pending)
-            disable_progress = args.no_progress or (not args.force_progress and not sys.stderr.isatty())
-            with tqdm(
-                total=len(pending),
-                desc=f"{args.dataset}/{args.method}",
-                unit="sample",
-                dynamic_ncols=True,
-                disable=disable_progress,
-            ) as progress:
-                done_count = 0
-                em_acc = 0.0
-                calls_acc = 0.0
-                for record in records_to_write:
-                    output.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
-                    output.flush()
-                    if not args.quiet_records:
-                        print(json.dumps(record, ensure_ascii=False, default=str))
-                    done_count += 1
-                    em_acc += float(record.get("exact_match") or 0.0)
-                    calls_acc += float(record.get("llm_calls") or 0.0)
-                    if not disable_progress:
-                        progress.set_postfix(
-                            em=f"{100 * em_acc / done_count:.1f}%",
-                            avg_calls=f"{calls_acc / done_count:.1f}",
-                            refresh=False,
-                        )
-                    progress.update(1)
-
-    records = [
-        json.loads(line)
-        for line in args.output.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    ]
-    summary = {"method": args.method, "dataset": args.dataset, "num_examples": len(records)}
-    summary["failed_examples"] = sum(row.get("run_status") == "failed" for row in records)
-    summary.update(
-        run_manifest=str(manifest_path),
-        run_fingerprint=run_manifest["fingerprint"],
-        provider=run_manifest["provider"]["provider"],
-        model=run_manifest["provider"]["model"],
-        code_revision=run_manifest["code_revision"],
-        input_sha256=run_manifest["input"]["sha256"],
+    logger = AsyncBenchmarkLogger(
+        output_path=args.output,
+        total_pending=len(pending),
+        args=args,
+        run_manifest=run_manifest,
+        manifest_path=manifest_path,
+        max_workers=max_workers,
+        initial_records=initial_records,
     )
-    if args.dataset in {"hybridqa", "ottqa"}:
-        em = sum(row["exact_match"] for row in records) / len(records) if records else 0.0
-        f1 = sum(row["f1"] for row in records) / len(records) if records else 0.0
-        summary.update(exact_match=em, f1=f1, exact_match_percent=100 * em, f1_percent=100 * f1)
-        semantic_em = sum(row["semantic_exact_match"] for row in records) / len(records) if records else 0.0
-        summary.update(semantic_exact_match=semantic_em, semantic_exact_match_percent=100 * semantic_em)
-        empty_answers = [row for row in records if not str(row.get("answer") or "").strip()]
-        categories: dict[str, int] = {}
-        for row in records:
-            category = row.get("error_category")
-            if category:
-                categories[category] = categories.get(category, 0) + 1
-        retrieval_means = {}
-        for key in ("gold_row_recall", "gold_hyperlink_recall", "gold_passage_recall"):
-            values = [row.get("retrieval_audit", {}).get(key) for row in records]
-            values = [float(value) for value in values if value is not None]
-            retrieval_means[f"mean_{key}"] = sum(values) / len(values) if values else None
-        audit_sample = [
-            {key: row.get(key) for key in ("id", "question", "gold_answer", "answer", "error_category", "retrieval_audit")}
-            for row in records if row.get("error_category")
-        ][:100]
-        ambiguous_rows = [r for r in records if r.get("is_ambiguous") is True]
-        unambiguous_rows = [r for r in records if r.get("is_ambiguous") is False]
-        ambiguity_metrics = {}
-        if ambiguous_rows:
-            ambiguity_metrics.update(
-                ambiguous_count=len(ambiguous_rows),
-                ambiguous_exact_match=sum(r["exact_match"] for r in ambiguous_rows) / len(ambiguous_rows),
-                ambiguous_semantic_exact_match=sum(r["semantic_exact_match"] for r in ambiguous_rows) / len(ambiguous_rows),
-                ambiguous_f1=sum(r["f1"] for r in ambiguous_rows) / len(ambiguous_rows),
-            )
-        if unambiguous_rows:
-            ambiguity_metrics.update(
-                unambiguous_count=len(unambiguous_rows),
-                unambiguous_exact_match=sum(r["exact_match"] for r in unambiguous_rows) / len(unambiguous_rows),
-                unambiguous_semantic_exact_match=sum(r["semantic_exact_match"] for r in unambiguous_rows) / len(unambiguous_rows),
-                unambiguous_f1=sum(r["f1"] for r in unambiguous_rows) / len(unambiguous_rows),
-            )
-        summary.update(
-            empty_answer_count=len(empty_answers),
-            empty_answer_rate=(len(empty_answers) / len(records) if records else 0.0),
-            error_taxonomy=categories,
-            error_audit_sample=audit_sample,
-            **ambiguity_metrics,
-            **retrieval_means,
-        )
-    elif args.dataset == "finqa":
-        execution = (
-            sum(row["execution_accuracy"] for row in records) / len(records)
-            if records else 0.0
-        )
-        official_execution = (
-            sum(row.get("official_execution_accuracy", 0.0) for row in records) / len(records)
-            if records else 0.0
-        )
-        summary.update(
-            execution_accuracy=execution,
-            execution_accuracy_percent=100 * execution,
-            official_execution_accuracy=official_execution,
-            official_execution_accuracy_percent=100 * official_execution,
-            ratio_percentage_equivalent=True,
-        )
-        if args.method == "numerical_ir":
-            for key in (
-                "ir_parse_rate", "schema_validity_rate", "execution_success_rate",
-                "operator_accuracy", "step_accuracy", "grounding_precision", "grounding_recall",
-                "strict_operator_accuracy", "strict_step_accuracy",
-                "ir_repair_count",
-            ):
-                values = [float(row[key]) for row in records if row.get(key) is not None]
-                summary[f"mean_{key}"] = round(sum(values) / len(values), 5) if values else None
-            categories: dict[str, int] = {}
-            for row in records:
-                category = row.get("error_category")
-                if category:
-                    categories[category] = categories.get(category, 0) + 1
-            summary["error_taxonomy"] = categories
-    else:
-        accuracy = (
-            sum(row["denotation_accuracy"] for row in records) / len(records)
-            if records else 0.0
-        )
-        summary.update(
-            denotation_accuracy=accuracy,
-            denotation_accuracy_percent=100 * accuracy,
-        )
-    if records:
-        for key in (
-            "wall_time_ms",
-            "llm_latency_ms",
-            "non_llm_time_ms",
-            "llm_calls",
-            "llm_api_attempts",
-            "llm_prompt_chars",
-            "llm_response_chars",
-        ):
-            values = [float(row.get(key, 0)) for row in records]
-            summary[f"total_{key}"] = round(sum(values), 2)
-            summary[f"mean_{key}"] = round(sum(values) / len(values), 2)
-    summary["config"] = {
-        "top_k": args.top_k,
-        "use_rule_text_triples": args.use_rule_text_triples,
-        "use_record_nodes": args.use_record_nodes,
-        "use_path_guidance": args.use_path_guidance,
-        "use_lexical_tiebreak": args.use_lexical_tiebreak,
-        "use_hyperlink_expansion": args.use_hyperlink_expansion,
-        "use_collision_evidence_expansion": args.use_collision_evidence_expansion,
-        "collision_passage_budget": args.collision_passage_budget,
-        "use_focus_evidence_augmentation": args.use_focus_evidence_augmentation,
-        "focus_passage_budget_per_candidate": args.focus_passage_budget_per_candidate,
-        "use_diagnostic_focus_resolution": args.use_diagnostic_focus_resolution,
-        "focus_query_fallback_budget": args.focus_query_fallback_budget,
-        "l2_existing_witness_budget": args.l2_existing_witness_budget,
-        "l2_max_edges_per_candidate": args.l2_max_edges_per_candidate,
-        "l2_max_contexts_per_candidate": args.l2_max_contexts_per_candidate,
-        "l2_context_snippet_chars": args.l2_context_snippet_chars,
-        "use_adaptive_verification": args.use_adaptive_verification,
-        "l2_evidence_mode": args.l2_evidence_mode,
-        "use_prompt_compression": args.use_prompt_compression,
-        "use_path_focused_prompt": args.use_path_focused_prompt,
-        "prompt_path_budget": args.prompt_path_budget,
-        "ambiguity_policy": args.ambiguity_policy,
-        "oueg_context_mode": args.oueg_context_mode,
-        "max_context_chars": args.max_context_chars,
-        "max_output_tokens": args.max_output_tokens,
-        "temperature": args.temperature,
-        "n_paths": args.n_paths,
-        "strict_path_text_top_n": args.strict_path_text_top_n,
-        "max_replans": args.max_replans,
-        "max_table_rows_for_kg": args.max_table_rows_for_kg,
-        "finqa_table_format": args.finqa_table_format,
-        "second_stage_k": args.second_stage_k,
-        "write_completion_order": args.write_completion_order,
-        "max_workers": max_workers,
-        "llm_max_concurrent_requests": int(
-            os.environ.get(
-                f"{os.environ.get('LLM_PROVIDER', '').strip().upper()}_MAX_CONCURRENT_REQUESTS",
-                os.environ.get("LLM_MAX_CONCURRENT_REQUESTS", "8"),
-            )
-        ),
-    }
-    summary_path = args.output.with_suffix(args.output.suffix + ".summary.json")
-    summary_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps(summary))
+
+    try:
+        if pending:
+            with ThreadPoolExecutor(max_workers=min(max_workers, len(pending))) as executor:
+                futures = {
+                    executor.submit(_evaluate_example, example, args): seq_idx
+                    for seq_idx, example in enumerate(pending)
+                }
+                for future in as_completed(futures):
+                    seq_idx = futures[future]
+                    try:
+                        record = future.result()
+                    except Exception as exc:
+                        if args.fail_fast:
+                            raise
+                        record = {
+                            "id": pending[seq_idx].example_id,
+                            "question": pending[seq_idx].question,
+                            "gold_answer": pending[seq_idx].answer,
+                            "answer": None,
+                            "error": f"{type(exc).__name__}: {exc}",
+                            "run_status": "failed",
+                        }
+                    logger.log_record(seq_idx, record)
+    finally:
+        logger.close()
 
 
 if __name__ == "__main__":

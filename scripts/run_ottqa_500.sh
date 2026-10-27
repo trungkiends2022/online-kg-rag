@@ -51,6 +51,16 @@ for shard in "${shards[@]}"; do
   for method in "${methods[@]}"; do
     method_args=()
     [[ "$method" == "path_text_top_n" ]] && method_args+=(--strict-path-text-top-n)
+    if [[ "$method" == "online_unified_evidence_graph" ]]; then
+      method_args+=(
+        --prompt-path-budget 8
+        --collision-passage-budget 12
+        --focus-passage-budget-per-candidate 2
+        --l2-evidence-mode delta_only
+        --ambiguity-policy prompt
+        --oueg-context-mode lossless
+      )
+    fi
     method_dir="$result_root/$method"
     mkdir -p "$method_dir"
     output="$method_dir/${shard_label}__${model_label}__${method}.jsonl"
@@ -63,10 +73,14 @@ for shard in "${shards[@]}"; do
       --output "$output" --top-k 5 --second-stage-k 3 --n-paths 5 --max-replans 0 \
       --max-context-chars 24000 --max-output-tokens 1024 --temperature 0 \
       --max-workers "$max_workers" --llm-max-concurrent-requests "$llm_max_concurrent_requests" \
-      --llm-timeout-seconds 120 --llm-sdk-retries 2 --fail-fast --resume \
+      --llm-timeout-seconds 120 --llm-sdk-retries 2 --fail-fast --quiet-records --resume \
       "${method_args[@]}" >> "$log" 2>&1
     echo "[$(date --iso-8601=seconds)] done method=$method shard=$shard"
   done
 done
 
 echo "[$(date --iso-8601=seconds)] all requested runs completed: $result_root"
+
+echo ""
+echo "=== [KẾT QUẢ TỔNG HỢP BENCHMARK OTT-QA] ==="
+"$python_bin" "$repo_root/scripts/fast_benchmark_summary.py" "$result_root"

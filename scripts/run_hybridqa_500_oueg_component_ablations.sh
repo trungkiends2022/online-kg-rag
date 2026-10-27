@@ -135,9 +135,12 @@ common_args=(
   --tables-dir data/WikiTables-WithLinks/tables_tok
   --passages-dir data/WikiTables-WithLinks/request_tok
   --top-k 5
+  --max-table-rows-for-kg 999999
   --max-context-chars 24000
   --max-output-tokens 1024
   --temperature 0
+  --prompt-path-budget 8
+  --collision-passage-budget 12
   --focus-passage-budget-per-candidate 2
   --focus-query-fallback-budget 2
   --l2-existing-witness-budget 2
@@ -145,6 +148,8 @@ common_args=(
   --l2-max-contexts-per-candidate 3
   --l2-context-snippet-chars 900
   --l2-evidence-mode delta_only
+  --ambiguity-policy prompt
+  --oueg-context-mode lossless
   --max-workers "$workers"
   --llm-max-concurrent-requests "$workers"
   --quiet-records
@@ -193,3 +198,7 @@ run_ablation no_prompt_compression --no-prompt-compression
 
 echo "Completed. Results: $output_dir"
 echo "Logs: $log_dir"
+
+echo ""
+echo "=== [KẾT QUẢ TỔNG HỢP ABLATION] ==="
+"$python_bin" "$repo_root/scripts/fast_benchmark_summary.py" "$output_dir"

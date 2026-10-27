@@ -109,6 +109,16 @@ for shard in "${shards[@]}"; do
     if [[ "$method" == "path_text_top_n" ]]; then
       method_args+=(--strict-path-text-top-n)
     fi
+    if [[ "$method" == "online_unified_evidence_graph" ]]; then
+      method_args+=(
+        --prompt-path-budget 8
+        --collision-passage-budget 12
+        --focus-passage-budget-per-candidate 2
+        --l2-evidence-mode delta_only
+        --ambiguity-policy prompt
+        --oueg-context-mode lossless
+      )
+    fi
     method_dir="$result_root/$method"
     mkdir -p "$method_dir"
     output="$method_dir/${shard_label}__${model_label}__${method}.jsonl"
@@ -133,10 +143,15 @@ for shard in "${shards[@]}"; do
       --llm-timeout-seconds 120 \
       --llm-sdk-retries 2 \
       --fail-fast \
+      --quiet-records \
       --resume \
       "${method_args[@]}" >> "$method_log" 2>&1
     echo "[$(date --iso-8601=seconds)] done method=$method shard=$shard"
   done
 done
 
-echo "[$(date --iso-8601=seconds)] all requested runs completed"
+echo "[$(date --iso-8601=seconds)] all requested runs completed: $result_root"
+
+echo ""
+echo "=== [KẾT QUẢ TỔNG HỢP BENCHMARK HYBRIDQA] ==="
+"$python_bin" "$repo_root/scripts/fast_benchmark_summary.py" "$result_root"
