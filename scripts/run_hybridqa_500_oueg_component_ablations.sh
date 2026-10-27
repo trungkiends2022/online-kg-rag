@@ -6,6 +6,13 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
+# Auto-load .env configuration if present
+if [[ -f "$repo_root/.env" ]]; then
+  set -a
+  source "$repo_root/.env"
+  set +a
+fi
+
 resolve_python() {
   local candidate resolved
   local candidates=()
@@ -136,7 +143,8 @@ common_args=(
   --passages-dir data/WikiTables-WithLinks/request_tok
   --top-k 5
   --max-context-chars 24000
-  --max-output-tokens 1024
+  --max-table-rows-for-kg 999999
+  --max-output-tokens 2048
   --temperature 0
   --prompt-path-budget 8
   --collision-passage-budget 12

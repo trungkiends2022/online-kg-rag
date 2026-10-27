@@ -380,11 +380,41 @@ bash scripts/run_hybridqa_1500.sh
 bash scripts/run_ottqa_500.sh
 ```
 
-Trên server, dùng launcher để chạy tuần tự năm baseline trên một hoặc cả hai
-GPT-OSS scales và cả hai benchmark suites:
+Tất cả các runner đều **tự động nạp cấu hình từ `.env`** nếu file tồn tại. Thiết lập file `.env` theo nhu cầu:
+
+- **Chạy LLM Local trên server (vLLM / SGLang / Ollama):**
+  ```bash
+  LLM_PROVIDER=openai_compatible
+  COMPAT_BASE_URL=http://localhost:8000/v1       # hoặc http://localhost:11434/v1 với Ollama
+  COMPAT_MODEL=openai/gpt-oss-20b              # model ID local đang phục vụ
+  COMPAT_API_KEY=not-needed
+  MAX_WORKERS=4
+  LLM_REQUEST_TIMEOUT_SECONDS=180
+  ```
+
+- **Chạy LLM Cloud qua OpenRouter:**
+  ```bash
+  LLM_PROVIDER=openrouter
+  OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxxxxxxxxxx
+  OPENROUTER_MODEL=openai/gpt-oss-20b
+  OPENROUTER_REASONING_ENABLED=true
+  MAX_WORKERS=4
+  LLM_REQUEST_TIMEOUT_SECONDS=180
+  ```
+
+Các cờ cấu hình chuẩn hóa hiện tại:
+- `max_output_tokens=2048`: đảm bảo trần token cho reasoning không làm cắt cụt completion.
+- `online_unified_evidence_graph`: chạy `--no-path-focused-prompt` (L1 giữ trọn vẹn compact graph) và tự động kích hoạt L2 Focus Augmentation khi L1 có danh sách candidate để nạp linked passages từ corpus.
+- `direct_llm`: đọc toàn bộ raw context không cắt top-K.
+
+Trên server, dùng launcher hoặc runner trực tiếp với tag mong muốn:
 
 ```bash
-bash scripts/run_grounded_baselines_server.sh --dataset both --model both --workers 4
+# Chạy toàn bộ HybridQA hoặc theo shard
+RUN_TAG=local-server-v1 bash scripts/run_hybridqa_1500.sh [01..08]
+
+# Chạy toàn bộ OTT-QA hoặc theo shard
+RUN_TAG=local-server-v1 bash scripts/run_ottqa_500.sh [01..05]
 ```
 
 ### Ablation OUEG đã chốt

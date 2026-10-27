@@ -5,6 +5,13 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
+# Auto-load .env configuration if present
+if [[ -f "$repo_root/.env" ]]; then
+  set -a
+  source "$repo_root/.env"
+  set +a
+fi
+
 resolve_python() {
   local candidate resolved
   local candidates=()
@@ -53,6 +60,8 @@ for shard in "${shards[@]}"; do
     [[ "$method" == "path_text_top_n" ]] && method_args+=(--strict-path-text-top-n)
     if [[ "$method" == "online_unified_evidence_graph" ]]; then
       method_args+=(
+        --max-table-rows-for-kg 999999
+        --no-path-focused-prompt
         --prompt-path-budget 8
         --collision-passage-budget 12
         --focus-passage-budget-per-candidate 2
@@ -76,7 +85,7 @@ for shard in "${shards[@]}"; do
       --tables-dir data/OTT-QA/data/traindev_tables_tok \
       --passages-dir data/OTT-QA/data/traindev_request_tok \
       --output "$output" --top-k 5 --second-stage-k 3 --n-paths 5 --max-replans 0 \
-      --max-context-chars 24000 --max-output-tokens 1024 --temperature 0 \
+      --max-context-chars 24000 --max-output-tokens 2048 --temperature 0 \
       --max-workers "$max_workers" --llm-max-concurrent-requests "$llm_max_concurrent_requests" \
       --llm-timeout-seconds 120 --llm-sdk-retries 2 --fail-fast --quiet-records --resume \
       "${method_args[@]}" >> "$log" 2>&1
