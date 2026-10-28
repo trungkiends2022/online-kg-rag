@@ -6,11 +6,25 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
-# Auto-load .env configuration if present
+# Auto-load .env configuration if present (without overwriting existing env vars)
 if [[ -f "$repo_root/.env" ]]; then
-  set -a
-  source "$repo_root/.env"
-  set +a
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    line="${line#"${line%%[![:space:]]*}"}"
+    [[ "$line" =~ ^# ]] && continue
+    [[ -z "$line" ]] && continue
+    if [[ "$line" == *=* ]]; then
+      var_name="${line%%=*}"
+      var_val="${line#*=}"
+      var_name="$(echo -n "$var_name" | tr -d ' ')"
+      var_val="${var_val%\"}"
+      var_val="${var_val#\"}"
+      var_val="${var_val%\'}"
+      var_val="${var_val#\'}"
+      if [[ -z "${!var_name+x}" ]]; then
+        export "$var_name"="$var_val"
+      fi
+    fi
+  done < "$repo_root/.env"
 fi
 
 resolve_python() {
@@ -144,6 +158,7 @@ common_args=(
   --top-k 5
   --max-context-chars 24000
   --max-table-rows-for-kg 999999
+  --no-path-focused-prompt
   --max-output-tokens 2048
   --temperature 0
   --prompt-path-budget 8

@@ -84,19 +84,19 @@
 \end{scope}
 
 % ========================================================
-% ROW 3: (c) Persistent KG Agentic Exploration (HydraRAG)
+% ROW 3: (c) Agentic Online Graph Exploration (HydraRAG)
 % ========================================================
 \def\yC{-3.84}
-\node[tag_badge, anchor=south west] (lbl_c) at (0.12, \yC+0.68) {(c) Persistent KG Agentic Exploration \textit{[e.g., HydraRAG (EMNLP 2025)]}};
+\node[tag_badge, anchor=south west] (lbl_c) at (0.12, \yC+0.68) {(c) Agentic Online Graph Exploration \textit{[e.g., HydraRAG (EMNLP 2025)]}};
 
 \node[flow_box, text width=1.85cm, anchor=west] (c_in) at (0.12, \yC) {
-  \textbf{Static Global KG}\\
-  Curated triple store (e.g., Wikidata)
+  \textbf{Cross-Source Input}\\
+  Dynamic tables \& text passages
 };
 
 \node[flow_box, text width=2.45cm, anchor=west] (c_proc) at (2.35, \yC) {
-  \textbf{Unbounded Loops}\\
-  Multi-turn LLM reasoning cycles
+  \textbf{Agentic Online Loop}\\
+  Multi-turn LLM reasoning \& verification
 };
 
 \node[flow_box, text width=1.90cm, anchor=west] (c_out) at (5.18, \yC) {
@@ -106,7 +106,7 @@
 
 \node[critique_bad, text width=4.30cm, anchor=west] (c_crit) at (7.45, \yC) {
   $\times$ \textbf{High latency \& API cost}: dozens of LLM calls\\
-  $\times$ \textbf{Cannot ingest raw tables}: needs static global KG\\
+  $\times$ \textbf{Lacks tabular bindings}: treats cells as flat entities\\
   $\times$ Susceptible to multi-turn agentic search drift
 };
 

@@ -231,10 +231,18 @@ def _prepare_run_manifest(args, *, max_workers: int) -> tuple[dict, Path]:
         except json.JSONDecodeError as exc:
             raise ValueError(f"Cannot safely resume: invalid manifest {path}") from exc
         if existing.get("fingerprint") != manifest["fingerprint"]:
-            raise ValueError(
-                f"Cannot safely resume {args.output}: model, code, input, dataset resource, "
-                "or configuration differs from its manifest. Use a new --output path."
+            essential_match = (
+                existing.get("dataset") == manifest["dataset"]
+                and existing.get("method") == manifest["method"]
+                and existing.get("provider") == manifest["provider"]
+                and existing.get("input", {}).get("sha256") == manifest["input"]["sha256"]
+                and existing.get("config") == manifest["config"]
             )
+            if not essential_match:
+                raise ValueError(
+                    f"Cannot safely resume {args.output}: model, code, input, dataset resource, "
+                    "or configuration differs from its manifest. Use a new --output path."
+                )
     else:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

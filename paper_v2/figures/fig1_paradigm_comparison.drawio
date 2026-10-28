@@ -49,23 +49,23 @@
     <mxCell id="e_b_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#e06666;strokeWidth=1.5;" edge="1" source="b_b_proc" target="b_b_out" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
     <mxCell id="e_b_3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#e06666;strokeWidth=1.5;" edge="1" source="b_b_out" target="b_b_lim" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
 
-    <!-- Paradigm C: Persistent KG Agentic Exploration (HydraRAG) -->
+    <!-- Paradigm C: Agentic Online Graph Exploration (HydraRAG) -->
     <mxCell id="p_c" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdfaf4;strokeColor=#d4ac0d;strokeWidth=1.5;" vertex="1" parent="1">
       <mxGeometry x="770" y="30" width="340" height="420" as="geometry" />
     </mxCell>
-    <mxCell id="t_c" value="&lt;b&gt;(C) Persistent KG Agentic Loops&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:10px; color:#b7950b;'&gt;[e.g., HydraRAG (EMNLP 2025)]&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fcf3cf;strokeColor=#f1c40f;fontSize=12;fontColor=#7d6608;" vertex="1" parent="1">
+    <mxCell id="t_c" value="&lt;b&gt;(C) Agentic Online Graph Loops&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:10px; color:#b7950b;'&gt;[e.g., HydraRAG (EMNLP 2025)]&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fcf3cf;strokeColor=#f1c40f;fontSize=12;fontColor=#7d6608;" vertex="1" parent="1">
       <mxGeometry x="785" y="45" width="310" height="40" as="geometry" />
     </mxCell>
-    <mxCell id="b_c_in" value="&lt;b&gt;Static Global KG&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10.5px;'&gt;• Pre-indexed triple store (e.g., Wikidata)&lt;br&gt;• Cannot ingest ad-hoc, raw table schemas&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f1c40f;fontSize=11;" vertex="1" parent="1">
+    <mxCell id="b_c_in" value="&lt;b&gt;Cross-Source Input&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10.5px;'&gt;• Dynamic tables &amp;amp; text passages&lt;br&gt;• Online evidence graph construction&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f1c40f;fontSize=11;" vertex="1" parent="1">
       <mxGeometry x="785" y="100" width="310" height="65" as="geometry" />
     </mxCell>
-    <mxCell id="b_c_proc" value="&lt;b&gt;Unbounded Agentic Loops&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;Multi-turn LLM reasoning &amp;amp; verification cycles&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9e7;strokeColor=#f9e79f;fontSize=11;" vertex="1" parent="1">
+    <mxCell id="b_c_proc" value="&lt;b&gt;Unbounded Agentic Loops&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;Multi-turn LLM reasoning &amp;amp; tri-factor verification&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9e7;strokeColor=#f9e79f;fontSize=11;" vertex="1" parent="1">
       <mxGeometry x="785" y="180" width="310" height="50" as="geometry" />
     </mxCell>
     <mxCell id="b_c_out" value="&lt;b&gt;Iterative Multi-Turn Paths&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;Explored traversal chains across LLM turns&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f1c40f;fontSize=11;" vertex="1" parent="1">
       <mxGeometry x="785" y="245" width="310" height="50" as="geometry" />
     </mxCell>
-    <mxCell id="b_c_lim" value="&lt;b style='color:#b7950b;'&gt;Key Operational Limitations&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10px; color:#7d6608;'&gt;• &lt;b&gt;High latency &amp;amp; API overhead&lt;/b&gt; (dozens of calls)&lt;br&gt;• &lt;b&gt;Cannot ingest raw tables&lt;/b&gt; at query time&lt;br&gt;• Search drift over unbounded agent steps&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fefde8;strokeColor=#f9e79f;fontSize=10.5;" vertex="1" parent="1">
+    <mxCell id="b_c_lim" value="&lt;b style='color:#b7950b;'&gt;Key Operational Limitations&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10px; color:#7d6608;'&gt;• &lt;b&gt;High latency &amp;amp; API overhead&lt;/b&gt; (dozens of calls)&lt;br&gt;• &lt;b&gt;Lacks tabular bindings&lt;/b&gt;: treats cells as flat&lt;br&gt;• Search drift over unbounded agent steps&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fefde8;strokeColor=#f9e79f;fontSize=10.5;" vertex="1" parent="1">
       <mxGeometry x="785" y="310" width="310" height="120" as="geometry" />
     </mxCell>
     <mxCell id="e_c_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#f1c40f;strokeWidth=1.5;" edge="1" source="b_c_in" target="b_c_proc" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
