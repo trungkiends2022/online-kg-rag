@@ -14,6 +14,7 @@
 \usepackage{enumitem}
 \setlist{noitemsep,topsep=1pt,parsep=0pt,partopsep=0pt}
 \setlength{\parskip}{0pt}
+\raggedbottom
 \setlength{\textfloatsep}{7pt plus 2pt minus 2pt}
 \setlength{\floatsep}{7pt plus 2pt minus 2pt}
 \setlength{\intextsep}{7pt plus 2pt minus 2pt}
@@ -255,14 +256,7 @@ To rigorously assess faithful reasoning and prevent models from relying on laten
 We report three standard accuracy metrics: (1)~\emph{Exact Match (EM)}: strict string equality against gold reference after standard normalization; (2)~\emph{Token-level F1}: harmonic mean of precision and recall over word tokens; and (3)~\emph{Semantic Exact Match (Semantic EM)}: denotation equivalence under surface alias tolerance. In addition, we report system efficiency via average LLM calls, empty answer percentage, and end-to-end wall-clock latency per question.
 
 \subsection{Baselines and Experimental Settings}
-To ensure rigorous and fair comparative evaluation, all methods are evaluated across three open-weights model architectures and scales: \textbf{GPT-OSS 20B}, \textbf{Qwen 30B} (\texttt{Qwen2.5-32B-Instruct}), and \textbf{GPT-OSS 120B}, under matched retrieval pools ($k_1=5, k_2=3$), context limits (24,000 characters), and greedy decoding ($T=0$):
-\begin{itemize}
-    \item \emph{Direct LLM}: Zero-shot in-context prompting over linearized table rows and passages without graph structuring.
-    \item \emph{Flat-RAG}: Standard concatenation of linearized table rows with raw retrieved text passages.
-    \item \emph{ODYSSEY}~\cite{agarwal2025hybrid}: The published zero-shot hybrid graph framework (NAACL 2025) employing question-driven destructive graph pruning.
-    \item \emph{Path-Text Top-$N$}: Hard path filtering retaining only top-$N$ ranked reasoning paths while discarding the remainder of the multigraph.
-    \item \emph{OUEG-RAG (Ours)}: The proposed controlled evidence scaffolding framework with two-tier diagnostic grounding.
-\end{itemize}
+To ensure rigorous and fair comparative evaluation, all methods are evaluated across three open-weights model architectures and scales: \textbf{GPT-OSS 20B}, \textbf{Qwen 30B} (\texttt{Qwen2.5-32B-Instruct}), and \textbf{GPT-OSS 120B}, under matched retrieval pools ($k_1=5, k_2=3$), context limits ($24{,}000$ characters), and greedy decoding ($T=0$): (1)~\emph{Direct LLM}: Zero-shot in-context prompting over linearized table rows and passages without graph structuring; (2)~\emph{Flat-RAG}: Standard concatenation of linearized table rows with raw retrieved text passages; (3)~\emph{ODYSSEY}~\cite{agarwal2025hybrid}: The published zero-shot hybrid graph framework (NAACL 2025) employing question-driven destructive graph pruning; (4)~\emph{Path-Text Top-$N$}: Hard path filtering retaining only top-$N$ ranked reasoning paths while discarding the remainder of the multigraph; and (5)~\emph{OUEG-RAG (Ours)}: The proposed controlled evidence scaffolding framework with two-tier diagnostic grounding.
 
 \begin{table}[t]
 \vspace{-1.5mm}
@@ -303,58 +297,50 @@ Model Scale & Method & EM (\%) & F1 (\%) & Sem.\ EM & Empty & Avg.\ Calls & Lat.
 \paragraph{Main Benchmark Results Across Model Scales.}
 Table~\ref{tab:main-results} presents the comparative evaluation across all 1,500 questions in the stratified development subset of HybridQA. Across all three model scales, OUEG-RAG consistently achieves higher grounding accuracy than direct prompting, flat concatenation, and graph baselines. On 20B, OUEG-RAG obtains 56.47\% EM and 67.12\% F1 (+1.67\% EM, +2.45\% F1 over Direct LLM; +4.07\% EM over ODYSSEY). On Qwen 30B, OUEG-RAG reaches 58.80\% EM and 70.15\% F1 (+2.20\% EM over Direct LLM; +4.60\% EM over ODYSSEY). On 120B, OUEG-RAG reaches 61.40\% EM and 73.11\% F1 (+2.67\% EM over Direct LLM, McNemar $p = 0.0058 < 0.01$; +4.60\% EM over ODYSSEY).
 
+\enlargethispage{2\baselineskip}
 We analyze how these empirical findings directly address the three core structural challenges outlined in the Introduction:
 
 First, \emph{Resolving loss of tabular semantics via record centroids}: In Direct LLM and Flat-RAG, linearizing tables into text decouples cell values from their originating rows, causing cross-row attribute conflation when multiple symmetric rows satisfy partial conditions. Across all three model scales, OUEG-RAG achieves higher exact match by explicitly anchoring row attributes to column predicates via star centroids $\rho_i$, maintaining the Row Attribute Non-Conflation property (Proposition~\ref{prop:non-conflation}). Ablation results in Table~\ref{tab:ablation} confirm this: removing record nodes $\rho_i$ reduces EM by $-1.40\%$, directly demonstrating the necessity of structural row bindings.
 
 Second, \emph{Guiding attention via explicit path scaffolds}: Supplying an unorganized collection of edges disperses language model attention across irrelevant entities. In Table~\ref{tab:ablation}, providing the complete multigraph without sequential path guidance drops EM by $-1.20\%$, while using unweighted path selection drops EM by $-2.40\%$. This demonstrates that the deterministic multi-factor objective $S(p)$ successfully steers model attention along verified cross-modal relations without discarding underlying context.
 
-Third, \emph{Overcoming the dilemma of destructive pruning versus multi-turn overhead}: 
-\begin{itemize}[leftmargin=1.5em]
-    \item \emph{Destructive pruning causes evidence loss}: In complex multi-hop queries, the critical factual span often resides in a peripheral cell or passage relation that does not directly match question keywords. When ODYSSEY prunes up to 53\% of graph elements, it severs these factual links. Under our strict context-grounding protocol, models cannot fall back to memorized parametric knowledge; this evidence loss forces the model to emit empty responses (7.20\% on 20B, 5.60\% on Qwen 30B, and reaching up to 39.0\% on constrained slices) and lowers EM to 52.40\%--56.80\%. Path-Text Top-$N$ hard filtering suffers an even steeper drop (EM of 21.20\%--29.53\%, with $-38.00\%$ EM in ablation). OUEG-RAG avoids this by retaining 100\% of the retrieved evidence via compact prompt compression.
-    \item \emph{Bounded two-tier efficiency}: Rather than relying on unbounded multi-turn agent loops (e.g., HydraRAG), OUEG-RAG concludes unambiguous queries in a single primary call (Fast Exit), reserving a targeted second call only when diagnostic feedback identifies structural collisions or missing passages, where the minimal state capsule provides complete factual sufficiency (Proposition~\ref{prop:sufficiency}). Consequently, OUEG-RAG averages only 1.22--1.24 LLM calls per query, achieving higher accuracy while bounding inference latency.
-\end{itemize}
+Third, \emph{Overcoming the dilemma of destructive pruning versus multi-turn overhead}: (a)~\emph{Destructive pruning causes evidence loss}: In complex multi-hop queries, the critical factual span often resides in a peripheral cell or passage relation that does not directly match question keywords. When ODYSSEY prunes up to 53\% of graph elements, it severs these factual links. Under our strict context-grounding protocol, models cannot fall back to memorized parametric knowledge; this evidence loss forces the model to emit empty responses (7.20\% on 20B, 5.60\% on Qwen 30B, and reaching up to 39.0\% on constrained slices) and lowers EM to 52.40\%--56.80\%. Path-Text Top-$N$ hard filtering suffers an even steeper drop (EM of 21.20\%--29.53\%, with $-38.00\%$ EM in ablation). OUEG-RAG avoids this by retaining 100\% of the retrieved evidence via compact prompt compression. (b)~\emph{Bounded two-tier efficiency}: Rather than relying on unbounded multi-turn agent loops (e.g., HydraRAG), OUEG-RAG concludes unambiguous queries in a single primary call (Fast Exit), reserving a targeted second call only when diagnostic feedback identifies structural collisions or missing passages, where the minimal state capsule provides complete factual sufficiency (Proposition~\ref{prop:sufficiency}). Consequently, OUEG-RAG averages only 1.22--1.24 LLM calls per query, achieving higher accuracy while bounding inference latency.
 
 \begin{table}[t]
 \vspace{-1.5mm}
-\caption{Systematic knockout ablation study on the controlled development partition ($N=500$, Shards 06--08 under GPT-OSS 20B). All variants isolate individual architectural components against the full OUEG-RAG framework.}
+\caption{Systematic knockout ablation study on the controlled development partition ($N=500$ under GPT-OSS 20B). All variants isolate individual components against full OUEG-RAG.}
 \label{tab:ablation}
 \centering
 \scriptsize
-\setlength{\tabcolsep}{2.0pt}
-\begin{tabular}{@{}lrrrp{3.7cm}@{}}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{@{}lrrrp{4.2cm}@{}}
 \toprule
 Ablation Configuration & EM (\%) & F1 (\%) & $\Delta$ EM & Architectural Implication \\
 \midrule
 \textbf{Full OUEG-RAG (Two-Tier)} & \textbf{56.00} & \textbf{66.52} & --- & Full controlled evidence scaffolding \\
 \midrule
-(1) w/o L2 Augmentation (Single-turn L1) & 54.40 & 64.80 & $-1.60$ & L1 must infer answers under missing links \\
-(2) w/o Path Scoring ($S(p)$ unweighted)  & 53.60 & 63.90 & $-2.40$ & Unguided paths introduce candidate noise \\
+(1) w/o L2 Augmentation (Single-turn L1) & 54.40 & 64.80 & $-1.60$ & L1 fails on missing bridge links \\
+(2) w/o Path Scoring ($S(p)$ unweighted)  & 53.60 & 63.90 & $-2.40$ & Unguided paths add candidate noise \\
 (3) w/o Path Guidance (Graph only)        & 54.80 & 65.10 & $-1.20$ & Unconnected triples disperse attention \\
-(4) w/ Destructive Pruning (Top-$N$ Path)  & 18.00 & 24.28 & $-38.00$ & Hard pruning forfeits peripheral evidence \\
-(5) w/o Subgraph Compression             & 33.00 & 38.87 & $-23.00$ & Uncompressed triples exceed context budget \\
-(6) w/o Record Nodes $\rho_i$ (Flat-RAG) & 54.60 & 64.67 & $-1.40$ & Disintegrates intra-row attribute bindings \\
+(4) w/ Destructive Pruning (Top-$N$ Path)  & 18.00 & 24.28 & $-38.00$ & Hard pruning drops peripheral facts \\
+(5) w/o Subgraph Compression             & 33.00 & 38.87 & $-23.00$ & Uncompressed triples exceed budget \\
+(6) w/o Record Nodes $\rho_i$ (Flat-RAG) & 54.60 & 64.67 & $-1.40$ & Disintegrates intra-row bindings \\
 \bottomrule
 \end{tabular}
 \vspace{-2mm}
 \end{table}
 
+\enlargethispage{2.5\baselineskip}
 \paragraph{Systematic Component Ablation Analysis.}
-Table~\ref{tab:ablation} systematically isolates the architectural pillars across 500 questions:
-\begin{enumerate}
-    \item \emph{Necessity of Diagnostic L2 Augmentation}: Disabling L2 augmentation requires L1 to infer answers without supplementary retrieval, dropping EM by $-1.60\%$ and increasing errors on collision queries.
-    \item \emph{Necessity of Deterministic Path Scoring $S(p)$}: Replacing multi-factor scoring with unweighted path selection reduces EM by $-2.40\%$, confirming that $S(p)$ is essential to prioritize structurally aligned paths over noisy distractors.
-    \item \emph{Graph Alone is Insufficient}: Supplying the complete multigraph without sequential path guidance drops EM by $-1.20\%$, indicating that explicit path scaffolds help steer attention across heterogeneous graphs.
-    \item \emph{Impact of Hard Path Filtering}: Preserving only top-$N$ linear paths results in a substantial $-38.00\%$ EM drop (down to 18.00\%), indicating that discarding peripheral multigraph context forfeits relevant supporting facts.
-    \item \emph{Prompt Compression is Required}: Disabling prompt deduplication drops EM by $-23.00\%$ and increases empty answers to 47.60\% due to token overflow.
-\end{enumerate}
+Table~\ref{tab:ablation} systematically isolates each architectural pillar across 500 questions: (1)~\emph{Diagnostic L2 Augmentation}: Disabling L2 requires L1 to infer answers without supplementary retrieval, dropping EM by $-1.60\%$ and increasing errors on collision queries; (2)~\emph{Deterministic Path Scoring $S(p)$}: Replacing multi-factor scoring with unweighted path selection reduces EM by $-2.40\%$, confirming that $S(p)$ is essential to prioritize structurally aligned paths over noisy distractors; (3)~\emph{Graph Alone is Insufficient}: Supplying the complete multigraph without sequential path guidance drops EM by $-1.20\%$, indicating that explicit path scaffolds help steer attention across heterogeneous graphs; (4)~\emph{Impact of Hard Path Filtering}: Preserving only top-$N$ linear paths results in a substantial $-38.00\%$ EM drop (down to 18.00\%), indicating that discarding peripheral multigraph context forfeits relevant supporting facts; and (5)~\emph{Prompt Compression is Required}: Disabling prompt deduplication drops EM by $-23.00\%$ and increases empty answers to 47.60\% due to token overflow.
 
 \paragraph{Human Audit of Provenance Traces ($N=100$).}
-A manual audit on 100 randomly sampled evaluation questions confirms: (1)~\emph{Trace Faithfulness}: In 92.0\% of cases, OUEG-RAG produced faithful reasoning chains where every traversed edge maps to verified cell coordinates or source Wikipedia passages; (2)~\emph{Bridge Alignment Precision}: In 89.0\% of cases, the multigraph path identified the ground-truth bridge entity linking the candidate row to external text; and (3)~\emph{Empty Failure Reduction}: On 120B, OUEG-RAG reduces empty failures to 0.53\% (compared to 3.40\% for ODYSSEY and 2.80\% for Path-Text).
+A manual audit on 100 randomly sampled evaluation questions confirms: (1)~\emph{Trace Faithfulness}: In 92.0\% of cases, OUEG-RAG produces faithful reasoning chains mapping directly to verified cell coordinates and source passages; (2)~\emph{Bridge Alignment Precision}: In 89.0\% of cases, the multigraph identifies the ground-truth bridge entity linking the candidate row to external text; and (3)~\emph{Empty Failure Reduction}: On 120B, OUEG-RAG reduces empty failures to 0.53\% (vs.\ 3.40\% for ODYSSEY and 2.80\% for Path-Text).
 
+\enlargethispage{2\baselineskip}
 \section{Limitations}
 \label{sec:limitations}
-First, query-time graph construction and richer structured prompts incur modest latency over naive direct prompting ($\approx 23\text{--}25$\,s vs.\ $\approx 6\text{--}10$\,s), though this is notably lower than multi-turn agentic systems. Second, our heuristic path scoring weights ($C, M, R, B$) were fixed via domain heuristics; learned scoring calibration represents a promising future avenue. Third, our evaluation focuses on the controlled 1,500-example dev benchmark for open-weights auditability; submitting to blinded leaderboards remains an ongoing milestone.
+First, query-time graph construction and structured prompts incur modest latency over direct prompting ($\approx 23\text{--}25$\,s vs.\ $\approx 6\text{--}10$\,s), though significantly lower than multi-turn agent loops. Second, path scoring weights were set via domain heuristics; learned scoring calibration represents a promising future direction. Third, our evaluation focuses on the controlled 1,500-example benchmark for open-weights reproducibility; submitting to blinded leaderboards remains an ongoing milestone.
 
 \section{Conclusion}
 \label{sec:conclusion}
@@ -364,14 +350,14 @@ We presented OUEG-RAG, an online unified evidence graph framework for grounded t
 \renewenvironment{thebibliography}[1]
      {\section*{\refname}%
       \def\@biblabel##1{##1.}%
-      \fontsize{6.5pt}{7.5pt}\selectfont
+      \fontsize{7.5pt}{9.2pt}\selectfont
       \list{\@biblabel{\@arabic\c@enumiv}}%
            {\settowidth\labelwidth{\@biblabel{#1}}%
             \leftmargin\labelwidth
             \advance\leftmargin\labelsep
-            \setlength{\itemsep}{-3.5pt}%
+            \setlength{\itemsep}{1.2pt plus 0.5pt minus 0.5pt}%
             \setlength{\parsep}{0pt}%
-            \setlength{\topsep}{0pt}%
+            \setlength{\topsep}{2pt}%
             \usecounter{enumiv}%
             \let\p@enumiv\@empty
             \renewcommand\theenumiv{\@arabic\c@enumiv}}%
