@@ -68,7 +68,11 @@ echo "model_label=$model_label"
 for shard in "${shards[@]}"; do
   input="${input_prefix}-shard${shard}.json"
   [[ -f "$input" ]] || { echo "Missing input shard: $input" >&2; exit 1; }
-  shard_label="shard${shard}-of05"
+  if (( 10#$shard <= 5 )); then
+    shard_label="shard${shard}-of05"
+  else
+    shard_label="shard${shard}-of10"
+  fi
   for method in "${methods[@]}"; do
     method_args=()
     [[ "$method" == "path_text_top_n" ]] && method_args+=(--strict-path-text-top-n)

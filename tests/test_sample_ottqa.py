@@ -64,3 +64,13 @@ def test_ottqa_sampler_requires_answer_node(tmp_path):
     assert {item["question_id"] for item in eligible} == {"q1"}
     assert skipped == {"missing_answer_node": 1}
 
+
+def test_load_question_ids_multiple_paths(tmp_path):
+    from src.sample_ottqa import load_question_ids
+    f1 = tmp_path / "f1.json"
+    f2 = tmp_path / "f2.json"
+    _write_json(f1, [{"question_id": "q1"}, {"question_id": "q2"}])
+    _write_json(f2, [{"question_id": "q2"}, {"question_id": "q3"}])
+    ids = load_question_ids([f1, f2])
+    assert ids == {"q1", "q2", "q3"}
+

@@ -30,12 +30,16 @@ def _has_text_context(passages_dir: Path, table_id: str) -> bool:
     return any(str(value).strip() for value in values)
 
 
-def load_question_ids(path: Path) -> set[str]:
-    """Read question IDs from an OTT-QA/HybridQA JSON split."""
-    records = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(records, list):
-        raise ValueError(f"expected a JSON list in {path}")
-    return {str(item["question_id"]) for item in records if item.get("question_id")}
+def load_question_ids(path_or_paths: Path | list[Path]) -> set[str]:
+    """Read question IDs from one or more OTT-QA/HybridQA JSON splits."""
+    paths = path_or_paths if isinstance(path_or_paths, list) else [path_or_paths]
+    all_ids: set[str] = set()
+    for path in paths:
+        records = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(records, list):
+            raise ValueError(f"expected a JSON list in {path}")
+        all_ids.update(str(item["question_id"]) for item in records if item.get("question_id"))
+    return all_ids
 
 
 def select_eligible_records(
@@ -116,7 +120,9 @@ def _report(
         "population_size": population_size,
         "eligible_population_size": len(eligible),
         "excluded_question_ids_source": (
-            str(excluded_question_ids_path) if excluded_question_ids_path else None
+            [str(p) for p in excluded_question_ids_path]
+            if isinstance(excluded_question_ids_path, list)
+            else (str(excluded_question_ids_path) if excluded_question_ids_path else None)
         ),
         "selection": {
             "method": "balanced_stratified" if stratify_reasoning else "uniform_without_replacement",
@@ -142,7 +148,10 @@ def main() -> None:
     parser.add_argument("--passages-dir", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--report", type=Path)
-    parser.add_argument("--exclude-question-ids-from", type=Path)
+    parser.add_argument(
+        "--exclude-question-ids-from", type=Path, nargs="+",
+        help="one or more paths to JSON files containing question IDs to exclude",
+    )
     parser.add_argument("--size", type=int, default=500)
     parser.add_argument("--seed", type=int, default=2027)
     parser.add_argument("--shard-size", type=int, default=100)
