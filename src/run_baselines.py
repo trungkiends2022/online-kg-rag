@@ -119,6 +119,7 @@ def _provider_options() -> dict[str, str | None]:
     """Record non-secret provider switches that can alter a model response."""
     option_names = (
         "COMPAT_BASE_URL",
+        "COMPAT_REASONING_ENABLED",
         "OPENROUTER_REASONING_ENABLED",
         "GROQ_REASONING_EFFORT",
         "LLM_RATE_LIMIT_RETRIES",

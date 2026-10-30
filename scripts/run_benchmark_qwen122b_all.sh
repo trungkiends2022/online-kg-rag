@@ -63,6 +63,7 @@ if [[ "$LLM_PROVIDER" == "openai_compatible" ]]; then
   export COMPAT_MODEL="${COMPAT_MODEL:-Qwen/Qwen3.5-122B-A10B}"
   export COMPAT_BASE_URL="${COMPAT_BASE_URL:-http://localhost:8000/v1}"
   export COMPAT_API_KEY="${COMPAT_API_KEY:-EMPTY}"
+  export COMPAT_REASONING_ENABLED="${COMPAT_REASONING_ENABLED:-true}"
 else
   export OPENROUTER_MODEL="${OPENROUTER_MODEL:-qwen/qwen3.5-122b-a10b}"
   export OPENROUTER_REASONING_ENABLED="${OPENROUTER_REASONING_ENABLED:-true}"
