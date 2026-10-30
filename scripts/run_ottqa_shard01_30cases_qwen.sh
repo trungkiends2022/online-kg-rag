@@ -6,23 +6,9 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 if [[ -f "$repo_root/.env" ]]; then
-  while IFS= read -r line || [[ -n "$line" ]]; do
-    line="${line#"${line%%[![:space:]]*}"}"
-    [[ "$line" =~ ^# ]] && continue
-    [[ -z "$line" ]] && continue
-    if [[ "$line" == *=* ]]; then
-      var_name="${line%%=*}"
-      var_val="${line#*=}"
-      var_name="$(echo -n "$var_name" | tr -d ' ')"
-      var_val="${var_val%\"}"
-      var_val="${var_val#\"}"
-      var_val="${var_val%\'}"
-      var_val="${var_val#\'}"
-      if [[ -z "${!var_name+x}" ]]; then
-        export "$var_name"="$var_val"
-      fi
-    fi
-  done < "$repo_root/.env"
+  set -a
+  source "$repo_root/.env"
+  set +a
 fi
 
 python_bin="$repo_root/.venv/bin/python"
