@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  28 OCT 2026 17:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  29 OCT 2026 22:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -533,103 +533,149 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 (./paradigm-comparison-diagram.tex
-LaTeX Font Info:    Calculating math sizes for size <5.1> on input line 38.
+LaTeX Font Info:    Calculating math sizes for size <4.6> on input line 35.
 
 
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.56998> not available
-(Font)              size <5> substituted on input line 38.
+LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.21999> not available
+(Font)              size <5> substituted on input line 35.
 
 
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.55> not available
-(Font)              size <5> substituted on input line 38.
+LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.3> not available
+(Font)              size <5> substituted on input line 35.
 
 
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.56998> not available
-(Font)              size <5> substituted on input line 38.
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.21999> not available
+(Font)              size <5> substituted on input line 35.
 
 
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.55> not available
-(Font)              size <5> substituted on input line 38.
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.3> not available
+(Font)              size <5> substituted on input line 35.
 
 
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.56998> not available
-(Font)              size <5> substituted on input line 38.
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.21999> not available
+(Font)              size <5> substituted on input line 35.
 
 
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.55> not available
-(Font)              size <5> substituted on input line 38.
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.3> not available
+(Font)              size <5> substituted on input line 35.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 38.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 35.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 38.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 35.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Calculating math sizes for size <5.2> on input line 129.
 
+LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <4.5> not available
+(Font)              size <5> substituted on input line 39.
+
+LaTeX Font Info:    Calculating math sizes for size <4.5> on input line 39.
+
+LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.5> not available
+(Font)              size <5> substituted on input line 39.
+
+
+LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.14998> not available
+(Font)              size <5> substituted on input line 39.
+
+
+LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.25> not available
+(Font)              size <5> substituted on input line 39.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.5> not available
+(Font)              size <5> substituted on input line 39.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.14998> not available
+(Font)              size <5> substituted on input line 39.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.25> not available
+(Font)              size <5> substituted on input line 39.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.5> not available
+(Font)              size <5> substituted on input line 39.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.14998> not available
+(Font)              size <5> substituted on input line 39.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.25> not available
+(Font)              size <5> substituted on input line 39.
+
+
+LaTeX Font Warning: Font shape `T1/cmr/bx/n' in size <4.5> not available
+(Font)              size <5> substituted on input line 66.
+
+
+LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <7.5> not available
+(Font)              size <7> substituted on input line 125.
+
+
+LaTeX Font Warning: Font shape `T1/cmr/bx/n' in size <7.5> not available
+(Font)              size <7> substituted on input line 125.
+
+LaTeX Font Info:    Calculating math sizes for size <5.2> on input line 132.
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.63997> not available
-(Font)              size <5> substituted on input line 129.
+(Font)              size <5> substituted on input line 132.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.59999> not available
-(Font)              size <5> substituted on input line 129.
+(Font)              size <5> substituted on input line 132.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.63997> not available
-(Font)              size <5> substituted on input line 129.
+(Font)              size <5> substituted on input line 132.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.59999> not available
-(Font)              size <5> substituted on input line 129.
+(Font)              size <5> substituted on input line 132.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.63997> not available
-(Font)              size <5> substituted on input line 129.
+(Font)              size <5> substituted on input line 132.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.59999> not available
-(Font)              size <5> substituted on input line 129.
-
-
-LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <3.56998> not available
-(Font)              size <5> substituted on input line 143.
-
-
-LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <2.55> not available
-(Font)              size <5> substituted on input line 143.
+(Font)              size <5> substituted on input line 132.
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]) (./fig1_standalone.aux)
 
 LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 3.725pt have occurred.
+(Font)              up to 2.75pt have occurred.
 
  ) 
 Here is how much of TeX's memory you used:
- 14711 strings out of 483183
- 292342 string characters out of 5966292
- 535369 words of memory out of 5000000
- 29460 multiletter control sequences out of 15000+600000
- 541921 words of font info for 56 fonts, out of 8000000 for 9000
+ 14817 strings out of 483183
+ 293811 string characters out of 5966292
+ 558275 words of memory out of 5000000
+ 29562 multiletter control sequences out of 15000+600000
+ 544883 words of font info for 63 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 68i,12n,65p,424b,932s stack positions out of 5000i,500n,10000p,200000b,80000s
- </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm0500.600pk> </tmp/texfonts/pk/ljfou
-r/jknappen/ec/ecbi0500.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx0500.600
-pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/symbols/msam5.pfb>
-Output written on fig1_standalone.pdf (1 page, 70740 bytes).
+ 68i,9n,65p,424b,788s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx0700.600pk> </tmp/texfonts/pk/ljfou
+r/jknappen/ec/tcbx0500.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/tcrm0500.600
+pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm0500.600pk> </tmp/texfonts/pk/ljfo
+ur/jknappen/ec/ecbx0500.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx0600.60
+0pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/symbols/msam5.pfb>
+Output written on fig1_standalone.pdf (1 page, 78067 bytes).
 PDF statistics:
- 175 PDF objects out of 1000 (max. 8388607)
- 31 compressed objects within 1 object stream
+ 201 PDF objects out of 1000 (max. 8388607)
+ 43 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

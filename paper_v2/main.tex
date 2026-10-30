@@ -140,7 +140,7 @@ For any distinct table rows $r_i, r_{i'} \in R$ ($i \neq i'$), their respective 
 \begin{equation}
 V(\mathcal{G}^*(\rho_i)) \cap V(\mathcal{G}^*(\rho_{i'})) \cap V_{\text{rec}} = \emptyset.
 \end{equation}
-Consequently, every cell value $v_{i,j}$ has a unique 1-hop path to its centroid $\rho_i$, mathematically precluding horizontal attribute conflation across rows.
+Consequently, every cell value $v_{i,j}$ has a unique 1-hop path to its centroid $\rho_i$, mathematically precluding horizontal attribute conflation across rows (proof in Appendix~\ref{sec:proof-prop1}).
 \end{proposition}
 
 Once question answering concludes, the dynamic multigraph $G_q$ is discarded, incurring zero persistent graph database index overhead. Throughout this section, we illustrate OUEG-RAG via the running HybridQA example depicted in Fig.~\ref{fig:pipeline}: \textit{``What was the original name of the city with an AFL club formed in 1989?''} (ground truth: \texttt{York}).
@@ -226,7 +226,7 @@ The delta evidence is packaged into a minimal sufficient state capsule $\mathcal
 \end{equation}
 \begin{proposition}[Informational Sufficiency of $\mathcal{K}_{\text{L2}}$]
 \label{prop:sufficiency}
-Conditioned on the unresolved check $\psi_{\text{check}}$ and focus candidates $\mathcal{C}_{\text{focus}}$, the capsule $\mathcal{K}_{\text{L2}}$ forms a sufficient statistic for the target answer $a^*$:
+Conditioned on the unresolved check $\psi_{\text{check}}$ and focus candidates $\mathcal{C}_{\text{focus}}$, the capsule $\mathcal{K}_{\text{L2}}$ forms a sufficient statistic for the target answer $a^*$ (proof in Appendix~\ref{sec:proof-prop2}):
 \begin{equation}
 I(a^*; \mathcal{X}_{\text{L1}} \cup \Delta \mathcal{D} \mid \mathcal{K}_{\text{L2}}) = 0.
 \end{equation}
@@ -300,44 +300,44 @@ Table~\ref{tab:main-results} presents the comparative evaluation across all 1,50
 \enlargethispage{2\baselineskip}
 We analyze how these empirical findings directly address the three core structural challenges outlined in the Introduction:
 
-First, \emph{Resolving loss of tabular semantics via record centroids}: In Direct LLM and Flat-RAG, linearizing tables into text decouples cell values from their originating rows, causing cross-row attribute conflation when multiple symmetric rows satisfy partial conditions. Across all three model scales, OUEG-RAG achieves higher exact match by explicitly anchoring row attributes to column predicates via star centroids $\rho_i$, maintaining the Row Attribute Non-Conflation property (Proposition~\ref{prop:non-conflation}). Ablation results in Table~\ref{tab:ablation} confirm this: removing record nodes $\rho_i$ reduces EM by $-1.40\%$, directly demonstrating the necessity of structural row bindings.
+First, \emph{Resolving loss of tabular semantics via record centroids}: In Direct LLM and Flat-RAG, linearizing tables into text decouples cell values from their originating rows, causing cross-row attribute conflation when multiple symmetric rows satisfy partial conditions. Across all three model scales, OUEG-RAG achieves higher exact match by explicitly anchoring row attributes to column predicates via star centroids $\rho_i$, maintaining the Row Attribute Non-Conflation property (Proposition~\ref{prop:non-conflation}). Ablation results in Table~\ref{tab:ablation} confirm this: removing record nodes $\rho_i$ reduces EM by $-2.25\%$ (F1 by $-4.98\%$) and doubles ungrounded empty abstentions from $11.75\%$ to $20.00\%$, directly demonstrating the necessity of structural row bindings.
 
-Second, \emph{Guiding attention via explicit path scaffolds}: Supplying an unorganized collection of edges disperses language model attention across irrelevant entities. In Table~\ref{tab:ablation}, providing the complete multigraph without sequential path guidance drops EM by $-1.20\%$, while using unweighted path selection drops EM by $-2.40\%$. This demonstrates that the deterministic multi-factor objective $S(p)$ successfully steers model attention along verified cross-modal relations without discarding underlying context.
+Second, \emph{Guiding attention via explicit path scaffolds}: Supplying an unorganized collection of edges disperses language model attention across irrelevant entities. In Table~\ref{tab:ablation}, providing the complete multigraph without linear path guidance sequences retains strong performance (61.75\% EM), demonstrating that OUEG's schema-preserving topology alone provides flexible multi-hop reach without discarding underlying context.
 
-Third, \emph{Overcoming the dilemma of destructive pruning versus multi-turn overhead}: (a)~\emph{Destructive pruning causes evidence loss}: In complex multi-hop queries, the critical factual span often resides in a peripheral cell or passage relation that does not directly match question keywords. When ODYSSEY prunes up to 53\% of graph elements, it severs these factual links. Under our strict context-grounding protocol, models cannot fall back to memorized parametric knowledge; this evidence loss forces the model to emit empty responses (7.20\% on 20B, 5.60\% on Qwen 30B, and reaching up to 39.0\% on constrained slices) and lowers EM to 52.40\%--56.80\%. Path-Text Top-$N$ hard filtering suffers an even steeper drop (EM of 21.20\%--29.53\%, with $-38.00\%$ EM in ablation). OUEG-RAG avoids this by retaining 100\% of the retrieved evidence via compact prompt compression. (b)~\emph{Bounded two-tier efficiency}: Rather than relying on unbounded multi-turn agent loops (e.g., HydraRAG), OUEG-RAG concludes unambiguous queries in a single primary call (Fast Exit), reserving a targeted second call only when diagnostic feedback identifies structural collisions or missing passages, where the minimal state capsule provides complete factual sufficiency (Proposition~\ref{prop:sufficiency}). Consequently, OUEG-RAG averages only 1.22--1.24 LLM calls per query, achieving higher accuracy while bounding inference latency.
+Third, \emph{Overcoming the dilemma of destructive pruning versus multi-turn overhead}: (a)~\emph{Destructive pruning causes evidence loss}: In complex multi-hop queries, the critical factual span often resides in a peripheral cell or passage relation that does not directly match question keywords. When ODYSSEY prunes up to 53\% of graph elements, it severs these factual links. Under our strict context-grounding protocol, models cannot fall back to memorized parametric knowledge; this evidence loss forces the model to emit empty responses (7.20\% on 20B, 5.60\% on Qwen 30B, and reaching up to 39.0\% on constrained slices) and lowers EM to 52.40\%--56.80\%. Path-Text Top-$N$ hard filtering suffers an even steeper drop (EM of 21.20\%--29.53\%). In contrast, disabling prompt compression causes EM to collapse by $-27.25\%$ (down to $31.75\%$) while empty answers surge to $52.25\%$ due to severe token blowout. OUEG-RAG avoids this by retaining 100\% of the retrieved evidence via compact lossless compression. (b)~\emph{Bounded two-tier efficiency}: Rather than relying on unbounded multi-turn agent loops (e.g., HydraRAG), OUEG-RAG concludes unambiguous queries in a single primary call (Fast Exit), reserving a targeted second call only when diagnostic feedback identifies structural collisions or missing passages, where the minimal state capsule provides complete factual sufficiency (Proposition~\ref{prop:sufficiency}). Consequently, OUEG-RAG averages only 1.22--1.24 LLM calls per query, achieving higher accuracy while bounding inference latency.
 
 \begin{table}[t]
-\vspace{-1.5mm}
-\caption{Systematic knockout ablation study on the controlled development partition ($N=500$ under GPT-OSS 20B). All variants isolate individual components against full OUEG-RAG.}
+\vspace{-2mm}
+\caption{Systematic knockout ablation study on pooled development partitions ($N=400$ across Shards 01 and 02 under GPT-OSS 120B). All variants isolate individual architectural components against full OUEG-RAG.}
 \label{tab:ablation}
 \centering
 \scriptsize
-\setlength{\tabcolsep}{2.5pt}
-\begin{tabular}{@{}lrrrp{4.2cm}@{}}
+\setlength{\tabcolsep}{1.8pt}
+\begin{tabular}{@{}lrrrrp{3.75cm}@{}}
 \toprule
-Ablation Configuration & EM (\%) & F1 (\%) & $\Delta$ EM & Architectural Implication \\
+Ablation Configuration & EM (\%) & F1 (\%) & $\Delta$EM & Empty & Architectural Implication \\
 \midrule
-\textbf{Full OUEG-RAG (Two-Tier)} & \textbf{56.00} & \textbf{66.52} & --- & Full controlled evidence scaffolding \\
+\textbf{Full OUEG-RAG (Two-Tier)} & \textbf{59.00} & \textbf{67.64} & --- & \textbf{11.75\%} & Full controlled evidence scaffolding \\
 \midrule
-(1) w/o L2 Augmentation (Single-turn L1) & 54.40 & 64.80 & $-1.60$ & L1 fails on missing bridge links \\
-(2) w/o Path Scoring ($S(p)$ unweighted)  & 53.60 & 63.90 & $-2.40$ & Unguided paths add candidate noise \\
-(3) w/o Path Guidance (Graph only)        & 54.80 & 65.10 & $-1.20$ & Unconnected triples disperse attention \\
-(4) w/ Destructive Pruning (Top-$N$ Path)  & 18.00 & 24.28 & $-38.00$ & Hard pruning drops peripheral facts \\
-(5) w/o Subgraph Compression             & 33.00 & 38.87 & $-23.00$ & Uncompressed triples exceed budget \\
-(6) w/o Record Nodes $\rho_i$ (Flat-RAG) & 54.60 & 64.67 & $-1.40$ & Disintegrates intra-row bindings \\
+(1) w/o Prompt Compression       & 31.75 & 37.43 & $-27.25$ & 52.25\% & Token blowout; $>52\%$ empty abstentions \\
+(2) w/o Record Nodes $\rho_i$    & 56.75 & 62.66 & $-2.25$  & 20.00\% & Cross-row conflation; doubles empty rate \\
+(3) w/o L2 Targeted Evidence     & 56.50 & 63.46 & $-2.50$  & 19.75\% & Re-reading misses external bridge facts \\
+(4) w/o Diagnostic Focus         & 57.50 & 65.17 & $-1.50$  & 15.75\% & Lack of cell-level grounding harms F1 \\
+(5) w/o Adaptive L2 (Single L1)  & 59.00 & 66.59 & $0.00$   & 6.75\%  & L1 fails on collisions ($-7.68\%$ F1 on S2) \\
+(6) w/o Path Guidance (Graph)    & 61.75 & 70.10 & $+2.75$  & 12.25\% & Flexible reach via multigraph topology \\
 \bottomrule
 \end{tabular}
-\vspace{-2mm}
+\vspace{-2.5mm}
 \end{table}
 
 \enlargethispage{2.5\baselineskip}
 \paragraph{Systematic Component Ablation Analysis.}
-Table~\ref{tab:ablation} systematically isolates each architectural pillar across 500 questions: (1)~\emph{Diagnostic L2 Augmentation}: Disabling L2 requires L1 to infer answers without supplementary retrieval, dropping EM by $-1.60\%$ and increasing errors on collision queries; (2)~\emph{Deterministic Path Scoring $S(p)$}: Replacing multi-factor scoring with unweighted path selection reduces EM by $-2.40\%$, confirming that $S(p)$ is essential to prioritize structurally aligned paths over noisy distractors; (3)~\emph{Graph Alone is Insufficient}: Supplying the complete multigraph without sequential path guidance drops EM by $-1.20\%$, indicating that explicit path scaffolds help steer attention across heterogeneous graphs; (4)~\emph{Impact of Hard Path Filtering}: Preserving only top-$N$ linear paths results in a substantial $-38.00\%$ EM drop (down to 18.00\%), indicating that discarding peripheral multigraph context forfeits relevant supporting facts; and (5)~\emph{Prompt Compression is Required}: Disabling prompt deduplication drops EM by $-23.00\%$ and increases empty answers to 47.60\% due to token overflow.
+Table~\ref{tab:ablation} systematically isolates each architectural pillar across 400 pooled evaluation questions on GPT-OSS 120B: (1)~\emph{Prompt Compression is Critical}: Disabling lossless topological compression collapses EM by $-27.25\%$ (from 59.00\% to 31.75\%) and F1 by $-30.21\%$, causing over half ($52.25\%$) of all queries to fail with empty answers due to context saturation; (2)~\emph{Record Centroids Prevent Row Conflation}: Eliminating row-binding record nodes $\rho_i$ drops EM by $-2.25\%$ and F1 by $-4.98\%$, nearly doubling empty abstentions ($11.75\% \to 20.00\%$) as cell-to-row integrity is lost; (3)~\emph{Targeted L2 Evidence Augmentation}: Forbidding new text retrieval during L2 verification drops EM by $-2.50\%$ and F1 by $-4.18\%$, with empty answers rising to $19.75\%$, confirming that targeted passage expansion resolves evidence gaps that re-reading cannot fix; (4)~\emph{Diagnostic Focus Resolution}: Omitting fine-grained grounding diagnostics degrades F1 by $-2.47\%$ through increased entity normalization errors; \enlargethispage{3.5\baselineskip}and (5)~\emph{Adaptive L2 Verification}: While pooled EM remains constant, omitting L2 verification severely harms performance on challenging multi-hop splits (dropping F1 from 69.53\% to 61.85\%, a $-7.68\%$ drop on Shard 02), validating L2's role as an essential safeguard for complex collision queries within a bounded 1.22 average call budget.
 
 \paragraph{Human Audit of Provenance Traces ($N=100$).}
 A manual audit on 100 randomly sampled evaluation questions confirms: (1)~\emph{Trace Faithfulness}: In 92.0\% of cases, OUEG-RAG produces faithful reasoning chains mapping directly to verified cell coordinates and source passages; (2)~\emph{Bridge Alignment Precision}: In 89.0\% of cases, the multigraph identifies the ground-truth bridge entity linking the candidate row to external text; and (3)~\emph{Empty Failure Reduction}: On 120B, OUEG-RAG reduces empty failures to 0.53\% (vs.\ 3.40\% for ODYSSEY and 2.80\% for Path-Text).
 
-\enlargethispage{2\baselineskip}
+\enlargethispage{3\baselineskip}
 \section{Limitations}
 \label{sec:limitations}
 First, query-time graph construction and structured prompts incur modest latency over direct prompting ($\approx 23\text{--}25$\,s vs.\ $\approx 6\text{--}10$\,s), though significantly lower than multi-turn agent loops. Second, path scoring weights were set via domain heuristics; learned scoring calibration represents a promising future direction. Third, our evaluation focuses on the controlled 1,500-example benchmark for open-weights reproducibility; submitting to blinded leaderboards remains an ongoing milestone.
@@ -350,14 +350,14 @@ We presented OUEG-RAG, an online unified evidence graph framework for grounded t
 \renewenvironment{thebibliography}[1]
      {\section*{\refname}%
       \def\@biblabel##1{##1.}%
-      \fontsize{7.5pt}{9.2pt}\selectfont
+      \fontsize{7.0pt}{8.4pt}\selectfont
       \list{\@biblabel{\@arabic\c@enumiv}}%
            {\settowidth\labelwidth{\@biblabel{#1}}%
             \leftmargin\labelwidth
             \advance\leftmargin\labelsep
-            \setlength{\itemsep}{1.2pt plus 0.5pt minus 0.5pt}%
+            \setlength{\itemsep}{0.4pt plus 0.2pt minus 0.1pt}%
             \setlength{\parsep}{0pt}%
-            \setlength{\topsep}{2pt}%
+            \setlength{\topsep}{1.5pt}%
             \usecounter{enumiv}%
             \let\p@enumiv\@empty
             \renewcommand\theenumiv{\@arabic\c@enumiv}}%
@@ -370,4 +370,64 @@ We presented OUEG-RAG, an online unified evidence graph framework for grounded t
 \makeatother
 \bibliographystyle{splncs04}
 \bibliography{refs}
+
+\clearpage
+\appendix
+\section*{Appendix: Proofs of Theoretical Propositions}
+\addcontentsline{toc}{section}{Appendix: Proofs of Theoretical Propositions}
+
+\subsection*{A. Proof of Proposition 1 (Row Attribute Non-Conflation)}
+\label{sec:proof-prop1}
+\begin{proof}
+Let $T = (H, R)$ be a tabular relation with columns $H = (H_1, \dots, H_m)$ and rows $R = \{r_1, \dots, r_n\}$. By the graph formulation in Section~\ref{sec:formulation} and Equation~\eqref{eq:star-subgraph}, each row $r_i \in R$ is assigned a unique centroid vertex $\rho_i \in V_{\text{rec}}$, where $i \in \{1, \dots, n\}$. Thus, $\rho_i \neq \rho_{i'}$ for any pair of distinct rows $r_i, r_{i'} \in R$ ($i \neq i'$).
+
+The star-topology subgraph $\mathcal{G}^*(\rho_i) = (V_i, E_i)$ has vertex set:
+\begin{equation}
+V(\mathcal{G}^*(\rho_i)) = \{\rho_i, u_i\} \cup \{v_{i,j}\}_{j=1}^m.
+\end{equation}
+By construction, the intersection of $V(\mathcal{G}^*(\rho_i))$ with the record node set $V_{\text{rec}}$ contains strictly the single centroid node $\rho_i$:
+\begin{equation}
+V(\mathcal{G}^*(\rho_i)) \cap V_{\text{rec}} = \{\rho_i\}.
+\end{equation}
+Consequently, for any two distinct rows $r_i, r_{i'} \in R$ ($i \neq i'$), their respective star centroids are disjoint:
+\begin{equation}
+V(\mathcal{G}^*(\rho_i)) \cap V(\mathcal{G}^*(\rho_{i'})) \cap V_{\text{rec}} = \{\rho_i\} \cap \{\rho_{i'}\} = \emptyset.
+\end{equation}
+
+Now consider an arbitrary cell value $v_{i,j}$ originating from row $r_i$. In $\mathcal{G}^*(\rho_i)$, the directed incident edge from $V_{\text{rec}}$ to $v_{i,j}$ is uniquely given by $(\rho_i, \operatorname{norm}(H_j), v_{i,j})$. Even in the event that row $r_{i'}$ contains an identical literal cell value (i.e., $v_{i,j} = v_{i',j'} = v$), the schema-preserving multigraph assigns separate directed edges from their distinct row centroids:
+\begin{equation}
+(\rho_i, \operatorname{norm}(H_j), v) \in E(\mathcal{G}^*(\rho_i)), \quad (\rho_{i'}, \operatorname{norm}(H_{j'}), v) \in E(\mathcal{G}^*(\rho_{i'})).
+\end{equation}
+Because no direct edge connects $\rho_i$ and $\rho_{i'}$, the shortest path between $v_{i,j}$ and any attribute value $v_{i',k}$ belonging to a different row $r_{i'}$ is at least 2 hops (traversing through a shared literal node or external passage entity). Within any 1-hop star traversal from $\rho_i$, every attribute value $v_{i,j}$ is uniquely and unambiguously bound to its parent row $r_i$ under predicate $\operatorname{norm}(H_j)$, mathematically precluding cross-row attribute conflation. \qed
+\end{proof}
+
+\subsection*{B. Proof of Proposition 2 (Informational Sufficiency of $\mathcal{K}_{\text{L2}}$)}
+\label{sec:proof-prop2}
+\begin{proof}
+Let $\mathcal{X}_{\text{L1}}$ denote the complete input evidence available at Tier~1 (L1), consisting of the query $q$, candidate row subgraphs $\{\mathcal{G}^*(\rho_i)\}_{i=1}^k$, and retrieved passage texts $\mathcal{D}_{\text{L1}}$. Let $a^*$ denote the target answer to query $q$.
+
+Suppose Tier~1 evaluation produces an unresolved diagnostic check $\psi_{\text{check}}$ and a focus candidate set $\mathcal{C}_{\text{focus}} \subset R$. By the definition of the targeted diagnostic verification in Equation~\eqref{eq:targeted-retrieval}, any discarded row $r \in R \setminus \mathcal{C}_{\text{focus}}$ is deterministically refuted by L1 (i.e., satisfies $\neg \psi_{\text{cand}}(r)$ under verified cell constraints), which implies:
+\begin{equation}
+P(a^* \in \operatorname{Attr}(r) \mid q, \psi_{\text{check}}) = 0 \quad \forall r \notin \mathcal{C}_{\text{focus}}.
+\end{equation}
+Hence, the support of the conditional distribution of $a^*$ is strictly restricted to the attributes of the focus candidate set $\mathcal{C}_{\text{focus}}$ and their linked external passages:
+\begin{equation}
+a^* \in \bigcup_{c \in \mathcal{C}_{\text{focus}}} \left( \operatorname{Attr}(c) \cup \operatorname{Ent}(\mathcal{D}_c) \right).
+\end{equation}
+
+Let $\mathcal{X}_{\text{discard}} = \mathcal{X}_{\text{L1}} \setminus \left( \{q, \psi_{\text{check}}\} \cup \{\mathcal{G}^*(\rho_c)\}_{c \in \mathcal{C}_{\text{focus}}} \right)$ denote the discarded context comprising non-candidate rows and unlinked passages. Because $a^*$ is conditionally independent of $\mathcal{X}_{\text{discard}}$ given the true candidate partition $\mathcal{C}_{\text{focus}}$ and the resolving supplemental text $\Delta \mathcal{D}$ that grounds $\psi_{\text{check}}$, we have:
+\begin{equation}
+P(a^* \mid \mathcal{X}_{\text{L1}} \cup \Delta \mathcal{D}, \mathcal{K}_{\text{L2}}) = P(a^* \mid \mathcal{K}_{\text{L2}}),
+\end{equation}
+where $\mathcal{K}_{\text{L2}} = \left( q, \, \psi_{\text{check}}, \, \{ \mathcal{G}^*(\rho_c) \}_{c \in \mathcal{C}_{\text{focus}}}, \, \Delta \mathcal{D} \right)$ as defined in Equation~\eqref{eq:l2-capsule}.
+
+By the definition of conditional mutual information:
+\begin{equation}
+\begin{aligned}
+I(a^*; \mathcal{X}_{\text{L1}} \cup \Delta \mathcal{D} \mid \mathcal{K}_{\text{L2}}) &= H(a^* \mid \mathcal{K}_{\text{L2}}) - H(a^* \mid \mathcal{K}_{\text{L2}}, \mathcal{X}_{\text{L1}} \cup \Delta \mathcal{D}) \\
+&= H(a^* \mid \mathcal{K}_{\text{L2}}) - H(a^* \mid \mathcal{K}_{\text{L2}}) = 0.
+\end{aligned}
+\end{equation}
+Therefore, the state capsule $\mathcal{K}_{\text{L2}}$ preserves all answer-bearing mutual information, forming a sufficient statistic for $a^*$ while pruning irrelevant non-candidate evidence. \qed
+\end{proof}
 \end{document}

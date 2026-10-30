@@ -1,156 +1,137 @@
 \begin{tikzpicture}[
   >=Latex,
   font=\scriptsize,
-  row_panel/.style={draw=gray!38, fill=gray!3, rounded corners=3.5pt, line width=0.5pt, inner sep=3.5pt},
-  row_panel_ours/.style={draw=teal!85!black, fill=teal!3, rounded corners=3.5pt, line width=0.85pt, inner sep=3.5pt},
-  tag_badge/.style={fill=gray!15, draw=gray!50, rounded corners=2pt, font=\fontsize{5.2pt}{6.2pt}\selectfont\bfseries, inner sep=2pt},
-  tag_ours/.style={fill=teal!18, draw=teal!80!black, text=teal!90!black, rounded corners=2pt, font=\fontsize{5.2pt}{6.2pt}\selectfont\bfseries, inner sep=2pt},
-  flow_box/.style={draw=gray!45, fill=white, rounded corners=2pt, font=\fontsize{5.2pt}{6.3pt}\selectfont, align=center, inner sep=2.5pt, line width=0.4pt, minimum height=1.16cm},
-  flow_box_ours/.style={draw=teal!70!black, fill=white, rounded corners=2pt, font=\fontsize{5.2pt}{6.3pt}\selectfont, align=center, inner sep=2.5pt, line width=0.6pt, minimum height=1.16cm},
-  arrow_flow/.style={->, line width=0.6pt, draw=gray!70!black},
-  arrow_flow_ours/.style={->, line width=0.7pt, draw=teal!85!black},
-  critique_bad/.style={fill=red!5, draw=red!45!black, text=red!80!black, font=\fontsize{5.1pt}{6.1pt}\selectfont, rounded corners=2pt, inner sep=2.6pt, align=left, minimum height=1.16cm},
-  critique_good/.style={fill=teal!8, draw=teal!70!black, text=teal!90!black, font=\fontsize{5.1pt}{6.1pt}\selectfont, rounded corners=2pt, inner sep=2.6pt, align=left, minimum height=1.16cm}
+  header-col/.style={draw=#1!70!black, fill=#1!12, rounded corners=3pt, font=\bfseries\fontsize{5.8pt}{6.8pt}\selectfont, align=center, inner sep=3pt, minimum height=7mm},
+  header-ours/.style={draw=teal!85!black, fill=teal!16, rounded corners=3pt, font=\bfseries\fontsize{5.8pt}{6.8pt}\selectfont, align=center, inner sep=3pt, minimum height=7mm, line width=0.9pt},
+  row-lbl/.style={draw=gray!60, fill=gray!15, rounded corners=2.5pt, font=\bfseries\fontsize{5.2pt}{6.2pt}\selectfont, align=center, inner sep=2.5pt},
+  cell-box/.style={draw=#1!40, fill=#1!4, rounded corners=2.5pt, font=\fontsize{5.0pt}{6.0pt}\selectfont, align=left, inner sep=3pt, line width=0.45pt},
+  cell-box-ours/.style={draw=teal!70!black, fill=teal!6, rounded corners=2.5pt, font=\fontsize{5.0pt}{6.0pt}\selectfont, align=left, inner sep=3pt, line width=0.85pt},
+  call-box/.style={draw=#1!50, fill=white, rounded corners=2.5pt, font=\fontsize{7.5pt}{8.5pt}\selectfont\bfseries, align=center, inner sep=2pt, line width=0.5pt, minimum height=6.5mm},
+  call-box-ours/.style={draw=teal!85!black, fill=teal!10, rounded corners=2.5pt, font=\fontsize{7.0pt}{8.0pt}\selectfont\bfseries, align=center, inner sep=2pt, line width=0.9pt, minimum height=6.5mm}
 ]
 
-% ========================================================
-% ROW 1: (a) Direct Prompting & Flat-RAG
-% ========================================================
-\def\yA{0}
-\node[tag_badge, anchor=south west] (lbl_a) at (0.12, \yA+0.68) {(a) Flattened In-Context Prompting \textit{[e.g., Direct LLM, Flat-RAG]}};
+\def\wL{2.5cm}
+\def\wC{3.4cm}
+\def\wD{3.6cm}
 
-\node[flow_box, text width=1.85cm, anchor=west] (a_in) at (0.12, \yA) {
-  \textbf{Table \& Text Context}\\
-  Raw row strings \& text passages
+% --- Headers (y = 0) ---
+\node[header-col=gray, text width=\wC] at (4.4, 0) {(A) Flattened In-Context Prompting\\{\tiny Direct LLM, Flat-RAG}};
+\node[header-col=red!70!black, text width=\wC] at (8.0, 0) {(B) Online Graph + Pruning\\{\tiny e.g., ODYSSEY (NAACL 2025)}};
+\node[header-col=orange!80!black, text width=\wC] at (11.6, 0) {(C) Agentic Graph Search\\{\tiny e.g., HydraRAG (EMNLP 2025)}};
+\node[header-ours, text width=\wD] at (15.3, 0) {(D) OUEG-RAG (Ours)\\{\tiny Training-free, Guided, Bounded}};
+
+% --- Row 0: Evidence Representation (y = -1.25, height=1.6cm) ---
+\def\yZero{-1.25}
+\node[row-lbl, text width=\wL, minimum height=1.6cm] at (1.25, \yZero) {\textbf{Evidence}\\\textbf{Representation}};
+
+% Col A background & elements
+\node[cell-box=gray, text width=\wC, minimum height=1.6cm] (boxA) at (4.4, \yZero) {};
+\node[draw=blue!60, fill=blue!10, rounded corners=1pt, inner sep=1.2pt, font=\fontsize{4.6pt}{5.2pt}\selectfont] (r1) at (3.5, -0.9) {row};
+\node[draw=blue!60, fill=blue!10, rounded corners=1pt, inner sep=1.2pt, font=\fontsize{4.6pt}{5.2pt}\selectfont] (r2) at (4.0, -0.9) {row};
+\node[draw=blue!60, fill=blue!10, rounded corners=1pt, inner sep=1.2pt, font=\fontsize{4.6pt}{5.2pt}\selectfont] (r3) at (4.5, -0.9) {row};
+\node[draw=orange!60, fill=orange!10, rounded corners=1pt, inner sep=1.2pt, font=\fontsize{4.6pt}{5.2pt}\selectfont] (p1) at (5.0, -0.9) {psg};
+\node[draw=orange!60, fill=orange!10, rounded corners=1pt, inner sep=1.2pt, font=\fontsize{4.6pt}{5.2pt}\selectfont] (p2) at (5.4, -0.9) {psg};
+\draw[->, gray!60, line width=0.5pt] (4.4, -1.1) -- (4.4, -1.35);
+\node[draw=gray!50, fill=white, rounded corners=1.5pt, font=\fontsize{4.6pt}{5.2pt}\selectfont, inner sep=1.5pt] at (4.4, -1.6) {\textbf{Linear Flat Prompt $\rightarrow$ LLM}};
+
+% Col B background & elements
+\node[cell-box=red!70!black, text width=\wC, minimum height=1.6cm] (boxB) at (8.0, \yZero) {};
+\node[circle, draw=red!60, fill=red!10, inner sep=0.8pt, font=\fontsize{4.5pt}{5pt}\selectfont] (be1) at (7.1, -0.95) {$e_1$};
+\node[circle, draw=red!60, fill=red!10, inner sep=0.8pt, font=\fontsize{4.5pt}{5pt}\selectfont] (be2) at (7.9, -0.85) {$e_2$};
+\node[circle, draw=red!60, fill=red!10, inner sep=0.8pt, font=\fontsize{4.5pt}{5pt}\selectfont] (be3) at (7.5, -1.45) {$e_3$};
+\node[circle, draw=red!60, dashed, fill=white, inner sep=0.8pt, text=red!80, font=\fontsize{5pt}{5pt}\selectfont] (bpx1) at (8.6, -0.95) {\texttimes};
+\node[circle, draw=red!60, dashed, fill=white, inner sep=0.8pt, text=red!80, font=\fontsize{5pt}{5pt}\selectfont] (bpx2) at (8.8, -1.45) {\texttimes};
+\draw[->, red!60, line width=0.4pt] (be1) -- (be2);
+\draw[->, red!60, line width=0.4pt] (be1) -- (be3);
+\draw[->, red!40, dashed, line width=0.4pt] (be2) -- (bpx1);
+\node[font=\fontsize{4.6pt}{5.4pt}\selectfont, text=gray!80!black] at (8.0, -1.8) {Pruning discards $\le 53\%$ elements};
+
+% Col C background & elements
+\node[cell-box=orange!80!black, text width=\wC, minimum height=1.6cm] (boxC) at (11.6, \yZero) {};
+\node[draw=orange!70, fill=orange!10, rounded corners=1.5pt, inner sep=1.2pt, font=\fontsize{4.8pt}{5.5pt}\selectfont] (exp) at (10.8, -1.05) {Explore};
+\node[draw=orange!70, fill=orange!10, rounded corners=1.5pt, inner sep=1.2pt, font=\fontsize{4.8pt}{5.5pt}\selectfont] (pat) at (11.6, -0.8) {Patch};
+\node[draw=orange!70, fill=orange!10, rounded corners=1.5pt, inner sep=1.2pt, font=\fontsize{4.8pt}{5.5pt}\selectfont] (ver) at (12.4, -1.05) {Verify};
+\draw[->, orange!80, line width=0.5pt] (exp) -- (pat);
+\draw[->, orange!80, line width=0.5pt] (pat) -- (ver);
+\draw[->, orange!80, line width=0.5pt] (ver) to[bend left=30] (exp);
+\node[font=\fontsize{4.6pt}{5.4pt}\selectfont, text=gray!80!black] at (11.6, -1.8) {Unbounded agent loop ($N$ LLM calls)};
+
+% Col D background & elements
+\node[cell-box-ours, text width=\wD, minimum height=1.6cm] (boxD) at (15.3, \yZero) {};
+\node[circle, draw=purple!80, fill=purple!15, inner sep=0.8pt, font=\bfseries\fontsize{5pt}{6pt}\selectfont] (rho) at (15.3, -1.1) {$\rho_i$};
+\node[draw=blue!70, fill=blue!10, rounded corners=1pt, inner sep=1pt, font=\fontsize{4.5pt}{5pt}\selectfont] (ent) at (14.2, -0.85) {entity};
+\node[draw=gray!70, fill=gray!10, rounded corners=1pt, inner sep=1pt, font=\fontsize{4.5pt}{5pt}\selectfont] (lit) at (14.2, -1.35) {literal};
+\node[draw=teal!70, fill=teal!10, rounded corners=1pt, inner sep=1pt, font=\fontsize{4.5pt}{5pt}\selectfont] (cell) at (16.4, -0.85) {cell};
+\node[draw=orange!70, fill=orange!10, rounded corners=1pt, inner sep=1pt, font=\fontsize{4.5pt}{5pt}\selectfont] (psg) at (16.4, -1.35) {psg};
+\node[draw=green!60!black, fill=green!15, rounded corners=1pt, inner sep=1pt, font=\bfseries\fontsize{4.5pt}{5pt}\selectfont] (ans) at (15.3, -1.75) {answer};
+\draw[->, purple!60, line width=0.4pt] (rho) -- (lit);
+\draw[->, purple!60, line width=0.4pt] (rho) -- (ent);
+\draw[->, teal!90!black, line width=1.0pt] (rho) -- (cell);
+\draw[->, teal!90!black, line width=1.0pt] (cell) -- (psg);
+\draw[->, teal!90!black, line width=1.0pt] (psg) -- (ans);
+\node[font=\fontsize{4.6pt}{5.4pt}\selectfont, text=teal!90!black] at (15.3, -0.55) {$\rho_i$ star hub binds row; thick = guide path $p_1$};
+
+% --- Row 1: Limitation 1: Tabular Bindings (y = -2.6, height=1.0cm) ---
+\def\yOne{-2.6}
+\node[row-lbl, text width=\wL, minimum height=1.0cm] at (1.25, \yOne) {\textbf{Limitation 1}\\\textbf{Tabular Bindings}};
+\node[cell-box=red, text width=\wC, minimum height=1.0cm] at (4.4, \yOne) {
+  \textbf{\color{red!70!black}\texttimes} Rows flattened to text; symmetric rows get conflated
+};
+\node[cell-box=red, text width=\wC, minimum height=1.0cm] at (8.0, \yOne) {
+  \textbf{\color{red!70!black}\texttimes} Split into pairwise triples; column context is lost
+};
+\node[cell-box=red, text width=\wC, minimum height=1.0cm] at (11.6, \yOne) {
+  \textbf{\color{red!70!black}\texttimes} Table cells treated as flat entity mentions
+};
+\node[cell-box-ours, text width=\wD, minimum height=1.0cm] at (15.3, \yOne) {
+  \textbf{\color{teal!80!black}\checkmark} Star record hubs $\rho_i$ guarantee row non-conflation (\textbf{Prop.~1})
 };
 
-\node[flow_box, text width=2.45cm, anchor=west] (a_proc) at (2.35, \yA) {
-  \textbf{Naive Concatenation}\\
-  Flattened serialization into linear prompt
+% --- Row 2: Limitation 2: Reasoning Guidance (y = -3.75, height=1.0cm) ---
+\def\yTwo{-3.75}
+\node[row-lbl, text width=\wL, minimum height=1.0cm] at (1.25, \yTwo) {\textbf{Limitation 2}\\\textbf{Reasoning Guide}};
+\node[cell-box=red, text width=\wC, minimum height=1.0cm] at (4.4, \yTwo) {
+  \textbf{\color{red!70!black}\texttimes} None: free-form attention over the prompt
+};
+\node[cell-box=red, text width=\wC, minimum height=1.0cm] at (8.0, \yTwo) {
+  \textbf{\color{red!70!black}\texttimes} Unorganized bag of triples fed to the LLM
+};
+\node[cell-box=red, text width=\wC, minimum height=1.0cm] at (11.6, \yTwo) {
+  \textbf{\color{red!70!black}\texttimes} Paths found by open-ended agent turns; prone to search drift
+};
+\node[cell-box-ours, text width=\wD, minimum height=1.0cm] at (15.3, \yTwo) {
+  \textbf{\color{teal!80!black}\checkmark} Deterministic score $\mathcal{S}(p)$ yields guide path $p_1$ (never filters)
 };
 
-\node[flow_box, text width=1.90cm, anchor=west] (a_out) at (5.18, \yA) {
-  \textbf{Unguided LLM}\\
-  Free-form attention over token sea
+% --- Row 3: Limitation 3: Loss vs Call Overhead (y = -4.95, height=1.1cm) ---
+\def\yThree{-4.95}
+\node[row-lbl, text width=\wL, minimum height=1.1cm] at (1.25, \yThree) {\textbf{Limitation 3}\\\textbf{Loss vs. Calls}};
+\node[cell-box=gray, text width=\wC, minimum height=1.1cm] at (4.4, \yThree) {
+  \textbf{--} Nothing pruned, but evidence stays unstructured
+};
+\node[cell-box=red, text width=\wC, minimum height=1.1cm] at (8.0, \yThree) {
+  \textbf{\color{red!70!black}\texttimes} Prunes $\le 53\%$ elements; peripheral facts are lost (39\% empty)
+};
+\node[cell-box=red, text width=\wC, minimum height=1.1cm] at (11.6, \yThree) {
+  \textbf{\color{red!70!black}\texttimes} Dozens of LLM calls: high latency and API cost
+};
+\node[cell-box-ours, text width=\wD, minimum height=1.1cm] at (15.3, \yThree) {
+  \textbf{\color{teal!80!black}\checkmark} 100\% evidence retained; bounded by two tiers (1--2 calls)
 };
 
-\node[critique_bad, text width=4.30cm, anchor=west] (a_crit) at (7.45, \yA) {
-  $\times$ \textbf{Lacks tabular bindings}: cross-row conflation\\
-  $\times$ Disperses attention across long passages\\
-  $\times$ Sensitive to symmetric row candidate ties
+% --- Row 4: LLM Calls Per Query (y = -5.85, height=0.65cm) ---
+\def\yFour{-5.85}
+\node[row-lbl, text width=\wL, minimum height=0.65cm] at (1.25, \yFour) {\textbf{LLM Calls}};
+\node[call-box=gray, text width=\wC] at (4.4, \yFour) {1};
+\node[call-box=gray, text width=\wC] at (8.0, \yFour) {1};
+\node[call-box=orange!70!black, text width=\wC, font=\fontsize{7.5pt}{8.5pt}\selectfont\color{orange!80!black}\bfseries] at (11.6, \yFour) {dozens};
+\node[call-box-ours, text width=\wD, text=teal!90!black] at (15.3, \yFour) {1 (Tier 1) or 2 (Tier 2)};
+
+% --- Legend (y = -6.4) ---
+\node[anchor=west, font=\fontsize{5.2pt}{6.2pt}\selectfont, text=gray!80!black] at (3.2, -6.4) {
+  \textbf{\color{teal!80!black}\checkmark} Limitation addressed \qquad
+  \textbf{\color{red!70!black}\texttimes} Limitation present \qquad
+  \textbf{--} Not applicable
 };
-
-\draw[arrow_flow] (a_in) -- (a_proc);
-\draw[arrow_flow] (a_proc) -- (a_out);
-\draw[arrow_flow] (a_out) -- (a_crit);
-
-\begin{scope}[on background layer]
-  \node[row_panel, fit=(lbl_a)(a_in)(a_proc)(a_out)(a_crit)] (p_a) {};
-\end{scope}
-
-% ========================================================
-% ROW 2: (b) Online Graph with Destructive Pruning (ODYSSEY)
-% ========================================================
-\def\yB{-1.92}
-\node[tag_badge, anchor=south west] (lbl_b) at (0.12, \yB+0.68) {(b) Online Graph with Destructive Pruning \textit{[e.g., ODYSSEY (NAACL 2025)]}};
-
-\node[flow_box, text width=1.85cm, anchor=west] (b_in) at (0.12, \yB) {
-  \textbf{Online Entity Graph}\\
-  Dynamic entity triples per query
-};
-
-\node[flow_box, text width=2.45cm, anchor=west] (b_proc) at (2.35, \yB) {
-  \textbf{Aggressive Pruning}\\
-  Heuristic cut of up to 53\% nodes \& edges
-};
-
-\node[flow_box, text width=1.90cm, anchor=west] (b_out) at (5.18, \yB) {
-  \textbf{Bag of Triples}\\
-  Disordered edge collection into LLM
-};
-
-\node[critique_bad, text width=4.30cm, anchor=west] (b_crit) at (7.45, \yB) {
-  $\times$ \textbf{Loss of tabular semantics}: triples decouple cells\\
-  $\times$ \textbf{Evidence loss}: discards peripheral cell qualifiers\\
-  $\times$ \textbf{No reasoning guidance}: disordered edges
-};
-
-\draw[arrow_flow] (b_in) -- (b_proc);
-\draw[arrow_flow] (b_proc) -- (b_out);
-\draw[arrow_flow] (b_out) -- (b_crit);
-
-\begin{scope}[on background layer]
-  \node[row_panel, fit=(lbl_b)(b_in)(b_proc)(b_out)(b_crit)] (p_b) {};
-\end{scope}
-
-% ========================================================
-% ROW 3: (c) Agentic Online Graph Exploration (HydraRAG)
-% ========================================================
-\def\yC{-3.84}
-\node[tag_badge, anchor=south west] (lbl_c) at (0.12, \yC+0.68) {(c) Agentic Online Graph Exploration \textit{[e.g., HydraRAG (EMNLP 2025)]}};
-
-\node[flow_box, text width=1.85cm, anchor=west] (c_in) at (0.12, \yC) {
-  \textbf{Cross-Source Input}\\
-  Dynamic tables \& text passages
-};
-
-\node[flow_box, text width=2.45cm, anchor=west] (c_proc) at (2.35, \yC) {
-  \textbf{Agentic Online Loop}\\
-  Multi-turn LLM reasoning \& verification
-};
-
-\node[flow_box, text width=1.90cm, anchor=west] (c_out) at (5.18, \yC) {
-  \textbf{Iterative Paths}\\
-  Dynamic traversal chains across turns
-};
-
-\node[critique_bad, text width=4.30cm, anchor=west] (c_crit) at (7.45, \yC) {
-  $\times$ \textbf{High latency \& API cost}: dozens of LLM calls\\
-  $\times$ \textbf{Lacks tabular bindings}: treats cells as flat entities\\
-  $\times$ Susceptible to multi-turn agentic search drift
-};
-
-\draw[arrow_flow] (c_in) -- (c_proc);
-\draw[arrow_flow] (c_proc) -- (c_out);
-\draw[arrow_flow] (c_out) -- (c_crit);
-
-\begin{scope}[on background layer]
-  \node[row_panel, fit=(lbl_c)(c_in)(c_proc)(c_out)(c_crit)] (p_c) {};
-\end{scope}
-
-% ========================================================
-% ROW 4: (d) Proposed OUEG-RAG (Guided Online Reasoning)
-% ========================================================
-\def\yD{-5.76}
-\node[tag_ours, anchor=south west] (lbl_d) at (0.12, \yD+0.68) {(d) Proposed OUEG-RAG \textit{[Guided Online Reasoning \& Bounded Tiers]}};
-
-\node[flow_box_ours, text width=1.85cm, anchor=west] (d_in) at (0.12, \yD) {
-  \textbf{Ad-Hoc Table \& Text}\\
-  Query context $(q, T, \mathcal{D}_T)$
-};
-
-\node[flow_box_ours, text width=2.45cm, anchor=west] (d_proc) at (2.35, \yD) {
-  \textbf{Online Multigraph}\\
-  Star hubs $\rho_i$ ($<20$\,ms) + compact prompt
-};
-
-\node[flow_box_ours, text width=1.90cm, anchor=west] (d_out) at (5.18, \yD) {
-  \textbf{Path Scaffolding}\\
-  Scored path $p_1$ guide + L1/L2 tiers
-};
-
-\node[critique_good, text width=4.30cm, anchor=west] (d_crit) at (7.45, \yD) {
-  $\checkmark$ \textbf{Preserves tabular semantics}: $\rho_i$ prevents conflation\\
-  $\checkmark$ \textbf{Explicit reasoning guidance}: $S(p)$ steers attention\\
-  $\checkmark$ \textbf{Zero evidence loss \& Bounded tiers}: 1--2 calls
-};
-
-\draw[arrow_flow_ours] (d_in) -- (d_proc);
-\draw[arrow_flow_ours] (d_proc) -- (d_out);
-\draw[arrow_flow_ours] (d_out) -- (d_crit);
-
-\begin{scope}[on background layer]
-  \node[row_panel_ours, fit=(lbl_d)(d_in)(d_proc)(d_out)(d_crit)] (p_d) {};
-\end{scope}
 
 \end{tikzpicture}

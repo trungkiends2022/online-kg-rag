@@ -195,6 +195,11 @@ run_ablation() {
     output="$ablation_dir/hybridqa__${shard_label}__${model_label}__online_unified_evidence_graph__${ablation}.jsonl"
     log="$log_dir/hybridqa__${shard_label}__${model_label}__online_unified_evidence_graph__${ablation}.log"
 
+    if [[ -f "$output" ]] && [[ "$(wc -l < "$output")" -ge 200 ]]; then
+      echo "[$(date --iso-8601=seconds)] skip ablation=$ablation shard=$shard (already 200 records in $output)"
+      continue
+    fi
+
     echo "[$(date --iso-8601=seconds)] start ablation=$ablation shard=$shard model=$model_label"
     PYTHONUNBUFFERED=1 "$python_bin" -m src.run_baselines \
       --input "$input" \
