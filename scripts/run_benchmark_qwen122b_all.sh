@@ -65,7 +65,7 @@ if [[ "$LLM_PROVIDER" == "openai_compatible" ]]; then
   export COMPAT_API_KEY="${COMPAT_API_KEY:-EMPTY}"
 else
   export OPENROUTER_MODEL="${OPENROUTER_MODEL:-qwen/qwen3.5-122b-a10b}"
-  export OPENROUTER_REASONING_ENABLED="${OPENROUTER_REASONING_ENABLED:-false}"
+  export OPENROUTER_REASONING_ENABLED="${OPENROUTER_REASONING_ENABLED:-true}"
 fi
 
 # 4. Xác định Model Label

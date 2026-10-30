@@ -109,6 +109,7 @@ EOF
 
 workers=4
 single_shard=""
+limit=""
 run_tag="oueg_component_ablations_500_$(date -u +%Y%m%dT%H%M%SZ)"
 output_dir=""
 resume=true
@@ -116,6 +117,7 @@ resume=true
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -s|--shard) single_shard="$2"; shift 2 ;;
+    -l|--limit) limit="$2"; shift 2 ;;
     -w|--workers) workers="$2"; shift 2 ;;
     --output-dir) output_dir="$2"; shift 2 ;;
     --tag) run_tag="$2"; shift 2 ;;
@@ -129,6 +131,11 @@ if ! [[ "$workers" =~ ^[1-9][0-9]*$ ]]; then
   echo "--workers must be a positive integer; received: $workers" >&2
   exit 2
 fi
+if [[ -n "$limit" ]] && ! [[ "$limit" =~ ^[1-9][0-9]*$ ]]; then
+  echo "--limit must be a positive integer; received: $limit" >&2
+  exit 2
+fi
+target_records="${limit:-200}"
 if [[ -n "$single_shard" ]]; then
   if [[ "$single_shard" =~ ^[0-9]+$ ]]; then
     printf -v single_shard "%02d" "$((10#$single_shard))"
@@ -176,6 +183,7 @@ common_args=(
   --llm-max-concurrent-requests "$workers"
   --quiet-records
 )
+[[ -n "$limit" ]] && common_args+=(--limit "$limit")
 [[ "$resume" == true ]] && common_args+=(--resume)
 
 run_ablation() {
@@ -195,8 +203,8 @@ run_ablation() {
     output="$ablation_dir/hybridqa__${shard_label}__${model_label}__online_unified_evidence_graph__${ablation}.jsonl"
     log="$log_dir/hybridqa__${shard_label}__${model_label}__online_unified_evidence_graph__${ablation}.log"
 
-    if [[ -f "$output" ]] && [[ "$(wc -l < "$output")" -ge 200 ]]; then
-      echo "[$(date --iso-8601=seconds)] skip ablation=$ablation shard=$shard (already 200 records in $output)"
+    if [[ -f "$output" ]] && [[ "$(wc -l < "$output")" -ge "$target_records" ]]; then
+      echo "[$(date --iso-8601=seconds)] skip ablation=$ablation shard=$shard (already $target_records records in $output)"
       continue
     fi
 

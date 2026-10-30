@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  30 OCT 2026 07:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  30 OCT 2026 13:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -903,11 +903,11 @@ Underfull \hbox (badness 2103) in paragraph at lines 325--326
 
 ] [17] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 19297 strings out of 483183
- 365882 string characters out of 5966292
- 673284 words of memory out of 5000000
+ 19299 strings out of 483183
+ 365904 string characters out of 5966292
+ 673285 words of memory out of 5000000
  33711 multiletter control sequences out of 15000+600000
- 711888 words of font info for 248 fonts, out of 8000000 for 9000
+ 712018 words of font info for 249 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,20n,69p,2038b,992s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/s
@@ -937,7 +937,7 @@ tt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt8.pfb></usr/share/texmf/fo
 nts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 /amsfonts/symbols/msam5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/symbols/msbm10.pfb>
-Output written on main.pdf (17 pages, 694846 bytes).
+Output written on main.pdf (17 pages, 694830 bytes).
 PDF statistics:
  225 PDF objects out of 1000 (max. 8388607)
  170 compressed objects within 2 object streams

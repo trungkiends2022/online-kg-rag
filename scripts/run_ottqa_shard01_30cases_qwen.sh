@@ -28,7 +28,7 @@ fi
 python_bin="$repo_root/.venv/bin/python"
 export LLM_PROVIDER=openrouter
 export OPENROUTER_MODEL="${OPENROUTER_MODEL:-qwen/qwen3-30b-a3b-instruct-2507}"
-export OPENROUTER_REASONING_ENABLED="${OPENROUTER_REASONING_ENABLED:-false}"
+export OPENROUTER_REASONING_ENABLED="${OPENROUTER_REASONING_ENABLED:-true}"
 max_workers="${MAX_WORKERS:-4}"
 llm_max_concurrent_requests="${LLM_MAX_CONCURRENT_REQUESTS:-$max_workers}"
 
