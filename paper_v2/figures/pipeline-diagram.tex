@@ -155,9 +155,9 @@
   \par}
 };
 
-\draw[flow_orange] (l1_box.south) -- node[right, font=\tiny, text=orange!90!black] {if collision / ambiguous} (handoff_box.north);
+\draw[flow_orange] (l1_box.south) -- (handoff_box.north);
 \draw[flow_purple] (handoff_box.south) -- (ret_box.north);
-\draw[flow_teal] (ret_box.south) -- node[right, font=\tiny, text=teal!90!black] {Focused Capsule} (l2_box.north);
+\draw[flow_teal] (ret_box.south) -- (l2_box.north);
 
 % ========================================================
 % STAGE 4: GROUNDED GENERATION & PROVENANCE AUDIT (Sec. 3.4)
@@ -200,23 +200,23 @@
 \draw[flow] (prov_box.south) -- (rev_box.north);
 
 % ========================================================
-% INTER-STAGE CONNECTORS (Orthogonal & Neat)
+% INTER-STAGE CONNECTORS (Rotated Vertical Labels to Prevent Overlap)
 % ========================================================
 % Top question to Stage 1
 \draw[flow, draw=blue!70!black] (q_box.south -| panel1.north) -- (panel1.north);
 
-% Stage 1 -> Stage 2 (Clean horizontal line in 1.0cm gap)
-\draw[flow] (retr_summary.east) -- node[above, font=\tiny\bfseries, text=blue!85!black] {Evidence} (panel2.west |- retr_summary.east);
+% Stage 1 -> Stage 2: rotated vertical label in corridor
+\draw[flow] (retr_summary.east) -- node[midway, above=1pt, font=\fontsize{4.8pt}{5.8pt}\selectfont\bfseries, text=blue!85!black] {Evidence} (panel2.west |- retr_summary.east);
 
-% Stage 2 -> Stage 3 (Orthogonal neat step into Tier 1 reader in 1.0cm gap)
+% Stage 2 -> Stage 3: vertical segment with vertical label in corridor
 \path (path_box.east) -- ++(0.50, 0) coordinate (p_turn);
-\draw[flow, draw=purple!85!black] (path_box.east) -- (p_turn) -- (p_turn |- l1_box.west) node[above=1pt, font=\tiny\bfseries, text=purple!90!black] {Graph + Path} -- (l1_box.west);
+\draw[flow, draw=purple!85!black] (path_box.east) -- (p_turn) -- node[midway, rotate=90, above=2pt, font=\tiny\bfseries, text=purple!90!black] {Graph + Path} (p_turn |- l1_box.west) -- (l1_box.west);
 
-% Stage 3 -> Stage 4: Branch 1: Tier 1 Fast Exit (Pure horizontal line in 1.0cm gap!)
-\draw[flow_green] (l1_box.east |- ans_box.center) -- node[above, font=\tiny\bfseries, text=green!50!black] {Fast Exit} (ans_box.west);
+% Stage 3 -> Stage 4: Branch 1: Fast Exit (rotated vertical label in corridor)
+\draw[flow_green] (l1_box.east |- ans_box.center) -- node[midway, above=1pt, font=\fontsize{4.8pt}{5.8pt}\selectfont\bfseries, text=green!50!black] {Fast Exit} (ans_box.west);
 
-% Stage 3 -> Stage 4: Branch 2: Tier 2 Verified Exit (Orthogonal right-angle step into ans_box!)
+% Stage 3 -> Stage 4: Branch 2: Tier 2 Verified (vertical segment with vertical label in corridor)
 \path (l2_box.east) -- ++(0.50, 0) coordinate (t_turn);
-\draw[flow_teal] (l2_box.east) -- (t_turn) -- (t_turn |- ans_box.south west) node[above=1pt, font=\tiny\bfseries, text=teal!90!black] {Tier 2 Verified} -- (ans_box.south west);
+\draw[flow_teal] (l2_box.east) -- (t_turn) -- node[midway, rotate=90, above=2pt, font=\tiny\bfseries, text=teal!90!black] {Tier 2 Verified} (t_turn |- ans_box.south west) -- (ans_box.south west);
 
 \end{tikzpicture}

@@ -1,29 +1,112 @@
-<mxGraphModel dx="1400" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1520" pageHeight="710" background="#ffffff">
+<mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1350" pageHeight="700" background="#ffffff">
   <root>
     <mxCell id="0" />
     <mxCell id="1" parent="0" />
-    <mxCell id="in" value="&lt;b&gt;Input to L1&lt;/b&gt;&lt;br&gt;X*(G&lt;sub&gt;q&lt;/sub&gt;): compact multigraph, nothing pruned&lt;br&gt;+ guide path p&lt;sub&gt;1&lt;/sub&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ebf5fb;strokeColor=#2980b9;strokeWidth=2;fontSize=14;" vertex="1" parent="1"><mxGeometry x="30" y="250" width="200" height="120" as="geometry" /></mxCell>
-    <mxCell id="l1" value="&lt;b&gt;Tier 1 · L1 Reader&lt;/b&gt;&lt;br&gt;&lt;b&gt;LLM call 1&lt;/b&gt;&lt;br&gt;self-audit: answer only if determined, never guess" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d35400;strokeWidth=3;fontSize=14;" vertex="1" parent="1"><mxGeometry x="270" y="250" width="210" height="120" as="geometry" /></mxCell>
-    <mxCell id="dc" value="&lt;b&gt;|C&lt;sub&gt;q&lt;/sub&gt;| = 1&lt;br&gt;and p&lt;sub&gt;1&lt;/sub&gt; unbroken?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d79b00;strokeWidth=2;fontSize=14;" vertex="1" parent="1"><mxGeometry x="520" y="235" width="190" height="150" as="geometry" /></mxCell>
-    <mxCell id="fast" value="&lt;b&gt;Fast exit&lt;/b&gt;&lt;br&gt;FINAL_ANSWER: a*&lt;br&gt;1 LLM call in total" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=14;" vertex="1" parent="1"><mxGeometry x="760" y="60" width="250" height="110" as="geometry" /></mxCell>
-    <mxCell id="note" value="Escalation, only when L1 finds |C&lt;sub&gt;q&lt;/sub&gt;| &amp;gt; 1 or a missing bridge link. Illustration: anchoring leaves ρ0 and ρ1 tied." style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=2;fontColor=#b45f06;" vertex="1" parent="1"><mxGeometry x="760" y="402" width="715" height="40" as="geometry" /></mxCell>
-    <mxCell id="diag" value="&lt;b&gt;Diagnostic handoff&lt;/b&gt;&lt;br&gt;H&lt;sub&gt;diag&lt;/sub&gt; = (C&lt;sub&gt;focus&lt;/sub&gt;, β, ψ&lt;sub&gt;check&lt;/sub&gt;)&lt;br&gt;C&lt;sub&gt;focus&lt;/sub&gt; = {ρ0, ρ1}&lt;br&gt;β = collision&lt;br&gt;ψ&lt;sub&gt;check&lt;/sub&gt; = original city name" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=13;" vertex="1" parent="1"><mxGeometry x="505" y="450" width="220" height="170" as="geometry" /></mxCell>
-    <mxCell id="ret" value="&lt;b&gt;Targeted retrieval R&lt;sub&gt;target&lt;/sub&gt;&lt;/b&gt;&lt;br&gt;controller, no LLM&lt;br&gt;ΔD = ∪ ℓ(c) \ D&lt;sub&gt;current&lt;/sub&gt;, c ∈ C&lt;sub&gt;focus&lt;/sub&gt;&lt;br&gt;≤ k&lt;sub&gt;focus&lt;/sub&gt; passages per candidate (symmetric)&lt;br&gt;&lt;i&gt;ρ0: Doc:Toronto “town of York”&lt;br&gt;ρ1: Doc:Hamilton “founded in 1816”&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;fontSize=12;" vertex="1" parent="1"><mxGeometry x="765" y="450" width="230" height="170" as="geometry" /></mxCell>
-    <mxCell id="cap" value="&lt;b&gt;State capsule K&lt;sub&gt;L2&lt;/sub&gt;&lt;/b&gt;&lt;br&gt;(q, ψ&lt;sub&gt;check&lt;/sub&gt;, {G*(ρ&lt;sub&gt;c&lt;/sub&gt;)}, ΔD)&lt;br&gt;built by the controller, no LLM&lt;br&gt;minimal and sufficient (Prop. 2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6fffa;strokeColor=#008080;strokeWidth=2;fontSize=13;" vertex="1" parent="1"><mxGeometry x="1035" y="450" width="200" height="170" as="geometry" /></mxCell>
-    <mxCell id="l2" value="&lt;b&gt;Tier 2 · L2 Reader&lt;/b&gt;&lt;br&gt;&lt;b&gt;LLM call 2&lt;/b&gt;&lt;br&gt;a* = argmax P(a | K&lt;sub&gt;L2&lt;/sub&gt;)&lt;br&gt;decides from grounded evidence, no tie-break guessing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d35400;strokeWidth=3;fontSize=13;" vertex="1" parent="1"><mxGeometry x="1270" y="450" width="200" height="170" as="geometry" /></mxCell>
-    <mxCell id="out" value="&lt;b&gt;Output&lt;/b&gt;&lt;br&gt;&lt;span style='background:#d4efdf;color:#145a32;font-weight:bold;font-size:16px;padding:2px 12px'&gt;York&lt;/span&gt;&lt;br&gt;provenance π(a*):&lt;br&gt;row 0 → Toronto → Doc:Toronto → York" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#27ae60;strokeWidth=3;fontSize=14;" vertex="1" parent="1"><mxGeometry x="1265" y="235" width="210" height="150" as="geometry" /></mxCell>
-    <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#2c3e50;strokeWidth=2;endArrow=block;endFill=1;" edge="1" source="in" target="l1" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#2c3e50;strokeWidth=2;endArrow=block;endFill=1;" edge="1" source="l1" target="dc" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="e3" value="Yes · Ω&lt;sub&gt;ans&lt;/sub&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#27ae60;strokeWidth=3;endArrow=block;endFill=1;exitX=0.5;exitY=0;entryX=0;entryY=0.5;fontSize=14;fontStyle=1;fontColor=#1e8449;labelBackgroundColor=#ffffff;" edge="1" source="dc" target="fast" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="e4" value="No · Ω&lt;sub&gt;diag&lt;/sub&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#d35400;strokeWidth=3;endArrow=block;endFill=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;fontSize=14;fontStyle=1;fontColor=#b9770e;labelBackgroundColor=#ffffff;" edge="1" source="dc" target="diag" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#9673a6;strokeWidth=2;endArrow=block;endFill=1;" edge="1" source="diag" target="ret" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#008080;strokeWidth=2;endArrow=block;endFill=1;" edge="1" source="ret" target="cap" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#008080;strokeWidth=2;endArrow=block;endFill=1;" edge="1" source="cap" target="l2" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#27ae60;strokeWidth=3;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" source="fast" target="out" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="e9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#008080;strokeWidth=3;endArrow=block;endFill=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" source="l2" target="out" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="lgA" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d35400;strokeWidth=3;fontSize=12;" vertex="1" parent="1"><mxGeometry x="30" y="655" width="34" height="20" as="geometry" /></mxCell>
-    <mxCell id="lgAt" value="LLM call (at most two per query)" style="text;html=1;align=left;verticalAlign=middle;fontSize=13;" vertex="1" parent="1"><mxGeometry x="72" y="651" width="320" height="28" as="geometry" /></mxCell>
-    <mxCell id="lgB" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f4ecf7;strokeColor=#8e44ad;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1"><mxGeometry x="420" y="655" width="34" height="20" as="geometry" /></mxCell>
-    <mxCell id="lgBt" value="deterministic step (no LLM)" style="text;html=1;align=left;verticalAlign=middle;fontSize=13;" vertex="1" parent="1"><mxGeometry x="462" y="651" width="320" height="28" as="geometry" /></mxCell>
+
+    <!-- ==================== COLUMN 1: TIER 1 ==================== -->
+    <!-- Background Panel 1 -->
+    <mxCell id="p1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fbfd;strokeColor=#2980b9;strokeWidth=2;arcSize=4;" vertex="1" parent="1">
+      <mxGeometry x="40" y="30" width="480" height="620" as="geometry" />
+    </mxCell>
+    <!-- Header Tier 1 -->
+    <mxCell id="t1" value="&lt;b&gt;Tier 1: Initial Evidence Reasoning Algorithm&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4e6f1;strokeColor=#2980b9;strokeWidth=1.5;fontSize=14;fontColor=#1b4f72;" vertex="1" parent="1">
+      <mxGeometry x="60" y="45" width="440" height="42" as="geometry" />
+    </mxCell>
+
+    <!-- Step 1: Input Multigraph -->
+    <mxCell id="b1_in" value="&lt;b style='font-size:13px; color:#1b4f72;'&gt;Input: Full Evidence Multigraph G&lt;sub&gt;q&lt;/sub&gt;&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:11px; color:#566573;'&gt;Full unpruned multigraph (all candidate rows &amp;amp; connected passages)&lt;br&gt;Tied candidates: &lt;i&gt;Toronto Eagles (1989)&lt;/i&gt; vs &lt;i&gt;Toronto Blues (1989)&lt;/i&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#3498db;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="60" y="110" width="440" height="75" as="geometry" />
+    </mxCell>
+
+    <!-- Step 2: Primary LLM Reasoning (Brain Icon) -->
+    <mxCell id="b1_llm" value="&lt;b style='font-size:13px; color:#512e5f;'&gt;[LLM] Step 1: Primary LLM Reasoning (Call 1)&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:11px; color:#4a235a;'&gt;Evaluates evidence against query constraints; strict clarity audit&lt;br&gt;&lt;b&gt;Audit Rule:&lt;/b&gt; Zero ungrounded guessing on candidate ties&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f4ecf7;strokeColor=#8e44ad;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="60" y="215" width="440" height="75" as="geometry" />
+    </mxCell>
+
+    <!-- Step 3: Decision Rhombus -->
+    <mxCell id="b1_dec" value="&lt;b style='font-size:12px;'&gt;Candidate&lt;br&gt;Collision?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fbfcfc;strokeColor=#8e44ad;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="195" y="325" width="170" height="90" as="geometry" />
+    </mxCell>
+
+    <!-- Branch A: Fast Exit -->
+    <mxCell id="b1_exit" value="&lt;b style='color:#145a32; font-size:13px;'&gt;Fast Exit&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:11px; color:#196f3d;'&gt;Single LLM Call&lt;br&gt;&lt;b&gt;≈ 80% of Queries&lt;/b&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4efdf;strokeColor=#27ae60;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="60" y="475" width="200" height="120" as="geometry" />
+    </mxCell>
+
+    <!-- Branch B: Diagnostic Handoff -->
+    <mxCell id="b1_out" value="&lt;b style='color:#7e5109; font-size:13px;'&gt;Diagnostic Packet D&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:11px; color:#935116;'&gt;Collision Alert:&lt;br&gt;Both clubs match 1989;&lt;br&gt;Bridge passage missing&lt;br&gt;&lt;b&gt;Controlled Pause (No guess)&lt;/b&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdebd0;strokeColor=#d35400;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="300" y="475" width="200" height="120" as="geometry" />
+    </mxCell>
+
+    <!-- Connectors inside Tier 1 -->
+    <mxCell id="e1_1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#2980b9;strokeWidth=2;endArrow=block;endFill=1;" edge="1" source="b1_in" target="b1_llm" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e1_2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#8e44ad;strokeWidth=2;endArrow=block;endFill=1;" edge="1" source="b1_llm" target="b1_dec" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e1_no" value="&lt;b style='color:#27ae60; background:#ffffff; padding:2px;'&gt;No (Clear)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#27ae60;strokeWidth=2;endArrow=block;endFill=1;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" edge="1" source="b1_dec" target="b1_exit" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e1_yes" value="&lt;b style='color:#d35400; background:#ffffff; padding:2px;'&gt;Yes (Tied)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#d35400;strokeWidth=2;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" source="b1_dec" target="b1_out" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+
+    <!-- ==================== CENTER: BRIDGE &amp; GRAPH COMPRESSION ==================== -->
+    <mxCell id="b_bridge" value="&lt;b style='font-size:13px; color:#0e6251;'&gt;Automated Bridge Search&lt;br&gt;&amp;amp; Graph Compression&lt;/b&gt;&lt;hr style='border-top:1px solid #16a085; margin:6px 0;'&gt;&lt;div style='text-align:center; font-size:11.5px; line-height:1.4;'&gt;&lt;b style='color:#2980b9;'&gt;Zero LLM Calls&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b style='color:#0e6251;'&gt;Graph Compression:&lt;/b&gt;&lt;br&gt;Prune non-tied paths&lt;br&gt;&lt;b style='color:#c0392b;'&gt;≈ 85% Size Reduction&lt;/b&gt;&lt;br&gt;&lt;br&gt;Fetch missing bridge passage:&lt;br&gt;&lt;i&gt;Doc:Toronto_Blues&lt;/i&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f8f5;strokeColor=#16a085;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="560" y="240" width="220" height="210" as="geometry" />
+    </mxCell>
+
+    <!-- Connectors through Bridge -->
+    <mxCell id="e_bridge_in" value="&lt;b style='color:#d35400; background:#ffffff; padding:2px;'&gt;Handoff D&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#d35400;strokeWidth=2.5;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0.5;entryY=1;" edge="1" source="b1_out" target="b_bridge" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_bridge_out" value="&lt;b style='color:#16a085; background:#ffffff; padding:2px;'&gt;Minimal Capsule S_min&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16a085;strokeWidth=2.5;endArrow=block;endFill=1;exitX=0.5;exitY=0;entryX=0;entryY=0.5;" edge="1" source="b_bridge" target="b2_in" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+
+    <!-- ==================== COLUMN 2: TIER 2 ==================== -->
+    <!-- Background Panel 2 -->
+    <mxCell id="p2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f6fcfa;strokeColor=#16a085;strokeWidth=2;arcSize=4;" vertex="1" parent="1">
+      <mxGeometry x="820" y="30" width="480" height="620" as="geometry" />
+    </mxCell>
+    <!-- Header Tier 2 -->
+    <mxCell id="t2" value="&lt;b&gt;Tier 2: Targeted Collision Resolution Algorithm&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1f2eb;strokeColor=#16a085;strokeWidth=1.5;fontSize=14;fontColor=#0e6251;" vertex="1" parent="1">
+      <mxGeometry x="840" y="45" width="440" height="42" as="geometry" />
+    </mxCell>
+
+    <!-- Step 1: Input Minimal Capsule -->
+    <mxCell id="b2_in" value="&lt;b style='font-size:13px; color:#0e6251;'&gt;Input: Minimal State Capsule S&lt;sub&gt;min&lt;/sub&gt;&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:11px; color:#566573;'&gt;Compressed isolated subgraph: contains strictly tied clubs + bridge passage&lt;br&gt;Zero non-competing candidates; eliminates context dilution&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#16a085;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="840" y="110" width="440" height="75" as="geometry" />
+    </mxCell>
+
+    <!-- Step 2: Targeted LLM Call (Brain Icon) -->
+    <mxCell id="b2_llm" value="&lt;b style='font-size:13px; color:#512e5f;'&gt;[LLM] Step 2: Targeted LLM Resolution (Call 2)&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:11px; color:#4a235a;'&gt;Prompts LLM exclusively with compressed capsule S&lt;sub&gt;min&lt;/sub&gt;&lt;br&gt;Resolves ambiguity directly against factual bridge evidence&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f4ecf7;strokeColor=#8e44ad;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="840" y="215" width="440" height="75" as="geometry" />
+    </mxCell>
+
+    <!-- Step 3: Decision Rhombus -->
+    <mxCell id="b2_dec" value="&lt;b style='font-size:12px;'&gt;Grounded by&lt;br&gt;Bridge Passage?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fbfcfc;strokeColor=#16a085;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="975" y="325" width="170" height="90" as="geometry" />
+    </mxCell>
+
+    <!-- Step 4: Final Verified Output -->
+    <mxCell id="b2_out" value="&lt;b style='color:#145a32; font-size:14px;'&gt;Verified Output: Answer &quot;York&quot;&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:11.5px; color:#196f3d;'&gt;≤ 2 LLM Calls Total &amp;nbsp;•&amp;nbsp; 100% Grounded Provenance &amp;nbsp;•&amp;nbsp; Zero Hallucination&lt;br&gt;&lt;b&gt;Provenance Trace:&lt;/b&gt; Row 0 → &lt;i&gt;Doc:Toronto_Blues&lt;/i&gt; → &lt;b&gt;York University&lt;/b&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4efdf;strokeColor=#27ae60;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="840" y="475" width="440" height="120" as="geometry" />
+    </mxCell>
+
+    <!-- Connectors inside Tier 2 -->
+    <mxCell id="e2_1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#16a085;strokeWidth=2;endArrow=block;endFill=1;" edge="1" source="b2_in" target="b2_llm" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e2_2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#8e44ad;strokeWidth=2;endArrow=block;endFill=1;" edge="1" source="b2_llm" target="b2_dec" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e2_yes" value="&lt;b style='color:#27ae60; background:#ffffff; padding:2px;'&gt;Yes (Grounded)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#27ae60;strokeWidth=2.5;endArrow=block;endFill=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="b2_dec" target="b2_out" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
   </root>
 </mxGraphModel>
