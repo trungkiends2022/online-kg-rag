@@ -1,0 +1,83 @@
+\documentclass[runningheads]{llncs}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+  basicstyle=\ttfamily\scriptsize,
+  breaklines=true,
+  frame=single,
+  columns=fullflexible,
+  captionpos=b,
+  backgroundcolor=\color{gray!5},
+  rulecolor=\color{gray!40},
+  xleftmargin=3pt,
+  xrightmargin=3pt
+}
+
+\begin{document}
+
+\title{Supplementary Material: Prompt Templates for QEG-RAG Two-Tier Diagnostic Engine}
+\titlerunning{Prompt Templates for QEG-RAG}
+\author{Trung-Kien Nguyen\inst{1} \and
+Khac-Hoai-Nam Bui\inst{2} \and
+Hoang-Hiep Lai\inst{2} \and
+Quang-Huy Phung\inst{2} \and
+Van-Vinh Nguyen\inst{1}\thanks{Corresponding author.}}
+\authorrunning{T.-K. Nguyen et al.}
+\institute{VNU University of Engineering and Technology, Vietnam National University, Hanoi, Vietnam\\ \and
+Viettel AI, Viettel Group, Hanoi, Vietnam}
+\maketitle
+
+\appendix
+\section{Prompt Templates for Two-Tier Reasoning Engine}
+\label{sec:prompt_templates}
+
+This supplementary document provides the exact prompt templates used in the Two-Tier Controlled Reasoning Engine of QEG-RAG.
+
+\subsection{Tier 1: Primary Reader Prompt Template}
+The Tier 1 prompt serializes the compact evidence graph $\mathcal{X}^*(G_q)$, incorporating star record blocks, deduplicated context passages, and deterministic path scaffolds. It instructs the language model to perform immediate fact extraction or trigger a diagnostic handoff.
+
+\begin{lstlisting}[caption={Tier 1 Prompt Template (Primary Reader with Diagnostic Protocol)}]
+Answer the question using the grounded compact OUEG payload.
+
+`rows` retains table rows selected by grounded paths, their original order, values, passage references, and edge IDs. `edges` uses the legend schema and contains the other selected KG edges. `contexts` are deduplicated by passage ID. `paths` are reading guides only. Their `score` is rounded relevance metadata, not factual proof. Follow `ordering` when present; use `edges` and `contexts` for multi-hop evidence. Copy the shortest answer span exactly as written in the evidence; do not translate or expand names. Return only that span.
+
+Fallback protocol (only when you cannot prove one answer from this payload): keep the normal successful-answer behaviour above unchanged---return its shortest answer span and nothing else. If you cannot answer, never return a blank response. Instead return exactly one of:
+1. `NEED_FOCUS: {"candidates":["candidate names already in the payload"],"blocker_type":"missing_link","bottleneck":"why the answer is not yet unique","needed_check":"exact row, relation, year, rank, or passage fact to compare"}` when a focused L2 re-read can resolve it.
+2. `UNRESOLVED: {"blocker_type":"insufficient_evidence","bottleneck":"what evidence is absent or contradictory","needed_check":"what fact would be required"}` when this payload cannot prove an answer.
+
+`blocker_type` must be exactly one label: `candidate_collision`, `missing_link`, `insufficient_evidence`, `conflicting_evidence`, or `answer_type_uncertain`; never combine labels with `|`.
+Do not invent candidates or evidence.
+
+Question: {question}
+Compact OUEG payload: {compact_json}
+Answer:
+\end{lstlisting}
+
+\subsection{Tier 2: Targeted Reader Prompt Template}
+When Tier 1 returns a \texttt{NEED\_FOCUS} diagnostic signal, the targeted bridge retriever augments missing passages for disputed candidates without calling the LLM. Tier 2 then receives a minimal state capsule $\mathcal{K}_2$ containing \emph{only} the disputed candidates and new bridge evidence, filtering out all unrelated table rows.
+
+\begin{lstlisting}[caption={Tier 2 Prompt Template (Targeted Reader over Minimal State Capsule)}]
+Resolve the question using only the grounded L2 state capsule below. This is a new request: do not assume you remember L1 or use facts absent from this capsule.
+
+The capsule contains the original question, the unresolved constraint, complete row bindings for the focus candidates, and their relevant evidence. `coverage` says whether retrieval found new text; absence of evidence is not a negative fact. Scores are intentionally omitted.
+
+Compare the candidates against the evidence to resolve the question. Return:
+`FINAL_ANSWER: <shortest evidence span>`
+`EVIDENCE_PATH: {"edges":["edge IDs in this capsule"],"passages":["source IDs in this capsule"]}`
+for the proven candidate. 
+
+Only return `UNRESOLVED: {"blocker_type":"...","bottleneck":"...","needed_check":"..."}` if the evidence strictly contradicts all candidates. Never return blank or invent evidence.
+
+Question: {question}
+L2 state capsule: {compact_json}
+Answer:
+\end{lstlisting}
+
+\end{document}

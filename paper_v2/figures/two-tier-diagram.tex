@@ -1,183 +1,192 @@
 \begin{tikzpicture}[
   >=Latex,
   font=\sffamily\scriptsize,
-  % Symmetrical Panel Style
-  panel/.style={draw=#1!70!black, fill=#1!3, rounded corners=6pt, line width=0.7pt},
-  titlebar/.style={fill=#1!15, draw=#1!70!black, line width=0.5pt, rounded corners=3pt, font=\bfseries\scriptsize, text=#1!90!black, align=center, inner sep=2.5pt, minimum height=4.8mm},
-  % Uniform Card Style (Exact same width: 2.88cm, Exact same height: 2.15cm)
-  card/.style={draw=gray!30, fill=white, rounded corners=4pt, line width=0.5pt, inner sep=2.5pt, minimum width=2.88cm, minimum height=2.15cm, text width=2.62cm, align=center},
-  llmcard/.style={draw=#1!75!black, fill=#1!8, rounded corners=4pt, line width=0.65pt, inner sep=2.5pt, minimum width=2.88cm, minimum height=2.15cm, text width=2.62cm, align=center},
-  anscard/.style={draw=green!65!black, fill=green!6, rounded corners=4pt, line width=0.65pt, inner sep=2.5pt, minimum width=2.88cm, minimum height=2.15cm, text width=2.62cm, align=center},
-  badge/.style={fill=#1!15, draw=#1!75!black, line width=0.45pt, rounded corners=2pt, inner sep=1.4pt, font=\bfseries\tiny, text=#1!95!black},
-  % Flow Arrows
-  flow/.style={->, line width=0.85pt, draw=gray!60!black},
-  flow_green/.style={->, line width=1.1pt, draw=green!60!black},
+  % Panels
+  tier_col/.style={draw=#1!70!black, fill=#1!2!white, rounded corners=5pt, line width=0.65pt},
+  col_header/.style={fill=#1!14, draw=#1!70!black, line width=0.45pt, rounded corners=2.5pt, font=\bfseries\scriptsize, text=#1!95!black, inner sep=2.2pt, align=center},
+  % Algorithmic Cards
+  alg_card/.style={draw=#1!65!black, fill=white, rounded corners=3.5pt, line width=0.5pt, inner sep=3pt, align=left},
+  % Decision Shape
+  alg_decision/.style={draw=#1!85!black, fill=#1!10, rounded corners=2.5pt, line width=0.55pt, inner sep=2pt, font=\bfseries\scriptsize, text=#1!95!black, align=center},
+  % Exit Shape
+  alg_exit/.style={draw=green!70!black, fill=green!12, rounded corners=2.5pt, line width=0.6pt, inner sep=2pt, align=center, font=\bfseries\scriptsize, text=green!90!black},
+  % Badges
+  tag/.style={fill=#1!15, draw=#1!70!black, line width=0.35pt, rounded corners=1.5pt, inner sep=1.1pt, font=\bfseries\fontsize{4.2pt}{5.0pt}\selectfont, text=#1!95!black},
+  % Arrows
+  flow/.style={->, line width=0.9pt, draw=gray!70!black},
+  flow_blue/.style={->, line width=0.9pt, draw=blue!75!black},
+  flow_teal/.style={->, line width=0.9pt, draw=teal!80!black},
   flow_orange/.style={->, line width=1.0pt, draw=orange!85!black},
-  flow_purple/.style={->, line width=0.95pt, draw=purple!80!black},
-  flow_blue/.style={->, line width=0.95pt, draw=blue!75!black}
+  flow_green/.style={->, line width=1.05pt, draw=green!65!black}
 ]
 
-% Geometry Definitions:
-% Total diagram width: 13.0cm, Center X: 6.5cm
-% Column centers (4 uniform columns, width=2.88cm, gap=0.34cm):
-% Col 1: 1.65cm, Col 2: 4.88cm, Col 3: 8.12cm, Col 4: 11.35cm
+% ==========================================================
+% BRAIN ICON MACRO (#1 = position, #2 = scale, #3 = color)
+% ==========================================================
+\def\drawbrain#1#2#3{
+  \begin{scope}[shift={(#1)}, scale=#2]
+    % Left hemisphere
+    \draw[fill=#3!22, draw=#3!85!black, line width=0.6pt]
+      (0, 0.72) 
+      .. controls (-0.35, 0.82) and (-0.72, 0.62) .. (-0.72, 0.28)
+      .. controls (-0.92, 0.12) and (-0.92, -0.22) .. (-0.68, -0.34)
+      .. controls (-0.76, -0.58) and (-0.52, -0.78) .. (-0.28, -0.68)
+      .. controls (-0.18, -0.82) and (-0.05, -0.68) .. (0, -0.58)
+      -- cycle;
+    % Right hemisphere
+    \draw[fill=#3!22, draw=#3!85!black, line width=0.6pt]
+      (0, 0.72) 
+      .. controls (0.35, 0.82) and (0.72, 0.62) .. (0.72, 0.28)
+      .. controls (0.92, 0.12) and (0.92, -0.22) .. (0.68, -0.34)
+      .. controls (0.76, -0.58) and (0.52, -0.78) .. (0.28, -0.68)
+      .. controls (0.18, -0.82) and (0.05, -0.68) .. (0, -0.58)
+      -- cycle;
+    % Midline
+    \draw[#3!85!black, line width=0.6pt] (0, 0.70) -- (0, -0.56);
+    % Neural nodes & synapses (Left)
+    \fill[#3!85!black] (-0.32, 0.36) circle (0.9pt);
+    \fill[#3!85!black] (-0.50, 0.02) circle (0.9pt);
+    \fill[#3!85!black] (-0.22, -0.12) circle (0.9pt);
+    \fill[#3!85!black] (-0.38, -0.42) circle (0.9pt);
+    \draw[#3!65!black, line width=0.35pt] (-0.32, 0.36) -- (-0.50, 0.02) -- (-0.22, -0.12) -- (-0.38, -0.42);
+    % Neural nodes & synapses (Right)
+    \fill[#3!85!black] (0.32, 0.36) circle (0.9pt);
+    \fill[#3!85!black] (0.50, 0.02) circle (0.9pt);
+    \fill[#3!85!black] (0.22, -0.12) circle (0.9pt);
+    \fill[#3!85!black] (0.38, -0.42) circle (0.9pt);
+    \draw[#3!65!black, line width=0.35pt] (0.32, 0.36) -- (0.50, 0.02) -- (0.22, -0.12) -- (0.38, -0.42);
+    % Synapse bridge
+    \draw[#3!60!black, line width=0.35pt, dashed] (-0.22, -0.12) -- (0.22, -0.12);
+  \end{scope}
+}
 
 % ==========================================================
-% TOP PANEL: TIER 1 (PRIMARY CALL & FAST EXIT)
+% GEOMETRY:
+% Total diagram width: 13.0cm
+% Column 1 (Left): Center X = 3.0cm, Width = 5.8cm (X: 0.1 to 5.9)
+% Center Gap: 1.2cm (X: 5.9 to 7.1, Center = 6.5cm)
+% Column 2 (Right): Center X = 10.0cm, Width = 5.8cm (X: 7.1 to 12.9)
+% Total Height: 6.2cm (Y: +3.05 to -3.05)
 % ==========================================================
-\node[panel=blue, minimum width=13.0cm, minimum height=3.1cm] (p1) at (6.5, 3.6) {};
-\node[titlebar=blue, text width=12.6cm, anchor=north] (t1) at ([yshift=-1.8mm]p1.north) {Tier 1: Primary Evidence Evaluation \& Determinacy Audit};
 
-% Card 1.1: Evidence Multigraph (Col 1)
-\node[card] (c1_1) at (1.65, 3.35) {
-  \vspace{-1mm}
-  \mbox{\begin{tikzpicture}[scale=0.55]
-    \draw[fill=blue!15, draw=blue!75!black, rounded corners=1.5pt] (0,0) rectangle (0.8, 0.7);
-    \fill[orange!85!black] (0.2,0.45) circle (1.8pt);
-    \fill[blue!85!black] (0.6,0.55) circle (1.8pt);
-    \fill[green!75!black] (0.5,0.2) circle (1.8pt);
-    \draw[gray!70!black, line width=0.5pt] (0.2,0.45) -- (0.6,0.55);
-    \draw[gray!70!black, line width=0.5pt] (0.2,0.45) -- (0.5,0.2);
-  \end{tikzpicture}}\\[0.5mm]
-  \textbf{Evidence Multigraph}\\[0.3mm]
-  {\fontsize{5.2pt}{6.2pt}\selectfont
-  Full unpruned graph evidence\\
-  Guided path scaffolding\\
-  Zero peripheral context loss
-  \par}
+% ----------------------------------------------------------
+% COLUMN 1: TIER 1 (INITIAL EVIDENCE REASONING & CLARITY AUDIT)
+% ----------------------------------------------------------
+\node[tier_col=blue, minimum width=5.8cm, minimum height=6.1cm] (col1) at (3.0, 0) {};
+\node[col_header=blue, minimum width=5.5cm, anchor=north] (t1) at ([yshift=-1.6mm]col1.north) {
+  Tier 1: Initial Evidence Reasoning \& Clarity Audit
 };
 
-% Card 1.2: Tier 1 LLM Call (Col 2)
-\node[llmcard=blue] (c1_2) at (4.88, 3.35) {
-  \vspace{-1mm}
-  \mbox{\begin{tikzpicture}[scale=0.55]
-    \draw[fill=blue!20, draw=blue!80!black, rounded corners=1.5pt] (0,0) rectangle (0.75, 0.75);
-    \node[font=\fontsize{4.5pt}{5pt}\bfseries\selectfont, text=blue!90!black] at (0.375, 0.375) {LLM};
-    \foreach \x in {0.2, 0.375, 0.55} {
-      \draw[blue!80!black, line width=0.5pt] (\x, 0.75) -- (\x, 0.9);
-      \draw[blue!80!black, line width=0.5pt] (\x, 0) -- (\x, -0.15);
-    }
-  \end{tikzpicture}}\\[0.5mm]
-  \textbf{Tier 1 Primary Call}\\[0.3mm]
-  {\fontsize{5.2pt}{6.2pt}\selectfont
-  Evaluates complete evidence\\
-  Audits candidate clarity\\
-  Strictly avoids guesswork
-  \par}
+% Step 1.1: Input Block (Uncompressed Graph)
+\node[alg_card=blue, text width=5.1cm] (b1_in) at (3.0, 2.15) {
+  \textbf{Input: Full Evidence Multigraph} \hfill \tikz{\node[tag=blue]{Unpruned $G_q$};}\\
+  {\fontsize{4.8pt}{5.6pt}\selectfont
+  $\bullet$ Complete multigraph: all retrieved rows \& connected passages\\
+  $\bullet$ Guided path scaffold steers attention along linear graph structure\\
+  $\bullet$ \textcolor{blue!90!black}{\textbf{Tied Candidates:}} \texttt{Toronto Eagles (1989)} vs \texttt{Toronto Blues (1989)}}
 };
 
-% Card 1.3: Determinacy Check (Col 3)
-\node[card, draw=orange!70!black, fill=orange!4] (c1_3) at (8.12, 3.35) {
-  \vspace{-1mm}
-  \mbox{\begin{tikzpicture}[scale=0.55]
-    \draw[fill=orange!25, draw=orange!80!black, shape=diamond, line width=0.5pt] (0.4, 0.4) circle (0.38);
-    \node[font=\tiny\bfseries, text=orange!90!black] at (0.4, 0.4) {?};
-  \end{tikzpicture}}\\[0.5mm]
-  \textbf{Clarity Decision}\\[0.3mm]
-  {\fontsize{5.2pt}{6.2pt}\selectfont
-  Audits candidate uniqueness\\
-  $\bullet$ Clear: Fast Exit\\
-  $\bullet$ Ambiguous: Tier 2 Handoff
-  \par}
+% Step 1.2: Process Block (Primary LLM Call with Brain Icon)
+\node[alg_card=purple, fill=purple!4, text width=5.1cm] (b1_llm) at (3.0, 0.90) {
+  \textbf{Step 1: Primary LLM Evaluation (Call 1)} \hfill \tikz{\drawbrain{0,0}{0.20}{purple};}\\
+  {\fontsize{4.8pt}{5.6pt}\selectfont
+  $\bullet$ Evaluates evidence path against question constraints\\
+  $\bullet$ \textcolor{purple!90!black}{\textbf{Strict Audit Rule:}} Zero guessing on ambiguous candidate ties\\
+  $\bullet$ Detects candidate collision on \texttt{formed=1989}; text bridge missing}
 };
 
-% Card 1.4: Fast Exit Answer (Col 4)
-\node[anscard] (c1_4) at (11.35, 3.35) {
-  \vspace{-1mm}
-  \mbox{\begin{tikzpicture}[scale=0.55]
-    \draw[fill=green!25, draw=green!75!black, circle] (0.35,0.35) circle (0.35);
-    \draw[green!80!black, line width=1.1pt] (0.2,0.35) -- (0.32,0.22) -- (0.52,0.48);
-  \end{tikzpicture}}\\[0.5mm]
-  \textbf{Fast Exit Path} \ \tikz\node[badge=green!70!black, inner sep=1pt]{1 Call};\\[0.3mm]
-  {\fontsize{5.2pt}{6.2pt}\selectfont
-  Direct confident resolution ($\approx 80\%$)\\[0.5mm]
-  \textcolor{green!60!black}{\textbf{Verified Answer: York}}
-  \par}
+% Step 1.3: Decision Diamond / Box
+\node[alg_decision=purple, text width=3.1cm] (b1_dec) at (2.05, -0.32) {
+  Clarity Audit:\\
+  Unambiguous?
 };
 
-% Tier 1 Horizontal Flow Connectors
-\draw[flow_blue] (c1_1) -- (c1_2);
-\draw[flow_blue] (c1_2) -- (c1_3);
-\draw[flow_green] (c1_3) -- (c1_4) node[midway, above, font=\tiny\bfseries, text=green!60!black] {Clear};
-
-% ==========================================================
-% BOTTOM PANEL: TIER 2 (DIAGNOSTIC RETRIEVAL & DISAMBIGUATION)
-% ==========================================================
-\node[panel=orange, minimum width=13.0cm, minimum height=3.1cm] (p2) at (6.5, 0.15) {};
-\node[titlebar=orange, text width=12.6cm, anchor=north] (t2) at ([yshift=-1.8mm]p2.north) {Tier 2: Diagnostic Feedback \& Targeted Disambiguation};
-
-% Card 2.1: Diagnostic Handoff (Col 1)
-\node[card, draw=orange!70!black, fill=orange!5] (c2_1) at (1.65, -0.1) {
-  \vspace{-1mm}
-  \mbox{\begin{tikzpicture}[scale=0.55]
-    \draw[fill=orange!25, draw=orange!85!black, rounded corners=1.5pt] (0.35, 0.75) -- (0.02, 0.1) -- (0.68, 0.1) -- cycle;
-    \node[font=\bfseries\tiny, text=orange!90!black] at (0.35, 0.32) {!};
-  \end{tikzpicture}}\\[0.5mm]
-  \textbf{Diagnostic Handoff}\\[0.3mm]
-  {\fontsize{5.2pt}{6.2pt}\selectfont
-  Triggered on ambiguity:\\
-  Pinpoints competing rows\\
-  Identifies missing bridge facts
-  \par}
+% Branch 1: Fast Exit (Right inside Col 1)
+\node[alg_exit, text width=1.55cm] (b1_exit) at (4.85, -0.32) {
+  \textbf{Fast Exit}\\[-0.2mm]
+  {\fontsize{4.4pt}{5.0pt}\selectfont $\approx 80\%$ Queries\\1 LLM Call}
 };
 
-% Card 2.2: Targeted Search (Col 2)
-\node[card, draw=purple!65!black, fill=purple!5] (c2_2) at (4.88, -0.1) {
-  \vspace{-1mm}
-  \mbox{\begin{tikzpicture}[scale=0.55]
-    \draw[fill=purple!20, draw=purple!80!black, circle] (0.3,0.45) circle (0.23);
-    \draw[purple!80!black, line width=1.1pt] (0.47,0.28) -- (0.7,0.05);
-  \end{tikzpicture}}\\[0.5mm]
-  \textbf{Targeted Search}\\[0.3mm]
-  {\fontsize{5.2pt}{6.2pt}\selectfont
-  \textcolor{purple!80!black}{\textbf{Automated (Zero LLM)}}\\[0.2mm]
-  Fetches missing bridge links\\
-  Symmetric per-candidate search
-  \par}
+% Step 1.4: Output Block (Diagnostic Handoff)
+\node[alg_card=orange, fill=orange!4, draw=orange!75!black, text width=5.1cm] (b1_handoff) at (3.0, -1.95) {
+  \textbf{Output: Diagnostic Handoff $\mathcal{D}$} \hfill \tikz{\node[tag=orange]{Collision Alert};}\\
+  {\fontsize{4.8pt}{5.6pt}\selectfont
+  $\bullet$ Two clubs match \texttt{formed = 1989}; \texttt{Blues} bridge doc is missing\\
+  $\bullet$ Emits structured diagnostic packet $\mathcal{D}$ identifying competing rows\\
+  $\bullet$ \textcolor{orange!90!black}{\textbf{Controlled Pause:}} Halts execution without hallucinated guess}
 };
 
-% Card 2.3: Focused State Capsule (Col 3)
-\node[card, draw=purple!75!black, fill=purple!9] (c2_3) at (8.12, -0.1) {
-  \vspace{-1mm}
-  \mbox{\begin{tikzpicture}[scale=0.55]
-    \draw[fill=purple!25, draw=purple!80!black, rounded corners=1.5pt] (0.05,0.08) rectangle (0.7, 0.65);
-    \draw[purple!80!black, line width=0.5pt] (0.05,0.4) -- (0.7,0.4);
-    \draw[purple!80!black, line width=0.5pt] (0.375,0.4) -- (0.375,0.65);
-  \end{tikzpicture}}\\[0.5mm]
-  \textbf{State Capsule}\\[0.3mm]
-  {\fontsize{5.2pt}{6.2pt}\selectfont
-  Focused evidence bundle\\
-  Discards irrelevant rows\\
-  Retains only disputed hypotheses
-  \par}
+% Tier 1 Internal Connectors
+\draw[flow_blue] (b1_in) -- (b1_llm);
+\draw[flow] (b1_llm) -- (b1_dec);
+\draw[flow_green] (b1_dec.east) -- (b1_exit.west);
+\node[font=\bfseries\tiny, text=green!75!black, anchor=south] at ([yshift=0.5mm]$(b1_dec.east)!0.5!(b1_exit.west)$) {Yes};
+\draw[flow_orange] (b1_dec.south) -- (b1_dec.south |- b1_handoff.north);
+\node[font=\bfseries\tiny, text=orange!85!black, anchor=east] at ([xshift=-1mm]$(b1_dec.south)!0.5!(b1_dec.south |- b1_handoff.north)$) {No (Tied)};
+
+% ----------------------------------------------------------
+% COLUMN 2: TIER 2 (TARGETED COLLISION RESOLUTION)
+% ----------------------------------------------------------
+\node[tier_col=teal, minimum width=5.8cm, minimum height=6.1cm] (col2) at (10.0, 0) {};
+\node[col_header=teal, minimum width=5.5cm, anchor=north] (t2) at ([yshift=-1.6mm]col2.north) {
+  Tier 2: Targeted Collision Resolution \& Verification
 };
 
-% Card 2.4: Tier 2 Disambiguation LLM (Col 4)
-\node[anscard] (c2_4) at (11.35, -0.1) {
-  \vspace{-1mm}
-  \mbox{\begin{tikzpicture}[scale=0.55]
-    \draw[fill=orange!25, draw=orange!80!black, rounded corners=1.5pt] (0,0) rectangle (0.75, 0.75);
-    \node[font=\fontsize{4.5pt}{5pt}\bfseries\selectfont, text=orange!90!black] at (0.375, 0.375) {LLM};
-    \foreach \x in {0.2, 0.375, 0.55} {
-      \draw[orange!80!black, line width=0.5pt] (\x, 0.75) -- (\x, 0.9);
-      \draw[orange!80!black, line width=0.5pt] (\x, 0) -- (\x, -0.15);
-    }
-  \end{tikzpicture}}\\[0.5mm]
-  \textbf{Tier 2 Resolution} \ \tikz\node[badge=orange!80!black, inner sep=1pt]{2 Calls};\\[0.3mm]
-  {\fontsize{5.2pt}{6.2pt}\selectfont
-  Breaks tie by fact ($\approx 20\%$)\\[0.5mm]
-  \textcolor{green!60!black}{\textbf{Verified Answer: York}}
-  \par}
+% Step 2.1: Input Minimal State Capsule (Compressed Graph)
+\node[alg_card=teal, text width=5.1cm] (b2_in) at (10.0, 2.15) {
+  \textbf{Input: Minimal State Capsule $\mathcal{S}_{\text{min}}$} \hfill \tikz{\node[tag=teal]{Compressed Graph};}\\
+  {\fontsize{4.8pt}{5.6pt}\selectfont
+  $\bullet$ \textcolor{teal!90!black}{\textbf{Graph Compression:}} Discards all non-competing candidate rows\\
+  $\bullet$ Isolated context: contains strictly tied clubs + fetched bridge passage\\
+  $\bullet$ Eliminates context dilution and prevents distracting interference}
 };
 
-% Tier 2 Horizontal Flow Connectors
-\draw[flow_orange] (c2_1) -- (c2_2);
-\draw[flow_purple] (c2_2) -- (c2_3);
-\draw[flow_purple] (c2_3) -- (c2_4);
+% Step 2.2: Process Block (Targeted LLM Call with Brain Icon)
+\node[alg_card=purple, fill=purple!4, text width=5.1cm] (b2_llm) at (10.0, 0.90) {
+  \textbf{Step 2: Targeted LLM Resolution (Call 2)} \hfill \tikz{\drawbrain{0,0}{0.20}{purple};}\\
+  {\fontsize{4.8pt}{5.6pt}\selectfont
+  $\bullet$ Prompted exclusively with compressed minimal capsule $\mathcal{S}_{\text{min}}$\\
+  $\bullet$ Evaluates tied candidates directly against factual bridge evidence\\
+  $\bullet$ Verifies exact affiliation link: \texttt{Doc:Blues} links to \texttt{York University}}
+};
 
-% Inter-tier Feedback Connector (from Card 1.3 to Card 2.1)
-\draw[flow_orange] (c1_3.south) -- ++(0,-0.4) -| (c2_1.north)
-  node[pos=0.35, fill=white, draw=orange!70!black, rounded corners=2pt, inner sep=1.8pt, font=\bfseries\tiny, text=orange!90!black]
-  {Ambiguity / Missing Link ($\approx 20\%$)};
+% Step 2.3: Decision Diamond / Box
+\node[alg_decision=teal, text width=4.8cm] (b2_dec) at (10.0, -0.32) {
+  Factual Grounding: Verified by Bridge Doc?
+};
+
+% Step 2.4: Termination / Output Block
+\node[alg_exit, fill=green!15, text width=5.1cm] (b2_final) at (10.0, -1.95) {
+  \textbf{Termination: Final Verified Answer: ``York''}\\[0.5mm]
+  {\fontsize{4.8pt}{5.6pt}\selectfont
+  $\le 2$ LLM Calls Total $\bullet$ 100\% Grounded Provenance $\bullet$ Zero Hallucination\\[0.3mm]
+  \textcolor{green!75!black}{Full audit trail: \texttt{Table Row 1} $\to$ \texttt{Doc:Toronto\_Blues} $\to$ \texttt{York}}}
+};
+
+% Tier 2 Internal Connectors
+\draw[flow_teal] (b2_in) -- (b2_llm);
+\draw[flow] (b2_llm) -- (b2_dec);
+\draw[flow_green] (b2_dec.south) -- (b2_final.north);
+\node[font=\bfseries\tiny, text=green!75!black, anchor=east] at ([xshift=-1mm]$(b2_dec.south)!0.5!(b2_final.north)$) {Yes (Grounded)};
+
+% ----------------------------------------------------------
+% CENTER TRANSITION: AUTOMATED BRIDGE & GRAPH COMPRESSION
+% (Drawn at end after all nodes exist)
+% ----------------------------------------------------------
+\node[draw=orange!80!black, fill=orange!7, rounded corners=3.5pt, line width=0.6pt, text width=1.45cm, align=center, inner sep=2.5pt] (bridge_box) at (6.5, -0.55) {
+  \textbf{Bridge Search}\\[-0.2mm]
+  {\fontsize{4.2pt}{5.0pt}\selectfont
+  \textcolor{blue!90!black}{\textbf{Zero LLM Calls}}\\[0.6mm]
+  $\bullet$ Fetch missing \texttt{Doc:Blues}\\[0.6mm]
+  \textcolor{teal!90!black}{\textbf{Graph Compression:}}\\[0.3mm]
+  Prune non-tied rows\\
+  ($\approx 85\%$ size reduction)}
+};
+
+% Connecting wires
+\draw[flow_orange, rounded corners=4pt] (b1_handoff.east) -- (6.5, -1.95) -- (bridge_box.south);
+\draw[flow_teal, rounded corners=4pt] (bridge_box.north) -- (6.5, 2.15) -- (b2_in.west);
+\node[tag=orange, fill=white] at (6.5, -2.25) {Handoff $\mathcal{D}$};
+\node[tag=teal, fill=white] at (6.5, 2.45) {Capsule $\mathcal{S}_{\text{min}}$};
 
 \end{tikzpicture}

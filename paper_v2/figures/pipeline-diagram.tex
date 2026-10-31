@@ -32,7 +32,7 @@
 
 \node[subcard, text width=3.95cm, anchor=north] (table_box) at ([yshift=-2.5mm]t1.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{Table $T$: \texttt{AFL\_Ontario\_0}} \\[0.5mm]
+  \textbf{Table: \texttt{AFL\_Ontario\_0}} \\[0.5mm]
   \resizebox{\linewidth}{!}{%
   \renewcommand{\arraystretch}{1.05}%
   \setlength{\tabcolsep}{2.5pt}%
@@ -45,13 +45,13 @@
     \hline
   \end{tabular}%
   }\\[0.6mm]
-  $\rightarrow$ \textbf{Anchor Row 0} (\texttt{1989})
+  $\rightarrow$ Matches constraint: \textbf{1989}
   \par}
 };
 
 \node[subcard, text width=3.95cm, anchor=north] (link_box) at ([yshift=-3mm]table_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{Wikipedia Bridge Expansion}: \\
+  \textbf{Wikipedia Bridge Passage}: \\
   \texttt{Toronto} $\rightarrow$ \texttt{Doc:Toronto} \\[0.4mm]
   \textit{``...capital of Ontario. Established in 1793 as town of \textbf{\underline{York}}...''}
   \par}
@@ -59,10 +59,10 @@
 
 \node[subcard, text width=3.95cm, fill=blue!8, draw=blue!45, anchor=north] (retr_summary) at ([yshift=-3mm]link_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{Retriever Output ($k_1=5, k_2=3$)} \\[0.3mm]
-  $\bullet$ Coarse candidate rows: $\{\rho_0, \rho_1, \dots\}$ \\
-  $\bullet$ Cell hyperlinks: \texttt{/wiki/Toronto} \\
-  $\bullet$ 100\% context preserved (0 doc pruning)
+  \textbf{Retriever Output} \\[0.3mm]
+  $\bullet$ Candidate table rows \\
+  $\bullet$ Linked Wikipedia passages \\
+  $\bullet$ Complete context retained
   \par}
 };
 
@@ -78,7 +78,7 @@
 
 % Graph nodes
 \node[knode=blue] (ent_club) at (6.65, 2.35) {Toronto\\Eagles};
-\node[knode=purple] (rec_node) at (6.65, 1.45) {$\rho_0$\\(Rec 0)};
+\node[knode=purple] (rec_node) at (6.65, 1.45) {Row 0\\Hub};
 \node[knode=teal] (ent_city) at (8.75, 1.45) {Toronto};
 \node[knode=gray] (lit_year) at (6.65, 0.55) {``1989''};
 \node[knode=orange] (doc_node) at (8.75, 0.55) {Doc:\\Toronto};
@@ -93,19 +93,19 @@
 
 \node[subcard, text width=4.15cm, fill=purple!6, draw=purple!40, anchor=north] (centroid_box) at (7.70, -0.75) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{Star Centroid Hub $\mathcal{G}^*(\rho_i)$} \\[0.3mm]
-  $\bullet$ Centroid binds row cells (Prop.~1) \\
-  $\bullet$ Mathematically precludes row conflation \\
-  $\bullet$ Deterministic rule text extraction (0 LLM)
+  \textbf{Star Record Hubs} \\[0.3mm]
+  $\bullet$ Hub binds every cell to its row \\
+  $\bullet$ Prevents cross-row conflation \\
+  $\bullet$ Rule-based text links (no LLM)
   \par}
 };
 
 \node[subcard, text width=4.15cm, fill=purple!12, draw=purple!60, anchor=north] (path_box) at ([yshift=-2.5mm]centroid_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{Guided Path Scorer $S(p)$ (9 Factors)} \\[0.3mm]
-  $\bullet$ Path $p_1$: $\text{Eagles} \to \rho_0 \to \text{Toronto} \to \text{York}$ \\
-  $\bullet$ Maximal score $S(p_1) = 7.85$ (non-filtering) \\
-  $\bullet$ Lossless compression $\mathcal{X}^*(G_q)$ scaffold
+  \textbf{Guided Reasoning Path} \\[0.3mm]
+  $\bullet$ Best path: Eagles $\to$ Row 0 $\to$ Toronto $\to$ York \\
+  $\bullet$ Guides model attention (no filtering) \\
+  $\bullet$ Compact serialized prompt
   \par}
 };
 
@@ -119,45 +119,45 @@
 % Tier 1 LLM Card
 \node[llmcard=orange, text width=5.15cm, anchor=north] (l1_box) at ([yshift=-2.5mm]t3.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{\underline{Tier 1: Primary Reader (First Call)}} \\[0.3mm]
-  $\bullet$ Evaluates compressed multigraph $\mathcal{X}^*(G_q)$ $+$ guided path $p_1$ \\
-  $\bullet$ \textbf{Controlled Audit Decision}:
+  \textbf{\underline{Tier 1: Primary Reader [LLM Call 1]}} \\[0.3mm]
+  $\bullet$ \textbf{Prompt Packaging}: Compressed graph (deduplicated passages $+$ row blocks) $+$ guided reading path \\
+  $\bullet$ \textbf{Controlled Decision}:
   \vspace{-0.5mm}
   \begin{itemize}[leftmargin=3mm]
     \setlength{\itemsep}{0pt}
-    \item If determined ($|\mathcal{C}_q|=1$) $\rightarrow$ \textbf{Fast Exit Answer} (1 turn)
-    \item If collision ($|\mathcal{C}_q|>1$) or missing link $\rightarrow$ \textbf{Diagnostic Handoff}
+    \item Clear evidence $\rightarrow$ \textbf{Fast Exit Answer} (1 call total)
+    \item Ambiguity or missing facts $\rightarrow$ \textbf{Diagnostic Handoff}
   \end{itemize}
   \par}
 };
 
 % Diagnostic Packet Box
-\node[subcard, text width=5.15cm, fill=orange!6, draw=orange!75!black, line width=0.5pt, anchor=north] (handoff_box) at ([yshift=-2.5mm]l1_box.south) {
+\node[subcard, text width=5.15cm, fill=orange!6, draw=orange!75!black, line width=0.5pt, anchor=north] (handoff_box) at ([yshift=-2.2mm]l1_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{Diagnostic Handoff $\mathcal{H}_{\text{diag}}$}: \texttt{\{"focus": [$\rho_0, \rho_1$], "check": "town", "type": "collision"\}}
+  \textbf{Diagnostic Handoff}: \texttt{\{"focus": ["Row 0", "Row 1"], "check": "original name"\}}
   \par}
 };
 
 % Targeted Bridge Re-retrieval
-\node[subcard, text width=5.15cm, fill=purple!8, draw=purple!60, anchor=north] (ret_box) at ([yshift=-2.5mm]handoff_box.south) {
+\node[subcard, text width=5.15cm, fill=purple!8, draw=purple!60, anchor=north] (ret_box) at ([yshift=-2.2mm]handoff_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{Targeted Symmetric Bridge Augmentation $\Delta \mathcal{D}$}: \\
-  Harvests missing candidate passages symmetrically for focus set $\mathcal{C}_{\text{focus}}$
+  \textbf{Targeted Bridge Retrieval [0 LLM Calls]}: \\
+  Fetches missing passages for disputed rows; builds focused capsule
   \par}
 };
 
 % Tier 2 LLM Card
-\node[llmcard=teal, text width=5.15cm, anchor=north] (l2_box) at ([yshift=-2.5mm]ret_box.south) {
+\node[llmcard=teal, text width=5.15cm, anchor=north] (l2_box) at ([yshift=-2.2mm]ret_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{\underline{Tier 2: Targeted Reader (Second Call)}} \\[0.3mm]
-  $\bullet$ Input: \textbf{Minimal Sufficient State Capsule $\mathcal{K}_2$} (Prop.~2) \\
-  $\bullet$ Conclusive factual resolution (eliminates tiebreak guessing)
+  \textbf{\underline{Tier 2: Targeted Reader [LLM Call 2]}} \\[0.3mm]
+  $\bullet$ \textbf{Prompt Packaging}: Transmits \emph{only missing \& disputed facts} (discards all unrelated rows) \\
+  $\bullet$ Resolves candidate ambiguity via verified facts ($\le 2$ calls total)
   \par}
 };
 
 \draw[flow_orange] (l1_box.south) -- node[right, font=\tiny, text=orange!90!black] {if collision / ambiguous} (handoff_box.north);
 \draw[flow_purple] (handoff_box.south) -- (ret_box.north);
-\draw[flow_teal] (ret_box.south) -- node[right, font=\tiny, text=teal!90!black] {State Capsule $\mathcal{K}_2$} (l2_box.north);
+\draw[flow_teal] (ret_box.south) -- node[right, font=\tiny, text=teal!90!black] {Focused Capsule} (l2_box.north);
 
 % ========================================================
 % STAGE 4: GROUNDED GENERATION & PROVENANCE AUDIT (Sec. 3.4)
@@ -169,30 +169,30 @@
 % Answer box aligned with l1_box center vertically!
 \node[subcard, text width=3.95cm, fill=green!15, draw=green!60!black, line width=0.7pt, anchor=north] (ans_box) at ([yshift=-2.5mm]t4.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{\underline{Verified Output Span $a^*$}} \\[0.5mm]
+  \textbf{\underline{Verified Answer Span}} \\[0.5mm]
   \centering{\textbf{\small \texttt{"York"}}}\\[0.6mm]
   $\bullet$ Exact context-grounded extraction \\
-  $\bullet$ Zero ungrounded hallucination
+  $\bullet$ Zero hallucination
   \par}
 };
 
 \node[subcard, text width=3.95cm, fill=teal!6, draw=teal!60, anchor=north] (prov_box) at ([yshift=-2.8mm]ans_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{\underline{Auditable Provenance $\pi(a^*)$}} \\[0.3mm]
+  \textbf{\underline{Auditable Provenance}} \\[0.3mm]
   $\bullet$ Table: \texttt{AFL\_Ontario\_0} \\
-  $\bullet$ Row Hub: $\rho_0$ (\texttt{row:0}) \\
+  $\bullet$ Row: \texttt{Row 0 (Tor. Eagles)} \\
   $\bullet$ Cell: \texttt{City: Toronto} \\
-  $\bullet$ Bridge URL: \texttt{/wiki/Toronto} \\
-  $\bullet$ Passage: \textit{``...town of York...''}
+  $\bullet$ Link: \texttt{/wiki/Toronto} \\
+  $\bullet$ Text: \textit{``...town of York...''}
   \par}
 };
 
 \node[subcard, text width=3.95cm, fill=blue!6, draw=blue!45, anchor=north] (rev_box) at ([yshift=-2.8mm]prov_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{\underline{Reverse Grounding Fallback}} \\[0.3mm]
-  $\bullet$ Maps span back onto multigraph $G_q$ \\
-  $\bullet$ Fallback synthesis if disconnected \\
-  $\bullet$ 0.53\% empty rate (92.0\% faithful traces)
+  $\bullet$ Maps answer back to graph coordinates \\
+  $\bullet$ Direct synthesis if disconnected \\
+  $\bullet$ Auditable evidence trail
   \par}
 };
 
@@ -210,7 +210,7 @@
 
 % Stage 2 -> Stage 3 (Orthogonal neat step into Tier 1 reader in 1.0cm gap)
 \path (path_box.east) -- ++(0.50, 0) coordinate (p_turn);
-\draw[flow, draw=purple!85!black] (path_box.east) -- (p_turn) -- (p_turn |- l1_box.west) node[above=1pt, font=\tiny\bfseries, text=purple!90!black] {$\mathcal{X}^*(G_q), p_1$} -- (l1_box.west);
+\draw[flow, draw=purple!85!black] (path_box.east) -- (p_turn) -- (p_turn |- l1_box.west) node[above=1pt, font=\tiny\bfseries, text=purple!90!black] {Graph + Path} -- (l1_box.west);
 
 % Stage 3 -> Stage 4: Branch 1: Tier 1 Fast Exit (Pure horizontal line in 1.0cm gap!)
 \draw[flow_green] (l1_box.east |- ans_box.center) -- node[above, font=\tiny\bfseries, text=green!50!black] {Fast Exit} (ans_box.west);

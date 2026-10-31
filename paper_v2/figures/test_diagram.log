@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  31 OCT 2026 15:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  31 OCT 2026 15:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -489,83 +489,66 @@ LaTeX Font Info:    Trying to load font information for OT1+lmss on input line
 (/usr/share/texmf/tex/latex/lm/ot1lmss.fd
 File: ot1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-Overfull \hbox (5.69089pt too wide) in paragraph at lines 65--74
- [] 
- []
+LaTeX Font Info:    Calculating math sizes for size <5.2> on input line 58.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 5
+8.
 
-
-Overfull \hbox (5.69089pt too wide) in paragraph at lines 84--89
- [] 
- []
-
-LaTeX Font Info:    Calculating math sizes for size <5.2> on input line 93.
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 9
-3.
 (/usr/share/texmf/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-93.
+58.
 
 (/usr/share/texmf/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-93.
+58.
 
 (/usr/share/texmf/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5.2> on input line 93.
+(Font)              <5.2> on input line 58.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <3.63997> on input line 93.
+(Font)              <3.63997> on input line 58.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <2.59999> on input line 93.
-
-Overfull \hbox (6.14087pt too wide) in paragraph at lines 105--105
- [] 
- []
-
-
-Overfull \hbox (5.69089pt too wide) in paragraph at lines 124--129
- [] 
- []
-
-
-Overfull \hbox (5.69089pt too wide) in paragraph at lines 170--179
- [] 
- []
-
-
-Overfull \hbox (6.14087pt too wide) in paragraph at lines 180--180
- [] 
- []
-
+(Font)              <2.59999> on input line 58.
+LaTeX Font Info:    Calculating math sizes for size <4.8> on input line 64.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 195.
-[1
+(Font)              <4.8> on input line 64.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <3.35999> on input line 64.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <2.4> on input line 64.
+LaTeX Font Info:    Trying to load font information for OT1+lmtt on input line 
+64.
+
+(/usr/share/texmf/tex/latex/lm/ot1lmtt.fd
+File: ot1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./test_diagram.aux) ) 
 Here is how much of TeX's memory you used:
- 13312 strings out of 483183
- 278327 string characters out of 5966292
- 519072 words of memory out of 5000000
- 28079 multiletter control sequences out of 15000+600000
- 580390 words of font info for 49 fonts, out of 8000000 for 9000
+ 13349 strings out of 483183
+ 278796 string characters out of 5966292
+ 522043 words of memory out of 5000000
+ 28112 multiletter control sequences out of 15000+600000
+ 588295 words of font info for 56 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 68i,12n,67p,414b,1421s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 68i,11n,67p,414b,1338s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/us
 r/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm
-/lm-mathsy.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx5.pfb></usr/share/te
-xmf/fonts/type1/public/lm/lmbx7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr
-5.pfb></usr/share/texmf/fonts/type1/public/lm/lmss8.pfb></usr/share/texmf/fonts
-/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy5.pfb
->
-Output written on test_diagram.pdf (1 page, 125347 bytes).
+/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}</usr/share/tex
+mf/fonts/type1/public/lm/lmbx5.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx
+7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr5.pfb></usr/share/texmf/fonts/
+type1/public/lm/lmss8.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb>
+</usr/share/texmf/fonts/type1/public/lm/lmsy5.pfb></usr/share/texmf/fonts/type1
+/public/lm/lmtt8.pfb>
+Output written on test_diagram.pdf (1 page, 152260 bytes).
 PDF statistics:
- 37 PDF objects out of 1000 (max. 8388607)
- 27 compressed objects within 1 object stream
+ 42 PDF objects out of 1000 (max. 8388607)
+ 31 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
