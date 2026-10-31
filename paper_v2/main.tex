@@ -351,30 +351,28 @@ Path-Text Top-$N$                & 1.67  & 1.89  & 1.73  & 97.53\% & \textbf{1.0
 
 \enlargethispage{6.0\baselineskip}
 \begin{table}[t]
-\vspace{-4mm}
+\vspace{-2mm}
 \caption{Systematic knockout ablation study on pooled partitions ($N=500$ under GPT-OSS 120B). All variants isolate individual components against full QEG-RAG.}
 \label{tab:ablation}
 \centering
 \scriptsize
-\renewcommand{\arraystretch}{0.82}
-\setlength{\tabcolsep}{1.8pt}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{@{}lrrrrp{3.75cm}@{}}
+\renewcommand{\arraystretch}{0.88}
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{}lrrrr@{}}
 \toprule
-Ablation Configuration & EM (\%) & F1 (\%) & $\Delta$EM & Empty & Architectural Implication \\
+Ablation Configuration & EM (\%) & $\text{F}_1$ (\%) & $\Delta$EM & Empty \\
 \midrule
-\textbf{Full QEG-RAG (Two-Tier)} & \textbf{59.20} & \textbf{68.06} & --- & \textbf{11.40\%} & Full controlled evidence scaffolding \\
+\textbf{Full QEG-RAG (Two-Tier)} & \textbf{59.20} & \textbf{68.06} & --- & \textbf{11.40\%} \\
 \midrule
-(1) w/o Prompt Compression       & 31.60 & 37.36 & $-27.60$ & 52.40\% & Token blowout; $>52\%$ empty abstentions \\
-(2) w/o Record Nodes $\rho_i$    & 56.20 & 62.74 & $-3.00$  & 19.60\% & Cross-row conflation; doubles empty rate \\
-(3) w/o Tier-2 Targeted Evidence & 56.00 & 63.60 & $-3.20$  & 18.40\% & Re-reading misses external bridge facts \\
-(4) w/o Diagnostic Focus         & 57.80 & 65.74 & $-1.40$  & 15.60\% & Lack of cell-level grounding harms F1 \\
-(5) w/o Adaptive Tier-2 (Single Tier-1) & 58.60 & 66.78 & $-0.60$  & 5.40\%  & Single tier fails on collisions ($-7.68\%$ F1) \\
-(6) w/o Path Guidance (Graph)    & 61.60 & 70.14 & $+2.40$  & 11.80\% & Flexible reach via multigraph topology \\
+(1) w/o Prompt Compression       & 31.60 & 37.36 & $-27.60$ & 52.40\% \\
+(2) w/o Record Nodes $\rho_i$    & 56.20 & 62.74 & $-3.00$  & 19.60\% \\
+(3) w/o Tier-2 Targeted Evidence & 56.00 & 63.60 & $-3.20$  & 18.40\% \\
+(4) w/o Diagnostic Focus         & 57.80 & 65.74 & $-1.40$  & 15.60\% \\
+(5) w/o Adaptive Tier-2 (Single Tier-1) & 58.60 & 66.78 & $-0.60$  & 5.40\% \\
+(6) w/o Path Guidance (Graph)    & 61.60 & 70.14 & $+2.40$  & 11.80\% \\
 \bottomrule
-\end{tabular}%
-}
-\vspace{-4mm}
+\end{tabular}
+\vspace{-2.5mm}
 \end{table}
 
 \paragraph{Summary of Knockout Ablations \& Provenance Audit.}

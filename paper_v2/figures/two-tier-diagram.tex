@@ -2,21 +2,24 @@
   >=Latex,
   font=\sffamily\scriptsize,
   % Panels
-  col_panel/.style={draw=#1!70!black, fill=#1!2!white, rounded corners=5pt, line width=0.65pt},
-  col_hdr/.style={fill=#1!12, draw=#1!70!black, line width=0.5pt, rounded corners=2.5pt, font=\bfseries\scriptsize, text=#1!95!black, inner sep=2.5pt, align=center},
-  % Flowchart Nodes
-  fc_box/.style={draw=#1!75!black, fill=white, rounded corners=3pt, line width=0.55pt, inner sep=2.5pt, align=center, font=\scriptsize},
-  fc_proc/.style={draw=purple!80!black, fill=purple!5, rounded corners=3pt, line width=0.55pt, inner sep=2.5pt, align=center, font=\scriptsize},
-  fc_dec/.style={diamond, aspect=2.0, draw=#1!80!black, fill=#1!10, line width=0.55pt, inner sep=1.0pt, align=center, font=\scriptsize},
-  fc_exit/.style={draw=green!70!black, fill=green!12, rounded corners=3pt, line width=0.6pt, inner sep=2.5pt, align=center, font=\scriptsize},
-  fc_out/.style={draw=orange!80!black, fill=orange!6, rounded corners=3pt, line width=0.55pt, inner sep=2.5pt, align=center, font=\scriptsize},
-  % Bridge Box
-  bridge_box/.style={draw=teal!80!black, fill=teal!6, rounded corners=4pt, line width=0.65pt, inner sep=2.5pt, align=center, font=\scriptsize},
+  col_panel/.style={draw=#1!75!black, fill=#1!3!white, rounded corners=5pt, line width=0.7pt},
+  col_hdr/.style={fill=#1!16, draw=#1!75!black, line width=0.5pt, rounded corners=2.5pt, font=\bfseries\scriptsize, text=#1!95!black, inner sep=2.5pt, align=center},
+  % Cards matching draw.io
+  card_white/.style={draw=#1!75!black, fill=white, rounded corners=3pt, line width=0.55pt, inner sep=2.5pt, align=left, font=\scriptsize},
+  card_purple/.style={draw=purple!80!black, fill=purple!5, rounded corners=3pt, line width=0.6pt, inner sep=2.5pt, align=left, font=\scriptsize},
+  card_green/.style={draw=green!70!black, fill=green!12, rounded corners=3pt, line width=0.65pt, inner sep=2.5pt, align=left, font=\scriptsize},
+  card_orange/.style={draw=orange!80!black, fill=orange!8, rounded corners=3pt, line width=0.6pt, inner sep=2.5pt, align=left, font=\scriptsize},
+  card_bridge/.style={draw=teal!80!black, fill=teal!6, rounded corners=4pt, line width=0.65pt, inner sep=2.8pt, align=center, font=\scriptsize},
+  % Rhombus Decision
+  rhombus_dec/.style={diamond, aspect=2.0, draw=#1!80!black, fill=white, line width=0.6pt, inner sep=1.0pt, align=center, font=\scriptsize},
+  % Tags on arrows
+  wire_tag/.style={fill=white, draw=#1!80!black, line width=0.45pt, rounded corners=1.5pt, inner sep=1.2pt, font=\bfseries\fontsize{4.6pt}{5.4pt}\selectfont, text=#1!95!black},
   % Arrows
-  arr/.style={->, line width=0.85pt, draw=gray!70!black},
-  arr_green/.style={->, line width=0.9pt, draw=green!65!black},
-  arr_orange/.style={->, line width=0.9pt, draw=orange!85!black},
-  arr_bridge/.style={->, line width=1.0pt, draw=teal!85!black}
+  arr/.style={->, line width=0.85pt, draw=gray!75!black},
+  arr_blue/.style={->, line width=0.9pt, draw=blue!75!black},
+  arr_green/.style={->, line width=0.95pt, draw=green!65!black},
+  arr_orange/.style={->, line width=0.95pt, draw=orange!85!black},
+  arr_teal/.style={->, line width=1.0pt, draw=teal!85!black}
 ]
 
 % Brain icon pic
@@ -50,107 +53,132 @@
   }
 }
 
-% -------------------------
-% COLUMN 1: TIER 1 ALGORITHM
-% Center X = 2.6cm, Width = 5.0cm (X: 0.1 to 5.1)
-% -------------------------
-\node[col_panel=blue, minimum width=5.0cm, minimum height=6.0cm] (c1) at (2.6, 0) {};
-\node[col_hdr=blue, minimum width=4.7cm, anchor=north] (t1_hdr) at ([yshift=-1.6mm]c1.north) {
+% =============================================================
+% GEOMETRY:
+% Width: 12.2 cm
+% Col 1: Center X = 2.45cm, Width = 4.7cm (X: 0.10 to 4.80)
+% Center: Center X = 6.10cm, Width = 1.9cm (X: 5.15 to 7.05)
+% Col 2: Center X = 9.75cm, Width = 4.7cm (X: 7.40 to 12.10)
+% Total Height: 5.8 cm (Y: +2.90 to -2.90)
+% =============================================================
+
+% -------------------------------------------------------------
+% COLUMN 1: TIER 1
+% -------------------------------------------------------------
+\node[col_panel=blue, minimum width=4.7cm, minimum height=5.6cm] (c1) at (2.45, 0) {};
+\node[col_hdr=blue, minimum width=4.4cm, anchor=north] (t1_hdr) at ([yshift=-1.4mm]c1.north) {
   Tier 1: Initial Evidence Reasoning Algorithm
 };
 
-% T1 Step 1: Input Box
-\node[fc_box=blue, text width=4.5cm] (t1_in) at (2.6, 2.05) {
-  \textbf{Input:} Evidence Multigraph $G_q$\\
-  \textcolor{blue!80!black}{Full unpruned multigraph (candidate rows \& passages)}
+% Step 1.1: Input Multigraph
+\node[card_white=blue, text width=4.15cm] (t1_in) at (2.45, 1.85) {
+  \textbf{Input: Full Evidence Multigraph $G_q$}\\
+  {\fontsize{4.6pt}{5.4pt}\selectfont
+  $\bullet$ Full unpruned multigraph (all candidate rows \& passages)\\
+  $\bullet$ Tied candidates: \texttt{Toronto Eagles} vs \texttt{Toronto Blues} (1989)}
 };
 
-% T1 Step 2: Primary LLM Reasoning
-\node[fc_proc, text width=4.5cm] (t1_proc) at (2.6, 1.05) {
-  \tikz[baseline=-2.5pt]{\pic {brain_icon};}\hspace{4pt}\textbf{Primary LLM Reasoning (Call 1)}\\
-  \textcolor{purple!85!black}{Verify candidates; audit evidence clarity}
+% Step 1.2: Primary LLM Reasoning (Call 1)
+\node[card_purple, text width=4.15cm] (t1_llm) at (2.45, 0.85) {
+  \tikz[baseline=-2.5pt]{\pic {brain_icon};}\hspace{3pt}\textbf{Step 1: Primary LLM Reasoning (Call 1)}\\
+  {\fontsize{4.6pt}{5.4pt}\selectfont
+  $\bullet$ Evaluates evidence against query constraints; clarity audit\\
+  $\bullet$ \textcolor{purple!90!black}{\textbf{Audit Rule:}} Zero guessing on ambiguous candidate ties}
 };
 
-% T1 Step 3: Decision Diamond (Centered at 2.6)
-\node[fc_dec=purple, text width=1.8cm] (t1_dec) at (2.6, -0.15) {
+% Step 1.3: Rhombus Candidate Collision?
+\node[rhombus_dec=purple, text width=1.65cm] (t1_dec) at (2.45, -0.25) {
   Candidate\\Collision?
 };
 
-% T1 Step 4a: Fast Exit (Branch: No collision, left bottom)
-\node[fc_exit, text width=1.85cm] (t1_exit) at (1.35, -1.85) {
-  \textbf{Fast Exit}\\[0.3mm]
-  \textcolor{green!80!black}{$\approx 80\%$ Queries}\\
-  Single LLM call
+% Step 1.4a: Fast Exit (Branch: No)
+\node[card_green, text width=1.75cm] (t1_exit) at (1.30, -1.80) {
+  \textbf{Fast Exit}\\[0.2mm]
+  {\fontsize{4.5pt}{5.2pt}\selectfont
+  $\bullet$ Single LLM Call\\
+  $\bullet$ $\approx 80\%$ of Queries\\
+  $\bullet$ Terminate verified}
 };
 
-% T1 Step 4b: Diagnostic Packet (Branch: Collision detected, right bottom)
-\node[fc_out, text width=1.95cm] (t1_out) at (3.85, -1.85) {
-  \textbf{Diagnostic Packet $\mathcal{D}$}\\[0.3mm]
-  \textcolor{orange!90!black}{Collision alert:}\\
-  \texttt{Eagles} vs \texttt{Blues} (1989)
+% Step 1.4b: Diagnostic Packet D (Branch: Yes)
+\node[card_orange, text width=1.90cm] (t1_out) at (3.55, -1.80) {
+  \textbf{Diagnostic Packet $\mathcal{D}$}\\[0.2mm]
+  {\fontsize{4.5pt}{5.2pt}\selectfont
+  $\bullet$ Collision: formed 1989\\
+  $\bullet$ Bridge passage missing\\
+  $\bullet$ \textcolor{orange!90!black}{\textbf{Controlled Pause}}}
 };
 
 % Connectors in Tier 1
-\draw[arr] (t1_in) -- (t1_proc);
-\draw[arr] (t1_proc) -- (t1_dec);
-\draw[arr_green, rounded corners=3pt] (t1_dec.west) -| node[above, font=\bfseries\tiny, text=green!75!black, near start] {No} (t1_exit.north);
+\draw[arr_blue] (t1_in) -- (t1_llm);
+\draw[arr] (t1_llm) -- (t1_dec);
+\draw[arr_green, rounded corners=3pt] (t1_dec.west) -| node[above, font=\bfseries\tiny, text=green!75!black, near start] {No (Clear)} (t1_exit.north);
 \draw[arr_orange, rounded corners=3pt] (t1_dec.east) -| node[above, font=\bfseries\tiny, text=orange!85!black, near start] {Yes (Tied)} (t1_out.north);
 
 
-% -------------------------
-% COLUMN 2: TIER 2 ALGORITHM
-% Center X = 10.0cm, Width = 5.0cm (X: 7.5 to 12.5)
-% -------------------------
-\node[col_panel=teal, minimum width=5.0cm, minimum height=6.0cm] (c2) at (10.0, 0) {};
-\node[col_hdr=teal, minimum width=4.7cm, anchor=north] (t2_hdr) at ([yshift=-1.6mm]c2.north) {
+% -------------------------------------------------------------
+% COLUMN 2: TIER 2
+% -------------------------------------------------------------
+\node[col_panel=teal, minimum width=4.7cm, minimum height=5.6cm] (c2) at (9.75, 0) {};
+\node[col_hdr=teal, minimum width=4.4cm, anchor=north] (t2_hdr) at ([yshift=-1.4mm]c2.north) {
   Tier 2: Targeted Collision Resolution Algorithm
 };
 
-% T2 Step 1: Input Box
-\node[fc_box=teal, text width=4.5cm] (t2_in) at (10.0, 2.05) {
-  \textbf{Input:} Minimal State Capsule $\mathcal{S}_{\mathrm{min}}$\\
-  \textcolor{teal!85!black}{Compressed subgraph: tied candidates + bridge doc}
+% Step 2.1: Input Minimal Capsule
+\node[card_white=teal, text width=4.15cm] (t2_in) at (9.75, 1.85) {
+  \textbf{Input: Minimal State Capsule $\mathcal{S}_{\mathrm{min}}$}\\
+  {\fontsize{4.6pt}{5.4pt}\selectfont
+  $\bullet$ Compressed subgraph: strictly tied clubs + bridge doc\\
+  $\bullet$ Zero non-competing candidates; eliminates context dilution}
 };
 
-% T2 Step 2: Targeted LLM Call
-\node[fc_proc, text width=4.5cm] (t2_proc) at (10.0, 1.05) {
-  \tikz[baseline=-2.5pt]{\pic {brain_icon};}\hspace{4pt}\textbf{Targeted LLM Resolution (Call 2)}\\
-  \textcolor{purple!85!black}{Resolve ambiguity via isolated bridge evidence}
+% Step 2.2: Targeted LLM Call (Call 2)
+\node[card_purple, text width=4.15cm] (t2_llm) at (9.75, 0.85) {
+  \tikz[baseline=-2.5pt]{\pic {brain_icon};}\hspace{3pt}\textbf{Step 2: Targeted LLM Resolution (Call 2)}\\
+  {\fontsize{4.6pt}{5.4pt}\selectfont
+  $\bullet$ Prompts LLM exclusively with compressed capsule $\mathcal{S}_{\mathrm{min}}$\\
+  $\bullet$ Resolves ambiguity directly against factual bridge evidence}
 };
 
-% T2 Step 3: Decision Diamond
-\node[fc_dec=teal, text width=2.4cm] (t2_dec) at (10.0, -0.15) {
+% Step 2.3: Rhombus Grounded by Bridge?
+\node[rhombus_dec=teal, text width=2.3cm] (t2_dec) at (9.75, -0.25) {
   Grounded by\\Bridge Passage?
 };
 
-% T2 Step 4: Final Verified Answer
-\node[fc_exit, text width=4.5cm] (t2_out) at (10.0, -1.85) {
-  \textbf{Verified Output: Answer ``York''}\\[0.4mm]
-  \textcolor{green!80!black}{Full provenance audit trail $\bullet$ Zero hallucination}
+% Step 2.4: Verified Output
+\node[card_green, text width=4.15cm] (t2_out) at (9.75, -1.80) {
+  \textbf{Verified Output: Answer ``York''}\\[0.2mm]
+  {\fontsize{4.6pt}{5.4pt}\selectfont
+  $\bullet$ $\le 2$ LLM Calls Total $\bullet$ 100\% Grounded $\bullet$ Zero Hallucination\\
+  $\bullet$ \textcolor{green!75!black}{\textbf{Provenance:}} Row 0 $\to$ \texttt{Doc:Toronto\_Blues} $\to$ \textbf{York University}}
 };
 
 % Connectors in Tier 2
-\draw[arr] (t2_in) -- (t2_proc);
-\draw[arr] (t2_proc) -- (t2_dec);
-\draw[arr_green] (t2_dec.south) -- node[right, font=\bfseries\tiny, text=green!75!black] {Yes} (t2_out.north);
+\draw[arr_teal] (t2_in) -- (t2_llm);
+\draw[arr] (t2_llm) -- (t2_dec);
+\draw[arr_green] (t2_dec.south) -- node[right, font=\bfseries\tiny, text=green!75!black] {Yes (Grounded)} (t2_out.north);
 
 
 % -------------------------------------------------------------
-% CENTER CONNECTOR: BRIDGE SEARCH & GRAPH COMPRESSION
-% Center X = 6.3cm, Width = 2.0cm (X: 5.3 to 7.3)
+% CENTER: BRIDGE SEARCH & GRAPH COMPRESSION
 % -------------------------------------------------------------
-\node[bridge_box, text width=1.9cm] (bridge) at (6.3, 0.1) {
-  \textbf{Automated Bridge}\\[-0.2mm]
-  \textbf{\& Compression}\\[1.0mm]
-  \textcolor{blue!90!black}{\textbf{Zero LLM Calls}}\\[0.8mm]
+\node[card_bridge, text width=1.85cm] (bridge) at (6.10, 0.00) {
+  \textbf{Automated Bridge Search}\\[-0.2mm]
+  \textbf{\& Graph Compression}\\[0.6mm]
+  \textcolor{blue!90!black}{\textbf{Zero LLM Calls}}\\[0.6mm]
   \textbf{Graph Compression:}\\[-0.2mm]
-  \textcolor{teal!90!black}{Prune $\approx 85\%$ paths}\\[0.6mm]
-  Fetch bridge doc\\
-  \texttt{Doc:Blues}
+  \textcolor{teal!90!black}{Prune non-tied paths}\\[-0.2mm]
+  \textcolor{red!80!black}{\textbf{$\approx 85\%$ Size Reduction}}\\[0.5mm]
+  Fetch bridge passage:\\
+  {\fontsize{4.2pt}{5.0pt}\selectfont \texttt{Doc:Toronto\_Blues}}
 };
 
-% Inter-tier connecting flow
-\draw[arr_orange, rounded corners=4pt] (t1_out.east) -- (6.3, -1.85) -- (bridge.south);
-\draw[arr_bridge, rounded corners=4pt] (bridge.north) -- (6.3, 2.05) -- (t2_in.west);
+% Inter-tier connecting wires
+\draw[arr_orange, rounded corners=4pt] (t1_out.east) -- (6.10, -1.80) -- (bridge.south);
+\draw[arr_teal, rounded corners=4pt] (bridge.north) -- (6.10, 1.85) -- (t2_in.west);
+
+% Clean wire tags
+\node[wire_tag=orange] at (6.10, -1.35) {Handoff $\mathcal{D}$};
+\node[wire_tag=teal] at (6.10, 1.35) {Capsule $\mathcal{S}_{\mathrm{min}}$};
 
 \end{tikzpicture}
