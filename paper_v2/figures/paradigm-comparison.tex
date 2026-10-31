@@ -2,7 +2,7 @@
 \centering
 \resizebox{0.92\linewidth}{!}{\input{figures/paradigm-comparison-diagram}}
 \vspace{2.5mm}
-\caption{Architectural comparison across four table--text reasoning paradigms. In contrast to unguided linear prompt concatenation~(a), destructive question-driven graph pruning in ODYSSEY~(b), and expensive multi-turn agentic loops in online GraphRAG systems like HydraRAG~(c), the proposed OUEG-RAG framework~(d) dynamically instantiates a schema-preserving multigraph on-the-fly, retains complete evidence context, guides attention via deterministic multi-factor scored paths, and resolves bottlenecks via a bounded two-tier diagnostic-driven execution protocol.}
+\caption{Architectural comparison across four query-time table--text reasoning paradigms (offline GraphRAG frameworks like Microsoft GraphRAG and HippoRAG~2 require corpus-wide pre-indexing and cannot ingest ad-hoc tables at query time). In contrast to unguided linear prompt concatenation~(a), destructive question-driven graph pruning in ODYSSEY~(b), and expensive multi-turn agentic loops in online GraphRAG systems like HydraRAG and ToG-3~(c), the proposed QEG-RAG framework~(d) dynamically instantiates a schema-preserving multigraph on-the-fly, retains complete evidence context, guides attention via deterministic multi-factor scored paths, and resolves bottlenecks via a bounded two-tier diagnostic-driven execution protocol.}
 \vspace{-2mm}
 \label{fig:paradigms}
 \end{figure}

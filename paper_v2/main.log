@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  30 OCT 2026 13:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  31 OCT 2026 13:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -866,8 +866,8 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <3.63997> on input line 132.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <2.59999> on input line 132.
-) [3]) [4] (./figures/pipeline.tex
-(./figures/pipeline-diagram.tex
+) [3]) [4] [5]
+(./figures/pipeline.tex (./figures/pipeline-diagram.tex
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <5> not available
 (Font)              Font shape `T1/lmtt/b/n' tried instead on input line 35.
 
@@ -877,8 +877,7 @@ Underfull \hbox (badness 2245) in paragraph at lines 63--63
 
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <9> not available
 (Font)              Font shape `T1/lmtt/b/n' tried instead on input line 173.
-) [5]) [6] [7] (./figures/diagnostic-l2.tex
-(./figures/diagnostic-l2-diagram.tex
+)) [6] [7] (./figures/diagnostic-l2.tex (./figures/diagnostic-l2-diagram.tex
 Underfull \hbox (badness 1472) in paragraph at lines 59--59
 []\T1/lmtt/m/n/4.6 {"candidates": ["$\OML/lmm/m/it/4.6 ^^Z[]$\T1/lmtt/m/n/4.6 "
 , "$\OML/lmm/m/it/4.6 ^^Z[]$\T1/lmtt/m/n/4.6 "], "blocker": 
@@ -889,27 +888,27 @@ Underfull \hbox (badness 10000) in paragraph at lines 90--91
 []$\OMS/lmsy/m/n/5 K[] \OT1/lmr/m/n/5 = 
  []
 
-)) [8] [9] [10] [11] [12]
-Underfull \hbox (badness 10000) in paragraph at lines 324--325
+)) [8] [9] [10] [11] [12] [13]
+Underfull \hbox (badness 10000) in paragraph at lines 335--336
 []|\T1/lmr/m/n/7 Re-reading misses ex-ter-nal
  []
 
 
-Underfull \hbox (badness 2103) in paragraph at lines 325--326
+Underfull \hbox (badness 2103) in paragraph at lines 336--337
 []|\T1/lmr/m/n/7 Lack of cell-level ground-ing
  []
 
-[13] (./main.bbl [14]) [15] [16
+(./main.bbl [14]) [15] [16
 
 ] [17] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 19299 strings out of 483183
- 365904 string characters out of 5966292
- 673285 words of memory out of 5000000
- 33711 multiletter control sequences out of 15000+600000
- 712018 words of font info for 249 fonts, out of 8000000 for 9000
+ 19306 strings out of 483183
+ 366040 string characters out of 5966292
+ 670406 words of memory out of 5000000
+ 33718 multiletter control sequences out of 15000+600000
+ 719325 words of font info for 251 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,20n,69p,2038b,992s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,20n,69p,2005b,992s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/s
 hare/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/l
 m/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texm
@@ -937,10 +936,10 @@ tt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt8.pfb></usr/share/texmf/fo
 nts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 /amsfonts/symbols/msam5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/symbols/msbm10.pfb>
-Output written on main.pdf (17 pages, 694830 bytes).
+Output written on main.pdf (17 pages, 708560 bytes).
 PDF statistics:
  225 PDF objects out of 1000 (max. 8388607)
  170 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 41485 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 42509 words of extra memory for PDF output out of 42996 (max. 10000000)
 
