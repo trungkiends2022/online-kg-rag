@@ -1,0 +1,183 @@
+\begin{tikzpicture}[
+  >=Latex,
+  font=\sffamily\scriptsize,
+  % Symmetrical Panel Style
+  panel/.style={draw=#1!70!black, fill=#1!3, rounded corners=6pt, line width=0.7pt},
+  titlebar/.style={fill=#1!15, draw=#1!70!black, line width=0.5pt, rounded corners=3pt, font=\bfseries\scriptsize, text=#1!90!black, align=center, inner sep=2.5pt, minimum height=4.8mm},
+  % Uniform Card Style (Exact same width: 2.88cm, Exact same height: 2.15cm)
+  card/.style={draw=gray!30, fill=white, rounded corners=4pt, line width=0.5pt, inner sep=2.5pt, minimum width=2.88cm, minimum height=2.15cm, text width=2.62cm, align=center},
+  llmcard/.style={draw=#1!75!black, fill=#1!8, rounded corners=4pt, line width=0.65pt, inner sep=2.5pt, minimum width=2.88cm, minimum height=2.15cm, text width=2.62cm, align=center},
+  anscard/.style={draw=green!65!black, fill=green!6, rounded corners=4pt, line width=0.65pt, inner sep=2.5pt, minimum width=2.88cm, minimum height=2.15cm, text width=2.62cm, align=center},
+  badge/.style={fill=#1!15, draw=#1!75!black, line width=0.45pt, rounded corners=2pt, inner sep=1.4pt, font=\bfseries\tiny, text=#1!95!black},
+  % Flow Arrows
+  flow/.style={->, line width=0.85pt, draw=gray!60!black},
+  flow_green/.style={->, line width=1.1pt, draw=green!60!black},
+  flow_orange/.style={->, line width=1.0pt, draw=orange!85!black},
+  flow_purple/.style={->, line width=0.95pt, draw=purple!80!black},
+  flow_blue/.style={->, line width=0.95pt, draw=blue!75!black}
+]
+
+% Geometry Definitions:
+% Total diagram width: 13.0cm, Center X: 6.5cm
+% Column centers (4 uniform columns, width=2.88cm, gap=0.34cm):
+% Col 1: 1.65cm, Col 2: 4.88cm, Col 3: 8.12cm, Col 4: 11.35cm
+
+% ==========================================================
+% TOP PANEL: TIER 1 (PRIMARY CALL & FAST EXIT)
+% ==========================================================
+\node[panel=blue, minimum width=13.0cm, minimum height=3.1cm] (p1) at (6.5, 3.6) {};
+\node[titlebar=blue, text width=12.6cm, anchor=north] (t1) at ([yshift=-1.8mm]p1.north) {Tier 1: Primary Evidence Evaluation \& Determinacy Audit};
+
+% Card 1.1: Evidence Multigraph (Col 1)
+\node[card] (c1_1) at (1.65, 3.35) {
+  \vspace{-1mm}
+  \mbox{\begin{tikzpicture}[scale=0.55]
+    \draw[fill=blue!15, draw=blue!75!black, rounded corners=1.5pt] (0,0) rectangle (0.8, 0.7);
+    \fill[orange!85!black] (0.2,0.45) circle (1.8pt);
+    \fill[blue!85!black] (0.6,0.55) circle (1.8pt);
+    \fill[green!75!black] (0.5,0.2) circle (1.8pt);
+    \draw[gray!70!black, line width=0.5pt] (0.2,0.45) -- (0.6,0.55);
+    \draw[gray!70!black, line width=0.5pt] (0.2,0.45) -- (0.5,0.2);
+  \end{tikzpicture}}\\[0.5mm]
+  \textbf{Evidence Multigraph}\\[0.3mm]
+  {\fontsize{5.2pt}{6.2pt}\selectfont
+  Full unpruned graph evidence\\
+  Guided path scaffolding\\
+  Zero peripheral context loss
+  \par}
+};
+
+% Card 1.2: Tier 1 LLM Call (Col 2)
+\node[llmcard=blue] (c1_2) at (4.88, 3.35) {
+  \vspace{-1mm}
+  \mbox{\begin{tikzpicture}[scale=0.55]
+    \draw[fill=blue!20, draw=blue!80!black, rounded corners=1.5pt] (0,0) rectangle (0.75, 0.75);
+    \node[font=\fontsize{4.5pt}{5pt}\bfseries\selectfont, text=blue!90!black] at (0.375, 0.375) {LLM};
+    \foreach \x in {0.2, 0.375, 0.55} {
+      \draw[blue!80!black, line width=0.5pt] (\x, 0.75) -- (\x, 0.9);
+      \draw[blue!80!black, line width=0.5pt] (\x, 0) -- (\x, -0.15);
+    }
+  \end{tikzpicture}}\\[0.5mm]
+  \textbf{Tier 1 Primary Call}\\[0.3mm]
+  {\fontsize{5.2pt}{6.2pt}\selectfont
+  Evaluates complete evidence\\
+  Audits candidate clarity\\
+  Strictly avoids guesswork
+  \par}
+};
+
+% Card 1.3: Determinacy Check (Col 3)
+\node[card, draw=orange!70!black, fill=orange!4] (c1_3) at (8.12, 3.35) {
+  \vspace{-1mm}
+  \mbox{\begin{tikzpicture}[scale=0.55]
+    \draw[fill=orange!25, draw=orange!80!black, shape=diamond, line width=0.5pt] (0.4, 0.4) circle (0.38);
+    \node[font=\tiny\bfseries, text=orange!90!black] at (0.4, 0.4) {?};
+  \end{tikzpicture}}\\[0.5mm]
+  \textbf{Clarity Decision}\\[0.3mm]
+  {\fontsize{5.2pt}{6.2pt}\selectfont
+  Audits candidate uniqueness\\
+  $\bullet$ Clear: Fast Exit\\
+  $\bullet$ Ambiguous: Tier 2 Handoff
+  \par}
+};
+
+% Card 1.4: Fast Exit Answer (Col 4)
+\node[anscard] (c1_4) at (11.35, 3.35) {
+  \vspace{-1mm}
+  \mbox{\begin{tikzpicture}[scale=0.55]
+    \draw[fill=green!25, draw=green!75!black, circle] (0.35,0.35) circle (0.35);
+    \draw[green!80!black, line width=1.1pt] (0.2,0.35) -- (0.32,0.22) -- (0.52,0.48);
+  \end{tikzpicture}}\\[0.5mm]
+  \textbf{Fast Exit Path} \ \tikz\node[badge=green!70!black, inner sep=1pt]{1 Call};\\[0.3mm]
+  {\fontsize{5.2pt}{6.2pt}\selectfont
+  Direct confident resolution ($\approx 80\%$)\\[0.5mm]
+  \textcolor{green!60!black}{\textbf{Verified Answer: York}}
+  \par}
+};
+
+% Tier 1 Horizontal Flow Connectors
+\draw[flow_blue] (c1_1) -- (c1_2);
+\draw[flow_blue] (c1_2) -- (c1_3);
+\draw[flow_green] (c1_3) -- (c1_4) node[midway, above, font=\tiny\bfseries, text=green!60!black] {Clear};
+
+% ==========================================================
+% BOTTOM PANEL: TIER 2 (DIAGNOSTIC RETRIEVAL & DISAMBIGUATION)
+% ==========================================================
+\node[panel=orange, minimum width=13.0cm, minimum height=3.1cm] (p2) at (6.5, 0.15) {};
+\node[titlebar=orange, text width=12.6cm, anchor=north] (t2) at ([yshift=-1.8mm]p2.north) {Tier 2: Diagnostic Feedback \& Targeted Disambiguation};
+
+% Card 2.1: Diagnostic Handoff (Col 1)
+\node[card, draw=orange!70!black, fill=orange!5] (c2_1) at (1.65, -0.1) {
+  \vspace{-1mm}
+  \mbox{\begin{tikzpicture}[scale=0.55]
+    \draw[fill=orange!25, draw=orange!85!black, rounded corners=1.5pt] (0.35, 0.75) -- (0.02, 0.1) -- (0.68, 0.1) -- cycle;
+    \node[font=\bfseries\tiny, text=orange!90!black] at (0.35, 0.32) {!};
+  \end{tikzpicture}}\\[0.5mm]
+  \textbf{Diagnostic Handoff}\\[0.3mm]
+  {\fontsize{5.2pt}{6.2pt}\selectfont
+  Triggered on ambiguity:\\
+  Pinpoints competing rows\\
+  Identifies missing bridge facts
+  \par}
+};
+
+% Card 2.2: Targeted Search (Col 2)
+\node[card, draw=purple!65!black, fill=purple!5] (c2_2) at (4.88, -0.1) {
+  \vspace{-1mm}
+  \mbox{\begin{tikzpicture}[scale=0.55]
+    \draw[fill=purple!20, draw=purple!80!black, circle] (0.3,0.45) circle (0.23);
+    \draw[purple!80!black, line width=1.1pt] (0.47,0.28) -- (0.7,0.05);
+  \end{tikzpicture}}\\[0.5mm]
+  \textbf{Targeted Search}\\[0.3mm]
+  {\fontsize{5.2pt}{6.2pt}\selectfont
+  \textcolor{purple!80!black}{\textbf{Automated (Zero LLM)}}\\[0.2mm]
+  Fetches missing bridge links\\
+  Symmetric per-candidate search
+  \par}
+};
+
+% Card 2.3: Focused State Capsule (Col 3)
+\node[card, draw=purple!75!black, fill=purple!9] (c2_3) at (8.12, -0.1) {
+  \vspace{-1mm}
+  \mbox{\begin{tikzpicture}[scale=0.55]
+    \draw[fill=purple!25, draw=purple!80!black, rounded corners=1.5pt] (0.05,0.08) rectangle (0.7, 0.65);
+    \draw[purple!80!black, line width=0.5pt] (0.05,0.4) -- (0.7,0.4);
+    \draw[purple!80!black, line width=0.5pt] (0.375,0.4) -- (0.375,0.65);
+  \end{tikzpicture}}\\[0.5mm]
+  \textbf{State Capsule}\\[0.3mm]
+  {\fontsize{5.2pt}{6.2pt}\selectfont
+  Focused evidence bundle\\
+  Discards irrelevant rows\\
+  Retains only disputed hypotheses
+  \par}
+};
+
+% Card 2.4: Tier 2 Disambiguation LLM (Col 4)
+\node[anscard] (c2_4) at (11.35, -0.1) {
+  \vspace{-1mm}
+  \mbox{\begin{tikzpicture}[scale=0.55]
+    \draw[fill=orange!25, draw=orange!80!black, rounded corners=1.5pt] (0,0) rectangle (0.75, 0.75);
+    \node[font=\fontsize{4.5pt}{5pt}\bfseries\selectfont, text=orange!90!black] at (0.375, 0.375) {LLM};
+    \foreach \x in {0.2, 0.375, 0.55} {
+      \draw[orange!80!black, line width=0.5pt] (\x, 0.75) -- (\x, 0.9);
+      \draw[orange!80!black, line width=0.5pt] (\x, 0) -- (\x, -0.15);
+    }
+  \end{tikzpicture}}\\[0.5mm]
+  \textbf{Tier 2 Resolution} \ \tikz\node[badge=orange!80!black, inner sep=1pt]{2 Calls};\\[0.3mm]
+  {\fontsize{5.2pt}{6.2pt}\selectfont
+  Breaks tie by fact ($\approx 20\%$)\\[0.5mm]
+  \textcolor{green!60!black}{\textbf{Verified Answer: York}}
+  \par}
+};
+
+% Tier 2 Horizontal Flow Connectors
+\draw[flow_orange] (c2_1) -- (c2_2);
+\draw[flow_purple] (c2_2) -- (c2_3);
+\draw[flow_purple] (c2_3) -- (c2_4);
+
+% Inter-tier Feedback Connector (from Card 1.3 to Card 2.1)
+\draw[flow_orange] (c1_3.south) -- ++(0,-0.4) -| (c2_1.north)
+  node[pos=0.35, fill=white, draw=orange!70!black, rounded corners=2pt, inner sep=1.8pt, font=\bfseries\tiny, text=orange!90!black]
+  {Ambiguity / Missing Link ($\approx 20\%$)};
+
+\end{tikzpicture}

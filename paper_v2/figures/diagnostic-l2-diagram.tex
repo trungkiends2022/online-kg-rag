@@ -18,13 +18,13 @@
 % Center Y: -0.32, Height: 10.2cm (Top: +4.78cm, Bottom: -5.42cm)
 
 % ========================================================
-% COLUMN 1: TIER 1 (L1 READER & AUDIT PROTOCOL)
+% COLUMN 1: TIER 1 (PRIMARY READER & AUDIT PROTOCOL)
 % ========================================================
 \node[panel=orange, minimum width=5.2cm, minimum height=10.2cm] (p_l1) at (2.70, -0.32) {};
-\node[titlebar=orange, text width=4.8cm, anchor=north] (t_l1) at ([yshift=-2.8mm]p_l1.north) {Tier 1: L1 Reader \& Controlled Audit};
+\node[titlebar=orange, text width=4.8cm, anchor=north] (t_l1) at ([yshift=-2.8mm]p_l1.north) {Tier 1: Primary Reader \& Controlled Audit};
 
 \node[box, text width=4.75cm, fill=orange!6, draw=orange!45, anchor=north] (l1_in) at ([yshift=-2.9mm]t_l1.south) {
-  \textbf{Input Context to L1 LLM ($\mathcal{X}_{\text{L1}}$)} \\[0.3mm]
+  \textbf{Input Context to Tier 1 LLM ($\mathcal{X}_1$)} \\[0.3mm]
   \tiny $\bullet$ Complete multigraph $\mathcal{X}^*(G_q)$ (lossless compression) \\
   $\bullet$ Scored path guide $p_1$ ($S=7.85$) as attention steer \\
   $\bullet$ Non-filtering: preserves full topological evidence
@@ -41,7 +41,7 @@
 \node[box, text width=2.15cm, fill=green!12, draw=green!65!black, line width=0.55pt, anchor=north west] (l1_branch_a) at ([yshift=-2.9mm, xshift=0.5mm]l1_llm.south west) {
   \textbf{Branch A ($|\mathcal{C}_q|=1$)} \\[0.2mm]
   \tiny $\bullet$ Single path found \\
-  $\bullet$ \textbf{L1 Fast Exit}: verified $a^*$ \\
+  $\bullet$ \textbf{Tier 1 Fast Exit}: verified $a^*$ \\
   $\bullet$ 1 call, terminates here
 };
 
@@ -85,14 +85,14 @@
 };
 
 \node[box, text width=4.75cm, fill=teal!10, draw=teal!60, anchor=north] (capsule_pack) at ([yshift=-2.8mm]ret_delta.south) {
-  \textbf{Packager: State Capsule $\mathcal{K}_{\text{L2}}$} \\[0.3mm]
+  \textbf{Packager: State Capsule $\mathcal{K}_2$} \\[0.3mm]
   \tiny Integrates focus row bindings $+$ delta passages $\Delta \mathcal{D}$ \\
-  $\mathcal{K}_{\text{L2}} = (q, \, \psi_{\text{check}}, \, \{\mathcal{G}^*(\rho_c)\}_{c \in \mathcal{C}_{\text{focus}}}, \, \Delta \mathcal{D})$
+  $\mathcal{K}_2 = (q, \, \psi_{\text{check}}, \, \{\mathcal{G}^*(\rho_c)\}_{c \in \mathcal{C}_{\text{focus}}}, \, \Delta \mathcal{D})$
 };
 
 \node[box, text width=4.75cm, fill=purple!6, draw=purple!40, anchor=north] (ret_prop) at ([yshift=-2.8mm]capsule_pack.south) {
-  \textbf{Sufficiency Guarantee (Prop.~2)} \\[0.3mm]
-  \tiny $\bullet$ Zero informational loss: $I(a^*; \mathcal{X}_{\text{L1}} \cup \Delta \mathcal{D} \mid \mathcal{K}_{\text{L2}}) = 0$ \\
+  \textbf{Informational Sufficiency Guarantee} \\[0.3mm]
+  \tiny $\bullet$ Zero informational loss: $I(a^*; \mathcal{X}_1 \cup \Delta \mathcal{D} \mid \mathcal{K}_2) = 0$ \\
   $\bullet$ Bounded context: eliminates irrelevant clutter \\
   $\bullet$ Ready for factual disambiguation at Tier 2
 };
@@ -102,13 +102,13 @@
 \draw[flow_purple] (capsule_pack.south) -- (ret_prop.north);
 
 % ========================================================
-% COLUMN 3: TIER 2 (L2 READER & GROUNDED RESOLUTION)
+% COLUMN 3: TIER 2 (TARGETED READER & GROUNDED RESOLUTION)
 % ========================================================
 \node[panel=teal, minimum width=5.2cm, minimum height=10.2cm] (p_l2) at (14.90, -0.32) {};
-\node[titlebar=teal, text width=4.8cm, anchor=north] (t_l2) at ([yshift=-2.8mm]p_l2.north) {Tier 2: L2 Reader (Second LLM Call)};
+\node[titlebar=teal, text width=4.8cm, anchor=north] (t_l2) at ([yshift=-2.8mm]p_l2.north) {Tier 2: Targeted Reader (Second Call)};
 
 \node[box, text width=4.75cm, fill=teal!6, draw=teal!45, anchor=north] (l2_capsule) at ([yshift=-4.8mm]t_l2.south) {
-  \textbf{Minimal Sufficient State Capsule $\mathcal{K}_{\text{L2}}$} \\[0.3mm]
+  \textbf{Minimal Sufficient State Capsule $\mathcal{K}_2$} \\[0.3mm]
   \fontsize{4.6pt}{5.6pt}\selectfont
   \texttt{\{"question": "city with club formed in 1989",\\
   \ "unresolved": "needed\_check: town name",\\
@@ -124,7 +124,7 @@
 
 \node[llmbox=teal, text width=4.75cm, inner sep=5.0pt, anchor=north] (l2_llm) at ([yshift=-4.8mm]l2_capsule.south) {
   \textbf{Backbone LLM (Call 2) -- Factual Reader} \\[0.3mm]
-  \tiny $\bullet$ Evaluates grounded delta facts in $\mathcal{K}_{\text{L2}}$ at $T=0$ \\
+  \tiny $\bullet$ Evaluates grounded delta facts in $\mathcal{K}_2$ at $T=0$ \\
   $\bullet$ Disambiguates tie between $\rho_0$ and $\rho_1$ factually \\
   $\bullet$ Eliminates heuristic lexical tiebreaking
 };
@@ -150,7 +150,7 @@
 
 \coordinate (c2_turn) at (11.85, 0);
 \draw[flow_teal] (capsule_pack.east) -- (capsule_pack.east -| c2_turn) 
-  -- node[rotate=90, midway, badge=teal] {State Capsule $\mathcal{K}_{\text{L2}}$} 
+  -- node[rotate=90, midway, badge=teal] {State Capsule $\mathcal{K}_2$} 
   (l2_capsule.west -| c2_turn) -- (l2_capsule.west);
 
 \end{tikzpicture}

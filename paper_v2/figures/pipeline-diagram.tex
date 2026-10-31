@@ -93,7 +93,7 @@
 
 \node[subcard, text width=4.15cm, fill=purple!6, draw=purple!40, anchor=north] (centroid_box) at (7.70, -0.75) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{Star Centroid Hub $\mathcal{G}^*(\rho_i)$ ($<20$\,ms)} \\[0.3mm]
+  \textbf{Star Centroid Hub $\mathcal{G}^*(\rho_i)$} \\[0.3mm]
   $\bullet$ Centroid binds row cells (Prop.~1) \\
   $\bullet$ Mathematically precludes row conflation \\
   $\bullet$ Deterministic rule text extraction (0 LLM)
@@ -116,10 +116,10 @@
 \node[panel=orange, minimum width=5.6cm, minimum height=8.2cm] (panel3) at (13.80, -0.5) {};
 \node[titlebar=orange, text width=5.2cm, anchor=north] (t3) at ([yshift=-2.8mm]panel3.north) {Stage 3 (Sec.~3.3): Two-Tier Controlled Engine};
 
-% L1 LLM Card
+% Tier 1 LLM Card
 \node[llmcard=orange, text width=5.15cm, anchor=north] (l1_box) at ([yshift=-2.5mm]t3.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{\underline{Tier 1: L1 Reader (First LLM Call)}} \\[0.3mm]
+  \textbf{\underline{Tier 1: Primary Reader (First Call)}} \\[0.3mm]
   $\bullet$ Evaluates compressed multigraph $\mathcal{X}^*(G_q)$ $+$ guided path $p_1$ \\
   $\bullet$ \textbf{Controlled Audit Decision}:
   \vspace{-0.5mm}
@@ -146,18 +146,18 @@
   \par}
 };
 
-% L2 LLM Card
+% Tier 2 LLM Card
 \node[llmcard=teal, text width=5.15cm, anchor=north] (l2_box) at ([yshift=-2.5mm]ret_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{\underline{Tier 2: L2 Reader (Second LLM Call)}} \\[0.3mm]
-  $\bullet$ Input: \textbf{Minimal Sufficient State Capsule $\mathcal{K}_{\text{L2}}$} (Prop.~2) \\
+  \textbf{\underline{Tier 2: Targeted Reader (Second Call)}} \\[0.3mm]
+  $\bullet$ Input: \textbf{Minimal Sufficient State Capsule $\mathcal{K}_2$} (Prop.~2) \\
   $\bullet$ Conclusive factual resolution (eliminates tiebreak guessing)
   \par}
 };
 
 \draw[flow_orange] (l1_box.south) -- node[right, font=\tiny, text=orange!90!black] {if collision / ambiguous} (handoff_box.north);
 \draw[flow_purple] (handoff_box.south) -- (ret_box.north);
-\draw[flow_teal] (ret_box.south) -- node[right, font=\tiny, text=teal!90!black] {State Capsule $\mathcal{K}_{\text{L2}}$} (l2_box.north);
+\draw[flow_teal] (ret_box.south) -- node[right, font=\tiny, text=teal!90!black] {State Capsule $\mathcal{K}_2$} (l2_box.north);
 
 % ========================================================
 % STAGE 4: GROUNDED GENERATION & PROVENANCE AUDIT (Sec. 3.4)
@@ -208,15 +208,15 @@
 % Stage 1 -> Stage 2 (Clean horizontal line in 1.0cm gap)
 \draw[flow] (retr_summary.east) -- node[above, font=\tiny\bfseries, text=blue!85!black] {Evidence} (panel2.west |- retr_summary.east);
 
-% Stage 2 -> Stage 3 (Orthogonal neat step into L1 reader in 1.0cm gap)
+% Stage 2 -> Stage 3 (Orthogonal neat step into Tier 1 reader in 1.0cm gap)
 \path (path_box.east) -- ++(0.50, 0) coordinate (p_turn);
 \draw[flow, draw=purple!85!black] (path_box.east) -- (p_turn) -- (p_turn |- l1_box.west) node[above=1pt, font=\tiny\bfseries, text=purple!90!black] {$\mathcal{X}^*(G_q), p_1$} -- (l1_box.west);
 
-% Stage 3 -> Stage 4: Branch 1: L1 Fast Exit (Pure horizontal line in 1.0cm gap!)
+% Stage 3 -> Stage 4: Branch 1: Tier 1 Fast Exit (Pure horizontal line in 1.0cm gap!)
 \draw[flow_green] (l1_box.east |- ans_box.center) -- node[above, font=\tiny\bfseries, text=green!50!black] {Fast Exit} (ans_box.west);
 
-% Stage 3 -> Stage 4: Branch 2: L2 Verified Exit (Orthogonal right-angle step into ans_box!)
+% Stage 3 -> Stage 4: Branch 2: Tier 2 Verified Exit (Orthogonal right-angle step into ans_box!)
 \path (l2_box.east) -- ++(0.50, 0) coordinate (t_turn);
-\draw[flow_teal] (l2_box.east) -- (t_turn) -- (t_turn |- ans_box.south west) node[above=1pt, font=\tiny\bfseries, text=teal!90!black] {L2 Verified} -- (ans_box.south west);
+\draw[flow_teal] (l2_box.east) -- (t_turn) -- (t_turn |- ans_box.south west) node[above=1pt, font=\tiny\bfseries, text=teal!90!black] {Tier 2 Verified} -- (ans_box.south west);
 
 \end{tikzpicture}

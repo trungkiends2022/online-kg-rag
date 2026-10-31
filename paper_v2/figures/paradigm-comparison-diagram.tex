@@ -1,137 +1,199 @@
 \begin{tikzpicture}[
   >=Latex,
   font=\scriptsize,
-  header-col/.style={draw=#1!70!black, fill=#1!12, rounded corners=3pt, font=\bfseries\fontsize{5.8pt}{6.8pt}\selectfont, align=center, inner sep=3pt, minimum height=7mm},
-  header-ours/.style={draw=teal!85!black, fill=teal!16, rounded corners=3pt, font=\bfseries\fontsize{5.8pt}{6.8pt}\selectfont, align=center, inner sep=3pt, minimum height=7mm, line width=0.9pt},
-  row-lbl/.style={draw=gray!60, fill=gray!15, rounded corners=2.5pt, font=\bfseries\fontsize{5.2pt}{6.2pt}\selectfont, align=center, inner sep=2.5pt},
-  cell-box/.style={draw=#1!40, fill=#1!4, rounded corners=2.5pt, font=\fontsize{5.0pt}{6.0pt}\selectfont, align=left, inner sep=3pt, line width=0.45pt},
-  cell-box-ours/.style={draw=teal!70!black, fill=teal!6, rounded corners=2.5pt, font=\fontsize{5.0pt}{6.0pt}\selectfont, align=left, inner sep=3pt, line width=0.85pt},
-  call-box/.style={draw=#1!50, fill=white, rounded corners=2.5pt, font=\fontsize{7.5pt}{8.5pt}\selectfont\bfseries, align=center, inner sep=2pt, line width=0.5pt, minimum height=6.5mm},
-  call-box-ours/.style={draw=teal!85!black, fill=teal!10, rounded corners=2.5pt, font=\fontsize{7.0pt}{8.0pt}\selectfont\bfseries, align=center, inner sep=2pt, line width=0.9pt, minimum height=6.5mm}
+  lbl-dark/.style={draw=rowlblbg, fill=rowlblbg, rounded corners=3.5pt, font=\bfseries\fontsize{4.9pt}{5.8pt}\selectfont, text=white, align=center, inner sep=2.5pt},
+  hdr-box/.style n args={3}{draw=#2, fill=#1, rounded corners=3.5pt, font=\bfseries\fontsize{5.5pt}{6.5pt}\selectfont, text=#3, align=center, inner sep=2.5pt, line width=0.6pt},
+  hdr-ours/.style={draw=borderDteal, fill=headDteal, rounded corners=3.5pt, font=\bfseries\fontsize{5.5pt}{6.5pt}\selectfont, text=fontDteal, align=center, inner sep=2.5pt, line width=1.1pt},
+  box-r0/.style={draw=#1, fill=white, rounded corners=3.5pt, line width=0.55pt},
+  box-r0-ours/.style={draw=borderDteal, fill=white, rounded corners=3.5pt, line width=0.95pt},
+  card-red/.style={draw=cellRedBorder, fill=cellRedBg, rounded corners=3.5pt, font=\fontsize{4.8pt}{5.8pt}\selectfont, text=cellRedText, align=left, inner sep=3.0pt, line width=0.5pt},
+  card-green/.style={draw=cellGreenBorder, fill=cellGreenBg, rounded corners=3.5pt, font=\fontsize{4.8pt}{5.8pt}\selectfont, text=cellGreenText, align=left, inner sep=3.0pt, line width=0.9pt},
+  card-gray/.style={draw=cellGrayBorder, fill=cellGrayBg, rounded corners=3.5pt, font=\fontsize{4.8pt}{5.8pt}\selectfont, text=cellGrayText, align=left, inner sep=3.0pt, line width=0.5pt}
 ]
 
-\def\wL{2.5cm}
-\def\wC{3.4cm}
-\def\wD{3.6cm}
+% --- Color Palette from Draw.io ---
+\definecolor{rowlblbg}{HTML}{2C3E50}
+\definecolor{headAgray}{HTML}{EAEDED}
+\definecolor{borderAgray}{HTML}{7F8C8D}
+\definecolor{fontAgray}{HTML}{2C3E50}
 
-% --- Headers (y = 0) ---
-\node[header-col=gray, text width=\wC] at (4.4, 0) {(A) Flattened In-Context Prompting\\{\tiny Direct LLM, Flat-RAG}};
-\node[header-col=red!70!black, text width=\wC] at (8.0, 0) {(B) Online Graph + Pruning\\{\tiny e.g., ODYSSEY (NAACL 2025)}};
-\node[header-col=orange!80!black, text width=\wC] at (11.6, 0) {(C) Agentic Graph Search\\{\tiny e.g., HydraRAG, ToG-3}};
-\node[header-ours, text width=\wD] at (15.3, 0) {(D) QEG-RAG (Ours)\\{\tiny Training-free, Guided, Bounded}};
+\definecolor{headBred}{HTML}{F4CCCC}
+\definecolor{borderBred}{HTML}{C0392B}
+\definecolor{fontBred}{HTML}{7B241C}
 
-% --- Row 0: Evidence Representation (y = -1.25, height=1.6cm) ---
-\def\yZero{-1.25}
-\node[row-lbl, text width=\wL, minimum height=1.6cm] at (1.25, \yZero) {\textbf{Evidence}\\\textbf{Representation}};
+\definecolor{headCgold}{HTML}{FCF3CF}
+\definecolor{borderCgold}{HTML}{B7950B}
+\definecolor{fontCgold}{HTML}{7D6608}
 
-% Col A background & elements
-\node[cell-box=gray, text width=\wC, minimum height=1.6cm] (boxA) at (4.4, \yZero) {};
-\node[draw=blue!60, fill=blue!10, rounded corners=1pt, inner sep=1.2pt, font=\fontsize{4.6pt}{5.2pt}\selectfont] (r1) at (3.5, -0.9) {row};
-\node[draw=blue!60, fill=blue!10, rounded corners=1pt, inner sep=1.2pt, font=\fontsize{4.6pt}{5.2pt}\selectfont] (r2) at (4.0, -0.9) {row};
-\node[draw=blue!60, fill=blue!10, rounded corners=1pt, inner sep=1.2pt, font=\fontsize{4.6pt}{5.2pt}\selectfont] (r3) at (4.5, -0.9) {row};
-\node[draw=orange!60, fill=orange!10, rounded corners=1pt, inner sep=1.2pt, font=\fontsize{4.6pt}{5.2pt}\selectfont] (p1) at (5.0, -0.9) {psg};
-\node[draw=orange!60, fill=orange!10, rounded corners=1pt, inner sep=1.2pt, font=\fontsize{4.6pt}{5.2pt}\selectfont] (p2) at (5.4, -0.9) {psg};
-\draw[->, gray!60, line width=0.5pt] (4.4, -1.1) -- (4.4, -1.35);
-\node[draw=gray!50, fill=white, rounded corners=1.5pt, font=\fontsize{4.6pt}{5.2pt}\selectfont, inner sep=1.5pt] at (4.4, -1.6) {\textbf{Linear Flat Prompt $\rightarrow$ LLM}};
+\definecolor{headDteal}{HTML}{D1F2EB}
+\definecolor{borderDteal}{HTML}{0E8A75}
+\definecolor{fontDteal}{HTML}{0E6251}
 
-% Col B background & elements
-\node[cell-box=red!70!black, text width=\wC, minimum height=1.6cm] (boxB) at (8.0, \yZero) {};
-\node[circle, draw=red!60, fill=red!10, inner sep=0.8pt, font=\fontsize{4.5pt}{5pt}\selectfont] (be1) at (7.1, -0.95) {$e_1$};
-\node[circle, draw=red!60, fill=red!10, inner sep=0.8pt, font=\fontsize{4.5pt}{5pt}\selectfont] (be2) at (7.9, -0.85) {$e_2$};
-\node[circle, draw=red!60, fill=red!10, inner sep=0.8pt, font=\fontsize{4.5pt}{5pt}\selectfont] (be3) at (7.5, -1.45) {$e_3$};
-\node[circle, draw=red!60, dashed, fill=white, inner sep=0.8pt, text=red!80, font=\fontsize{5pt}{5pt}\selectfont] (bpx1) at (8.6, -0.95) {\texttimes};
-\node[circle, draw=red!60, dashed, fill=white, inner sep=0.8pt, text=red!80, font=\fontsize{5pt}{5pt}\selectfont] (bpx2) at (8.8, -1.45) {\texttimes};
-\draw[->, red!60, line width=0.4pt] (be1) -- (be2);
-\draw[->, red!60, line width=0.4pt] (be1) -- (be3);
-\draw[->, red!40, dashed, line width=0.4pt] (be2) -- (bpx1);
-\node[font=\fontsize{4.6pt}{5.4pt}\selectfont, text=gray!80!black] at (8.0, -1.8) {Pruning discards $\le 53\%$ elements};
+\definecolor{cellRedBg}{HTML}{FDEDEC}
+\definecolor{cellRedBorder}{HTML}{E6B0AA}
+\definecolor{cellRedText}{HTML}{922B21}
 
-% Col C background & elements
-\node[cell-box=orange!80!black, text width=\wC, minimum height=1.6cm] (boxC) at (11.6, \yZero) {};
-\node[draw=orange!70, fill=orange!10, rounded corners=1.5pt, inner sep=1.2pt, font=\fontsize{4.8pt}{5.5pt}\selectfont] (exp) at (10.8, -1.05) {Explore};
-\node[draw=orange!70, fill=orange!10, rounded corners=1.5pt, inner sep=1.2pt, font=\fontsize{4.8pt}{5.5pt}\selectfont] (pat) at (11.6, -0.8) {Patch};
-\node[draw=orange!70, fill=orange!10, rounded corners=1.5pt, inner sep=1.2pt, font=\fontsize{4.8pt}{5.5pt}\selectfont] (ver) at (12.4, -1.05) {Verify};
-\draw[->, orange!80, line width=0.5pt] (exp) -- (pat);
-\draw[->, orange!80, line width=0.5pt] (pat) -- (ver);
-\draw[->, orange!80, line width=0.5pt] (ver) to[bend left=30] (exp);
-\node[font=\fontsize{4.6pt}{5.4pt}\selectfont, text=gray!80!black] at (11.6, -1.8) {Unbounded agent loop ($N$ LLM calls)};
+\definecolor{cellGreenBg}{HTML}{D5F5E3}
+\definecolor{cellGreenBorder}{HTML}{27AE60}
+\definecolor{cellGreenText}{HTML}{145A32}
 
-% Col D background & elements
-\node[cell-box-ours, text width=\wD, minimum height=1.6cm] (boxD) at (15.3, \yZero) {};
-\node[circle, draw=purple!80, fill=purple!15, inner sep=0.8pt, font=\bfseries\fontsize{5pt}{6pt}\selectfont] (rho) at (15.3, -1.1) {$\rho_i$};
-\node[draw=blue!70, fill=blue!10, rounded corners=1pt, inner sep=1pt, font=\fontsize{4.5pt}{5pt}\selectfont] (ent) at (14.2, -0.85) {entity};
-\node[draw=gray!70, fill=gray!10, rounded corners=1pt, inner sep=1pt, font=\fontsize{4.5pt}{5pt}\selectfont] (lit) at (14.2, -1.35) {literal};
-\node[draw=teal!70, fill=teal!10, rounded corners=1pt, inner sep=1pt, font=\fontsize{4.5pt}{5pt}\selectfont] (cell) at (16.4, -0.85) {cell};
-\node[draw=orange!70, fill=orange!10, rounded corners=1pt, inner sep=1pt, font=\fontsize{4.5pt}{5pt}\selectfont] (psg) at (16.4, -1.35) {psg};
-\node[draw=green!60!black, fill=green!15, rounded corners=1pt, inner sep=1pt, font=\bfseries\fontsize{4.5pt}{5pt}\selectfont] (ans) at (15.3, -1.75) {answer};
+\definecolor{cellGrayBg}{HTML}{F2F3F4}
+\definecolor{cellGrayBorder}{HTML}{BDC3C7}
+\definecolor{cellGrayText}{HTML}{566573}
+
+% --- Exact Proportional Dimensions (10px vertical gap, 20px horizontal gap) ---
+\def\wL{1.95cm}
+\def\wC{3.36cm}
+
+% Horizontal positions (left edges)
+\def\xL{0.00}
+\def\xA{2.12}
+\def\xB{5.69}
+\def\xC{9.26}
+\def\xD{12.83}
+
+% Horizontal center positions
+\def\midA{3.80}
+\def\midB{7.37}
+\def\midC{10.94}
+\def\midD{14.51}
+
+% Vertical positions (top edges)
+\def\yH{0.00}
+\def\yZero{-0.80}
+\def\yOne{-2.39}
+\def\yTwo{-3.40}
+\def\yThree{-4.41}
+\def\yLeg{-5.50}
+
+% Row heights
+\def\hH{0.68cm}
+\def\hZero{1.48cm}
+\def\hNorm{0.90cm}
+
+% ========================================================
+% HEADERS (y = 0.00, height = 0.68cm)
+% ========================================================
+\node[hdr-box={headAgray}{borderAgray}{fontAgray}, text width=\wC-5pt, minimum width=\wC, minimum height=\hH, anchor=north west] at (\xA, \yH) {(A) Flattened In-Context Prompting\\[0.3mm]{\tiny Direct LLM, Flat-RAG}};
+\node[hdr-box={headBred}{borderBred}{fontBred}, text width=\wC-5pt, minimum width=\wC, minimum height=\hH, anchor=north west] at (\xB, \yH) {(B) Online KG + Destructive Pruning\\[0.3mm]{\tiny e.g., ODYSSEY (NAACL 2025)}};
+\node[hdr-box={headCgold}{borderCgold}{fontCgold}, text width=\wC-5pt, minimum width=\wC, minimum height=\hH, anchor=north west] at (\xC, \yH) {(C) Agentic Online KG Exploration\\[0.3mm]{\tiny e.g., HydraRAG (EMNLP 2025)}};
+\node[hdr-ours, text width=\wC-5pt, minimum width=\wC, minimum height=\hH, anchor=north west] at (\xD, \yH) {(D) QEG-RAG (Ours)\\[0.3mm]{\tiny Training-free, Guided, Bounded}};
+
+% ========================================================
+% ROW 0: EVIDENCE REPRESENTATION (y = -0.80, height = 1.48cm)
+% ========================================================
+\node[lbl-dark, text width=\wL-4pt, minimum width=\wL, minimum height=\hZero, anchor=north west] at (\xL, \yZero) {\textbf{Evidence}\\\textbf{Representation}};
+
+% --- Col A: Linearized prompt ---
+\node[box-r0=borderAgray, minimum width=\wC, minimum height=\hZero, anchor=north west] (bA) at (\xA, \yZero) {};
+\node[draw=blue!60, fill=blue!10, rounded corners=0.8pt, inner sep=1.0pt, font=\fontsize{4.2pt}{4.8pt}\selectfont] at (\xA+0.65, \yZero-0.34) {row};
+\node[draw=blue!60, fill=blue!10, rounded corners=0.8pt, inner sep=1.0pt, font=\fontsize{4.2pt}{4.8pt}\selectfont] at (\xA+1.06, \yZero-0.34) {row};
+\node[draw=blue!60, fill=blue!10, rounded corners=0.8pt, inner sep=1.0pt, font=\fontsize{4.2pt}{4.8pt}\selectfont] at (\xA+1.47, \yZero-0.34) {row};
+\node[draw=orange!65, fill=orange!12, rounded corners=0.8pt, inner sep=1.0pt, font=\fontsize{4.2pt}{4.8pt}\selectfont] at (\xA+1.89, \yZero-0.34) {psg};
+\node[draw=orange!65, fill=orange!12, rounded corners=0.8pt, inner sep=1.0pt, font=\fontsize{4.2pt}{4.8pt}\selectfont] at (\xA+2.30, \yZero-0.34) {psg};
+\node[draw=orange!65, fill=orange!12, rounded corners=0.8pt, inner sep=1.0pt, font=\fontsize{4.2pt}{4.8pt}\selectfont] at (\xA+2.71, \yZero-0.34) {psg};
+\node[text width=\wC-6pt, align=center, font=\itshape\fontsize{4.2pt}{4.8pt}\selectfont, text=gray!80!black] at (\midA, \yZero-0.70) {linearized into one flat prompt $\downarrow$};
+\node[draw=gray!60, fill=white, rounded corners=1.5pt, font=\bfseries\fontsize{4.8pt}{5.4pt}\selectfont, inner sep=1.6pt] at (\midA, \yZero-1.08) {LLM};
+
+% --- Col B: Graph with destructive pruning ---
+\node[box-r0=borderBred, minimum width=\wC, minimum height=\hZero, anchor=north west] (bB) at (\xB, \yZero) {};
+\node[circle, draw=borderBred, fill=headBred!70, inner sep=0.7pt, font=\fontsize{4.2pt}{4.8pt}\selectfont] (e1) at (\xB+0.65, \yZero-0.32) {$e_1$};
+\node[circle, draw=borderBred, fill=headBred!70, inner sep=0.7pt, font=\fontsize{4.2pt}{4.8pt}\selectfont] (e2) at (\xB+1.60, \yZero-0.32) {$e_2$};
+\node[circle, draw=borderBred, fill=headBred!70, inner sep=0.7pt, font=\fontsize{4.2pt}{4.8pt}\selectfont] (e3) at (\xB+0.65, \yZero-0.74) {$e_3$};
+\node[circle, draw=borderBred, fill=headBred!70, inner sep=0.7pt, font=\fontsize{4.2pt}{4.8pt}\selectfont] (e4) at (\xB+1.60, \yZero-0.74) {$e_4$};
+\node[circle, draw=borderBred, dashed, fill=white, inner sep=0.7pt, text=borderBred, font=\fontsize{4.6pt}{4.6pt}\selectfont] (x1) at (\xB+2.55, \yZero-0.32) {\texttimes};
+\node[circle, draw=borderBred, dashed, fill=white, inner sep=0.7pt, text=borderBred, font=\fontsize{4.6pt}{4.6pt}\selectfont] (x2) at (\xB+2.55, \yZero-0.74) {\texttimes};
+\draw[->, borderBred, line width=0.4pt] (e1) -- (e2);
+\draw[->, borderBred, line width=0.4pt] (e1) -- (e3);
+\draw[->, borderBred, line width=0.4pt] (e2) -- (e4);
+\draw[->, borderBred, line width=0.4pt] (e3) -- (e4);
+\draw[->, borderBred!50, dashed, line width=0.4pt] (e2) -- (x1);
+\draw[->, borderBred!50, dashed, line width=0.4pt] (e4) -- (x2);
+\node[text width=\wC-6pt, align=center, font=\fontsize{4.0pt}{4.7pt}\selectfont, text=gray!80!black] at (\midB, \yZero-1.18) {question-driven pruning\\discards peripheral evidence};
+
+% --- Col C: Agentic graph loop ---
+\node[box-r0=borderCgold, minimum width=\wC, minimum height=\hZero, anchor=north west] (bC) at (\xC, \yZero) {};
+\node[draw=borderCgold, fill=headCgold, rounded corners=1.5pt, inner sep=1.2pt, font=\fontsize{4.6pt}{5.2pt}\selectfont] (exp) at (\xC+0.85, \yZero-0.34) {Explore};
+\node[draw=borderCgold, fill=headCgold, rounded corners=1.5pt, inner sep=1.2pt, font=\fontsize{4.6pt}{5.2pt}\selectfont] (pat) at (\xC+2.45, \yZero-0.34) {Patch};
+\node[draw=borderCgold, fill=headCgold, rounded corners=1.5pt, inner sep=1.2pt, font=\fontsize{4.6pt}{5.2pt}\selectfont] (ver) at (\xC+1.65, \yZero-0.74) {Verify};
+\draw[->, borderCgold, line width=0.55pt] (exp) -- (pat);
+\draw[->, borderCgold, line width=0.55pt] (pat) to[bend left=15] (ver);
+\draw[->, borderCgold, line width=0.55pt] (ver) to[bend left=15] (exp);
+\node[text width=\wC-6pt, align=center, font=\fontsize{4.0pt}{4.7pt}\selectfont, text=gray!80!black] at (\midC, \yZero-1.18) {multi-turn loop with tri-factor\\verification ($N$ LLM calls)};
+
+% --- Col D: QEG-RAG Schema-preserving multigraph ---
+\node[box-r0-ours, minimum width=\wC, minimum height=\hZero, anchor=north west] (bD) at (\xD, \yZero) {};
+\node[circle, draw=purple!80, fill=purple!15, inner sep=0.7pt, font=\bfseries\fontsize{4.8pt}{5.6pt}\selectfont] (rho) at (\xD+1.65, \yZero-0.44) {$\rho_i$};
+\node[draw=blue!70, fill=blue!10, rounded corners=1pt, inner sep=0.9pt, font=\fontsize{4.2pt}{4.8pt}\selectfont] (ent) at (\xD+0.60, \yZero-0.28) {entity};
+\node[draw=gray!70, fill=gray!10, rounded corners=1pt, inner sep=0.9pt, font=\fontsize{4.2pt}{4.8pt}\selectfont] (lit) at (\xD+0.60, \yZero-0.68) {literal};
+\node[draw=teal!70, fill=teal!10, rounded corners=1pt, inner sep=0.9pt, font=\fontsize{4.2pt}{4.8pt}\selectfont] (cell) at (\xD+2.70, \yZero-0.28) {cell};
+\node[draw=orange!70, fill=orange!10, rounded corners=1pt, inner sep=0.9pt, font=\fontsize{4.2pt}{4.8pt}\selectfont] (psg) at (\xD+2.70, \yZero-0.68) {passage};
+\node[draw=green!60!black, fill=green!15, rounded corners=1pt, inner sep=0.9pt, font=\bfseries\fontsize{4.2pt}{4.8pt}\selectfont] (ans) at (\xD+1.65, \yZero-0.90) {answer};
 \draw[->, purple!60, line width=0.4pt] (rho) -- (lit);
 \draw[->, purple!60, line width=0.4pt] (rho) -- (ent);
-\draw[->, teal!90!black, line width=1.0pt] (rho) -- (cell);
-\draw[->, teal!90!black, line width=1.0pt] (cell) -- (psg);
-\draw[->, teal!90!black, line width=1.0pt] (psg) -- (ans);
-\node[font=\fontsize{4.6pt}{5.4pt}\selectfont, text=teal!90!black] at (15.3, -0.55) {$\rho_i$ star hub binds row; thick = guide path $p_1$};
+\draw[->, borderDteal, line width=0.95pt] (rho) -- (cell);
+\draw[->, borderDteal, line width=0.95pt] (cell) -- (psg);
+\draw[->, borderDteal, line width=0.95pt] (psg) -- (ans);
+\node[text width=\wC-6pt, align=center, font=\fontsize{4.0pt}{4.7pt}\selectfont, text=borderDteal] at (\midD, \yZero-1.18) {$\rho_i$ binds the row;\\thick path = guide path $p_1$};
 
-% --- Row 1: Limitation 1: Tabular Bindings (y = -2.6, height=1.0cm) ---
-\def\yOne{-2.6}
-\node[row-lbl, text width=\wL, minimum height=1.0cm] at (1.25, \yOne) {\textbf{Limitation 1}\\\textbf{Tabular Bindings}};
-\node[cell-box=red, text width=\wC, minimum height=1.0cm] at (4.4, \yOne) {
-  \textbf{\color{red!70!black}\texttimes} Rows flattened to text; symmetric rows get conflated
+% ========================================================
+% ROW 1: LIMITATION 1 (y = -2.39, height = 0.90cm)
+% ========================================================
+\node[lbl-dark, text width=\wL-4pt, minimum width=\wL, minimum height=\hNorm, anchor=north west] at (\xL, \yOne) {\textbf{Limitation 1}\\\textbf{Tabular \& Semantic}\\\textbf{Bindings}};
+\node[card-red, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xA, \yOne) {
+  \textbf{\color{cellRedText}\texttimes} Rows flattened to text; symmetric rows get conflated
 };
-\node[cell-box=red, text width=\wC, minimum height=1.0cm] at (8.0, \yOne) {
-  \textbf{\color{red!70!black}\texttimes} Split into pairwise triples; column context is lost
+\node[card-red, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xB, \yOne) {
+  \textbf{\color{cellRedText}\texttimes} Rows split into pairwise triples; column context is lost
 };
-\node[cell-box=red, text width=\wC, minimum height=1.0cm] at (11.6, \yOne) {
-  \textbf{\color{red!70!black}\texttimes} Table cells treated as flat entity mentions
+\node[card-red, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xC, \yOne) {
+  \textbf{\color{cellRedText}\texttimes} Cells treated as flat entity mentions
 };
-\node[cell-box-ours, text width=\wD, minimum height=1.0cm] at (15.3, \yOne) {
-  \textbf{\color{teal!80!black}\checkmark} Star record hubs $\rho_i$ guarantee row non-conflation (\textbf{Prop.~1})
-};
-
-% --- Row 2: Limitation 2: Reasoning Guidance (y = -3.75, height=1.0cm) ---
-\def\yTwo{-3.75}
-\node[row-lbl, text width=\wL, minimum height=1.0cm] at (1.25, \yTwo) {\textbf{Limitation 2}\\\textbf{Reasoning Guide}};
-\node[cell-box=red, text width=\wC, minimum height=1.0cm] at (4.4, \yTwo) {
-  \textbf{\color{red!70!black}\texttimes} None: free-form attention over the prompt
-};
-\node[cell-box=red, text width=\wC, minimum height=1.0cm] at (8.0, \yTwo) {
-  \textbf{\color{red!70!black}\texttimes} Unorganized bag of triples fed to the LLM
-};
-\node[cell-box=red, text width=\wC, minimum height=1.0cm] at (11.6, \yTwo) {
-  \textbf{\color{red!70!black}\texttimes} Paths found by open-ended agent turns; prone to search drift
-};
-\node[cell-box-ours, text width=\wD, minimum height=1.0cm] at (15.3, \yTwo) {
-  \textbf{\color{teal!80!black}\checkmark} Deterministic score $\mathcal{S}(p)$ yields guide path $p_1$ (never filters)
+\node[card-green, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xD, \yOne) {
+  \textbf{\color{cellGreenText}\checkmark} Row hub $\rho_i$ binds every cell to its row
 };
 
-% --- Row 3: Limitation 3: Loss vs Call Overhead (y = -4.95, height=1.1cm) ---
-\def\yThree{-4.95}
-\node[row-lbl, text width=\wL, minimum height=1.1cm] at (1.25, \yThree) {\textbf{Limitation 3}\\\textbf{Loss vs. Calls}};
-\node[cell-box=gray, text width=\wC, minimum height=1.1cm] at (4.4, \yThree) {
+% ========================================================
+% ROW 2: LIMITATION 2 (y = -3.40, height = 0.90cm)
+% ========================================================
+\node[lbl-dark, text width=\wL-4pt, minimum width=\wL, minimum height=\hNorm, anchor=north west] at (\xL, \yTwo) {\textbf{Limitation 2}\\\textbf{Explicit Reasoning}\\\textbf{Guidance}};
+\node[card-red, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xA, \yTwo) {
+  \textbf{\color{cellRedText}\texttimes} None: free-form attention over the prompt
+};
+\node[card-red, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xB, \yTwo) {
+  \textbf{\color{cellRedText}\texttimes} Unorganized bag of triples fed to the LLM
+};
+\node[card-red, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xC, \yTwo) {
+  \textbf{\color{cellRedText}\texttimes} Paths found by open-ended agent turns; search drift
+};
+\node[card-green, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xD, \yTwo) {
+  \textbf{\color{cellGreenText}\checkmark} Deterministic score $S(p)$ gives guide path $p_1$ (never filters)
+};
+
+% ========================================================
+% ROW 3: LIMITATION 3 (y = -4.41, height = 0.90cm)
+% ========================================================
+\node[lbl-dark, text width=\wL-4pt, minimum width=\wL, minimum height=\hNorm, anchor=north west] at (\xL, \yThree) {\textbf{Limitation 3}\\\textbf{Evidence Loss vs.}\\\textbf{Call Overhead}};
+\node[card-gray, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xA, \yThree) {
   \textbf{--} Nothing pruned, but evidence stays unstructured
 };
-\node[cell-box=red, text width=\wC, minimum height=1.1cm] at (8.0, \yThree) {
-  \textbf{\color{red!70!black}\texttimes} Prunes $\le 53\%$ elements; peripheral facts are lost (39\% empty)
+\node[card-red, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xB, \yThree) {
+  \textbf{\color{cellRedText}\texttimes} Prunes evidence; peripheral facts lost
 };
-\node[cell-box=red, text width=\wC, minimum height=1.1cm] at (11.6, \yThree) {
-  \textbf{\color{red!70!black}\texttimes} Dozens of LLM calls: high latency and API cost
+\node[card-red, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xC, \yThree) {
+  \textbf{\color{cellRedText}\texttimes} Dozens of LLM calls: high latency and API cost
 };
-\node[cell-box-ours, text width=\wD, minimum height=1.1cm] at (15.3, \yThree) {
-  \textbf{\color{teal!80!black}\checkmark} 100\% evidence retained; bounded by two tiers (1--2 calls)
+\node[card-green, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xD, \yThree) {
+  \textbf{\color{cellGreenText}\checkmark} Evidence kept; cost bounded by two tiers
 };
 
-% --- Row 4: LLM Calls Per Query (y = -5.85, height=0.65cm) ---
-\def\yFour{-5.85}
-\node[row-lbl, text width=\wL, minimum height=0.65cm] at (1.25, \yFour) {\textbf{LLM Calls}};
-\node[call-box=gray, text width=\wC] at (4.4, \yFour) {1};
-\node[call-box=gray, text width=\wC] at (8.0, \yFour) {1};
-\node[call-box=orange!70!black, text width=\wC, font=\fontsize{7.5pt}{8.5pt}\selectfont\color{orange!80!black}\bfseries] at (11.6, \yFour) {dozens};
-\node[call-box-ours, text width=\wD, text=teal!90!black] at (15.3, \yFour) {1 (Tier 1) or 2 (Tier 2)};
-
-% --- Legend (y = -6.4) ---
-\node[anchor=west, font=\fontsize{5.2pt}{6.2pt}\selectfont, text=gray!80!black] at (3.2, -6.4) {
-  \textbf{\color{teal!80!black}\checkmark} Limitation addressed \qquad
-  \textbf{\color{red!70!black}\texttimes} Limitation present \qquad
-  \textbf{--} Not applicable
+% ========================================================
+% LEGEND (y = -5.50)
+% ========================================================
+\node[font=\fontsize{5.2pt}{6.2pt}\selectfont, text=gray!80!black] at (8.10, \yLeg) {
+  \textbf{\color{cellGreenText}\checkmark} limitation addressed \qquad
+  \textbf{\color{cellRedText}\texttimes} limitation present \qquad
+  \textbf{--} not applicable
 };
 
 \end{tikzpicture}

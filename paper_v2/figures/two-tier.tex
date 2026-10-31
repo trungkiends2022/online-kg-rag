@@ -1,0 +1,8 @@
+\begin{figure}[t]
+\centering
+\resizebox{\linewidth}{!}{\input{figures/two-tier-diagram}}
+\vspace{2mm}
+\caption{Architecture of the bounded two-tier controlled reasoning engine. (Top) Tier~1 evaluates the complete unpruned evidence graph under guided path scaffolding. When the evidence is clear and unambiguous, execution terminates immediately via Fast Exit in a single LLM call ($\approx 80\%$ of queries). When ambiguity or a missing bridge link occurs, the model emits a structured diagnostic handoff. (Bottom) An automated search fetches targeted bridge evidence for the competing candidates to form a minimal focused state capsule. Tier~2 resolves the ambiguity by verified factual evidence in a second call, strictly bounding total execution to at most two calls.}
+\vspace{-2mm}
+\label{fig:two-tier}
+\end{figure}

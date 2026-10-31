@@ -125,4 +125,9 @@ Wu, X., Yang, C., Lin, X., Xu, C., Jiang, X., Sun, Y., Xiong, H., Li, J., Guo,
   heterogeneous graphs via multi-agent dual-evolving context retrieval. arXiv
   preprint arXiv:2509.21710  (2025)
 
+\bibitem{chen2021ottqa}
+Chen, W., Chang, M.W., Schlinger, E., Wang, W.Y., Cohen, W.W.: Open question
+  answering over tables and text. In: Proceedings of the International
+  Conference on Learning Representations (ICLR) (2021)
+
 \end{thebibliography}
