@@ -1,0 +1,14 @@
+\documentclass{standalone}
+\usepackage{tikz}
+
+\def\testmacro#1#2{
+  \begin{scope}[shift={(#1)}, scale=#2]
+    \draw (0,0) -- (1,1);
+  \end{scope}
+}
+
+\begin{document}
+\begin{tikzpicture}
+\testmacro{1,1}{0.5}
+\end{tikzpicture}
+\end{document}

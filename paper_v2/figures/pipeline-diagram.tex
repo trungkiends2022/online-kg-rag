@@ -25,12 +25,12 @@
 
 % ========================================================
 % STAGE 1: MULTI-SOURCE EVIDENCE INGESTION (Sec. 3.1)
-% Panel: [0.0, 4.4], Center: 2.20, Width: 4.4
+% Panel: height 7.2cm, Center Y: -0.00, Top: 3.60, Bot: -3.60
 % ========================================================
-\node[panel=blue, minimum width=4.4cm, minimum height=8.2cm] (panel1) at (2.20, -0.5) {};
+\node[panel=blue, minimum width=4.4cm, minimum height=7.2cm] (panel1) at (2.20, 0.00) {};
 \node[titlebar=blue, text width=4.0cm, anchor=north] (t1) at ([yshift=-2.8mm]panel1.north) {Stage 1 (Sec.~3.1): Multi-Source Ingestion};
 
-\node[subcard, text width=3.95cm, anchor=north] (table_box) at ([yshift=-2.5mm]t1.south) {
+\node[subcard, text width=3.95cm, anchor=north] (table_box) at ([yshift=-3.5mm]t1.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Table: \texttt{AFL\_Ontario\_0}} \\[0.5mm]
   \resizebox{\linewidth}{!}{%
@@ -49,7 +49,7 @@
   \par}
 };
 
-\node[subcard, text width=3.95cm, anchor=north] (link_box) at ([yshift=-3mm]table_box.south) {
+\node[subcard, text width=3.95cm, anchor=north] (link_box) at ([yshift=-5.5mm]table_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Wikipedia Bridge Passage}: \\
   \texttt{Toronto} $\rightarrow$ \texttt{Doc:Toronto} \\[0.4mm]
@@ -57,7 +57,7 @@
   \par}
 };
 
-\node[subcard, text width=3.95cm, fill=blue!8, draw=blue!45, anchor=north] (retr_summary) at ([yshift=-3mm]link_box.south) {
+\node[subcard, text width=3.95cm, fill=blue!8, draw=blue!45, anchor=north] (retr_summary) at ([yshift=-5.5mm]link_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Retriever Output} \\[0.3mm]
   $\bullet$ Candidate table rows \\
@@ -71,9 +71,9 @@
 
 % ========================================================
 % STAGE 2: SCHEMA-PRESERVING MULTIGRAPH (Sec. 3.2)
-% Panel: [5.4, 10.0], Center: 7.70, Width: 4.6
+% Panel: height 7.2cm, Center Y: -0.00
 % ========================================================
-\node[panel=purple, minimum width=4.6cm, minimum height=8.2cm] (panel2) at (7.70, -0.5) {};
+\node[panel=purple, minimum width=4.6cm, minimum height=7.2cm] (panel2) at (7.70, 0.00) {};
 \node[titlebar=purple, text width=4.2cm, anchor=north] (t2) at ([yshift=-2.8mm]panel2.north) {Stage 2 (Sec.~3.2): Multigraph Construction};
 
 % Graph nodes
@@ -111,9 +111,9 @@
 
 % ========================================================
 % STAGE 3: TWO-TIER CONTROLLED REASONING ENGINE (Sec. 3.3)
-% Panel: [11.0, 16.6], Center: 13.80, Width: 5.6
+% Panel: height 7.2cm, Center Y: -0.00
 % ========================================================
-\node[panel=orange, minimum width=5.6cm, minimum height=8.2cm] (panel3) at (13.80, -0.5) {};
+\node[panel=orange, minimum width=5.6cm, minimum height=7.2cm] (panel3) at (13.80, 0.00) {};
 \node[titlebar=orange, text width=5.2cm, anchor=north] (t3) at ([yshift=-2.8mm]panel3.north) {Stage 3 (Sec.~3.3): Two-Tier Controlled Engine};
 
 % Tier 1 LLM Card
@@ -161,13 +161,13 @@
 
 % ========================================================
 % STAGE 4: GROUNDED GENERATION & PROVENANCE AUDIT (Sec. 3.4)
-% Panel: [17.6, 22.0], Center: 19.80, Width: 4.4
+% Panel: height 7.2cm, Center Y: -0.00
 % ========================================================
-\node[panel=teal, minimum width=4.4cm, minimum height=8.2cm] (panel4) at (19.80, -0.5) {};
+\node[panel=teal, minimum width=4.4cm, minimum height=7.2cm] (panel4) at (19.80, 0.00) {};
 \node[titlebar=teal, text width=4.0cm, anchor=north] (t4) at ([yshift=-2.8mm]panel4.north) {Stage 4 (Sec.~3.4): Grounded Provenance};
 
 % Answer box aligned with l1_box center vertically!
-\node[subcard, text width=3.95cm, fill=green!15, draw=green!60!black, line width=0.7pt, anchor=north] (ans_box) at ([yshift=-2.5mm]t4.south) {
+\node[subcard, text width=3.95cm, fill=green!15, draw=green!60!black, line width=0.7pt, anchor=north] (ans_box) at ([yshift=-3.5mm]t4.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{\underline{Verified Answer Span}} \\[0.5mm]
   \centering{\textbf{\small \texttt{"York"}}}\\[0.6mm]
@@ -176,7 +176,7 @@
   \par}
 };
 
-\node[subcard, text width=3.95cm, fill=teal!6, draw=teal!60, anchor=north] (prov_box) at ([yshift=-2.8mm]ans_box.south) {
+\node[subcard, text width=3.95cm, fill=teal!6, draw=teal!60, anchor=north] (prov_box) at ([yshift=-5.2mm]ans_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{\underline{Auditable Provenance}} \\[0.3mm]
   $\bullet$ Table: \texttt{AFL\_Ontario\_0} \\
@@ -187,7 +187,7 @@
   \par}
 };
 
-\node[subcard, text width=3.95cm, fill=blue!6, draw=blue!45, anchor=north] (rev_box) at ([yshift=-2.8mm]prov_box.south) {
+\node[subcard, text width=3.95cm, fill=blue!6, draw=blue!45, anchor=north] (rev_box) at ([yshift=-5.2mm]prov_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{\underline{Reverse Grounding Fallback}} \\[0.3mm]
   $\bullet$ Maps answer back to graph coordinates \\
