@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 
 from src.kg.online_kg import OnlineKG
@@ -23,6 +23,10 @@ class PathStep:
 class ReasoningPath:
     path_id: str
     steps: list[PathStep]
+    nodes: list[str] = field(default_factory=list)
+    edges: list[dict] = field(default_factory=list)
+    score: float = 0.0
+    score_components: dict[str, float] = field(default_factory=dict)
 
 
 class PathPlanner:
@@ -39,6 +43,13 @@ class PathPlanner:
     ) -> list[ReasoningPath]:
         summary = kg.summary()
         operation_intent = infer_operation_intent(question, kg)
+        text_contexts = [
+            {
+                "source_id": context["source_id"],
+                "text": context["text"][:500],
+            }
+            for context in list(kg.text_contexts.values())[:10]
+        ]
         constraint_prompt = ""
         table_constraints = (constraint_context or {}).get("table_constraints", [])
         if table_constraints:
@@ -52,6 +63,7 @@ class PathPlanner:
         Question: {question}
         Entities có trong KG tạm (mẫu, tối đa 50): {list(kg.graph.nodes())[:50]}
         Relations có trong KG tạm: {summary["relations"][:50]}
+        Text contexts gắn với node/edge: {json.dumps(text_contexts, ensure_ascii=False)}
         Numerical operation intent inferred from question and KG schema only:
         {format_operation_intent(operation_intent)}
         {constraint_prompt}

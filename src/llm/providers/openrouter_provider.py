@@ -10,11 +10,12 @@ from src.llm.runtime_config import request_timeout_seconds, sdk_max_retries
 
 class OpenRouterProvider(LLMProvider):
     name = "openrouter"
+    default_model = "deepseek/deepseek-v4-flash"
 
     def __init__(self, model: str | None = None, api_key: str | None = None):
         from openai import OpenAI
 
-        self.model = model or os.environ.get("OPENROUTER_MODEL", "openrouter/free")
+        self.model = model or os.environ.get("OPENROUTER_MODEL", self.default_model)
         self.reasoning_enabled = os.environ.get(
             "OPENROUTER_REASONING_ENABLED", "false"
         ).strip().lower() in {"1", "true", "yes", "on"}
@@ -25,9 +26,6 @@ class OpenRouterProvider(LLMProvider):
             headers["X-OpenRouter-Title"] = title
         self._client = OpenAI(
             api_key=api_key or os.environ.get("OPENROUTER_API_KEY"),
-            # The OpenAI SDK appends ``/chat/completions`` itself.  OpenRouter's
-            # curl/requests examples include that endpoint because they issue a
-            # raw HTTP POST, whereas the SDK expects the API root here.
             base_url="https://openrouter.ai/api/v1",
             default_headers=headers or None,
             timeout=request_timeout_seconds(),
@@ -45,8 +43,7 @@ class OpenRouterProvider(LLMProvider):
         # OpenRouter exposes provider reasoning as a top-level request field.
         # ``extra_body`` keeps this extension compatible with the OpenAI SDK
         # while leaving other providers and models unchanged.
-        kwargs["extra_body"] = {
-            "reasoning": {"enabled": self.reasoning_enabled}
-        }
+        if self.reasoning_enabled:
+            kwargs["extra_body"] = {"reasoning": {"enabled": True}}
         response = self._client.chat.completions.create(**kwargs)
         return response.choices[0].message.content or ""

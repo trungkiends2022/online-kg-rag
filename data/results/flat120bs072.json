@@ -1,0 +1,1076 @@
+{
+  "method": "flat_rag_shared_context",
+  "dataset": "hybridqa",
+  "num_examples": 200,
+  "failed_examples": 0,
+  "run_manifest": "data/results/hybridqa_shard_120b_07_env/flat_rag_shared_context/shard07-of08__openai_compatible__GPT-OSS-120B__flat_rag_shared_context.jsonl.manifest.json",
+  "run_fingerprint": "70bfc71bd60c777ba418cdb3d109b1fbdecf11d994186580a9d5fe6c6694a875",
+  "provider": "openai_compatible",
+  "model": "GPT-OSS-120B",
+  "code_revision": null,
+  "input_sha256": "581dd531954d4579c5a2a0cc3ea9d163ebd6e1d60ef71cb28d3e43800c446e72",
+  "exact_match": 0.58,
+  "f1": 0.681015873015873,
+  "exact_match_percent": 57.99999999999999,
+  "f1_percent": 68.1015873015873,
+  "semantic_exact_match": 0.585,
+  "semantic_exact_match_percent": 58.5,
+  "empty_answer_count": 4,
+  "empty_answer_rate": 0.02,
+  "error_taxonomy": {
+    "retrieval_or_reasoning": 8,
+    "table_context_budget": 23,
+    "numeric_or_temporal_reasoning": 7,
+    "retrieval_miss": 26,
+    "format_or_normalization": 16,
+    "output_format": 4
+  },
+  "error_audit_sample": [
+    {
+      "id": "b1c741735e759f2e",
+      "question": "What medals did the skier win for the Women 's downhill ?",
+      "gold_answer": "Downhill and Alpine combined",
+      "answer": "Silver",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "6df98c8239f67ff3",
+      "question": "What is the capacity for the venue designed by the architects Enrico Del Debbio and Aniballe Vitellozzi ?",
+      "gold_answer": "20,000",
+      "answer": "Not listed",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "4219cb13a5586fb8",
+      "question": "How many football members are in the conference who has expanded eight times since 1981 ?",
+      "gold_answer": "22",
+      "answer": "10",
+      "error_category": "numeric_or_temporal_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "cab6eeeb5e8128e9",
+      "question": "The place named after Madoc ap Owain is a noted what town ?",
+      "gold_answer": "gold rush",
+      "answer": "township",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "6feb1e8b698b7e5f",
+      "question": "Which region contains the city of KVII-TV ?",
+      "gold_answer": "Llano Estacado",
+      "answer": "Amarillo, Texas",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "da85a646aba54f98",
+      "question": "How many natural features belong to the type of the site whose municipality 's total land area is 111.52 square kilometres ( 43.06 sq mi ) ?",
+      "gold_answer": "3",
+      "answer": "10",
+      "error_category": "numeric_or_temporal_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "e845c0b004d56121",
+      "question": "What is the population of the home country of Elena Pingacheva ?",
+      "gold_answer": "146.7 million",
+      "answer": "Russia",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "60dff9aaa4f8985d",
+      "question": "What novel is the member famous for who is associated with the tv series that , after the sudden death of its actor , left it in question ?",
+      "gold_answer": "A Dog 's Purpose",
+      "answer": "A Dog\u2019s Purpose",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "8dcffe4b10c32367",
+      "question": "Who is the brother of the winning driver of the pole position who drives the No . 14 Ford Mustang ?",
+      "gold_answer": "Kurt Busch",
+      "answer": "",
+      "error_category": "output_format",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "6d4547bfa64ed33b",
+      "question": "Who is the person whose state takes its name from Thomas West ?",
+      "gold_answer": "Richard Bayard",
+      "answer": "Thomas West, 3rd\u202fBaron\u202fDe\u202fLa\u202fWarr",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "50fcde44c7008176",
+      "question": "The Phi Psi member from Rutgers University was a state senator in what district ?",
+      "gold_answer": "15",
+      "answer": "District 5",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "4b20662303f007e9",
+      "question": "What is the full nickname of the club that produced the player who played the most games with the Swans after the 1990 draft ?",
+      "gold_answer": "Kangaroos",
+      "answer": "",
+      "error_category": "output_format",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "e7d0add9782efc93",
+      "question": "In which province is this football club based ?",
+      "gold_answer": "Mendoza Province",
+      "answer": "Buenos Aires Province",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "4b80716c6c686c87",
+      "question": "What is the name of the propulsion system utilized by the satellite line developed by the company involved with the satellite launched by Telesat Canada ?",
+      "gold_answer": "Plasma propulsion system",
+      "answer": "chemical, bi\u2011propellant propulsion system",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "a130d026ce3eddae",
+      "question": "How many people alive have gone to the post-secondary school attended by John Engler ?",
+      "gold_answer": "634,300",
+      "answer": "Michigan State University",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "2762dad21e3afee6",
+      "question": "How many episode did the an American comedy-drama detective mystery television series created by Andy Breckman consist in ?",
+      "gold_answer": "16",
+      "answer": "eight seasons",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "3ca0cfaeef7da0ed",
+      "question": "Who was the writer of the series in which Mackenzie Smith played Rhoda Hellberg in 2012 ?",
+      "gold_answer": "Annette Cascone",
+      "answer": "Dan Schneider",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "f72bdd5c8054b2e6",
+      "question": "How is Grete related to the third place finisher of the Cross-Country World Cup season that ended on March 14 , 2004 ?",
+      "gold_answer": "his wife",
+      "answer": "sister",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "e40fef697ae535c6",
+      "question": "Where did Pawina Thongsuk 's event take place ?",
+      "gold_answer": "Banquet Hall",
+      "answer": "Al\u2011Dana Banquet Hall in Doha",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "4a49b1cf1e787b5d",
+      "question": "Which film did the American Jewish actress in Community and Mad Men co-write and produce ?",
+      "gold_answer": "Horse Girl",
+      "answer": "Horse Girl (2020)",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "d6e99f47917bbd4b",
+      "question": "What sport does the brother of the gold medalist in modern pentathlon at the 2012 Summer Olympics participate in ?",
+      "gold_answer": "triathlete",
+      "answer": "triathlon",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "c76a280443de2a20",
+      "question": "What is visible on the eastern end of the peak in the Glarus with a 538 meter drop ?",
+      "gold_answer": "Braunwald and Linthal",
+      "answer": "Ortstock",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "ca620f4bebee8ef8",
+      "question": "How many Oscars have been given to the person who directed The Dead Do n't Die ?",
+      "gold_answer": "two",
+      "answer": "0",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "16eae0e4921fac90",
+      "question": "How much land does the main campus of the school whose scientific research papers were ranked # 16 encompass ?",
+      "gold_answer": "124-acre",
+      "answer": "124\u202facre",
+      "error_category": "numeric_or_temporal_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "af318afc315877cb",
+      "question": "How many copies in total has the album that features the song Trigger sold ?",
+      "gold_answer": "over 500,000 copies",
+      "answer": "over 500,000 copies worldwide",
+      "error_category": "numeric_or_temporal_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "ce570fb15df9042a",
+      "question": "Which guest actor who played in 'Live ! with Regis and Kelly ' on January 6th is the youngest ?",
+      "gold_answer": "Vinny Guadagnino",
+      "answer": "Roseanne Barr",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "313d4d099b776774",
+      "question": "When was the game that was originally released as a coin-operated arcade game on February 20 , 1987 released ?",
+      "gold_answer": "February 2 , 2010",
+      "answer": "February 20, 1987",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "51ff9f90b66b7a06",
+      "question": "What is the ship whose flag 's nation is surrounded by the Atlantic Ocean ?",
+      "gold_answer": "British Reliance",
+      "answer": "British Reliance ( 1928 )",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "2474f51cb724eb69",
+      "question": "In what region does the earliest established school reside in Queensland ?",
+      "gold_answer": "Capricorn",
+      "answer": "Shire of Banana",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "9e3fe607c59d7827",
+      "question": "What agency is the airport with the second least passengers staffed by ?",
+      "gold_answer": "Canada Border Services Agency",
+      "answer": "Canada Border Services Agency (CBSA)",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "81e7d510f5b964d5",
+      "question": "What is the party of the winner who contested from Alangulam ( State Assembly Constituency ) and won the election with votes 88891 ?",
+      "gold_answer": "DMK",
+      "answer": "ADMK",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "0c464945d87e62a4",
+      "question": "The first French ski racer to win an Olympic gold-medal since Jean-Claude Killy , won it in the Super-G at what ski venue ?",
+      "gold_answer": "Nakiska on Mount Allan",
+      "answer": "Nakiska",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "8719f5ca3711aa45",
+      "question": "The oldest Bronze medal team member who competed in the second to most recent games originates from what town ?",
+      "gold_answer": "Eisenerz",
+      "answer": "",
+      "error_category": "output_format",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "f8649d00034569ad",
+      "question": "Who discovered the element named after the Earth ?",
+      "gold_answer": "Franz-Joseph M\u00fcller",
+      "answer": "Franz-Joseph\u202fM\u00fcller\u202fvon\u202fReichenstein",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "1e76d4b5027cbe5a",
+      "question": "What chain of islands is in the home country of Trine Mj\u00e5land ?",
+      "gold_answer": "Svalbard",
+      "answer": "Lofoten Islands",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "4832aed34166c632",
+      "question": "Which year was the person who directed The Awakening the recipient of a BAFTA Award ?",
+      "gold_answer": "1994",
+      "answer": "1980",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "07e585122af9dc18",
+      "question": "Which society was centered around the area of the home country of Henry L\u00f3pez ?",
+      "gold_answer": "Maya",
+      "answer": "Maya civilization",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "bf5dade59b9b82d7",
+      "question": "Who is the vice-chairman of the team located in Meath , Ireland ?",
+      "gold_answer": "Mr. Walter Moran",
+      "answer": "Walter Moran",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "70fe8a6b0b994ccc",
+      "question": "How many years did it take to build the historic place whose city or town 's population was 4,249 at the 2010 census ?",
+      "gold_answer": "11",
+      "answer": "2 years",
+      "error_category": "numeric_or_temporal_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "2a1759f235d3ce8b",
+      "question": "Which Spanish records are held by the racer who finished with a time of 4:07.82 at the 2011 European Team Championships Super League ?",
+      "gold_answer": "mile run and the 1500 m indoors",
+      "answer": "the Spanish records for the 1500\u202fmetres and the 3000\u202fmetres",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "4e89db49264f7e7b",
+      "question": "How many people have faculty jobs at the post-secondary school attended by Sam Bradford ?",
+      "gold_answer": "3,000",
+      "answer": "0",
+      "error_category": "numeric_or_temporal_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "c543f8abbe87fc13",
+      "question": "Of the players listed in the Wingman position , how many are said to have become coaches after retiring as players ?",
+      "gold_answer": "2",
+      "answer": "1",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "970ef018b797297f",
+      "question": "The celebrity eliminated from Dancing with the Stars on October 14 , 2008 was born in what month ?",
+      "gold_answer": "November",
+      "answer": "August",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "b4097ceb0b475782",
+      "question": "What year did the city of KOBI get its name ?",
+      "gold_answer": "1883",
+      "answer": "",
+      "error_category": "output_format",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "60f487192df15ddd",
+      "question": "What is the middle name of the number 4 draft pick of the 2010 Major League Baseball draft ?",
+      "gold_answer": "Anthony",
+      "answer": "Christian",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "c8fec00282772d1c",
+      "question": "How many years has the NFL player named best of 2008 by ESPY competed on the Patriots ?",
+      "gold_answer": "20",
+      "answer": "20 seasons",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "f75af0e00010806c",
+      "question": "What is the power station that is in the state that shares maritime borders with Singapore to the south and Indonesia to both the west and east ?",
+      "gold_answer": "Naluri Ventures Sdn Bhd",
+      "answer": "Naluri Ventures Sdn Bhd ( license ended in 2010 )",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "8981141529183172",
+      "question": "What is the area in acres of the airport with the smallest number of proposed weekly departures ?",
+      "gold_answer": "7,500",
+      "answer": "2,060 acres",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "89475993dfd3a970",
+      "question": "What is the official name of the team that won in 1982 ?",
+      "gold_answer": "Vasas-Angyalf\u00f6ldi Sportiskola",
+      "answer": "Vasas\u2011Angyalf\u00f6ldi Sportiskola (Vasas\u2011ASI)",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "ebed67f2f9e23ab0",
+      "question": "Used for sporting events and concerts , this stadium resides in the world 's southernmost capital of a sovereign state ?",
+      "gold_answer": "Westpac Stadium",
+      "answer": "Wellington Regional Stadium",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "503e0715f7feb36a",
+      "question": "How many FM stations does the owner of the news station own ?",
+      "gold_answer": "44",
+      "answer": "2",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "29bdda48d568b983",
+      "question": "Who were the professors who received notability for the award who has helped preserve and expand Americans ' access to important resources ?",
+      "gold_answer": "Anna Deavere Smith",
+      "answer": "Anna Deavere Smith, Rebecca Goldstein, James McBride",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "ec3f3a33ae07ac85",
+      "question": "The smooth muscle are in the GI system in how many stages of digestion ?",
+      "gold_answer": "The process of digestion has three stages",
+      "answer": "three",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "42ca49423de8d69c",
+      "question": "What is the middle name of the 1988 Gatorade Player of the Year ?",
+      "gold_answer": "Harding",
+      "answer": "Foster",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "129aeb365127fad6",
+      "question": "What is the land area of the nationality whose athlete was elected to a seat in the National Assembly in the 2013 Kenyan general election ?",
+      "gold_answer": "580,367 square kilometres ( 224,081 sq mi )",
+      "answer": "580,367 square kilometres",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "d6d814996cdf9209",
+      "question": "In 2014 , Suresh Gopi played Dr. Vijay Nambiar in a film of what genre ?",
+      "gold_answer": "thriller",
+      "answer": "medical thriller",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "b6dcc7a5b6742d9f",
+      "question": "The Jacob Hiestand House can be found of a state route how many miles long ?",
+      "gold_answer": "38.245",
+      "answer": "38.245 miles",
+      "error_category": "numeric_or_temporal_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "5f6685b9482adb40",
+      "question": "Who was the mother of the child of the athlete who was called 'Rainy Drinkwater ' in a publicity stunt ?",
+      "gold_answer": "Rose-Berthe Pilon",
+      "answer": "the mother is not mentioned",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "a251b7c2adb7bbf2",
+      "question": "What position was the athlete who paved the way for Jamaal Charles to rush for a 1,000 yards in 2009 ?",
+      "gold_answer": "FB",
+      "answer": "Fullback",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "4d5ad5092b59880e",
+      "question": "What are the coordinates of the church whose architectural design is by James Gallier , Sr. , James H. Dakin , and Charles Dakin ?",
+      "gold_answer": "30\u00b041\u203222\u2033N 88\u00b02\u203237\u2033W / 30.68944\u00b0N 88.04361\u00b0W / 30.68944 ; -88.04361 ( Government Street Presbyterian Church )",
+      "answer": "30\u00b041\u203222\u2033N 88\u00b02\u203237\u2033W",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "1ae4ed2018014fae",
+      "question": "How many employees work for the company that is located in a country where there are ten provinces and three territories ?",
+      "gold_answer": "6,000",
+      "answer": "about 10,000 employees worldwide",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "96daa68247fbab60",
+      "question": "The city named after Saint Elizabeth of Portugal is located in which municipality ?",
+      "gold_answer": "Mexicali",
+      "answer": "Mexicali Municipality",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "482ca0bbaad57de2",
+      "question": "How many titles has the Major League Soccer team managed byBen Olsen in 2010 won ?",
+      "gold_answer": "thirteen",
+      "answer": "5",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "76e6f7d6135e5843",
+      "question": "Who was the youngest offensive player taken in this draft ?",
+      "gold_answer": "D. J. Dozier",
+      "answer": "Rick Fenney",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "371ae04942ba2e09",
+      "question": "Who did the flag bearer compete with in a sport that developed in British India ?",
+      "gold_answer": "Juliette Ah-Wan",
+      "answer": "Henk Grol",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "52940168b8d4e009",
+      "question": "What is the name of the racecourse whose country was first inhabited by modern humans during the Upper Palaeolithic period ?",
+      "gold_answer": "Bibury Racecourse",
+      "answer": "Abingdon Racecourse",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "f86da54f39d7dea5",
+      "question": "Which actress did the person who directed The Little Gangster date ?",
+      "gold_answer": "Jane Birkin",
+      "answer": "Clotilde Courau",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "c62da59be06438ef",
+      "question": "Nathalie Hart played Myka in a 2009 romantic series belonging to what genre ?",
+      "gold_answer": "Science fiction",
+      "answer": "fantasy science fiction romantic drama",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "d75a8765b176798f",
+      "question": "What is the Greek name of the club that was founded in 1962 ?",
+      "gold_answer": "\u0395\u03c0\u03b9\u03c3\u03ba\u03bf\u03c0\u03ae",
+      "answer": "\u0391\u03b8\u03bb\u03b7\u03c4\u03b9\u03ba\u03cc\u03c2 \u038c\u03bc\u03b9\u03bb\u03bf\u03c2 \u0395\u03c0\u03b9\u03c3\u03ba\u03bf\u03c0\u03ae\u03c2",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "d66178d5cb829b16",
+      "question": "On which date was this film shown at the Asian Film Festival , which was based on this video game series from the company headed by Yuji Ito ?",
+      "gold_answer": "June 25 , 2008",
+      "answer": "June\u202f20,\u202f2008",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "16ca794764db5e27",
+      "question": "What 1978 law was passed by the person associated with the state with the largest sub-national economy in the world ?",
+      "gold_answer": "Proposition 13",
+      "answer": "Proposition\u202f13 (the Howard\u202fJarvis Taxpayers\u2019 Bill of Rights)",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "82128e02c8ccfdd4",
+      "question": "How many kilometers south of Pulborough is the location of an unrestored 12th-century stone church ?",
+      "gold_answer": "3",
+      "answer": "3 km",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "a5cf7ceed7e24ed8",
+      "question": "What position was the oldest driver in 2010 Masters of Formula 3 race ?",
+      "gold_answer": "18",
+      "answer": "7",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "66bd35fd89f24e23",
+      "question": "On what show does the person that co-hosted with Kelly on January 29th currently appear on ?",
+      "gold_answer": "Riverdale",
+      "answer": "Live! with Kelly and Ryan",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "985c19aa4f67b9c4",
+      "question": "What is the full name of the earliest player of the year ?",
+      "gold_answer": "M\u00e1rio Rui Correia Tom\u00e1s",
+      "answer": "Marinho",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "644820939ecd7553",
+      "question": "What group does the garden located in the capital of Ishikawa prefecture belong to ?",
+      "gold_answer": "Three Great Gardens of Japan",
+      "answer": "Monuments of Japan",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "b7034d7c7b766a1d",
+      "question": "What is the birthday of the winner whose tournament was founded in 1988 and played annually through 1992 ?",
+      "gold_answer": "12 April 1996",
+      "answer": "n/a",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "2f813cd800de02c9",
+      "question": "What is the capacity of the venue that was given the name Spartak Stadium in 1939 ?",
+      "gold_answer": "11,200",
+      "answer": "10,060",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "446ebb2adfc7e8b6",
+      "question": "What is the club of the Champions League in which Atlante of Mexico won the championship ?",
+      "gold_answer": "New England Revolution",
+      "answer": "Atlante",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "7edb2051615e0598",
+      "question": "The city with the highest percentage of Japanese-American population is in what county ?",
+      "gold_answer": "Honolulu",
+      "answer": "Honolulu County",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "660a7b7682d712ab",
+      "question": "Who was the older person involved in writing the book from 2000 ?",
+      "gold_answer": "Sally Jenkins",
+      "answer": "Lance Armstrong",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "d65e6ae5f639b34a",
+      "question": "A science fiction writer who lives near Chelmsford , wrote a comic book series about machine intelligence , which is the opposite of what ?",
+      "gold_answer": "natural intelligence",
+      "answer": "natural intelligence displayed by humans",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "70c789b849dc85b8",
+      "question": "Which series , released in the 90 's , was available to play on the first platform to ship over 100 million units ?",
+      "gold_answer": "Mortal Kombat Trilogy",
+      "answer": "Mortal Kombat",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "39e20d29e80a2a1f",
+      "question": "What kind of institution is the namesake of the NYC neighborhood which contains the Museum at FIT ?",
+      "gold_answer": "Hospital",
+      "answer": "public college",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    }
+  ],
+  "mean_gold_row_recall": 0.92,
+  "mean_gold_hyperlink_recall": 1.0,
+  "mean_gold_passage_recall": 0.5228758169934641,
+  "total_wall_time_ms": 983854.76,
+  "mean_wall_time_ms": 4919.27,
+  "total_llm_latency_ms": 981941.96,
+  "mean_llm_latency_ms": 4909.71,
+  "total_non_llm_time_ms": 1912.8,
+  "mean_non_llm_time_ms": 9.56,
+  "total_llm_calls": 200.0,
+  "mean_llm_calls": 1.0,
+  "total_llm_api_attempts": 200.0,
+  "mean_llm_api_attempts": 1.0,
+  "total_llm_prompt_chars": 4002768.0,
+  "mean_llm_prompt_chars": 20013.84,
+  "total_llm_response_chars": 2845.0,
+  "mean_llm_response_chars": 14.22,
+  "config": {
+    "top_k": 5,
+    "use_rule_text_triples": true,
+    "use_record_nodes": true,
+    "use_path_guidance": true,
+    "use_lexical_tiebreak": true,
+    "use_hyperlink_expansion": true,
+    "use_prompt_compression": true,
+    "ambiguity_policy": "prompt",
+    "oueg_context_mode": "lossless",
+    "max_context_chars": 24000,
+    "max_output_tokens": 1024,
+    "temperature": 0.0,
+    "n_paths": 5,
+    "max_replans": 0,
+    "max_table_rows_for_kg": null,
+    "finqa_table_format": "official",
+    "second_stage_k": 3,
+    "max_workers": 64,
+    "llm_max_concurrent_requests": 64
+  }
+}

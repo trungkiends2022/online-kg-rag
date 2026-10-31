@@ -1,0 +1,11 @@
+{
+  "case_id": "8a0c9f5861500669",
+  "mode": "direct_single_client_initial_prompt_only",
+  "provider": "openrouter",
+  "model": "deepseek/deepseek-v4-flash",
+  "temperature": 0.0,
+  "max_output_tokens": 512,
+  "prompt_chars": 24609,
+  "prompt_sha256": "f7b251214551cc33e85ab12098f853026cc25cf1a0a638b686ae84472669e4ec",
+  "raw_response": ""
+}

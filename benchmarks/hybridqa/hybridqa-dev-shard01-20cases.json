@@ -1,0 +1,1127 @@
+[
+  {
+    "question_id": "2156839d9b37b5b8",
+    "question": "What county ( s ) does the railroad system service that operates more than 300 trains daily over 21,400 miles ( 34,000 km ) of track ?",
+    "table_id": "New_York_metropolitan_area_2",
+    "answer-text": "New York",
+    "question_postag": "WP NN ( JJ ) VBZ DT NN NN NN WDT VBZ JJR IN CD NNS RB IN CD NNS ( CD NN ) IN NN .",
+    "answer-node": [
+      [
+        "New York Pennsylvania Station",
+        [
+          0,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "New York",
+        [
+          0,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "New York",
+        [
+          1,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Long Island Rail Road",
+        [
+          0,
+          1
+        ],
+        "/wiki/Long_Island_Rail_Road",
+        "passage"
+      ],
+      [
+        "Long Island Rail Road",
+        [
+          4,
+          1
+        ],
+        "/wiki/Long_Island_Rail_Road",
+        "passage"
+      ],
+      [
+        "Long Island Rail Road",
+        [
+          5,
+          1
+        ],
+        "/wiki/Long_Island_Rail_Road",
+        "passage"
+      ],
+      [
+        "Long Island Rail Road",
+        [
+          6,
+          1
+        ],
+        "/wiki/Long_Island_Rail_Road",
+        "passage"
+      ],
+      [
+        "Long Island Rail Road",
+        [
+          7,
+          1
+        ],
+        "/wiki/Long_Island_Rail_Road",
+        "passage"
+      ],
+      [
+        "New Jersey Transit Rail Operations",
+        [
+          0,
+          1
+        ],
+        "/wiki/New_Jersey_Transit_Rail_Operations",
+        "passage"
+      ],
+      [
+        "New Jersey Transit Rail Operations",
+        [
+          2,
+          1
+        ],
+        "/wiki/New_Jersey_Transit_Rail_Operations",
+        "passage"
+      ],
+      [
+        "New Jersey Transit Rail Operations",
+        [
+          3,
+          1
+        ],
+        "/wiki/New_Jersey_Transit_Rail_Operations",
+        "passage"
+      ],
+      [
+        "New Jersey Transit Rail Operations",
+        [
+          8,
+          1
+        ],
+        "/wiki/New_Jersey_Transit_Rail_Operations",
+        "passage"
+      ],
+      [
+        "New Jersey Transit Rail Operations",
+        [
+          10,
+          1
+        ],
+        "/wiki/New_Jersey_Transit_Rail_Operations",
+        "passage"
+      ],
+      [
+        "New York (state)",
+        [
+          0,
+          2
+        ],
+        "/wiki/New_York_(state)",
+        "passage"
+      ],
+      [
+        "New York (state)",
+        [
+          1,
+          2
+        ],
+        "/wiki/New_York_(state)",
+        "passage"
+      ],
+      [
+        "New York (state)",
+        [
+          4,
+          2
+        ],
+        "/wiki/New_York_(state)",
+        "passage"
+      ],
+      [
+        "New York (state)",
+        [
+          5,
+          2
+        ],
+        "/wiki/New_York_(state)",
+        "passage"
+      ],
+      [
+        "New York (state)",
+        [
+          6,
+          2
+        ],
+        "/wiki/New_York_(state)",
+        "passage"
+      ],
+      [
+        "New York (state)",
+        [
+          7,
+          2
+        ],
+        "/wiki/New_York_(state)",
+        "passage"
+      ],
+      [
+        "Grand Central Terminal",
+        [
+          1,
+          0
+        ],
+        "/wiki/Grand_Central_Terminal",
+        "passage"
+      ],
+      [
+        "Metro-North Railroad",
+        [
+          1,
+          1
+        ],
+        "/wiki/Metro-North_Railroad",
+        "passage"
+      ],
+      [
+        "Metro-North Railroad",
+        [
+          3,
+          1
+        ],
+        "/wiki/Metro-North_Railroad",
+        "passage"
+      ],
+      [
+        "Metro-North Railroad",
+        [
+          8,
+          1
+        ],
+        "/wiki/Metro-North_Railroad",
+        "passage"
+      ],
+      [
+        "Metro-North Railroad",
+        [
+          9,
+          1
+        ],
+        "/wiki/Metro-North_Railroad",
+        "passage"
+      ],
+      [
+        "Pennsylvania Station (Newark)",
+        [
+          2,
+          0
+        ],
+        "/wiki/Pennsylvania_Station_(Newark)",
+        "passage"
+      ],
+      [
+        "Port Authority Trans-Hudson",
+        [
+          2,
+          1
+        ],
+        "/wiki/Port_Authority_Trans-Hudson",
+        "passage"
+      ],
+      [
+        "Port Authority Trans-Hudson",
+        [
+          3,
+          1
+        ],
+        "/wiki/Port_Authority_Trans-Hudson",
+        "passage"
+      ],
+      [
+        "New Jersey",
+        [
+          2,
+          2
+        ],
+        "/wiki/New_Jersey",
+        "passage"
+      ],
+      [
+        "New Jersey",
+        [
+          3,
+          2
+        ],
+        "/wiki/New_Jersey",
+        "passage"
+      ],
+      [
+        "New Jersey",
+        [
+          8,
+          2
+        ],
+        "/wiki/New_Jersey",
+        "passage"
+      ],
+      [
+        "New Jersey",
+        [
+          10,
+          2
+        ],
+        "/wiki/New_Jersey",
+        "passage"
+      ],
+      [
+        "Essex County, New Jersey",
+        [
+          2,
+          3
+        ],
+        "/wiki/Essex_County,_New_Jersey",
+        "passage"
+      ],
+      [
+        "Hoboken Terminal",
+        [
+          3,
+          0
+        ],
+        "/wiki/Hoboken_Terminal",
+        "passage"
+      ],
+      [
+        "Hudson County, New Jersey",
+        [
+          3,
+          3
+        ],
+        "/wiki/Hudson_County,_New_Jersey",
+        "passage"
+      ],
+      [
+        "Hudson County, New Jersey",
+        [
+          8,
+          3
+        ],
+        "/wiki/Hudson_County,_New_Jersey",
+        "passage"
+      ],
+      [
+        "Atlantic Terminal",
+        [
+          4,
+          0
+        ],
+        "/wiki/Atlantic_Terminal",
+        "passage"
+      ],
+      [
+        "Brooklyn",
+        [
+          4,
+          3
+        ],
+        "/wiki/Brooklyn",
+        "passage"
+      ],
+      [
+        "Hunterspoint Avenue (LIRR station)",
+        [
+          5,
+          0
+        ],
+        "/wiki/Hunterspoint_Avenue_(LIRR_station)",
+        "passage"
+      ],
+      [
+        "Queens",
+        [
+          5,
+          3
+        ],
+        "/wiki/Queens",
+        "passage"
+      ],
+      [
+        "Queens",
+        [
+          6,
+          3
+        ],
+        "/wiki/Queens",
+        "passage"
+      ],
+      [
+        "Queens",
+        [
+          7,
+          3
+        ],
+        "/wiki/Queens",
+        "passage"
+      ],
+      [
+        "Woodside (LIRR station)",
+        [
+          6,
+          0
+        ],
+        "/wiki/Woodside_(LIRR_station)",
+        "passage"
+      ],
+      [
+        "Jamaica (LIRR station)",
+        [
+          7,
+          0
+        ],
+        "/wiki/Jamaica_(LIRR_station)",
+        "passage"
+      ],
+      [
+        "Secaucus Junction",
+        [
+          8,
+          0
+        ],
+        "/wiki/Secaucus_Junction",
+        "passage"
+      ],
+      [
+        "Union Station (New Haven, Connecticut)",
+        [
+          9,
+          0
+        ],
+        "/wiki/Union_Station_(New_Haven,_Connecticut)",
+        "passage"
+      ],
+      [
+        "Shore Line East",
+        [
+          9,
+          1
+        ],
+        "/wiki/Shore_Line_East",
+        "passage"
+      ],
+      [
+        "Connecticut",
+        [
+          9,
+          2
+        ],
+        "/wiki/Connecticut",
+        "passage"
+      ],
+      [
+        "New Haven County, Connecticut",
+        [
+          9,
+          3
+        ],
+        "/wiki/New_Haven_County,_Connecticut",
+        "passage"
+      ],
+      [
+        "Trenton Transit Center",
+        [
+          10,
+          0
+        ],
+        "/wiki/Trenton_Transit_Center",
+        "passage"
+      ],
+      [
+        "Mercer County, New Jersey",
+        [
+          10,
+          3
+        ],
+        "/wiki/Mercer_County,_New_Jersey",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "1120dbac5e6cb313",
+    "question": "What was the original name of the city with an AFL club that formed in 1989 ?",
+    "table_id": "AFL_Ontario_0",
+    "answer-text": "York",
+    "question_postag": "WP VBD DT JJ NN IN DT NN IN DT NNP NN WDT VBD IN CD .",
+    "answer-node": [
+      [
+        "Toronto",
+        [
+          0,
+          1
+        ],
+        "/wiki/Toronto",
+        "passage"
+      ],
+      [
+        "Toronto",
+        [
+          4,
+          1
+        ],
+        "/wiki/Toronto",
+        "passage"
+      ],
+      [
+        "Toronto",
+        [
+          6,
+          1
+        ],
+        "/wiki/Toronto",
+        "passage"
+      ],
+      [
+        "Toronto",
+        [
+          7,
+          1
+        ],
+        "/wiki/Toronto",
+        "passage"
+      ],
+      [
+        "Toronto",
+        [
+          8,
+          1
+        ],
+        "/wiki/Toronto",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "f50907ea0bc6a4bb",
+    "question": "How many beds are available in the city named after the only U.S . Senator ever killed in military combat ?",
+    "table_id": "List_of_hospitals_in_Oregon_0",
+    "answer-text": "25",
+    "question_postag": "WRB JJ NNS VBP JJ IN DT NN VBN IN DT JJ NNP . NNP RB VBD IN JJ NN .",
+    "answer-node": [
+      [
+        "25",
+        [
+          2,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "25",
+        [
+          3,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "25",
+        [
+          6,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "25",
+        [
+          6,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "25",
+        [
+          9,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "25",
+        [
+          9,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "25",
+        [
+          13,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "25",
+        [
+          13,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Forest Grove, Oregon",
+        [
+          16,
+          0
+        ],
+        "/wiki/Forest_Grove,_Oregon",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "46aefbfa01870c18",
+    "question": "What service is the officer who was appointed in 2004 by general John D. Altenburg part of ?",
+    "table_id": "Presiding_Officer_(Guantanamo_Military_Commissions)_0",
+    "answer-text": "United States Army Reserve",
+    "question_postag": "WP NN VBZ DT NN WP VBD VBN IN CD IN JJ NNP NNP NNP NN IN .",
+    "answer-node": [
+      [
+        "United States Army Reserve",
+        [
+          8,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Steven David (Judge)",
+        [
+          8,
+          1
+        ],
+        "/wiki/Steven_David_(Judge)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "934caf7caff397a9",
+    "question": "What was the name ( s ) of the characters in the work that was a coming-of-age novel written by Austrian author Felix Salten ?",
+    "table_id": "List_of_fictional_mustelids_0",
+    "answer-text": "Buttercup",
+    "question_postag": "WP VBD DT NN ( JJ ) IN DT NNS IN DT NN WDT VBD DT JJ NN VBN IN JJ NN NNP NNP .",
+    "answer-node": [
+      [
+        "Buttercup",
+        [
+          0,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "db1930a238c9438f",
+    "question": "Who wrote this 2008 song recorded by the singer whose debut album had a track Long Black Train ?",
+    "table_id": "List_of_songs_in_SingStar_games_(PlayStation_2)_8",
+    "answer-text": "Jeremy Spillman and Chris Stapleton",
+    "question_postag": "WP VBD DT CD NN VBN IN DT NN WP$ NN NN VBD DT NN NNP NNP NNP .",
+    "answer-node": [
+      [
+        "Another Try",
+        [
+          14,
+          1
+        ],
+        "/wiki/Another_Try",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "75799415938a14ab",
+    "question": "What is the address of the stadium which is one of the ones with 8,000 seating , in a city less than 150 miles from a city in the big apple ?",
+    "table_id": "List_of_stadiums_in_Canada_1",
+    "answer-text": "100 Philip Aziz Avenue",
+    "question_postag": "WP VBZ DT NN IN DT NN WDT VBZ CD IN DT NNS IN CD NN , IN DT NN JJR IN CD NNS IN DT NN IN DT JJ NN .",
+    "answer-node": [
+      [
+        "TD Stadium",
+        [
+          16,
+          0
+        ],
+        "/wiki/TD_Stadium",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "0f30605a82278300",
+    "question": "How many times has the Democratic Party had a female candidate before the year 2000 ?",
+    "table_id": "List_of_female_United_States_presidential_and_vice-presidential_candidates_3",
+    "answer-text": "5",
+    "question_postag": "WRB JJ NNS VBZ DT NNP NNP VBD DT JJ NN IN DT NN CD .",
+    "answer-node": [
+      [
+        "Margaret Chase Smith",
+        [
+          3,
+          1
+        ],
+        "/wiki/Margaret_Chase_Smith",
+        "passage"
+      ],
+      [
+        "1996 United States presidential election",
+        [
+          5,
+          0
+        ],
+        "/wiki/1996_United_States_presidential_election",
+        "passage"
+      ],
+      [
+        "1996 United States presidential election",
+        [
+          8,
+          0
+        ],
+        "/wiki/1996_United_States_presidential_election",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "de93f380b7d515d0",
+    "question": "What is on the other side of Belle Isle from the province which contains Mistastin ?",
+    "table_id": "List_of_impact_craters_in_North_America_0",
+    "answer-text": "Newfoundland",
+    "question_postag": "WP VBZ IN DT JJ NN IN NNP NNP IN DT NN WDT VBZ NNP .",
+    "answer-node": [
+      [
+        "Quebec",
+        [
+          2,
+          1
+        ],
+        "/wiki/Quebec",
+        "passage"
+      ],
+      [
+        "Quebec",
+        [
+          3,
+          1
+        ],
+        "/wiki/Quebec",
+        "passage"
+      ],
+      [
+        "Quebec",
+        [
+          10,
+          1
+        ],
+        "/wiki/Quebec",
+        "passage"
+      ],
+      [
+        "Quebec",
+        [
+          11,
+          1
+        ],
+        "/wiki/Quebec",
+        "passage"
+      ],
+      [
+        "Quebec",
+        [
+          12,
+          1
+        ],
+        "/wiki/Quebec",
+        "passage"
+      ],
+      [
+        "Quebec",
+        [
+          13,
+          1
+        ],
+        "/wiki/Quebec",
+        "passage"
+      ],
+      [
+        "Quebec",
+        [
+          14,
+          1
+        ],
+        "/wiki/Quebec",
+        "passage"
+      ],
+      [
+        "Nunavut",
+        [
+          8,
+          1
+        ],
+        "/wiki/Nunavut",
+        "passage"
+      ],
+      [
+        "Labrador",
+        [
+          16,
+          1
+        ],
+        "/wiki/Labrador",
+        "passage"
+      ],
+      [
+        "Nova Scotia",
+        [
+          17,
+          1
+        ],
+        "/wiki/Nova_Scotia",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "210b095cb234293a",
+    "question": "The largest ship from the United States that was sunk was built by what company ?",
+    "table_id": "German_submarine_U-155_(1941)_0",
+    "answer-text": "Union Iron Works",
+    "question_postag": "DT JJS NN IN DT NNP NNPS DT VBD NN VBD VBN IN WP NN .",
+    "answer-node": [
+      [
+        "USS Challenger (ID-3630)",
+        [
+          4,
+          1
+        ],
+        "/wiki/USS_Challenger_(ID-3630)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "fb3b196732928c21",
+    "question": "The retired British policeman who held the position of Commissioner of Police of the Metropolis from 2005 to 2008 went to what College ?",
+    "table_id": "List_of_University_of_Oxford_people_in_British_public_life_12",
+    "answer-text": "Christ Church",
+    "question_postag": "DT JJ JJ NN WP VBD DT NN IN NNP IN NNP IN DT NNP IN CD TO CD VBD TO WP NNP .",
+    "answer-node": [
+      [
+        "Christ Church",
+        [
+          8,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Trinity College, Oxford",
+        [
+          1,
+          1
+        ],
+        "/wiki/Trinity_College,_Oxford",
+        "passage"
+      ],
+      [
+        "The Queen's College, Oxford",
+        [
+          13,
+          1
+        ],
+        "/wiki/The_Queen's_College,_Oxford",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "71e9a064c1e72df3",
+    "question": "What club did the commander of the 7th Arkansas Infantry Regiment run after the war ?",
+    "table_id": "List_of_Arkansas_Civil_War_Confederate_units_1",
+    "answer-text": "The Ku Klux Klan",
+    "question_postag": "WP NN VBD DT NN IN DT JJ NNP NNP NNP NN IN DT NN .",
+    "answer-node": [
+      [
+        "Robert G. Shaver",
+        [
+          12,
+          2
+        ],
+        "/wiki/Robert_G._Shaver",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "fecb81b06d0c69db",
+    "question": "What is the callsign of the airport whose name came after a naming contest in 2008 , where Samba was the other popular name ?",
+    "table_id": "List_of_airlines_of_Brazil_0",
+    "answer-text": "AZUL",
+    "question_postag": "WP VBZ DT NN IN DT NN WP$ NN VBD IN DT JJ NN IN CD , WRB NNP VBD DT JJ JJ NN .",
+    "answer-node": [
+      [
+        "Azul Brazilian Airlines",
+        [
+          1,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "AZUL",
+        [
+          1,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Gol Transportes A\u00e9reos",
+        [
+          3,
+          1
+        ],
+        "/wiki/Gol_Transportes_A\u00e9reos",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "8d9b6dff1a888a1c",
+    "question": "Which jurisdiction whose standard tax rate was 21 % is mostly credited to be named after a river ?",
+    "table_id": "European_Union_value_added_tax_0",
+    "answer-text": "Lithuania",
+    "question_postag": "JJ NN WP$ JJ NN NN VBD CD NN VBZ RB VBN TO VB VBN IN DT NN .",
+    "answer-node": [
+      [
+        "Lithuania",
+        [
+          16,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Latvia",
+        [
+          15,
+          0
+        ],
+        "/wiki/Latvia",
+        "passage"
+      ],
+      [
+        "Lithuanian language",
+        [
+          16,
+          4
+        ],
+        "/wiki/Lithuanian_language",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ec4fdec40c819a20",
+    "question": "When was this competition for men only held on this 777-kilometre-long ( 483 mi ) river ?",
+    "table_id": "Venues_of_the_1924_Summer_Olympics_0",
+    "answer-text": "13 to 17 July",
+    "question_postag": "WRB VBD DT NN IN NNS RB VBD IN DT JJ ( CD NN ) NN .",
+    "answer-node": [
+      [
+        "Rowing at the 1924 Summer Olympics",
+        [
+          1,
+          1
+        ],
+        "/wiki/Rowing_at_the_1924_Summer_Olympics",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "25962c0c7b55afc8",
+    "question": "What crop was grown at the site located on U.S. Route 90 ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Terrebonne_Parish,_Louisiana_0",
+    "answer-text": "sugar",
+    "question_postag": "WP NN VBD VBN IN DT NN VBN IN NNP NNP CD .",
+    "answer-node": [
+      [
+        "Argyle (Houma, Louisiana)",
+        [
+          1,
+          1
+        ],
+        "/wiki/Argyle_(Houma,_Louisiana)",
+        "passage"
+      ],
+      [
+        "Orange Grove Plantation House (Houma)",
+        [
+          11,
+          1
+        ],
+        "/wiki/Orange_Grove_Plantation_House_(Houma)",
+        "passage"
+      ],
+      [
+        "Residence Plantation House",
+        [
+          14,
+          1
+        ],
+        "/wiki/Residence_Plantation_House",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "86486af638fc37d0",
+    "question": "At the North American science fiction convention held in the US city named after King Louis XVI of France , one of the guest of honors won what award in 1984 ?",
+    "table_id": "North_American_Science_Fiction_Convention_0",
+    "answer-text": "Campbell Memorial Award",
+    "question_postag": "IN DT JJ JJ NN NN NN VBD IN DT NNP NN VBN IN VBG NNP NNP IN NNP , CD IN DT NN IN NNS VBD WP NN IN CD .",
+    "answer-node": [
+      [
+        "Frederik Pohl",
+        [
+          1,
+          4
+        ],
+        "/wiki/Frederik_Pohl",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e172bd0445a3a9ec",
+    "question": "What portion of the state which contains Albany live in its most populated city ?",
+    "table_id": "Homart_Development_Company_0",
+    "answer-text": "40%",
+    "question_postag": "WP NN IN DT NN WDT VBZ NNP NN IN PRP$ RBS JJ NN .",
+    "answer-node": [
+      [
+        "New York (state)",
+        [
+          4,
+          2
+        ],
+        "/wiki/New_York_(state)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "f67b8b120b82c0c4",
+    "question": "What fuel is used in the ceramics technology for which Nishimatsuura District is known ?",
+    "table_id": "List_of_Historic_Sites_of_Japan_(Saga)_0",
+    "answer-text": "wood",
+    "question_postag": "WP NN VBZ VBN IN DT NNS NN IN WDT NNP NNP VBZ VBN .",
+    "answer-node": [
+      [
+        "Yayoi settlement discovered in 1971 during works to remedy environmental damage caused by mining ; evidence uncovered of houses ( some now reconstructed ) , storage pits , and wells , along with the first mould for a yari ganna ( spear-plane ) , tools of stone and wood , and ceramics",
+        [
+          19,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Sluice gates",
+        [
+          3,
+          2
+        ],
+        "/wiki/Sluice_gates",
+        "passage"
+      ],
+      [
+        "Anagama kiln",
+        [
+          6,
+          2
+        ],
+        "/wiki/Anagama_kiln",
+        "passage"
+      ],
+      [
+        "Nabeshima ware",
+        [
+          15,
+          2
+        ],
+        "/wiki/Nabeshima_ware",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "a6d1c26b6533da69",
+    "question": "What is the Location for the organization that is also known as `` DelPark '' ?",
+    "table_id": "Delaware_Sports_Museum_and_Hall_of_Fame_0",
+    "answer-text": "Stanton",
+    "question_postag": "WP VBZ DT NN IN DT NN WDT VBZ RB VBN IN `` NNP '' .",
+    "answer-node": [
+      [
+        "Stanton",
+        [
+          4,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Delaware Park Racetrack",
+        [
+          4,
+          1
+        ],
+        "/wiki/Delaware_Park_Racetrack",
+        "passage"
+      ]
+    ]
+  }
+]

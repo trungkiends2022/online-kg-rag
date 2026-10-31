@@ -1,0 +1,135 @@
+def make_fig3_drawio():
+    xml = """<mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1380" pageHeight="670" background="#ffffff">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ==================== COLUMN 1: TIER 1 (L1) ==================== -->
+    <mxCell id="p_l1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff8f0;strokeColor=#d79b00;strokeWidth=1.5;arcSize=4;" vertex="1" parent="1">
+      <mxGeometry x="40" y="30" width="400" height="570" as="geometry" />
+    </mxCell>
+    <mxCell id="t_l1" value="&lt;b&gt;Tier 1: L1 Reader &amp;amp; Controlled Audit&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;fontColor=#b45f06;" vertex="1" parent="1">
+      <mxGeometry x="60" y="45" width="360" height="35" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b_l1_in" value="&lt;b&gt;Input Context to L1 LLM (&amp;Chi;&lt;sub&gt;L1&lt;/sub&gt;)&lt;/b&gt;&lt;hr style='border-top:1px solid #d79b00; margin:3px 0;'&gt;&lt;div style='text-align:left; font-size:11px; line-height:1.4;'&gt;• &lt;b&gt;Complete multigraph &amp;Chi;*(G&lt;sub&gt;q&lt;/sub&gt;)&lt;/b&gt; (lossless compression)&lt;br&gt;• &lt;b&gt;Scored path guide p₁&lt;/b&gt; (S=7.85) as attention steer&lt;br&gt;• &lt;b&gt;Non-filtering&lt;/b&gt;: preserves full topological evidence&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="60" y="95" width="360" height="80" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b_l1_llm" value="&lt;b&gt;Backbone LLM (Call 1): Collision Audit&lt;/b&gt;&lt;hr style='border-top:1px solid #d79b00; margin:3px 0;'&gt;&lt;div style='text-align:left; font-size:11px; line-height:1.4;'&gt;Evaluates candidate collision set C&lt;sub&gt;q&lt;/sub&gt; = {&amp;rho;₀, &amp;rho;₁}:&lt;br&gt;• &lt;b&gt;Decision Rule&lt;/b&gt;: Branch on structural determinacy&lt;br&gt;• Strictly prohibits ungrounded parametric guessing&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d79b00;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="60" y="190" width="360" height="80" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b_l1_branch_a" value="&lt;b style='color:#274e13;'&gt;Branch A (|C&lt;sub&gt;q&lt;/sub&gt;|=1)&lt;/b&gt;&lt;hr style='border-top:1px solid #82b366; margin:3px 0;'&gt;&lt;div style='text-align:left; font-size:10px; line-height:1.3;'&gt;• Single path found&lt;br&gt;• &lt;b&gt;L1 Fast Exit&lt;/b&gt;: verified a*&lt;br&gt;• 1 call, terminates here&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="60" y="285" width="170" height="95" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b_l1_branch_b" value="&lt;b style='color:#b45f06;'&gt;Branch B (|C&lt;sub&gt;q&lt;/sub&gt;|&gt;1)&lt;/b&gt;&lt;hr style='border-top:1px solid #d79b00; margin:3px 0;'&gt;&lt;div style='text-align:left; font-size:10px; line-height:1.3;'&gt;• Collision detected&lt;br&gt;• Defers guessing&lt;br&gt;• Emits handoff &amp;Eta;&lt;sub&gt;diag&lt;/sub&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="250" y="285" width="170" height="95" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b_l1_diag" value="&lt;b&gt;Structured Diagnostic Emission &amp;Eta;&lt;sub&gt;diag&lt;/sub&gt;&lt;/b&gt;&lt;hr style='border-top:1px solid #d79b00; margin:3px 0;'&gt;&lt;pre style='background:#ffffff; padding:4px; font-family:Courier New; font-size:10px; margin:2px 0;'&gt;{ &quot;candidates&quot;: [&quot;&amp;rho;₀&quot;, &quot;&amp;rho;₁&quot;],&#xa;  &quot;blocker&quot;: &quot;missing_link&quot;,&#xa;  &quot;needed_check&quot;: &quot;check town name in passage&quot; }&lt;/pre&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d79b00;strokeWidth=1.5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="60" y="395" width="360" height="150" as="geometry" />
+    </mxCell>
+
+    <mxCell id="e_l1_in_llm" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#d79b00;strokeWidth=1.5;" edge="1" source="b_l1_in" target="b_l1_llm" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_l1_llm_a" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#82b366;strokeWidth=1.5;" edge="1" source="b_l1_llm" target="b_l1_branch_a" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_l1_llm_b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#d79b00;strokeWidth=1.5;" edge="1" source="b_l1_llm" target="b_l1_branch_b" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_l1_b_diag" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#d79b00;strokeWidth=1.5;" edge="1" source="b_l1_branch_b" target="b_l1_diag" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ==================== COLUMN 2: RETRIEVAL ==================== -->
+    <mxCell id="p_ret" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f0fc;strokeColor=#9673a6;strokeWidth=1.5;arcSize=4;" vertex="1" parent="1">
+      <mxGeometry x="490" y="30" width="400" height="570" as="geometry" />
+    </mxCell>
+    <mxCell id="t_ret" value="&lt;b&gt;Targeted Evidence Retrieval (Controller)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontColor=#5b2c6f;" vertex="1" parent="1">
+      <mxGeometry x="510" y="45" width="360" height="35" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b_ret_sym" value="&lt;b&gt;Symmetric Candidate Expansion (R&lt;sub&gt;target&lt;/sub&gt;)&lt;/b&gt;&lt;hr style='border-top:1px solid #9673a6; margin:3px 0;'&gt;&lt;div style='text-align:left; font-size:11px; line-height:1.4;'&gt;• Focus candidates from handoff: C&lt;sub&gt;focus&lt;/sub&gt; = {&amp;rho;₀, &amp;rho;₁}&lt;br&gt;• Query Wikipedia hyperlink cache per candidate&lt;br&gt;• Bounded budget: k&lt;sub&gt;focus&lt;/sub&gt; = 2 passages / row&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="510" y="95" width="360" height="80" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b_ret_delta" value="&lt;b&gt;Targeted Delta Evidence Cards (&amp;Delta;D)&lt;/b&gt;&lt;hr style='border-top:1px solid #9673a6; margin:3px 0;'&gt;&lt;div style='text-align:left; font-size:11px; line-height:1.4;'&gt;• Row &amp;rho;₀: &lt;i&gt;Doc:Toronto&lt;/i&gt; &rarr; &ldquo;...town of York (1793)...&rdquo;&lt;br&gt;• Row &amp;rho;₁: &lt;i&gt;Doc:Hamilton&lt;/i&gt; &rarr; &ldquo;...founded in 1816...&rdquo;&lt;br&gt;• Symmetric balance prevents candidate bias&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f0fc;strokeColor=#9673a6;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="510" y="190" width="360" height="95" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b_ret_pack" value="&lt;b&gt;Packager: State Capsule K&lt;sub&gt;L2&lt;/sub&gt;&lt;/b&gt;&lt;hr style='border-top:1px solid #008080; margin:3px 0;'&gt;&lt;div style='text-align:left; font-size:11px; line-height:1.4;'&gt;Integrates focus row bindings + delta passages &amp;Delta;D&lt;br&gt;• K&lt;sub&gt;L2&lt;/sub&gt; = (q, &amp;psi;&lt;sub&gt;check&lt;/sub&gt;, {G*(&amp;rho;&lt;sub&gt;c&lt;/sub&gt;)}&lt;sub&gt;c&amp;isin;C&lt;sub&gt;focus&lt;/sub&gt;&lt;/sub&gt;, &amp;Delta;D)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6fffa;strokeColor=#008080;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="510" y="300" width="360" height="95" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b_ret_prop" value="&lt;b&gt;Sufficiency Guarantee (Proposition 2)&lt;/b&gt;&lt;hr style='border-top:1px solid #9673a6; margin:3px 0;'&gt;&lt;div style='text-align:left; font-size:11px; line-height:1.4;'&gt;• Zero informational loss: I(a*; &amp;Chi;&lt;sub&gt;L1&lt;/sub&gt; &amp;cup; &amp;Delta;D | K&lt;sub&gt;L2&lt;/sub&gt;) = 0&lt;br&gt;• Bounded context: eliminates irrelevant clutter&lt;br&gt;• Ready for factual disambiguation at Tier 2&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="510" y="410" width="360" height="135" as="geometry" />
+    </mxCell>
+
+    <mxCell id="e_ret_1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9673a6;strokeWidth=1.5;" edge="1" source="b_ret_sym" target="b_ret_delta" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_ret_2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#008080;strokeWidth=1.5;" edge="1" source="b_ret_delta" target="b_ret_pack" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_ret_3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9673a6;strokeWidth=1.5;" edge="1" source="b_ret_pack" target="b_ret_prop" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ==================== COLUMN 3: TIER 2 (L2) ==================== -->
+    <mxCell id="p_l2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf9;strokeColor=#008080;strokeWidth=1.5;arcSize=4;" vertex="1" parent="1">
+      <mxGeometry x="940" y="30" width="400" height="570" as="geometry" />
+    </mxCell>
+    <mxCell id="t_l2" value="&lt;b&gt;Tier 2: L2 Reader (Second LLM Call)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5f5e3;strokeColor=#008080;fontSize=13;fontColor=#0e6655;" vertex="1" parent="1">
+      <mxGeometry x="960" y="45" width="360" height="35" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b_l2_capsule" value="&lt;b&gt;Minimal Sufficient State Capsule K&lt;sub&gt;L2&lt;/sub&gt;&lt;/b&gt;&lt;hr style='border-top:1px solid #008080; margin:3px 0;'&gt;&lt;pre style='background:#f4fbf7; padding:4px; font-family:Courier New; font-size:9.5px; margin:2px 0;'&gt;{ &quot;question&quot;: &quot;city with club formed in 1989&quot;,&#xa;  &quot;unresolved&quot;: &quot;needed_check: town name&quot;,&#xa;  &quot;focus_bindings&quot;: [&#xa;    {&quot;rec&quot;: &quot;&amp;rho;₀&quot;, &quot;club&quot;: &quot;Eagles&quot;, &quot;yr&quot;: 1989},&#xa;    {&quot;rec&quot;: &quot;&amp;rho;₁&quot;, &quot;club&quot;: &quot;Tigers&quot;, &quot;yr&quot;: 1991}&#xa;  ],&#xa;  &quot;delta_evidence&quot;: [&#xa;    {&quot;target&quot;: &quot;&amp;rho;₀&quot;, &quot;doc&quot;: &quot;town of York (1793)&quot;},&#xa;    {&quot;target&quot;: &quot;&amp;rho;₁&quot;, &quot;doc&quot;: &quot;founded in 1816&quot;}&#xa;  ] }&lt;/pre&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#008080;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="960" y="95" width="360" height="160" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b_l2_llm" value="&lt;b&gt;Backbone LLM (Call 2) &amp;mdash; Factual Reader&lt;/b&gt;&lt;hr style='border-top:1px solid #008080; margin:3px 0;'&gt;&lt;div style='text-align:left; font-size:11px; line-height:1.4;'&gt;• Evaluates grounded delta facts in K&lt;sub&gt;L2&lt;/sub&gt; at T=0&lt;br&gt;• Disambiguates tie between &amp;rho;₀ and &amp;rho;₁ factually&lt;br&gt;• Eliminates heuristic lexical tiebreaking&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6fffa;strokeColor=#008080;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="960" y="270" width="360" height="110" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b_l2_res" value="&lt;b&gt;Final Conclusive Resolution&lt;/b&gt;&lt;hr style='border-top:1px solid #27ae60; margin:3px 0;'&gt;&lt;div style='text-align:left; font-size:11px; line-height:1.4;'&gt;• &lt;b&gt;Verified Answer:&lt;/b&gt; &lt;span style='background:#d5e8d4; color:#274e13; padding:2px 6px; font-weight:bold; border-radius:3px;'&gt;&quot;York&quot;&lt;/span&gt;&lt;br&gt;• &lt;b&gt;Provenance Homomorphism&lt;/b&gt; &amp;pi;: a* &rarr; E&lt;sub&gt;q&lt;/sub&gt;*:&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;rho;₀ (row 0) &rarr; Toronto &rarr; York&lt;br&gt;• Validated against ground truth without hallucination&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#27ae60;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="960" y="395" width="360" height="150" as="geometry" />
+    </mxCell>
+
+    <mxCell id="e_l2_1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#008080;strokeWidth=1.5;" edge="1" source="b_l2_capsule" target="b_l2_llm" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_l2_2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#27ae60;strokeWidth=1.5;" edge="1" source="b_l2_llm" target="b_l2_res" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ==================== INTER-COLUMN CONNECTIONS (Rotated Badges) ==================== -->
+    <mxCell id="e_cross_diag" value="&lt;b style='writing-mode: vertical-rl; transform: rotate(270deg); display:inline-block;'&gt;Diagnostic Handoff &amp;Eta;&lt;sub&gt;diag&lt;/sub&gt;&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#b45f06;strokeWidth=2;fontColor=#b45f06;fontSize=11;labelBackgroundColor=#ffffff;labelBorderColor=#b45f06;" edge="1" source="b_l1_diag" target="b_ret_sym" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="465" y="470" />
+          <mxPoint x="465" y="135" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="e_cross_capsule" value="&lt;b style='writing-mode: vertical-rl; transform: rotate(270deg); display:inline-block;'&gt;State Capsule K&lt;sub&gt;L2&lt;/sub&gt;&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#008080;strokeWidth=2;fontColor=#008080;fontSize=11;labelBackgroundColor=#ffffff;labelBorderColor=#008080;" edge="1" source="b_ret_pack" target="b_l2_capsule" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="915" y="347" />
+          <mxPoint x="915" y="175" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+  </root>
+</mxGraphModel>"""
+    with open("paper_v2/figures/fig3_diagnostic_l2.drawio", "w") as f:
+        f.write(xml)
+    print("Saved fig3_diagnostic_l2.drawio")
+
+if __name__ == "__main__":
+    make_fig3_drawio()

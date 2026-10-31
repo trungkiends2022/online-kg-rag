@@ -1,0 +1,3278 @@
+[
+  {
+    "question_id": "27416cfa05fd273f",
+    "question": "In what year did the 2006 awardee of the Commissioner 's Historic Achievement Award die ?",
+    "table_id": "Commissioner's_Historic_Achievement_Award_0",
+    "answer-text": "1972",
+    "question_postag": "IN WP NN VBD DT CD NN IN DT NNP POS NNP NNP NNP NN .",
+    "answer-node": [
+      [
+        "Clemente is the only posthumous recipient of the Commissioner 's Historic Achievement Award . He led the league in batting average four times in his career , notching his 3,000th hit in the 1972 season ( September 30 ) . Inducted into the Hall of Fame after his death at sea , Clemente was recognized not only for his statistical achievements over his 17 seasons , but for his humanitarian contributions",
+        [
+          2,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Roberto Clemente",
+        [
+          2,
+          0
+        ],
+        "/wiki/Roberto_Clemente",
+        "passage"
+      ],
+      [
+        "Jackie Robinson",
+        [
+          9,
+          2
+        ],
+        "/wiki/Jackie_Robinson",
+        "passage"
+      ],
+      [
+        "Oakland Athletics",
+        [
+          12,
+          2
+        ],
+        "/wiki/Oakland_Athletics",
+        "passage"
+      ],
+      [
+        "Houston Astros",
+        [
+          13,
+          2
+        ],
+        "/wiki/Houston_Astros",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "731adb9db2bd0f1b",
+    "question": "Who directed the Academy Awards the year that Sandy Powell was nominated for the Best Costume Design award for a film with a screenplay written by Chris Weitz ?",
+    "table_id": "Sandy_Powell_(costume_designer)_1",
+    "answer-text": "Glenn Weiss",
+    "question_postag": "WP VBD DT NNP NNP DT NN IN NNP NNP VBD VBN IN DT NNP NNP NNP NN IN DT NN IN DT NN VBN IN NNP NNP .",
+    "answer-node": [
+      [
+        "88th Academy Awards",
+        [
+          10,
+          0
+        ],
+        "/wiki/88th_Academy_Awards",
+        "passage"
+      ],
+      [
+        "88th Academy Awards",
+        [
+          11,
+          0
+        ],
+        "/wiki/88th_Academy_Awards",
+        "passage"
+      ],
+      [
+        "91st Academy Awards",
+        [
+          12,
+          0
+        ],
+        "/wiki/91st_Academy_Awards",
+        "passage"
+      ],
+      [
+        "91st Academy Awards",
+        [
+          13,
+          0
+        ],
+        "/wiki/91st_Academy_Awards",
+        "passage"
+      ],
+      [
+        "92nd Academy Awards",
+        [
+          14,
+          0
+        ],
+        "/wiki/92nd_Academy_Awards",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "43ea5a56552dd120",
+    "question": "What is the name of the +100 kg male athlete in Greco-Roman , which participated at World Wrestling Championships in 1983 , that won five European titles between 1977 and 1986 ?",
+    "table_id": "1983_World_Wrestling_Championships_3",
+    "answer-text": "Nikola Dinev",
+    "question_postag": "WP VBZ DT NN IN DT NNP NNP NN , WDT VBD IN NNP NNP NNP IN CD , DT VBD CD JJ NNS IN CD CC CD .",
+    "answer-node": [
+      [
+        "Nikola Dinev Bulgaria",
+        [
+          9,
+          2
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "3fce81ceeb4f1f24",
+    "question": "Who was the Dutch cyclist who placed 3rd overall in the 2019 Tour de France , finishing just 1:31 behind the overall winner ?",
+    "table_id": "2019_Tour_de_France_3",
+    "answer-text": "Steven Kruijswijk",
+    "question_postag": "WP VBD DT JJ NN WP VBD CD JJ IN DT CD NNP FW NNP , VBG RB CD IN DT JJ NN .",
+    "answer-node": [
+      [
+        "Steven Kruijswijk ( NED )",
+        [
+          2,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "fa100f2344c7012f",
+    "question": "What year was a group formed that had the most deaths in a suicide attack by Palestinians in 2005 ?",
+    "table_id": "List_of_Palestinian_suicide_attacks_13",
+    "answer-text": "1981",
+    "question_postag": "WP NN VBD DT NN VBD IN VBD DT RBS NNS IN DT JJ NN IN NNPS IN CD .",
+    "answer-node": [
+      [
+        "Palestinian Islamic Jihad",
+        [
+          0,
+          4
+        ],
+        "/wiki/Palestinian_Islamic_Jihad",
+        "passage"
+      ],
+      [
+        "Palestinian Islamic Jihad",
+        [
+          4,
+          4
+        ],
+        "/wiki/Palestinian_Islamic_Jihad",
+        "passage"
+      ],
+      [
+        "Palestinian Islamic Jihad",
+        [
+          5,
+          4
+        ],
+        "/wiki/Palestinian_Islamic_Jihad",
+        "passage"
+      ],
+      [
+        "Palestinian Islamic Jihad",
+        [
+          6,
+          4
+        ],
+        "/wiki/Palestinian_Islamic_Jihad",
+        "passage"
+      ],
+      [
+        "Palestinian Islamic Jihad",
+        [
+          7,
+          4
+        ],
+        "/wiki/Palestinian_Islamic_Jihad",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "459e7aca388bc6b7",
+    "question": "What is the name of the building housing the cultural institution in New York City 's Lower Manhattan ?",
+    "table_id": "List_of_museums_and_cultural_institutions_in_New_York_City_7",
+    "answer-text": "New Era Building",
+    "question_postag": "WP VBZ DT NN IN DT NN NN DT JJ NN IN NNP NNP NNP POS NNP NNP .",
+    "answer-node": [
+      [
+        "New Era Building (New York City)",
+        [
+          4,
+          0
+        ],
+        "/wiki/New_Era_Building_(New_York_City)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ef7758ff053f074e",
+    "question": "When was the Manufacturer company founded for the 2005 Advance Auto Parts 500 driver who is the top executive for Hendrick Motorsports ?",
+    "table_id": "2005_Advance_Auto_Parts_500_0",
+    "answer-text": "November 3 , 1911",
+    "question_postag": "WRB VBD DT NNP NN VBD IN DT CD NNP NNP NNP CD NN WP VBZ DT JJ NN IN NNP NNP .",
+    "answer-node": [
+      [
+        "Chevrolet",
+        [
+          0,
+          4
+        ],
+        "/wiki/Chevrolet",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "7489641d6011f207",
+    "question": "What is the Association of the RMIT athletics alumni who was born on 22 June 1931 ?",
+    "table_id": "List_of_alumni_and_faculty_of_the_Royal_Melbourne_Institute_of_Technology_16",
+    "answer-text": "attended",
+    "question_postag": "WP VBZ DT NNP IN NNP IN DT NN JJ CD NNP CD .",
+    "answer-node": [
+      [
+        "attended",
+        [
+          0,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "attended",
+        [
+          1,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "attended",
+        [
+          5,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "attended",
+        [
+          8,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "attended",
+        [
+          13,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Carrie Graf",
+        [
+          3,
+          0
+        ],
+        "/wiki/Carrie_Graf",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "9f9e4a2c2f1e14be",
+    "question": "What American heavy metal band based in Houston , Texas covered the song on Never Say Dinosaur from the sixth studio album of the Christian rock band , Petra ?",
+    "table_id": "Never_Say_Dinosaur_1",
+    "answer-text": "Galactic Cowboys",
+    "question_postag": "WP NNP JJ NN NN VBN IN NNP , NNP VBD DT NN IN NNP NNP NNP IN DT JJ NN NN IN DT NNP NN NN , NNP .",
+    "answer-node": [
+      [
+        "Galactic Cowboys",
+        [
+          2,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "872bef9dbe636469",
+    "question": "The Australian Little League World Series final in 2009 was hosted by a city with an estimated population of how many people ?",
+    "table_id": "Little_League_World_Series_in_Australia_1",
+    "answer-text": "679,127",
+    "question_postag": "DT JJ NNP NNP NNP NNP JJ IN CD VBD VBN IN DT NN IN DT JJ NN IN WRB JJ NNS .",
+    "answer-node": [
+      [
+        "Gold Coast, Queensland",
+        [
+          1,
+          1
+        ],
+        "/wiki/Gold_Coast,_Queensland",
+        "passage"
+      ],
+      [
+        "Gold Coast, Queensland",
+        [
+          2,
+          1
+        ],
+        "/wiki/Gold_Coast,_Queensland",
+        "passage"
+      ],
+      [
+        "Gold Coast, Queensland",
+        [
+          3,
+          1
+        ],
+        "/wiki/Gold_Coast,_Queensland",
+        "passage"
+      ],
+      [
+        "Gold Coast, Queensland",
+        [
+          4,
+          1
+        ],
+        "/wiki/Gold_Coast,_Queensland",
+        "passage"
+      ],
+      [
+        "Gold Coast, Queensland",
+        [
+          5,
+          1
+        ],
+        "/wiki/Gold_Coast,_Queensland",
+        "passage"
+      ],
+      [
+        "Gold Coast, Queensland",
+        [
+          6,
+          1
+        ],
+        "/wiki/Gold_Coast,_Queensland",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "1466c2dd43a1a940",
+    "question": "Which district of Buenos Aires is the club in that the 2019–20 Club Atlético Huracán player whose position is midfield went to play for ?",
+    "table_id": "2019–20_Club_Atlético_Huracán_season_4",
+    "answer-text": "the Villa Soldati district",
+    "question_postag": "NNP NN IN NNP NNP VBZ DT NN IN DT DT CD NNP NNP NNP NN WP$ NN VBZ JJ VBD TO VB IN .",
+    "answer-node": [
+      [
+        "Sacachispas Fútbol Club",
+        [
+          2,
+          3
+        ],
+        "/wiki/Sacachispas_Fútbol_Club",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "7d093236656117f3",
+    "question": "Which Brazilian footballer played for the Milan football team and has 2nd appearance in UEFA Team of the Year in 2012 ?",
+    "table_id": "UEFA_Team_of_the_Year_11",
+    "answer-text": "Thiago Silva",
+    "question_postag": "JJ NNP NN VBD IN DT NNP NN NN CC VBZ CD NN IN NNP NNP IN DT NN IN CD .",
+    "answer-node": [
+      [
+        "Thiago Silva",
+        [
+          3,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "a035145717053d7d",
+    "question": "Which year did the mountain in which Thomas Fanara registered his only alpine skiing event victory host the Winter Olympics ?",
+    "table_id": "Thomas_Fanara_1",
+    "answer-text": "1948",
+    "question_postag": "JJ NN VBD DT NN IN WDT NNP NNP VBD PRP$ JJ NN VBG NN NN VBD DT NN NNPS .",
+    "answer-node": [
+      [
+        "Piz Nair",
+        [
+          10,
+          2
+        ],
+        "/wiki/Piz_Nair",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "58e79c0205dcf90d",
+    "question": "What is the local authority area of the group that was split into two separate companies on October 10 , 2006 ?",
+    "table_id": "PR_postcode_area_0",
+    "answer-text": "non-geographic",
+    "question_postag": "WP VBZ DT JJ NN NN IN DT NN WDT VBD VBN IN CD JJ NNS IN NNP CD , CD .",
+    "answer-node": [
+      [
+        "non-geographic",
+        [
+          0,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "non-geographic",
+        [
+          10,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "89aaece6fdec10cb",
+    "question": "Who owns the 2014 amusement park which contains the roller coaster El Loco ?",
+    "table_id": "2014_in_amusement_parks_0",
+    "answer-text": "Phil Ruffin",
+    "question_postag": "WP VBZ DT CD NN NN WDT VBZ DT NN NN NNP NNP .",
+    "answer-node": [
+      [
+        "Adventuredome",
+        [
+          11,
+          1
+        ],
+        "/wiki/Adventuredome",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "5601befb22919018",
+    "question": "Which play did Charrier act in that is an English playwright 's most-perfomed play ?",
+    "table_id": "Anne_Charrier_0",
+    "answer-text": "Volpone",
+    "question_postag": "JJ NN VBD NNP NN IN DT VBZ DT JJ NN POS JJ NN .",
+    "answer-node": [
+      [
+        "Volpone",
+        [
+          6,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Ben Jonson",
+        [
+          6,
+          2
+        ],
+        "/wiki/Ben_Jonson",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "06f3c40abcc2d7b0",
+    "question": "The home team that played against Port Adelaide in the 2004 AFL season was founded in what year ?",
+    "table_id": "2004_AFL_season_1",
+    "answer-text": "1986",
+    "question_postag": "DT NN NN WDT VBD IN NNP NNP IN DT CD NNP NN VBD VBN IN WP NN .",
+    "answer-node": [
+      [
+        "West Coast Eagles",
+        [
+          3,
+          0
+        ],
+        "/wiki/West_Coast_Eagles",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "1c560400dadf3bfa",
+    "question": "How many seats does the main grandstand of the stadium have that the 1988-89 Courage League played on and was used by the team coached by Johan Ackermann ?",
+    "table_id": "1988–89_Courage_League_0",
+    "answer-text": "7,500",
+    "question_postag": "WRB JJ NNS VBZ DT JJ NN IN DT NN VBP IN DT JJ NNP NNP VBD IN CC VBD VBN IN DT NN VBN IN NNP NNP .",
+    "answer-node": [
+      [
+        "Kingsholm Stadium",
+        [
+          2,
+          1
+        ],
+        "/wiki/Kingsholm_Stadium",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e7786e347636c383",
+    "question": "What country borders the north of the country whose Men 's long jump athlete 's result was less than 5.00 in the 1967 European Indoor Games ?",
+    "table_id": "1967_European_Indoor_Games_–_Men's_long_jump_0",
+    "answer-text": "Slovakia",
+    "question_postag": "WP NN VBZ DT NN IN DT NN WP$ NNP POS JJ NN NN POS NN VBD JJR IN CD IN DT CD JJ NNP NNPS .",
+    "answer-node": [
+      [
+        "Poland",
+        [
+          2,
+          2
+        ],
+        "/wiki/Poland",
+        "passage"
+      ],
+      [
+        "Czechoslovakia",
+        [
+          3,
+          2
+        ],
+        "/wiki/Czechoslovakia",
+        "passage"
+      ],
+      [
+        "Czechoslovakia",
+        [
+          7,
+          2
+        ],
+        "/wiki/Czechoslovakia",
+        "passage"
+      ],
+      [
+        "Hungary",
+        [
+          10,
+          2
+        ],
+        "/wiki/Hungary",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "1707924dbeac0d64",
+    "question": "Who directed the third title that Mary Germaine performed in ?",
+    "table_id": "Mary_Germaine_0",
+    "answer-text": "David Butler",
+    "question_postag": "WP VBD DT JJ NN IN NNP NNP VBD IN .",
+    "answer-node": [
+      [
+        "Where's Charley? (film)",
+        [
+          2,
+          1
+        ],
+        "/wiki/Where's_Charley?_(film)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "cda854e3f72be6b5",
+    "question": "What was the name of the tournament double final in Uzbekistan that John Paul Fruttero , American professional tennis player , was the winner ?",
+    "table_id": "John_Paul_Fruttero_2",
+    "answer-text": "Fergana",
+    "question_postag": "WP VBD DT NN IN DT NN IN NNP IN NNP NNP NNP , NNP NN NN NN , VBD DT NN .",
+    "answer-node": [
+      [
+        "Fergana , Uzbekistan",
+        [
+          0,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "6d4f08091e1084ea",
+    "question": "When in 1998 was the Number 6 BSWW Tour race held in Siracusa , Italy ?",
+    "table_id": "BSWW_Tour_5",
+    "answer-text": "September 1998",
+    "question_postag": "WRB IN CD VBD DT NNP CD NNP NNP NN VBD IN NNP , NNP .",
+    "answer-node": [
+      [
+        "1998 Euro Beach Soccer Cup",
+        [
+          5,
+          1
+        ],
+        "/wiki/1998_Euro_Beach_Soccer_Cup",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "64e9ea521871f3f1",
+    "question": "Which family is the family of the informant that was killed in the Sopranos episode that was 1st aired on 14th March 2004 ?",
+    "table_id": "FBI_on_The_Sopranos_0",
+    "answer-text": "DeCavalcante",
+    "question_postag": "JJ NN VBZ DT NN IN DT NN WDT VBD VBN IN DT NNP NN WDT VBD CD VBN IN CD NNP CD .",
+    "answer-node": [
+      [
+        "Tony Soprano",
+        [
+          0,
+          3
+        ],
+        "/wiki/Tony_Soprano",
+        "passage"
+      ],
+      [
+        "List of characters from The Sopranos in the DiMeo Crime Family",
+        [
+          1,
+          0
+        ],
+        "/wiki/List_of_characters_from_The_Sopranos_in_the_DiMeo_Crime_Family",
+        "passage"
+      ],
+      [
+        "List of characters from The Sopranos in the DiMeo Crime Family",
+        [
+          5,
+          0
+        ],
+        "/wiki/List_of_characters_from_The_Sopranos_in_the_DiMeo_Crime_Family",
+        "passage"
+      ],
+      [
+        "Soprano crime family",
+        [
+          1,
+          1
+        ],
+        "/wiki/Soprano_crime_family",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "771ccc61a436c62e",
+    "question": "What is the nickname of the notable alumni of the University of Central Florida from 2005 who is a NASCAR driver ?",
+    "table_id": "List_of_University_of_Central_Florida_alumni_10",
+    "answer-text": "The Cuban Missile",
+    "question_postag": "WP VBZ DT NN IN DT JJ NNS IN DT NNP IN NNP NNP IN CD WP VBZ DT NNP NN .",
+    "answer-node": [
+      [
+        "Aric Almirola",
+        [
+          0,
+          0
+        ],
+        "/wiki/Aric_Almirola",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c10f03671ace4bf9",
+    "question": "The artist who performed Sunny Came Home on Idols South Africa II won a Grammy in what year ?",
+    "table_id": "Idols_South_Africa_(season_2)_3",
+    "answer-text": "1997",
+    "question_postag": "DT NN WP VBD NNP NNP NNP IN NNP NNP NNP NNP VBD DT NNP IN WP NN .",
+    "answer-node": [
+      [
+        "Sunny Came Home",
+        [
+          3,
+          2
+        ],
+        "/wiki/Sunny_Came_Home",
+        "passage"
+      ],
+      [
+        "Shawn Colvin",
+        [
+          3,
+          2
+        ],
+        "/wiki/Shawn_Colvin",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ceef4ef02c0d7b52",
+    "question": "The athlete with the best rank for the Men 's 1986 NHK Trophy grew up in what city ?",
+    "table_id": "1986_NHK_Trophy_0",
+    "answer-text": "Chicago",
+    "question_postag": "DT NN IN DT JJS NN IN DT CD NNP NNP VBD RP IN WP NN .",
+    "answer-node": [
+      [
+        "Angelo D'Agostino",
+        [
+          0,
+          1
+        ],
+        "/wiki/Angelo_D'Agostino",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "325a335d4a66b1ef",
+    "question": "What was the most notable new element in the latest version of the Fox Digital Entertainment game partly created by the Finnish video game developer based in Espoo ?",
+    "table_id": "Fox_Digital_Entertainment_1",
+    "answer-text": "the first use of boss levels",
+    "question_postag": "WP VBD DT RBS JJ JJ NN IN DT JJS NN IN DT NNP NNP NNP NN RB VBN IN DT JJ NN NN NN VBN IN NNP .",
+    "answer-node": [
+      [
+        "Angry Birds Rio",
+        [
+          0,
+          0
+        ],
+        "/wiki/Angry_Birds_Rio",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c4b62825c0cd3090",
+    "question": "What company created the video game that starred Jeff Bergman as Mr . Incredible ?",
+    "table_id": "Jeff_Bergman_2",
+    "answer-text": "TT Fusion",
+    "question_postag": "WP NN VBD DT NN NN WDT VBD NNP NNP IN NNP . NNP .",
+    "answer-node": [
+      [
+        "Lego The Incredibles",
+        [
+          8,
+          1
+        ],
+        "/wiki/Lego_The_Incredibles",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "23ae2d8e30224571",
+    "question": "What is the population of the city which is the location of a Malaysian Diplomatic Consulate mission of a country that lies about 137 kilometres above the equator ?",
+    "table_id": "List_of_diplomatic_missions_in_Malaysia_0",
+    "answer-text": "497,097",
+    "question_postag": "WP VBZ DT NN IN DT NN WDT VBZ DT NN IN DT JJ NNP NNP NN IN DT NN WDT VBZ IN CD NNS IN DT NN .",
+    "answer-node": [
+      [
+        "Johor Bahru",
+        [
+          6,
+          1
+        ],
+        "/wiki/Johor_Bahru",
+        "passage"
+      ],
+      [
+        "Johor Bahru",
+        [
+          12,
+          1
+        ],
+        "/wiki/Johor_Bahru",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "3b8c581ec03ad8e9",
+    "question": "What is the density ( kg/m ) of the entity that is comprised of carbon and oxygen ?",
+    "table_id": "Orders_of_magnitude_(density)_1",
+    "answer-text": "2.1 × 10",
+    "question_postag": "WP VBZ DT NN ( NN ) IN DT NN WDT VBZ VBN IN NN CC NN .",
+    "answer-node": [
+      [
+        "2.1 × 10",
+        [
+          5,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "aa5dc3f0af2fbb6f",
+    "question": "When did the youngest player who played at 1996 Cricket World Cup squads play his last international match ?",
+    "table_id": "1996_Cricket_World_Cup_squads_9",
+    "answer-text": "1997",
+    "question_postag": "WRB VBD DT JJS NN WP VBD IN CD NNP NNP NNP VBZ VB PRP$ JJ JJ NN .",
+    "answer-node": [
+      [
+        "Arshad Laeeq",
+        [
+          1,
+          0
+        ],
+        "/wiki/Arshad_Laeeq",
+        "passage"
+      ],
+      [
+        "Azhar Saeed",
+        [
+          2,
+          0
+        ],
+        "/wiki/Azhar_Saeed",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "35f28d3e619ab35e",
+    "question": "Of the Brazilian indoor volleyball players from the Osasco VC at the '16 summer Olympics what is the position of the player with the shortest spike ?",
+    "table_id": "Brazil_at_the_2016_Summer_Olympics_4",
+    "answer-text": "setter",
+    "question_postag": "IN DT JJ NN NN NNS IN DT NNP NNP IN DT CD NN NNPS WP VBZ DT NN IN DT NN IN DT JJS NN .",
+    "answer-node": [
+      [
+        "Dani Lins",
+        [
+          2,
+          1
+        ],
+        "/wiki/Dani_Lins",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b3fa9ee63a867aad",
+    "question": "What is the 2010 Malaysia FA Cup Team 2 known as , whose Team 1 is based in Alor Setar ?",
+    "table_id": "2010_Malaysia_FA_Cup_1",
+    "answer-text": "The Red Warriors",
+    "question_postag": "WP VBZ DT CD NNP NNP NNP NNP CD VBN IN , WP$ NN CD VBZ VBN IN NNP NNP .",
+    "answer-node": [
+      [
+        "Kelantan FA",
+        [
+          7,
+          2
+        ],
+        "/wiki/Kelantan_FA",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "f1961cec5ce79a4c",
+    "question": "How many units of the post-war Dinky Toys model with no production year were produced ?",
+    "table_id": "Dinky_Toys_0",
+    "answer-text": "Just over 23,000 units were produced",
+    "question_postag": "WRB JJ NNS IN DT JJ NNP NNP NN IN DT NN NN VBD VBN .",
+    "answer-node": [
+      [
+        "Jowett Javelin",
+        [
+          2,
+          1
+        ],
+        "/wiki/Jowett_Javelin",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b9fbce943a2eb0ca",
+    "question": "Which district is the community which contains the Yeshiva University Museum northeast of ?",
+    "table_id": "List_of_museums_and_cultural_institutions_in_New_York_City_4",
+    "answer-text": "Meatpacking",
+    "question_postag": "NNP NN VBZ DT NN WDT VBZ DT NNP NNP NNP NN IN .",
+    "answer-node": [
+      [
+        "Greenwich Village",
+        [
+          6,
+          1
+        ],
+        "/wiki/Greenwich_Village",
+        "passage"
+      ],
+      [
+        "Chelsea, Manhattan",
+        [
+          12,
+          1
+        ],
+        "/wiki/Chelsea,_Manhattan",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "9f54d49bcc3a13bd",
+    "question": "What national away team that played a friendly match in Esbjerg Stadium has been around since 1921 ?",
+    "table_id": "Esbjerg_Stadium_0",
+    "answer-text": "Portugal",
+    "question_postag": "WP JJ RB NN IN VBD DT JJ NN IN NNP NNP VBZ VBN IN IN CD .",
+    "answer-node": [
+      [
+        "Portugal",
+        [
+          4,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "cb9b5477ba3f31a7",
+    "question": "When was the oldest player drafted by the Toronto Maple Leafs in '93 born ?",
+    "table_id": "1993–94_Toronto_Maple_Leafs_season_16",
+    "answer-text": "October 6 , 1974",
+    "question_postag": "WRB VBD DT JJS NN VBN IN DT NNP NNP NNP IN NNP NN .",
+    "answer-node": [
+      [
+        "Kenny Jönsson",
+        [
+          0,
+          2
+        ],
+        "/wiki/Kenny_Jönsson",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "fc47368ca54fac39",
+    "question": "The stage 3 event whichAndrzej Mierzejewski participated in 1982 took place in a country that was founded in what year ?",
+    "table_id": "Andrzej_Mierzejewski_0",
+    "answer-text": "1025",
+    "question_postag": "DT NN CD NN IN CD VBD NN IN DT NN WDT VBD VBN IN WP NN .",
+    "answer-node": [
+      [
+        "Poland",
+        [
+          0,
+          5
+        ],
+        "/wiki/Poland",
+        "passage"
+      ],
+      [
+        "Poland",
+        [
+          1,
+          5
+        ],
+        "/wiki/Poland",
+        "passage"
+      ],
+      [
+        "Poland",
+        [
+          4,
+          5
+        ],
+        "/wiki/Poland",
+        "passage"
+      ],
+      [
+        "Poland",
+        [
+          5,
+          5
+        ],
+        "/wiki/Poland",
+        "passage"
+      ],
+      [
+        "Poland",
+        [
+          6,
+          5
+        ],
+        "/wiki/Poland",
+        "passage"
+      ],
+      [
+        "Poland",
+        [
+          9,
+          5
+        ],
+        "/wiki/Poland",
+        "passage"
+      ],
+      [
+        "Poland",
+        [
+          10,
+          5
+        ],
+        "/wiki/Poland",
+        "passage"
+      ],
+      [
+        "Poland",
+        [
+          12,
+          5
+        ],
+        "/wiki/Poland",
+        "passage"
+      ],
+      [
+        "Poland",
+        [
+          13,
+          5
+        ],
+        "/wiki/Poland",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "1a5f5c9752faaf4e",
+    "question": "What is the notability of the RMIT member born on 12 November 1940 ?",
+    "table_id": "List_of_alumni_and_faculty_of_the_Royal_Melbourne_Institute_of_Technology_8",
+    "answer-text": "photojournalist",
+    "question_postag": "WP VBZ DT NN IN DT NNP NN VBN IN CD NNP CD .",
+    "answer-node": [
+      [
+        "photojournalist",
+        [
+          5,
+          2
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "7ac68f3e378e2234",
+    "question": "Which team does this Brazilian retired footballer manage who played for Santos FC in 2007 , and used to play for this team whose greatest rival is Caxias ?",
+    "table_id": "2007_Santos_FC_season_1",
+    "answer-text": "Kashima Antlers",
+    "question_postag": "JJ NN VBZ DT JJ VBD JJ NN WP VBD IN NNP NNP IN CD , CC VBD TO VB IN DT NN WP$ JJS NN VBZ NNP .",
+    "answer-node": [
+      [
+        "Antônio Carlos Zago",
+        [
+          2,
+          1
+        ],
+        "/wiki/Antônio_Carlos_Zago",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "df7f743596043e65",
+    "question": "Which urban Japanese prefecture is not associated with `` thorny trees `` ?",
+    "table_id": "Special_cities_of_Japan_0",
+    "answer-text": "Kyoto",
+    "question_postag": "JJ JJ JJ NN VBZ RB VBN IN `` JJ NNS `` .",
+    "answer-node": [
+      [
+        "Kansai region",
+        [
+          2,
+          4
+        ],
+        "/wiki/Kansai_region",
+        "passage"
+      ],
+      [
+        "Kansai region",
+        [
+          5,
+          4
+        ],
+        "/wiki/Kansai_region",
+        "passage"
+      ],
+      [
+        "Kansai region",
+        [
+          14,
+          4
+        ],
+        "/wiki/Kansai_region",
+        "passage"
+      ],
+      [
+        "Osaka Prefecture",
+        [
+          2,
+          5
+        ],
+        "/wiki/Osaka_Prefecture",
+        "passage"
+      ],
+      [
+        "Hyōgo Prefecture",
+        [
+          5,
+          5
+        ],
+        "/wiki/Hyōgo_Prefecture",
+        "passage"
+      ],
+      [
+        "Hyōgo Prefecture",
+        [
+          14,
+          5
+        ],
+        "/wiki/Hyōgo_Prefecture",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "67cb66c1d006001d",
+    "question": "What position does the captain of the team that competed in Torneo Descentralizado league in 2012 , managed by Javier Arce play ?",
+    "table_id": "2012_Torneo_Descentralizado_1",
+    "answer-text": "midfielder",
+    "question_postag": "WP NN VBZ DT NN IN DT NN WDT VBD IN NNP NNP NN IN CD , VBN IN NNP NNP NN .",
+    "answer-node": [
+      [
+        "Juan José Jayo",
+        [
+          0,
+          2
+        ],
+        "/wiki/Juan_José_Jayo",
+        "passage"
+      ],
+      [
+        "Julio García (footballer)",
+        [
+          1,
+          2
+        ],
+        "/wiki/Julio_García_(footballer)",
+        "passage"
+      ],
+      [
+        "Gregorio Bernales",
+        [
+          2,
+          2
+        ],
+        "/wiki/Gregorio_Bernales",
+        "passage"
+      ],
+      [
+        "Marco Ruiz (footballer)",
+        [
+          4,
+          2
+        ],
+        "/wiki/Marco_Ruiz_(footballer)",
+        "passage"
+      ],
+      [
+        "Jean Ferrari",
+        [
+          6,
+          1
+        ],
+        "/wiki/Jean_Ferrari",
+        "passage"
+      ],
+      [
+        "Julio Alberto Zamora",
+        [
+          7,
+          1
+        ],
+        "/wiki/Julio_Alberto_Zamora",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "cee0391cc406111f",
+    "question": "What is the capacity of the arena used by a Norwegian 1st Div team in '10 that has the possibility to expand to 15,000 seats ?",
+    "table_id": "2010_Norwegian_First_Division_0",
+    "answer-text": "12,560",
+    "question_postag": "WP VBZ DT NN IN DT NN VBN IN DT JJ CD NNP NN IN NN WDT VBZ DT NN TO VB TO CD NNS .",
+    "answer-node": [
+      [
+        "12,560",
+        [
+          4,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Fredrikstad Stadion",
+        [
+          4,
+          2
+        ],
+        "/wiki/Fredrikstad_Stadion",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "94a219842bccb2b9",
+    "question": "What is the nationality of the oldest person in the first episode in 1971 of The Silent Force television series ?",
+    "table_id": "The_Silent_Force_(TV_series)_0",
+    "answer-text": "American",
+    "question_postag": "WP VBZ DT NN IN DT JJS NN IN DT JJ NN IN CD IN DT NNP NNP NN NN .",
+    "answer-node": [
+      [
+        "Eddie Firestone",
+        [
+          0,
+          3
+        ],
+        "/wiki/Eddie_Firestone",
+        "passage"
+      ],
+      [
+        "Martin E. Brooks",
+        [
+          1,
+          3
+        ],
+        "/wiki/Martin_E._Brooks",
+        "passage"
+      ],
+      [
+        "Mark Richman",
+        [
+          2,
+          3
+        ],
+        "/wiki/Mark_Richman",
+        "passage"
+      ],
+      [
+        "Joan Van Ark",
+        [
+          2,
+          3
+        ],
+        "/wiki/Joan_Van_Ark",
+        "passage"
+      ],
+      [
+        "Dane Clark",
+        [
+          3,
+          3
+        ],
+        "/wiki/Dane_Clark",
+        "passage"
+      ],
+      [
+        "Kevin Hagen",
+        [
+          3,
+          3
+        ],
+        "/wiki/Kevin_Hagen",
+        "passage"
+      ],
+      [
+        "John Dehner",
+        [
+          4,
+          3
+        ],
+        "/wiki/John_Dehner",
+        "passage"
+      ],
+      [
+        "DeForest Kelley",
+        [
+          4,
+          3
+        ],
+        "/wiki/DeForest_Kelley",
+        "passage"
+      ],
+      [
+        "Paul Carr (actor)",
+        [
+          4,
+          3
+        ],
+        "/wiki/Paul_Carr_(actor)",
+        "passage"
+      ],
+      [
+        "Linda Marsh",
+        [
+          5,
+          3
+        ],
+        "/wiki/Linda_Marsh",
+        "passage"
+      ],
+      [
+        "Jared Martin",
+        [
+          5,
+          3
+        ],
+        "/wiki/Jared_Martin",
+        "passage"
+      ],
+      [
+        "Regis Philbin",
+        [
+          5,
+          3
+        ],
+        "/wiki/Regis_Philbin",
+        "passage"
+      ],
+      [
+        "Bert Convy",
+        [
+          6,
+          3
+        ],
+        "/wiki/Bert_Convy",
+        "passage"
+      ],
+      [
+        "Mala Powers",
+        [
+          6,
+          3
+        ],
+        "/wiki/Mala_Powers",
+        "passage"
+      ],
+      [
+        "Anthony Eisley",
+        [
+          6,
+          3
+        ],
+        "/wiki/Anthony_Eisley",
+        "passage"
+      ],
+      [
+        "Natalie Trundy",
+        [
+          6,
+          3
+        ],
+        "/wiki/Natalie_Trundy",
+        "passage"
+      ],
+      [
+        "Jeanne Cooper",
+        [
+          7,
+          3
+        ],
+        "/wiki/Jeanne_Cooper",
+        "passage"
+      ],
+      [
+        "Michael Conrad",
+        [
+          7,
+          3
+        ],
+        "/wiki/Michael_Conrad",
+        "passage"
+      ],
+      [
+        "Tom Bosley",
+        [
+          8,
+          3
+        ],
+        "/wiki/Tom_Bosley",
+        "passage"
+      ],
+      [
+        "Paul Lambert (actor)",
+        [
+          8,
+          3
+        ],
+        "/wiki/Paul_Lambert_(actor)",
+        "passage"
+      ],
+      [
+        "Paul Harris (actor)",
+        [
+          8,
+          3
+        ],
+        "/wiki/Paul_Harris_(actor)",
+        "passage"
+      ],
+      [
+        "Del Monroe",
+        [
+          8,
+          3
+        ],
+        "/wiki/Del_Monroe",
+        "passage"
+      ],
+      [
+        "Carmen Zapata",
+        [
+          8,
+          3
+        ],
+        "/wiki/Carmen_Zapata",
+        "passage"
+      ],
+      [
+        "Steve Ihnat",
+        [
+          9,
+          3
+        ],
+        "/wiki/Steve_Ihnat",
+        "passage"
+      ],
+      [
+        "Arthur Batanides",
+        [
+          9,
+          3
+        ],
+        "/wiki/Arthur_Batanides",
+        "passage"
+      ],
+      [
+        "Michael Bell (actor)",
+        [
+          9,
+          3
+        ],
+        "/wiki/Michael_Bell_(actor)",
+        "passage"
+      ],
+      [
+        "Stewart Moss",
+        [
+          11,
+          3
+        ],
+        "/wiki/Stewart_Moss",
+        "passage"
+      ],
+      [
+        "Anthony Caruso (actor)",
+        [
+          11,
+          3
+        ],
+        "/wiki/Anthony_Caruso_(actor)",
+        "passage"
+      ],
+      [
+        "Roy Jenson",
+        [
+          11,
+          3
+        ],
+        "/wiki/Roy_Jenson",
+        "passage"
+      ],
+      [
+        "Norman Alden",
+        [
+          12,
+          3
+        ],
+        "/wiki/Norman_Alden",
+        "passage"
+      ],
+      [
+        "Albert Paulsen",
+        [
+          12,
+          3
+        ],
+        "/wiki/Albert_Paulsen",
+        "passage"
+      ],
+      [
+        "Daniel J. Travanti",
+        [
+          12,
+          3
+        ],
+        "/wiki/Daniel_J._Travanti",
+        "passage"
+      ],
+      [
+        "Paul Stewart (actor)",
+        [
+          13,
+          3
+        ],
+        "/wiki/Paul_Stewart_(actor)",
+        "passage"
+      ],
+      [
+        "Robert Pine",
+        [
+          13,
+          3
+        ],
+        "/wiki/Robert_Pine",
+        "passage"
+      ],
+      [
+        "Carla Borelli",
+        [
+          13,
+          3
+        ],
+        "/wiki/Carla_Borelli",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "d5340fad7defea0a",
+    "question": "What was the score from the 1995 season replay game of the FC Porto- Sporting CP rivalry ?",
+    "table_id": "FC_Porto–Sporting_CP_rivalry_15",
+    "answer-text": "3-0",
+    "question_postag": "WP VBD DT NN IN DT CD NN NN NN IN DT NNP NNP NNP NNP NN .",
+    "answer-node": [
+      [
+        "3-0",
+        [
+          2,
+          5
+        ],
+        null,
+        "table"
+      ],
+      [
+        "1995 Supertaça Cândido de Oliveira",
+        [
+          0,
+          1
+        ],
+        "/wiki/1995_Supertaça_Cândido_de_Oliveira",
+        "passage"
+      ],
+      [
+        "1995 Supertaça Cândido de Oliveira",
+        [
+          0,
+          2
+        ],
+        "/wiki/1995_Supertaça_Cândido_de_Oliveira",
+        "passage"
+      ],
+      [
+        "1995 Supertaça Cândido de Oliveira",
+        [
+          1,
+          1
+        ],
+        "/wiki/1995_Supertaça_Cândido_de_Oliveira",
+        "passage"
+      ],
+      [
+        "1995 Supertaça Cândido de Oliveira",
+        [
+          1,
+          2
+        ],
+        "/wiki/1995_Supertaça_Cândido_de_Oliveira",
+        "passage"
+      ],
+      [
+        "1995 Supertaça Cândido de Oliveira",
+        [
+          2,
+          1
+        ],
+        "/wiki/1995_Supertaça_Cândido_de_Oliveira",
+        "passage"
+      ],
+      [
+        "1995 Supertaça Cândido de Oliveira",
+        [
+          2,
+          2
+        ],
+        "/wiki/1995_Supertaça_Cândido_de_Oliveira",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c14f876b4c2bb106",
+    "question": "What date was the platform which offers 4-player support for games over wireless play released in North America ?",
+    "table_id": "List_of_Bomberman_video_games_1",
+    "answer-text": "March 24 , 2005",
+    "question_postag": "WP NN VBD DT NN WDT VBZ JJ NN IN NNS IN JJ NN VBN IN NNP NNP .",
+    "answer-node": [
+      [
+        "PlayStation Portable",
+        [
+          11,
+          2
+        ],
+        "/wiki/PlayStation_Portable",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "7ace6ada77abc1b7",
+    "question": "In what year did the athlete who finished 10th in the 2010 Men 's 20km at South American Race Walking Championship leave a competition before finishing it ?",
+    "table_id": "2010_South_American_Race_Walking_Championships_1",
+    "answer-text": "2016",
+    "question_postag": "IN WP NN VBD DT NN WP VBD CD IN DT CD NNP JJ NNP NNP NNP VBP DT NN IN VBG PRP .",
+    "answer-node": [
+      [
+        "Yerenman Salazar",
+        [
+          9,
+          1
+        ],
+        "/wiki/Yerenman_Salazar",
+        "passage"
+      ],
+      [
+        "Moacir Zimmermann",
+        [
+          11,
+          1
+        ],
+        "/wiki/Moacir_Zimmermann",
+        "passage"
+      ],
+      [
+        "Ronald Quispe",
+        [
+          13,
+          1
+        ],
+        "/wiki/Ronald_Quispe",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "4224e4535c986c26",
+    "question": "Who founded the group whose member who competed in The jump is now an ambassador for the Bloch Dance World Cup ?",
+    "table_id": "The_Jump_3",
+    "answer-text": "Robin Antin",
+    "question_postag": "WP VBD DT NN WP$ NN WP VBD IN DT NN VBZ RB DT NN IN DT NNP NNP NNP NNP .",
+    "answer-node": [
+      [
+        "The Pussycat Dolls",
+        [
+          7,
+          1
+        ],
+        "/wiki/The_Pussycat_Dolls",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "4037dc748da051f5",
+    "question": "Who is the Bee Hive Records American jazz drummer on Starfingers ?",
+    "table_id": "Bee_Hive_Records_0",
+    "answer-text": "Mel Lewis",
+    "question_postag": "WP VBZ DT NNP NNP NNS NNP NN NN IN NNS .",
+    "answer-node": [
+      [
+        "Eddie Bert , Nick Brignola , Sam Jones , Mel Lewis , Derek Smith",
+        [
+          2,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Jimmy Knepper",
+        [
+          13,
+          4
+        ],
+        "/wiki/Jimmy_Knepper",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "6f3463980f63ebfb",
+    "question": "This Kishore Kumar song was in an Indian Hindi-language film produced and directed by Shakti Samanta and has a music director that died in 1994 ?",
+    "table_id": "Kishore_Kumar_1",
+    "answer-text": "Yeh Jo Mohabbat Hai",
+    "question_postag": "DT NNP NNP NN VBD IN DT JJ NN NN VBN CC VBN IN NNP NNP CC VBZ DT NN NN WDT VBD IN CD .",
+    "answer-node": [
+      [
+        "Yeh Jo Mohabbat Hai",
+        [
+          1,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "79a051980a283775",
+    "question": "What type of business sponsors the 1986 Tour de France team with a rider who won the 1988 Giro d'Italia in general classification ?",
+    "table_id": "1986_Tour_de_France_3",
+    "answer-text": "a chain of health food stores",
+    "question_postag": "WP NN IN NN NNS DT CD NNP FW NNP NN IN DT NN WP VBD DT CD NNP NN .",
+    "answer-node": [
+      [
+        "La Vie Claire",
+        [
+          0,
+          2
+        ],
+        "/wiki/La_Vie_Claire",
+        "passage"
+      ],
+      [
+        "La Vie Claire",
+        [
+          1,
+          2
+        ],
+        "/wiki/La_Vie_Claire",
+        "passage"
+      ],
+      [
+        "La Vie Claire",
+        [
+          3,
+          2
+        ],
+        "/wiki/La_Vie_Claire",
+        "passage"
+      ],
+      [
+        "La Vie Claire",
+        [
+          6,
+          2
+        ],
+        "/wiki/La_Vie_Claire",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "970e8577320293ca",
+    "question": "What country submitted an entry for Best Foreign Language Film that had a director who was born on 6 July 1936 ?",
+    "table_id": "List_of_submissions_to_the_64th_Academy_Awards_for_Best_Foreign_Language_Film_0",
+    "answer-text": "Denmark",
+    "question_postag": "WP NN VBD DT NN IN NNP NNP NNP NNP WDT VBD DT NN WP VBD VBN IN CD NNP CD .",
+    "answer-node": [
+      [
+        "Denmark",
+        [
+          11,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Danish language",
+        [
+          11,
+          3
+        ],
+        "/wiki/Danish_language",
+        "passage"
+      ],
+      [
+        "Iceland",
+        [
+          15,
+          0
+        ],
+        "/wiki/Iceland",
+        "passage"
+      ],
+      [
+        "Icelandic language",
+        [
+          15,
+          3
+        ],
+        "/wiki/Icelandic_language",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c239c12bb20e8075",
+    "question": "What is the year of the Nacional championship winner whose stadium in the city of Avellaneda in Greater Buenos Aires ?",
+    "table_id": "Nacional_championship_0",
+    "answer-text": "1967",
+    "question_postag": "WP VBZ DT NN IN DT NNP NN NN WP$ NN IN DT NN IN NNP IN NNP NNP NNP .",
+    "answer-node": [
+      [
+        "1967",
+        [
+          0,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Estudiantes de La Plata",
+        [
+          0,
+          2
+        ],
+        "/wiki/Estudiantes_de_La_Plata",
+        "passage"
+      ],
+      [
+        "Estudiantes de La Plata",
+        [
+          8,
+          2
+        ],
+        "/wiki/Estudiantes_de_La_Plata",
+        "passage"
+      ],
+      [
+        "Estudiantes de La Plata",
+        [
+          16,
+          1
+        ],
+        "/wiki/Estudiantes_de_La_Plata",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "324b407cfa38d78d",
+    "question": "The team ranked number 1 at the Asian Basketball Confederation Championship of 1975 is governed by who ?",
+    "table_id": "1975_ABC_Championship_4",
+    "answer-text": "the Chinese Basketball Association",
+    "question_postag": "DT NN VBD NN CD IN DT NNP NNP NNP NNP IN CD VBZ VBN IN WP .",
+    "answer-node": [
+      [
+        "China men's national basketball team",
+        [
+          0,
+          1
+        ],
+        "/wiki/China_men's_national_basketball_team",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "72fbc00e830db914",
+    "question": "What is the position of the Bradford A.F.C player that only played for the team in the 2012 season ?",
+    "table_id": "Bradford_City_A.F.C._0",
+    "answer-text": "midfielder",
+    "question_postag": "WP VBZ DT NN IN DT NNP NNP NN IN RB VBN IN DT NN IN DT CD NN .",
+    "answer-node": [
+      [
+        "Rod Johnson (footballer)",
+        [
+          2,
+          0
+        ],
+        "/wiki/Rod_Johnson_(footballer)",
+        "passage"
+      ],
+      [
+        "Michael Flynn (footballer)",
+        [
+          10,
+          0
+        ],
+        "/wiki/Michael_Flynn_(footballer)",
+        "passage"
+      ],
+      [
+        "Ricky Ravenhill",
+        [
+          11,
+          0
+        ],
+        "/wiki/Ricky_Ravenhill",
+        "passage"
+      ],
+      [
+        "Gary Jones (footballer born 1977)",
+        [
+          12,
+          0
+        ],
+        "/wiki/Gary_Jones_(footballer_born_1977)",
+        "passage"
+      ],
+      [
+        "Josh Wright",
+        [
+          15,
+          0
+        ],
+        "/wiki/Josh_Wright",
+        "passage"
+      ],
+      [
+        "Anthony O'Connor (footballer)",
+        [
+          16,
+          0
+        ],
+        "/wiki/Anthony_O'Connor_(footballer)",
+        "passage"
+      ],
+      [
+        "Hope Akpan",
+        [
+          18,
+          0
+        ],
+        "/wiki/Hope_Akpan",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "a21b34c16ca6f2eb",
+    "question": "When did the runner up to Dave Stockton in 1992 , that was born in 1939 , get inducted to the World Golf Hall ?",
+    "table_id": "Dave_Stockton_2",
+    "answer-text": "1981",
+    "question_postag": "WRB VBD DT NN RB TO NNP NNP IN CD , DT VBD VBN IN CD , VB VBN TO DT NNP NNP NNP .",
+    "answer-node": [
+      [
+        "Lee Trevino",
+        [
+          0,
+          5
+        ],
+        "/wiki/Lee_Trevino",
+        "passage"
+      ],
+      [
+        "Lee Trevino",
+        [
+          5,
+          5
+        ],
+        "/wiki/Lee_Trevino",
+        "passage"
+      ],
+      [
+        "Harold Henning",
+        [
+          1,
+          5
+        ],
+        "/wiki/Harold_Henning",
+        "passage"
+      ],
+      [
+        "Jim Albus",
+        [
+          7,
+          5
+        ],
+        "/wiki/Jim_Albus",
+        "passage"
+      ],
+      [
+        "Jim Albus",
+        [
+          8,
+          5
+        ],
+        "/wiki/Jim_Albus",
+        "passage"
+      ],
+      [
+        "Isao Aoki",
+        [
+          10,
+          5
+        ],
+        "/wiki/Isao_Aoki",
+        "passage"
+      ],
+      [
+        "U.S. Senior Open",
+        [
+          11,
+          2
+        ],
+        "/wiki/U.S._Senior_Open",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "25ceb6d3aacf1908",
+    "question": "What is the work of the Grammy-winning female artist who has won 14 Grammys and the Polar Music Prize ?",
+    "table_id": "Grammy_Award_for_Best_Female_Country_Vocal_Performance_2",
+    "answer-text": "In My Dreams",
+    "question_postag": "WP VBZ DT NN IN DT NNP JJ NN WP VBZ VBN CD NNP CC DT NNP NNP NNP .",
+    "answer-node": [
+      [
+        "In My Dreams",
+        [
+          5,
+          2
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "56665bf5bf771602",
+    "question": "Deadline , Hebrew was an Israeli movie from 1987 that is part of the genre that got its start with what poetic work ?",
+    "table_id": "List_of_Israeli_films_of_1987_0",
+    "answer-text": "Aristotle 's Poetics",
+    "question_postag": "NNP , NNP VBD DT JJ NN IN CD WDT VBZ NN IN DT NN WDT VBD PRP$ NN IN WP JJ NN .",
+    "answer-node": [
+      [
+        "Drama",
+        [
+          0,
+          4
+        ],
+        "/wiki/Drama",
+        "passage"
+      ],
+      [
+        "Drama",
+        [
+          2,
+          4
+        ],
+        "/wiki/Drama",
+        "passage"
+      ],
+      [
+        "Drama",
+        [
+          4,
+          4
+        ],
+        "/wiki/Drama",
+        "passage"
+      ],
+      [
+        "Drama",
+        [
+          8,
+          4
+        ],
+        "/wiki/Drama",
+        "passage"
+      ],
+      [
+        "Drama",
+        [
+          9,
+          4
+        ],
+        "/wiki/Drama",
+        "passage"
+      ],
+      [
+        "Drama",
+        [
+          10,
+          4
+        ],
+        "/wiki/Drama",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "15dd2d8d6efe8871",
+    "question": "What is the nickname of the 2013 Malaysia Super League team whose kit manufacturer is Warriors ?",
+    "table_id": "2013_Malaysia_Super_League_1",
+    "answer-text": "The Red Warriors",
+    "question_postag": "WP VBZ DT NN IN DT CD NNP NNP NNP NN WP$ NN NN VBZ NNS .",
+    "answer-node": [
+      [
+        "Kelantan FA",
+        [
+          3,
+          0
+        ],
+        "/wiki/Kelantan_FA",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "f4fd65d72e77394e",
+    "question": "Who directed the film which the song whose order on the Norwegian X Factor season 2 was greater than 7 came from ?",
+    "table_id": "X_Factor_(Norwegian_TV_series)_16",
+    "answer-text": "Randal Kleiser",
+    "question_postag": "WP VBD DT NN WDT DT NN WP$ NN IN DT JJ NNP NNP VBD JJR IN CD VBD IN .",
+    "answer-node": [
+      [
+        "Grease (film)",
+        [
+          7,
+          3
+        ],
+        "/wiki/Grease_(film)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "a3334e8b0297dd51",
+    "question": "Of the championship with the latest runner up , where is the Caribbean Club Championship team based in ?",
+    "table_id": "CFU_Club_Championship_0",
+    "answer-text": "Kingston",
+    "question_postag": "IN DT NN IN DT JJS NN RB , WRB VBZ DT NNP NNP NNP NN VBN IN .",
+    "answer-node": [
+      [
+        "Harbour View F.C.",
+        [
+          5,
+          0
+        ],
+        "/wiki/Harbour_View_F.C.",
+        "passage"
+      ],
+      [
+        "Arnett Gardens F.C.",
+        [
+          12,
+          0
+        ],
+        "/wiki/Arnett_Gardens_F.C.",
+        "passage"
+      ],
+      [
+        "Waterhouse F.C.",
+        [
+          13,
+          0
+        ],
+        "/wiki/Waterhouse_F.C.",
+        "passage"
+      ],
+      [
+        "Tivoli Gardens F.C.",
+        [
+          16,
+          0
+        ],
+        "/wiki/Tivoli_Gardens_F.C.",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "95d9b7dbabcfc897",
+    "question": "What was the original release date of the Creative Commons licensed musical work produced by an American industrial rock band formed in 1988 ?",
+    "table_id": "List_of_major_Creative_Commons_licensed_works_7",
+    "answer-text": "March 2 , 2008",
+    "question_postag": "WP VBD DT JJ NN NN IN DT JJ NNS VBD JJ NN VBN IN DT JJ JJ NN NN VBN IN CD .",
+    "answer-node": [
+      [
+        "Ghosts I-IV",
+        [
+          3,
+          0
+        ],
+        "/wiki/Ghosts_I-IV",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "5aca0600b5ba8485",
+    "question": "Which of the three Serbian athletes who played for FC Sheriff Tiraspol in 2012/13 is the oldest ?",
+    "table_id": "2012–13_FC_Sheriff_Tiraspol_season_2",
+    "answer-text": "Tomislav Pajović",
+    "question_postag": "WDT IN DT CD JJ NNS WP VBD IN NNP NNP NNP IN CD VBZ DT JJS .",
+    "answer-node": [
+      [
+        "Tomislav Pajović",
+        [
+          5,
+          2
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "e2ae6f66a2eb803b",
+    "question": "What are the peak ratings of the TV series featuring Han Da-min that also has role of Queen Gonghye ?",
+    "table_id": "Han_Da-min_0",
+    "answer-text": "20%",
+    "question_postag": "WP VBP DT JJ NNS IN DT NN NN VBG NNP NNP IN RB VBZ NN IN NNP NNP .",
+    "answer-node": [
+      [
+        "The King and I (TV series)",
+        [
+          8,
+          1
+        ],
+        "/wiki/The_King_and_I_(TV_series)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b1222b7ddf5e7c2a",
+    "question": "Which 1999 Spanish Grand Prix Qualifying constructor supplied Brawn in 2009 ?",
+    "table_id": "1999_Spanish_Grand_Prix_0",
+    "answer-text": "Mercedes",
+    "question_postag": "JJ CD JJ NNP NNP NN VBD NNP IN CD .",
+    "answer-node": [
+      [
+        "McLaren - Mercedes",
+        [
+          0,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "McLaren - Mercedes",
+        [
+          2,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Michael Schumacher",
+        [
+          3,
+          2
+        ],
+        "/wiki/Michael_Schumacher",
+        "passage"
+      ],
+      [
+        "British American Racing",
+        [
+          5,
+          3
+        ],
+        "/wiki/British_American_Racing",
+        "passage"
+      ],
+      [
+        "British American Racing",
+        [
+          15,
+          3
+        ],
+        "/wiki/British_American_Racing",
+        "passage"
+      ],
+      [
+        "Williams Grand Prix Engineering",
+        [
+          9,
+          3
+        ],
+        "/wiki/Williams_Grand_Prix_Engineering",
+        "passage"
+      ],
+      [
+        "Williams Grand Prix Engineering",
+        [
+          16,
+          3
+        ],
+        "/wiki/Williams_Grand_Prix_Engineering",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "39afa0960a4caec0",
+    "question": "How long of a probationary period was the university that was runner-up of the 1991 WCC basketball tournament placed in 2013 ?",
+    "table_id": "List_of_West_Coast_Conference_Men's_Basketball_Tournament_Finals_broadcasters_0",
+    "answer-text": "four years",
+    "question_postag": "WRB JJ IN DT JJ NN VBD DT NN WDT VBD NN IN DT CD NNP NN NN VBN IN CD .",
+    "answer-node": [
+      [
+        "Saint Mary's Gaels men's basketball",
+        [
+          4,
+          3
+        ],
+        "/wiki/Saint_Mary's_Gaels_men's_basketball",
+        "passage"
+      ],
+      [
+        "Saint Mary's Gaels men's basketball",
+        [
+          10,
+          1
+        ],
+        "/wiki/Saint_Mary's_Gaels_men's_basketball",
+        "passage"
+      ],
+      [
+        "Saint Mary's Gaels men's basketball",
+        [
+          17,
+          3
+        ],
+        "/wiki/Saint_Mary's_Gaels_men's_basketball",
+        "passage"
+      ],
+      [
+        "Saint Mary's Gaels men's basketball",
+        [
+          18,
+          3
+        ],
+        "/wiki/Saint_Mary's_Gaels_men's_basketball",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "cfcee4fe65a2ae8e",
+    "question": "What French house duo did an artist with a Vance Lorenzini produced video use a vocal sample from who collaborated with Louis Vuitton ?",
+    "table_id": "Vance_Lorenzini_0",
+    "answer-text": "Daft Punk",
+    "question_postag": "WP JJ NN NN VBD DT NN IN DT NNP NNP VBD NN NN DT JJ NN IN WP VBD IN NNP NNP .",
+    "answer-node": [
+      [
+        "Stronger (Kanye West song)",
+        [
+          12,
+          1
+        ],
+        "/wiki/Stronger_(Kanye_West_song)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "25f63195196f6177",
+    "question": "What is the network internationally airing `` Boss '' whose country has historically been home to myriad peoples and cultures ?",
+    "table_id": "Boss_(TV_series)_0",
+    "answer-text": "Rai Tre",
+    "question_postag": "WP VBZ DT NN RB VBG `` NNP '' WP$ NN VBZ RB VBN NN TO VB NNS CC NNS .",
+    "answer-node": [
+      [
+        "Rai Tre",
+        [
+          2,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "5ec88e2eccad3411",
+    "question": "What was the previous name of the show , broadcast from 2015-18 , featuring voice actor Robbie Daymond ?",
+    "table_id": "Robbie_Daymond_1",
+    "answer-text": "Blake and the Aliens",
+    "question_postag": "WP VBD DT JJ NN IN DT NN , NN IN JJ , JJ NN NN NNP NNP .",
+    "answer-node": [
+      [
+        "Get Blake!",
+        [
+          2,
+          1
+        ],
+        "/wiki/Get_Blake!",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "203c2c7ee102a9c1",
+    "question": "How many National Cups did a 2009–10 Azerbaijan Premier League team win whose Outgoing Manager played for Teteks and Pelister ?",
+    "table_id": "2009–10_Azerbaijan_Premier_League_3",
+    "answer-text": "three",
+    "question_postag": "WRB JJ NNP NNP VBD DT CD NNP NNP NNP NN NN WP$ NNP NNP VBD IN NNP CC NNP .",
+    "answer-node": [
+      [
+        "FK Khazar Lankaran",
+        [
+          1,
+          0
+        ],
+        "/wiki/FK_Khazar_Lankaran",
+        "passage"
+      ],
+      [
+        "FK Baku",
+        [
+          3,
+          0
+        ],
+        "/wiki/FK_Baku",
+        "passage"
+      ],
+      [
+        "FK Baku",
+        [
+          8,
+          0
+        ],
+        "/wiki/FK_Baku",
+        "passage"
+      ],
+      [
+        "Kemal Alispahić",
+        [
+          6,
+          1
+        ],
+        "/wiki/Kemal_Alispahić",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "7b857015996a617e",
+    "question": "The first The Shimmer Tag Team Championship wrestler listed with combined defenses of 3 has what ancestry ?",
+    "table_id": "Shimmer_Tag_Team_Championship_1",
+    "answer-text": "Samoan and Irish",
+    "question_postag": "DT JJ DT NNP NNP NNP NNP NN VBD IN JJ NNS IN CD VBZ WP NN .",
+    "answer-node": [
+      [
+        "Dakota Kai",
+        [
+          9,
+          1
+        ],
+        "/wiki/Dakota_Kai",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b0f82d6843e412f5",
+    "question": "The album Ropin ' the Wind , which was on All-Time Billboard 200 , was by an artist who is married to which musician ?",
+    "table_id": "Billboard_200_1",
+    "answer-text": "Trisha Yearwood",
+    "question_postag": "DT NN NNP POS DT NNP , WDT VBD IN NNP NNP CD , VBD IN DT NN WP VBZ VBN TO WDT NN .",
+    "answer-node": [
+      [
+        "Garth Brooks",
+        [
+          5,
+          3
+        ],
+        "/wiki/Garth_Brooks",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e174aa6da96f5a20",
+    "question": "What is the genre of the ViacomCBS television program that aired in 1967- 68 on ABC ?",
+    "table_id": "List_of_ViacomCBS_television_programs_28",
+    "answer-text": "science-fiction",
+    "question_postag": "WP VBZ DT NN IN DT NNP NN NN WDT VBD IN JJ CD IN NNP .",
+    "answer-node": [
+      [
+        "The Invaders",
+        [
+          2,
+          0
+        ],
+        "/wiki/The_Invaders",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "55e4f6bd134799a3",
+    "question": "The driver who finished in position 6 in the 2004 United States Grand Prix qualifying was the brother of what famous driver ?",
+    "table_id": "2004_United_States_Grand_Prix_0",
+    "answer-text": "Michael Schumacher",
+    "question_postag": "DT NN WP VBD IN NN CD IN DT CD NNP NNPS NNP NNP NN VBD DT NN IN WP JJ NN .",
+    "answer-node": [
+      [
+        "Michael Schumacher",
+        [
+          1,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Rubens Barrichello",
+        [
+          0,
+          2
+        ],
+        "/wiki/Rubens_Barrichello",
+        "passage"
+      ],
+      [
+        "Scuderia Ferrari",
+        [
+          0,
+          3
+        ],
+        "/wiki/Scuderia_Ferrari",
+        "passage"
+      ],
+      [
+        "Scuderia Ferrari",
+        [
+          1,
+          3
+        ],
+        "/wiki/Scuderia_Ferrari",
+        "passage"
+      ],
+      [
+        "BMW in Formula One",
+        [
+          4,
+          3
+        ],
+        "/wiki/BMW_in_Formula_One",
+        "passage"
+      ],
+      [
+        "BMW in Formula One",
+        [
+          5,
+          3
+        ],
+        "/wiki/BMW_in_Formula_One",
+        "passage"
+      ],
+      [
+        "Ralf Schumacher",
+        [
+          5,
+          2
+        ],
+        "/wiki/Ralf_Schumacher",
+        "passage"
+      ],
+      [
+        "Kimi Räikkönen",
+        [
+          6,
+          2
+        ],
+        "/wiki/Kimi_Räikkönen",
+        "passage"
+      ],
+      [
+        "Fernando Alonso",
+        [
+          8,
+          2
+        ],
+        "/wiki/Fernando_Alonso",
+        "passage"
+      ],
+      [
+        "David Coulthard",
+        [
+          11,
+          2
+        ],
+        "/wiki/David_Coulthard",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "018e6f06ee983da1",
+    "question": "When did the Men 's 2001 World Judo Championships Judoka from Japan win a gold medal ?",
+    "table_id": "2001_World_Judo_Championships_8",
+    "answer-text": "2000 Summer Olympics",
+    "question_postag": "WRB VBD DT CD NNP NNP NNP NNP IN NNP VBP DT NN NN .",
+    "answer-node": [
+      [
+        "Kosei Inoue",
+        [
+          0,
+          1
+        ],
+        "/wiki/Kosei_Inoue",
+        "passage"
+      ],
+      [
+        "Jang Sung-Ho",
+        [
+          2,
+          1
+        ],
+        "/wiki/Jang_Sung-Ho",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "2b16b328f0d2cd20",
+    "question": "Which stadium does the Argentina football club from the Villa Fox district that also plays in the Primera B division play for ?",
+    "table_id": "List_of_football_clubs_in_Argentina_3",
+    "answer-text": "Estadio Defensores Unidos",
+    "question_postag": "JJ NN VBZ DT NNP NN NN IN DT NNP NNP NN WDT RB VBZ IN DT NNP NNP NN NN IN .",
+    "answer-node": [
+      [
+        "Estadio Defensores Unidos",
+        [
+          5,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "cc2a12f824d88a4d",
+    "question": "How many NFL teams did the celebrity football player who participated in season three of Rachael vs . Guy : Celebrity Cook-Off play for ?",
+    "table_id": "Rachael_vs._Guy:_Celebrity_Cook-Off_2",
+    "answer-text": "four",
+    "question_postag": "WRB JJ NNP NNS VBD DT NN NN NN WP VBD IN NN CD IN NNP NN . NN : NN NNP NN IN .",
+    "answer-node": [
+      [
+        "Chris Kattan",
+        [
+          0,
+          0
+        ],
+        "/wiki/Chris_Kattan",
+        "passage"
+      ],
+      [
+        "Tiffany (American singer)",
+        [
+          5,
+          0
+        ],
+        "/wiki/Tiffany_(American_singer)",
+        "passage"
+      ],
+      [
+        "NFL",
+        [
+          7,
+          1
+        ],
+        "/wiki/NFL",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "0b6c50bc2a3eefff",
+    "question": "Which 1991 female nominee , who was nominated in a country singing category , is the oldest ?",
+    "table_id": "Grammy_Award_for_Best_Female_Country_Vocal_Performance_3",
+    "answer-text": "K.T . Oslin",
+    "question_postag": "JJ CD NN NN , WP VBD VBN IN DT NN VBG NN , VBZ DT JJS .",
+    "answer-node": [
+      [
+        "Mary Chapin Carpenter - Quittin ' Time Carlene Carter - I Fell in Love Reba McEntire - You Lie K.T . Oslin - Come Next Monday",
+        [
+          1,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "2f43009e20eee2b8",
+    "question": "When was the B2 division club which played in Cypriot Second Division in 2013/14 , based in the second largest urban area in Cyprus founded ?",
+    "table_id": "2013–14_Cypriot_Second_Division_1",
+    "answer-text": "1956",
+    "question_postag": "WRB VBD DT NN WDT VBD IN NNP NNP NNP IN CD , VBN IN DT JJ JJS JJ NN IN NNP VBD .",
+    "answer-node": [
+      [
+        "AEZ Zakakiou",
+        [
+          0,
+          0
+        ],
+        "/wiki/AEZ_Zakakiou",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "61b46e4dd0cd767a",
+    "question": "What was the original name of the Ukrainian Premier League team whose head coach was born on born 21 February 1964 in Kiev ?",
+    "table_id": "2018–19_Ukrainian_Premier_League_3",
+    "answer-text": "Avanhard",
+    "question_postag": "WP VBD DT JJ NN IN DT JJ NNP NNP NN WP$ NN NN VBD VBN IN JJ CD NNP CD IN NNP .",
+    "answer-node": [
+      [
+        "FC Desna Chernihiv",
+        [
+          2,
+          0
+        ],
+        "/wiki/FC_Desna_Chernihiv",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "2064ac84e00f3652",
+    "question": "Who provided guidance to Jelena Kostanić Tošić ’ s partner in the ITF finals doubles hard surface match where Jelena was not in first place ?",
+    "table_id": "Jelena_Kostanić_Tošić_6",
+    "answer-text": "Ivan Humić",
+    "question_postag": "WP VBD NN TO NNP NNP NNP NNP VBD NN IN DT NNP NNS VBZ JJ NN NN WRB NNP VBD RB IN JJ NN .",
+    "answer-node": [
+      [
+        "Matea Mezak",
+        [
+          7,
+          5
+        ],
+        "/wiki/Matea_Mezak",
+        "passage"
+      ],
+      [
+        "Matea Mezak",
+        [
+          8,
+          5
+        ],
+        "/wiki/Matea_Mezak",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e229da10aa150aa7",
+    "question": "How many people live in the hometown of the 2012-13 LEB Oro team that was founded in 1966 ?",
+    "table_id": "2012–13_LEB_Oro_season_0",
+    "answer-text": "98,025",
+    "question_postag": "WRB JJ NNS VBP IN DT NN IN DT JJ NNP NNP NN WDT VBD VBN IN CD .",
+    "answer-node": [
+      [
+        "Lugo",
+        [
+          1,
+          1
+        ],
+        "/wiki/Lugo",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "10b1ef5e8b268eb5",
+    "question": "The Coptic month that coincides with the Julian date of 27 December on the Ethiopian calendar is also the first month of the season of what ?",
+    "table_id": "Ethiopian_calendar_0",
+    "answer-text": "Proyet ( Growth and Emergence )",
+    "question_postag": "DT NNP NN WDT VBZ IN DT JJ NN IN CD NNP IN DT JJ NN VBZ RB DT JJ NN IN DT NN IN WP .",
+    "answer-node": [
+      [
+        "Tobi (month)",
+        [
+          4,
+          1
+        ],
+        "/wiki/Tobi_(month)",
+        "passage"
+      ],
+      [
+        "Meshir",
+        [
+          5,
+          1
+        ],
+        "/wiki/Meshir",
+        "passage"
+      ],
+      [
+        "Paremhat",
+        [
+          6,
+          1
+        ],
+        "/wiki/Paremhat",
+        "passage"
+      ],
+      [
+        "Parmouti",
+        [
+          7,
+          1
+        ],
+        "/wiki/Parmouti",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "90edf41f33a8b5b4",
+    "question": "The NHL skater with a PIM of 31 during the 2018 Stanley Cup playoffs was selected in which NHL Entry Draft ?",
+    "table_id": "2018_Stanley_Cup_playoffs_0",
+    "answer-text": "2005 NHL Entry Draft",
+    "question_postag": "DT NNP NN IN DT NNP IN CD IN DT CD NNP NNP NNS VBD VBN IN WDT NNP NNP NNP .",
+    "answer-node": [
+      [
+        "Sidney Crosby",
+        [
+          5,
+          0
+        ],
+        "/wiki/Sidney_Crosby",
+        "passage"
+      ],
+      [
+        "T. J. Oshie",
+        [
+          7,
+          0
+        ],
+        "/wiki/T._J._Oshie",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e96cc27e674c7730",
+    "question": "The 2003 AFL round 8 premiership season game on May 16th was at a venue that was built in what year ?",
+    "table_id": "2003_AFL_season_7",
+    "answer-text": "1853",
+    "question_postag": "DT CD NNP VBD CD NN NN NN IN NNP CD VBD IN DT NN WDT VBD VBN IN WP NN .",
+    "answer-node": [
+      [
+        "Melbourne Cricket Ground",
+        [
+          0,
+          4
+        ],
+        "/wiki/Melbourne_Cricket_Ground",
+        "passage"
+      ],
+      [
+        "Melbourne Cricket Ground",
+        [
+          3,
+          4
+        ],
+        "/wiki/Melbourne_Cricket_Ground",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "eaf0dcc7c79938ae",
+    "question": "Which author of a work that won a Australian Prime Minister 's Literary Award is deputy chair of the National Museum of Australia , and a 2012 award winner ?",
+    "table_id": "Prime_Minister's_Literary_Awards_0",
+    "answer-text": "Bill Gammage",
+    "question_postag": "JJ NN IN DT NN WDT VBD DT JJ NNP NNP POS NNP NNP VBZ JJ NN IN DT NNP NNP IN NNP , CC DT CD NN NN .",
+    "answer-node": [
+      [
+        "The Biggest Estate on Earth by Bill Gammage",
+        [
+          4,
+          6
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "a93ce2f614482e03",
+    "question": "In the event where the 1994 European Women Judo Championships athlete from Poland won gold , the silver medal winner was born in which year ?",
+    "table_id": "1994_European_Judo_Championships_1",
+    "answer-text": "1966",
+    "question_postag": "IN DT NN WRB DT CD JJ NNP NNP NNP NN IN NNP VBD NN , DT NN NN NN VBD VBN IN WDT NN .",
+    "answer-node": [
+      [
+        "Alessandra Giungi",
+        [
+          1,
+          2
+        ],
+        "/wiki/Alessandra_Giungi",
+        "passage"
+      ],
+      [
+        "Ursula Myrén",
+        [
+          2,
+          3
+        ],
+        "/wiki/Ursula_Myrén",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e521761c17199d8e",
+    "question": "Which American passenger train rides on a class 1 railroad with one of two end-points ending in a city with Bourbon Street ?",
+    "table_id": "List_of_named_passenger_trains_of_the_United_States_(S-Z)_2",
+    "answer-text": "United States Fast Mail",
+    "question_postag": "JJ NNP NN NN NNS IN DT NN CD NN IN CD IN CD NNS VBG IN DT NN IN NNP NNP .",
+    "answer-node": [
+      [
+        "United States Fast Mail",
+        [
+          2,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "c0a1bf98c717dcfc",
+    "question": "What is the birth date of the singer who won Top Fest with the song `` Ëndërroj `` ?",
+    "table_id": "Top_Fest_0",
+    "answer-text": "24 March 1989",
+    "question_postag": "WP VBZ DT NN NN IN DT NN WP VBD NNP NNP IN DT NN `` IN `` .",
+    "answer-node": [
+      [
+        "Linda Halimi",
+        [
+          5,
+          2
+        ],
+        "/wiki/Linda_Halimi",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "fb1c4745962c1a5d",
+    "question": "What is the 2011 book of the couple celebrity eliminated from season 5 of Dancing with the Stars in america on October 23 , 2007 ?",
+    "table_id": "Dancing_with_the_Stars_(U.S._season_5)_0",
+    "answer-text": "How to Win at the Sport of Business",
+    "question_postag": "WP VBZ DT CD NN IN DT NN VBN IN NN CD IN VBG IN DT NNP IN NN IN NNP CD , CD .",
+    "answer-node": [
+      [
+        "Mark Cuban",
+        [
+          4,
+          0
+        ],
+        "/wiki/Mark_Cuban",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b2298a6e40edcd81",
+    "question": "What is the birth date of the 2014 Web.com Tour money leader who hails from a country who is the second most populous state of Europe ?",
+    "table_id": "2014_Web.com_Tour_1",
+    "answer-text": "2 December 1970",
+    "question_postag": "WP VBZ DT NN NN IN DT CD NNP NNP NN NN WP VBZ IN DT NN WP VBZ DT JJ RBS JJ NN IN NNP .",
+    "answer-node": [
+      [
+        "Alex Čejka",
+        [
+          9,
+          1
+        ],
+        "/wiki/Alex_Čejka",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "977de39c88146229",
+    "question": "What is the TFP of the male skater at the 2002 Bofrost Cup on Ice who is a two-time European medalist and placed fifth at the 2002 Winter Olympics ?",
+    "table_id": "2002_Bofrost_Cup_on_Ice_0",
+    "answer-text": "3.0",
+    "question_postag": "WP VBZ DT NNP IN DT NN IN DT CD NNP NNP IN NNP WP VBZ DT JJ JJ NN CC VBD NNS IN DT CD NNP NNPS .",
+    "answer-node": [
+      [
+        "3.0",
+        [
+          1,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "983278a691c1f418",
+    "question": "Which actor in 2009 action comedy film that changed its title from Kathi was known for his roles in Telugu films ?",
+    "table_id": "Vakkantham_Vamsi_0",
+    "answer-text": "Shaam",
+    "question_postag": "JJ NN IN CD NN NN NN WDT VBD PRP$ NN IN NNP VBD VBN IN PRP$ NNS IN NNP NNS .",
+    "answer-node": [
+      [
+        "Kalyan Ram , Sana Khan , Shaam",
+        [
+          4,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Kick (2009 film)",
+        [
+          3,
+          1
+        ],
+        "/wiki/Kick_(2009_film)",
+        "passage"
+      ],
+      [
+        "Kalyanram Kathi",
+        [
+          4,
+          1
+        ],
+        "/wiki/Kalyanram_Kathi",
+        "passage"
+      ],
+      [
+        "Oosaravelli",
+        [
+          5,
+          1
+        ],
+        "/wiki/Oosaravelli",
+        "passage"
+      ],
+      [
+        "Kick 2",
+        [
+          10,
+          1
+        ],
+        "/wiki/Kick_2",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "4a22b4ee7b0b79e2",
+    "question": "What was the year of birth of the Australian Football League number 5 pick of the 2007 AFL rookie draft ?",
+    "table_id": "2007_AFL_Draft_5",
+    "answer-text": "1989",
+    "question_postag": "WP VBD DT NN IN NN IN DT JJ NNP NNP NN CD NN IN DT CD NNP NN .",
+    "answer-node": [
+      [
+        "Aaron Joseph",
+        [
+          1,
+          2
+        ],
+        "/wiki/Aaron_Joseph",
+        "passage"
+      ],
+      [
+        "Rhys Magin",
+        [
+          4,
+          2
+        ],
+        "/wiki/Rhys_Magin",
+        "passage"
+      ],
+      [
+        "Lewis Stevenson (Australian footballer)",
+        [
+          11,
+          2
+        ],
+        "/wiki/Lewis_Stevenson_(Australian_footballer)",
+        "passage"
+      ],
+      [
+        "Coburg Tigers",
+        [
+          16,
+          3
+        ],
+        "/wiki/Coburg_Tigers",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "74ba1af06cdeab4c",
+    "question": "How many songs are included in the album , first released in 1965 , “ that is part of the Beatles Collection ?",
+    "table_id": "The_Beatles_Collection_1",
+    "answer-text": "fourteen songs",
+    "question_postag": "WRB JJ NNS VBP VBN IN DT NN , RB VBN IN CD , NN WDT VBZ NN IN DT NNP NNP .",
+    "answer-node": [
+      [
+        "Help!",
+        [
+          4,
+          0
+        ],
+        "/wiki/Help!",
+        "passage"
+      ],
+      [
+        "Rubber Soul",
+        [
+          5,
+          0
+        ],
+        "/wiki/Rubber_Soul",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ad9f91e81f193dc2",
+    "question": "Who was featured on the cover of the Elysia Rotaru title that is noted for recording movements of one or more actors that are sample many times per second ?",
+    "table_id": "Elysia_Rotaru_2",
+    "answer-text": "Tom Brady",
+    "question_postag": "WP VBD VBN IN DT NN IN DT NNP NNP NN WDT VBZ VBN IN VBG NNS IN CD CC JJR NNS WDT VBP RB JJ NNS IN NN .",
+    "answer-node": [
+      [
+        "Madden NFL 18",
+        [
+          2,
+          1
+        ],
+        "/wiki/Madden_NFL_18",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b8c4d124476f64fe",
+    "question": "How many students attend the oldest existing institution in the world where rabbis are graduated , which is in Budapest ?",
+    "table_id": "Budapest_0",
+    "answer-text": "60",
+    "question_postag": "WRB JJ NNS VBP DT JJS VBG NN IN DT NN WRB NN VBP VBN , WDT VBZ IN NNP .",
+    "answer-node": [
+      [
+        "60",
+        [
+          16,
+          5
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "cfa643d69c14905b",
+    "question": "For how long was the wrestling athlete that beat a 2-time parliamentarian banned for doping at the 1998 Asian Games in Bangkok , Thailand ?",
+    "table_id": "Wrestling_at_the_1998_Asian_Games_2",
+    "answer-text": "two years",
+    "question_postag": "IN WRB JJ VBD DT NN NN WDT VBD DT JJ NN VBN IN VBG IN DT CD JJ NNPS IN NNP , NNP .",
+    "answer-node": [
+      [
+        "Abbas Jadidi",
+        [
+          6,
+          1
+        ],
+        "/wiki/Abbas_Jadidi",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b95af9cd7f6e4aba",
+    "question": "How many houses are in the town with a 2010 Meath Senior Football Championship participating club that plays in the parish of Kilcloon ?",
+    "table_id": "2010_Meath_Senior_Football_Championship_0",
+    "answer-text": "forty",
+    "question_postag": "WRB JJ NNS VBP IN DT NN IN DT CD NNP NNP NNP NNP VBG NN WDT VBZ IN DT NN IN NNP .",
+    "answer-node": [
+      [
+        "Batterstown",
+        [
+          0,
+          1
+        ],
+        "/wiki/Batterstown",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "43e58d0a4f5e9cac",
+    "question": "When was the first mention of the venue for the most recent game against the opponent known as the Cedars , in which Hassouneh Al-Sheikh scored an international goal ?",
+    "table_id": "Hassouneh_Al-Sheikh_0",
+    "answer-text": "15th century BC",
+    "question_postag": "WRB VBD DT JJ NN IN DT NN IN DT RBS JJ NN IN DT NN VBN IN DT NNP , IN WDT NNP NNP VBD DT JJ NN .",
+    "answer-node": [
+      [
+        "Beirut",
+        [
+          6,
+          2
+        ],
+        "/wiki/Beirut",
+        "passage"
+      ]
+    ]
+  }
+]

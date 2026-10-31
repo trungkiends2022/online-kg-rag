@@ -1,0 +1,1 @@
+[{"question_id": "q1", "question": "Where was the winner born?", "answer_text": "Hanoi", "table_id": "t1", "table": {"title": "Winners", "header": ["Winner", "Year"], "data": [[{"value": "An", "urls": [{"url": "An", "summary": "An was born in Hanoi."}]}, {"value": "2020", "urls": []}]]}}]

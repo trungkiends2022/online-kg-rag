@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 from rank_bm25 import BM25Okapi
 
+from src.baselines.grounded_response import parse_response, response_contract
 from src.datasets.schema import DatasetExample
 from src.llm.client import get_provider, llm_call
 
@@ -14,15 +15,98 @@ from src.llm.client import get_provider, llm_call
 @dataclass(frozen=True)
 class RAGConfig:
     top_k: int = 5
+    second_stage_k: int = 3
     max_context_chars: int = 24_000
+    # ``None`` deliberately keeps every table row when constructing a KG.
+    # This is independent of top_k, which ranks text/web retrieval.
+    max_table_rows_for_kg: int | None = None
     max_output_tokens: int = 1024
     temperature: float = 0.0
+
+    use_rule_text_triples: bool = True
+    # OUEG component-ablation switches. Defaults define the full system;
+    # each False value removes one answer-time signal.
+    use_record_nodes: bool = True
+    use_path_guidance: bool = True
+    # Scores can order reader presentation, but lexical overlap is not proof.
+    # Keep this off unless explicitly running the historical ablation.
+    use_lexical_tiebreak: bool = False
+    use_hyperlink_expansion: bool = True
+    # When structural candidates tie, add a linked passage for each candidate
+    # before synthesis. This expands evidence only; it never prunes the graph.
+    use_collision_evidence_expansion: bool = True
+    collision_passage_budget: int = 12
+    # L2 may fetch candidate-linked passages that were absent from the first
+    # retrieval, but only after the reader explicitly reports missing
+    # evidence.  The per-candidate limit prevents a popular early candidate
+    # from consuming the evidence budget of the others.
+    use_focus_evidence_augmentation: bool = True
+    focus_passage_budget_per_candidate: int = 2
+    # Resolve L1 diagnostics against grounded table values before asking L2
+    # for more text. This avoids treating Rank/Year cells as entities.
+    use_diagnostic_focus_resolution: bool = True
+    focus_query_fallback_budget: int = 2
+    l2_existing_witness_budget: int = 2
+    l2_max_edges_per_candidate: int = 16
+    l2_max_contexts_per_candidate: int = 3
+    l2_context_snippet_chars: int = 900
+    # On a blank or explicitly uncertain first response, make one
+    # non-destructive re-read with an auditable focus pointer.
+    use_adaptive_verification: bool = True
+    # L2 normally receives a small sufficient state capsule, not the L1
+    # prompt. ``complete_re_read`` is retained solely as a diagnostic ablation.
+    l2_evidence_mode: str = "delta_only"
+    use_prompt_compression: bool = True
+    # Full OUEG preserves the established L1 reader: it sees the complete,
+    # losslessly compacted graph.  Path-focused presentation is opt-in for a
+    # prompt-pruning ablation; it must not change the main L1 comparison.
+    use_path_focused_prompt: bool = False
+    prompt_path_budget: int = 8
+    # OUEG-only: prompt keeps the ambiguity visible by default. The two other
+    # modes are explicit selective-prediction behaviours.
+    ambiguity_policy: str = "prompt"
+    oueg_context_mode: str = "lossless"
 
     def validate(self) -> None:
         if self.top_k < 1:
             raise ValueError("top_k must be positive")
+        if self.second_stage_k < 0:
+            raise ValueError("second_stage_k must be non-negative")
+        if self.max_table_rows_for_kg is not None and self.max_table_rows_for_kg < 1:
+            raise ValueError("max_table_rows_for_kg must be positive when set")
         if self.max_context_chars < 1 or self.max_output_tokens < 1:
             raise ValueError("context and output limits must be positive")
+        if self.collision_passage_budget < 1:
+            raise ValueError("collision_passage_budget must be positive")
+        if self.focus_passage_budget_per_candidate < 1:
+            raise ValueError("focus_passage_budget_per_candidate must be positive")
+        for name in (
+            "focus_query_fallback_budget", "l2_existing_witness_budget",
+            "l2_max_edges_per_candidate", "l2_max_contexts_per_candidate",
+            "l2_context_snippet_chars",
+        ):
+            if getattr(self, name) < 1:
+                raise ValueError(f"{name} must be positive")
+        if not isinstance(self.use_rule_text_triples, bool):
+            raise ValueError("use_rule_text_triples must be boolean")
+        for name in (
+            "use_record_nodes", "use_path_guidance", "use_lexical_tiebreak",
+            "use_hyperlink_expansion", "use_collision_evidence_expansion",
+            "use_focus_evidence_augmentation",
+            "use_diagnostic_focus_resolution",
+            "use_adaptive_verification", "use_prompt_compression",
+            "use_path_focused_prompt",
+        ):
+            if not isinstance(getattr(self, name), bool):
+                raise ValueError(f"{name} must be boolean")
+        if self.prompt_path_budget < 1:
+            raise ValueError("prompt_path_budget must be positive")
+        if self.ambiguity_policy not in {"prompt", "return_candidates", "lexical_tiebreak"}:
+            raise ValueError("ambiguity_policy must be prompt, return_candidates, or lexical_tiebreak")
+        if self.l2_evidence_mode not in {"delta_only", "complete_re_read"}:
+            raise ValueError("l2_evidence_mode must be delta_only or complete_re_read")
+        if self.oueg_context_mode not in {"lossless", "extractive"}:
+            raise ValueError("oueg_context_mode must be lossless or extractive")
 
 
 def flatten_documents(example: DatasetExample) -> list[dict]:
@@ -80,7 +164,7 @@ def _bounded_context(documents: list[dict], limit: int) -> tuple[str, list[str]]
 
 def _answer_prompt(question: str, context: str) -> str:
     return f"""Answer the question using only the evidence below.
-Return only the shortest answer span or numeric answer. Do not explain.
+{response_contract(source_label='document ID')}
 
 Question: {question}
 
@@ -98,23 +182,30 @@ class _RAGBaseline:
         self.config.validate()
 
     def _complete(
-        self, prompt: str, *, llm_calls: int, metadata: dict, started: float | None = None
+        self, prompt: str, *, llm_calls: int, metadata: dict, context_ids: list[str],
+        started: float | None = None,
     ) -> dict:
         provider = get_provider()
         started = started if started is not None else time.perf_counter()
-        answer = llm_call(
+        raw_response = llm_call(
             prompt,
             max_tokens=self.config.max_output_tokens,
             temperature=self.config.temperature,
         ).strip()
+        parsed = parse_response(raw_response, context_ids)
         return {
-            "answer": answer,
+            "answer": parsed["answer"],
             "method": self.method_name,
             "provider": provider.name,
             "model": getattr(provider, "model", None),
             "llm_calls": llm_calls,
             "latency_ms": round((time.perf_counter() - started) * 1000, 2),
             "temperature": self.config.temperature,
+            "answer_response_valid": parsed["response_valid"],
+            "abstained_for_missing_grounding": parsed["abstained"],
+            "evidence_context_ids": parsed["evidence_context_ids"],
+            "grounding_diagnostic": parsed["diagnostic"],
+            "raw_answer": parsed["raw_response"],
             **metadata,
         }
 
@@ -125,15 +216,15 @@ class FlatTableBM25Baseline(_RAGBaseline):
     method_name = "flat_table_bm25"
 
     def run(self, example: DatasetExample) -> dict:
-        selected = rank_documents(
-            example.question, flatten_documents(example), self.config.top_k
-        )
+        documents = flatten_documents(example)
+        selected = rank_documents(example.question, documents, len(documents))
         context, ids = _bounded_context(selected, self.config.max_context_chars)
         prompt = _answer_prompt(example.question, context)
-        return self._complete(prompt, llm_calls=1, metadata={
+        return self._complete(prompt, llm_calls=1, context_ids=ids, metadata={
             "retrieved_document_ids": ids,
             "prompt_chars": len(prompt),
             "top_k": self.config.top_k,
+            "context_selection_policy": "all_instance_evidence_no_top_k",
         })
 
 
@@ -185,7 +276,7 @@ class OracleEvidenceBaseline(_RAGBaseline):
             )
         context, ids = _bounded_context(documents, self.config.max_context_chars)
         prompt = _answer_prompt(example.question, context)
-        return self._complete(prompt, llm_calls=1, metadata={
+        return self._complete(prompt, llm_calls=1, context_ids=ids, metadata={
             "oracle_document_ids": ids,
             "prompt_chars": len(prompt),
         })

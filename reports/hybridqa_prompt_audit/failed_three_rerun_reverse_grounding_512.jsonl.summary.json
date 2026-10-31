@@ -1,0 +1,91 @@
+{
+  "method": "online_kg_path_text",
+  "dataset": "hybridqa",
+  "num_examples": 3,
+  "failed_examples": 0,
+  "run_manifest": "reports/hybridqa_prompt_audit/failed_three_rerun_reverse_grounding_512.jsonl.manifest.json",
+  "run_fingerprint": "5537eb22be72df3a4d87bc7b6580d34c2b05d8555360aefbf82bb901e367954f",
+  "provider": "openrouter",
+  "model": "deepseek/deepseek-v4-flash",
+  "code_revision": "4387344213626185bcb51989fdafe8199f17153a",
+  "input_sha256": "699b2bb4b8fe89b3b39a2ebf8388e7bdc7df7c71c77b713f49579295bc8f4a1b",
+  "exact_match": 0.0,
+  "f1": 0.0,
+  "exact_match_percent": 0.0,
+  "f1_percent": 0.0,
+  "semantic_exact_match": 0.0,
+  "semantic_exact_match_percent": 0.0,
+  "empty_answer_count": 2,
+  "empty_answer_rate": 0.6666666666666666,
+  "error_taxonomy": {
+    "retrieval_miss": 1,
+    "output_format": 2
+  },
+  "error_audit_sample": [
+    {
+      "id": "7d2cbbdbecead98c",
+      "question": "What was the person who founded the Shamrock Hotel known to be the king of ?",
+      "gold_answer": "Wildcatter",
+      "answer": "Wildcatters",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "8a0c9f5861500669",
+      "question": "What is the name of the club whose city/town is situated between Kgale and Oodi Hills ?",
+      "gold_answer": "Gaborone United",
+      "answer": "",
+      "error_category": "output_format",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "d27ec782152ad273",
+      "question": "What is the alternative name for the historic place that is located in the township that was established in 1886 and that has the date listed # 14000426 ?",
+      "gold_answer": "Portage Entry Light",
+      "answer": "",
+      "error_category": "output_format",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    }
+  ],
+  "mean_gold_row_recall": 1.0,
+  "mean_gold_hyperlink_recall": 1.0,
+  "mean_gold_passage_recall": 0.0,
+  "total_wall_time_ms": 65580.4,
+  "mean_wall_time_ms": 21860.13,
+  "total_llm_latency_ms": 48582.42,
+  "mean_llm_latency_ms": 16194.14,
+  "total_non_llm_time_ms": 16997.98,
+  "mean_non_llm_time_ms": 5665.99,
+  "total_llm_calls": 5.0,
+  "mean_llm_calls": 1.67,
+  "total_llm_api_attempts": 5.0,
+  "mean_llm_api_attempts": 1.67,
+  "total_llm_prompt_chars": 123038.0,
+  "mean_llm_prompt_chars": 41012.67,
+  "total_llm_response_chars": 12.0,
+  "mean_llm_response_chars": 4.0,
+  "config": {
+    "top_k": 5,
+    "max_context_chars": 24000,
+    "max_output_tokens": 512,
+    "temperature": 0.0,
+    "n_paths": 5,
+    "max_replans": 2,
+    "finqa_table_format": "official",
+    "second_stage_k": 3,
+    "max_workers": 3,
+    "llm_max_concurrent_requests": 3
+  }
+}

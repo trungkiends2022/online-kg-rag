@@ -16,6 +16,9 @@ from src.kg.normalization import normalize_key
 from src.planning.entity_anchor import anchor_question
 
 
+SHORT_TABLE_ROW_LIMIT = 30
+
+
 def _tokenize(text: str) -> list[str]:
     return text.lower().split()
 
@@ -66,6 +69,123 @@ def _item_id(item: dict) -> str:
     return str(item.get("id") or item.get("url") or item.get("text", ""))
 
 
+def _row_text(table_name: str, row: dict) -> str:
+    cells = " ".join(f"{column} {value}" for column, value in row.items())
+    return f"{table_name} {cells}"
+
+
+def _select_table_rows(
+    question: str,
+    table_groups: list[dict],
+    *,
+    top_k: int,
+    anchor,
+) -> list[dict]:
+    """Select a bounded union of anchored and lexically relevant table rows."""
+    candidates = []
+    for table_index, group in enumerate(table_groups):
+        table_name = str(group.get("table_name", f"table_{table_index}"))
+        for row_index, row in enumerate(group.get("rows", [])):
+            candidates.append({
+                "table_index": table_index,
+                "row_index": row_index,
+                "row": row,
+                "text": _row_text(table_name, row),
+            })
+    # HybridQA tables are commonly one short list whose answer row may have no
+    # lexical overlap with the question. Retain each short table in full before
+    # applying BM25 to larger tables, so table-to-text links are not discarded.
+    short_table_indexes = {
+        index for index, group in enumerate(table_groups)
+        if len(group.get("rows", [])) <= SHORT_TABLE_ROW_LIMIT
+    }
+    selected = [
+        item for item in candidates if item["table_index"] in short_table_indexes
+    ]
+    remaining_candidates = [
+        item for item in candidates if item["table_index"] not in short_table_indexes
+    ]
+    if remaining_candidates:
+        corpus = [_tokenize(item["text"]) for item in candidates]
+        all_scores = BM25Okapi(corpus).get_scores(_tokenize(question))
+        score_by_key = {
+            (item["table_index"], item["row_index"]): score
+            for item, score in zip(candidates, all_scores)
+        }
+        ranked = sorted(
+            remaining_candidates,
+            key=lambda item: (
+                -score_by_key[(item["table_index"], item["row_index"])],
+                item["table_index"], item["row_index"],
+            ),
+        )
+        required_values = {
+            normalize_key(value)
+            for value in anchor.bridge_entities
+            if str(value).strip()
+        }
+        for constraint in anchor.table_constraints:
+            required_values.update(
+                normalize_key(value) for value in constraint.get("candidates", ())
+                if str(value).strip()
+            )
+        witness_row_keys = {
+            int(r_idx)
+            for w in getattr(anchor, "table_witnesses", ())
+            for r_idx in w.get("row_indices", ())
+        }
+        anchored, remaining = [], []
+        for item in ranked:
+            row_values = {normalize_key(value) for value in item["row"].values()}
+            is_witness = item["row_index"] in witness_row_keys
+            (anchored if is_witness or (required_values & row_values) else remaining).append(item)
+        selected.extend((anchored + remaining)[:top_k])
+
+    by_table: dict[int, list[dict]] = {}
+    for item in selected:
+        by_table.setdefault(item["table_index"], []).append(item)
+    output = []
+    for table_index, items in sorted(by_table.items()):
+        original = table_groups[table_index]
+        ordered = sorted(items, key=lambda item: item["row_index"])
+        group = {
+            key: value for key, value in original.items()
+            if key not in {"rows", "row_indices", "cell_links"}
+        }
+        group["rows"] = [item["row"] for item in ordered]
+        group["row_indices"] = [item["row_index"] for item in ordered]
+        selected_indices = {item["row_index"] for item in ordered}
+        if "cell_links" in original:
+            group["cell_links"] = [
+                dict(link) for link in original["cell_links"]
+                if link.get("row_index") in selected_indices
+            ]
+        output.append(group)
+    return output
+def _all_table_rows(table_groups: list[dict]) -> list[dict]:
+    """Return every table row with stable original indices and cell links.
+
+    KG construction must be able to retain a complete table independently of
+    the retrieval ``top_k`` used for text passages. Keep the copying and
+    index-normalisation here so downstream builders receive the same schema as
+    they do for a bounded selection.
+    """
+    output = []
+    for group in table_groups:
+        rows = list(group.get("rows", []))
+        inherited_indices = list(group.get("row_indices", []))
+        row_indices = inherited_indices if len(inherited_indices) == len(rows) else list(range(len(rows)))
+        copied = {key: value for key, value in group.items() if key not in {"rows", "row_indices", "cell_links"}}
+        copied["rows"] = rows
+        copied["row_indices"] = row_indices
+        if "cell_links" in group:
+            copied["cell_links"] = [dict(link) for link in group["cell_links"]]
+        output.append(copied)
+    return output
+
+
+
+
 def _entity_topk(entity: str, items: list[dict], top_k: int) -> list[dict]:
     """Rank exact entity mentions ahead of BM25 ties and short documents."""
     entity_tokens = set(normalize_key(entity).split())
@@ -105,15 +225,43 @@ def two_stage_retrieve(
     web_snippets: list[dict],
     top_k: int = 10,
     second_stage_k: int = 3,
+    max_table_rows: int | None = None,
+    use_hyperlink_expansion: bool = True,
 ) -> dict:
-    """Add a bounded schema-aware stage to ordinary question BM25 retrieval."""
+    """Retrieve text evidence and prepare table rows for downstream consumers.
+
+    ``max_table_rows=None`` (the default) retains the complete table, which is
+    the safe policy when the rows are used to build a KG. A positive limit
+    restores BM25/anchor row filtering for consumers that need a bounded table
+    representation, such as a direct-context prompt.
+    """
+    if max_table_rows is not None and max_table_rows < 1:
+        raise ValueError("max_table_rows must be positive when set")
+    anchor = anchor_question(question, table_rows, text_passages)
     first = coarse_retrieve(
         question, table_rows, text_passages, web_snippets, top_k=top_k
     )
+    first["table_rows"] = (
+        _all_table_rows(table_rows)
+        if max_table_rows is None
+        else _select_table_rows(
+            question, table_rows, top_k=max_table_rows, anchor=anchor,
+        )
+    )
+    selected_row_links = list(dict.fromkeys(
+        str(link.get("url", "")).strip()
+        for group in first["table_rows"] for link in group.get("cell_links", [])
+        if str(link.get("url", "")).strip()
+    ))
+    selected_row_text = " ".join(
+        _row_text(str(group.get("table_name", "")), row)
+        for group in first["table_rows"] for row in group.get("rows", [])
+    )
     expansions = _query_expansions(question, table_rows)
-    anchor = anchor_question(question, table_rows)
     entity_queries = list(anchor.bridge_entities)
     table_constraints = list(anchor.table_constraints)
+    table_witnesses = list(getattr(anchor, "table_witnesses", ()))
+
     constrained_candidates = list(dict.fromkeys(
         entity for constraint in table_constraints for entity in constraint["candidates"]
     ))
@@ -123,6 +271,59 @@ def two_stage_retrieve(
         remaining = [item for item in items if _item_id(item) not in selected_ids]
         positions = {_item_id(item): index for index, item in enumerate(items)}
         added: list[dict] = []
+
+        # Controlled passage expansion: if witness has hyperlinks, prioritize them directly
+        witness_links = [
+            link
+            for witness in table_witnesses
+            for link in witness.get("hyperlinks", ())
+            if link
+        ] if use_hyperlink_expansion else []
+        if witness_links:
+            for link in witness_links:
+                clean_link = str(link).strip()
+                clean_target = clean_link.removeprefix("/wiki/").removeprefix("passage:").casefold()
+                for item in remaining:
+                    item_id_val = str(item.get("id") or item.get("url") or "").casefold()
+                    if clean_target in item_id_val or item_id_val.endswith(clean_target):
+                        item_id = _item_id(item)
+                        if item_id not in selected_ids:
+                            enriched = dict(item)
+                            position = positions.get(item_id, 0)
+                            enriched["context_before"] = " ".join(
+                                str(previous.get("text", ""))
+                                for previous in items[max(0, position - 2):position]
+                            )
+                            added.append(enriched)
+                            selected_ids.add(item_id)
+                            break
+
+        # Row-first multi-hop retrieval: expand selected-row hyperlinks and
+        # rerank them using the question plus the selected table rows.
+        if use_hyperlink_expansion and selected_row_links and second_stage_k > 0:
+            link_targets = {
+                link.removeprefix("/wiki/").removeprefix("passage:").casefold()
+                for link in selected_row_links
+            }
+            linked = [
+                item for item in remaining
+                if any(target in str(item.get("id") or item.get("url") or "").casefold()
+                       for target in link_targets)
+            ]
+            for item in _bm25_topk(f"{question} {selected_row_text}", linked, "text", second_stage_k):
+                item_id = _item_id(item)
+                if item_id in selected_ids:
+                    continue
+                enriched = dict(item)
+                position = positions[item_id]
+                enriched["context_before"] = " ".join(
+                    str(previous.get("text", ""))
+                    for previous in items[max(0, position - 2):position]
+                )
+                added.append(enriched)
+                selected_ids.add(item_id)
+                if len(added) >= second_stage_k:
+                    return selected + added
         # A table can identify an entity that is absent from the question.  For
         # example, HybridQA's Walter Payton item requires rank=2 -> Walter
         # Payton (table) -> Walter Payton passage -> middle name.  Prioritise
@@ -155,9 +356,6 @@ def two_stage_retrieve(
                 if item_id not in selected_ids:
                     enriched = dict(item)
                     position = positions[item_id]
-                    # Adjacent prose commonly carries the antecedent (e.g.
-                    # "2025 notes") for a following numerical sentence. Supply
-                    # it as resolution-only context without another API call.
                     enriched["context_before"] = " ".join(
                         str(previous.get("text", ""))
                         for previous in items[max(0, position - 2):position]
@@ -175,11 +373,21 @@ def two_stage_retrieve(
         "retrieval_trace": {
             "strategy": "two_stage_bm25_schema",
             "stage1_top_k": top_k,
+            "max_table_rows": max_table_rows,
+            "selected_table_rows": sum(
+                len(group.get("rows", [])) for group in first["table_rows"]
+            ),
             "stage2_budget": second_stage_k,
             "expansion_queries": expansions,
-            "entity_anchor": anchor.to_dict(),
-            "entity_queries": entity_queries,
             "table_constraints": table_constraints,
+            "table_witnesses": table_witnesses,
+            "entity_anchor": anchor.to_dict(),
+            "selected_row_hyperlinks": selected_row_links,
+            "use_hyperlink_expansion": use_hyperlink_expansion,
+            "passage_reranker_query": "question_plus_selected_rows",
+            "selected_table_row_indices": [
+                index for group in first["table_rows"] for index in group.get("row_indices", [])
+            ],
             "constraint_policy": {
                 "allowed_output_values": list(dict.fromkeys(
                     entity for constraint in table_constraints

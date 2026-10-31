@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "dataset": "hybridqa",
+  "method": "direct_llm",
+  "code_worktree_diff_sha256": "8c3a68c275c287e97083f25f908ffbc6340df418b0cb89a0d52e0cdbff0ab3bd",
+  "input": {
+    "path": "/workspace/kiennt/online-kg-rag/benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard01.json",
+    "sha256": "ced0f8f2744a9f8d653fe966ab695946e488d4980551f08778ea3c0e86187d55"
+  },
+  "resources": {
+    "tables_dir": "data/WikiTables-WithLinks/tables_tok",
+    "tables_revision": "dc066e1a6d5281511d8b73a6107d5ad2824cc2b2",
+    "tables_worktree_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "passages_dir": "data/WikiTables-WithLinks/request_tok",
+    "passages_revision": "dc066e1a6d5281511d8b73a6107d5ad2824cc2b2",
+    "passages_worktree_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "hitab_tables_dir": null,
+    "hitab_tables_revision": null,
+    "hitab_tables_worktree_diff_sha256": null
+  },
+  "provider": {
+    "provider": "openrouter",
+    "model": "openai/gpt-oss-20b"
+  },
+  "provider_options": {
+    "COMPAT_BASE_URL": "http://localhost:11434/v1",
+    "OPENROUTER_REASONING_ENABLED": "true",
+    "LLM_RATE_LIMIT_RETRIES": "3"
+  },
+  "code_revision": "61ab53b7661f16421fc58ab38e66f1e8950975fe",
+  "config": {
+    "top_k": 5,
+    "second_stage_k": 3,
+    "max_context_chars": 24000,
+    "max_table_rows_for_kg": null,
+    "max_output_tokens": 1024,
+    "temperature": 0.0,
+    "use_rule_text_triples": true,
+    "ambiguity_policy": "prompt",
+    "oueg_context_mode": "lossless",
+    "n_paths": 5,
+    "max_replans": 0,
+    "finqa_table_format": "official",
+    "llm_timeout_seconds": 120.0,
+    "llm_sdk_retries": 2,
+    "max_workers": 4,
+    "llm_max_concurrent_requests": 4
+  },
+  "fingerprint": "b73dbad03a59c9a619a325abdf56241bbbaab76664e3ae00db0389e2a8ef43ff"
+}

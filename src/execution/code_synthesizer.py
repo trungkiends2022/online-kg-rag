@@ -162,7 +162,11 @@ class CodeSynthesizer:
             question_terms = set(re.findall(r"[a-z0-9]+", question.lower()))
             ranked = []
             for position, (head, tail, data) in enumerate(kg.graph.edges(data=True)):
-                rendered = f"{head} {data['relation']} {tail}".lower()
+                text_context = " ".join(
+                    str(context.get("text", ""))
+                    for context in data.get("contexts", [])
+                )
+                rendered = f"{head} {data['relation']} {tail} {text_context}".lower()
                 overlap = len(question_terms & set(re.findall(r"[a-z0-9]+", rendered)))
                 scoped_bonus = 3 if data["relation"] == "annual_interest_amount" else 0
                 ranked.append((overlap + scoped_bonus, -position, head, tail, data))
@@ -185,6 +189,9 @@ class CodeSynthesizer:
             seen_edges = set()
             for _, _, head, tail, data in candidate_ranked + ranked:
                 edge = {"head": head, "relation": data["relation"], "tail": tail}
+                contexts = data.get("contexts", [])
+                if contexts:
+                    edge["text_context"] = str(contexts[0].get("text", ""))[:500]
                 edge_key = (head, data["relation"], tail)
                 if edge_key in seen_edges:
                     continue

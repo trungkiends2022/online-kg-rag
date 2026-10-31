@@ -1,0 +1,8 @@
+\begin{figure}[t]
+\centering
+\resizebox{\linewidth}{!}{\input{figures/dual-track-diagram}}
+\vspace{-2mm}
+\caption{Detailed illustration of OUEG dual-track reasoning, structural ambiguity resolution, and unified prompt payload. (Left) Rather than destructive top-$N$ path filtering, Track~3a compresses the complete evidence subgraph with a shared passage dictionary $\mathcal{S}_p$, while Track~3b enumerates multi-factor scored candidate paths ($S(p)$) as non-filtering reading guides. Track~3c detects structural candidate score collisions, applying a bridge lexical tiebreak $\tau(c)$ to resolve ties deterministically. (Right) The synthesized compact prompt payload provides the backbone LLM with complete evidence and directed reading focus, producing the grounded answer alongside a full provenance trace.}
+\vspace{-2mm}
+\label{fig:dual-track}
+\end{figure}

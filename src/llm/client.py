@@ -37,6 +37,8 @@ _metrics_lock = threading.Lock()
 _metrics_context: ContextVar[dict | None] = ContextVar("llm_metrics", default=None)
 _rate_lock = threading.Lock()
 _last_request_at: dict[str, float] = {}
+_request_slot_lock = threading.Lock()
+_request_slots: dict[tuple[str, int], threading.BoundedSemaphore] = {}
 
 
 def _pace_provider(provider_name: str) -> None:
@@ -52,6 +54,43 @@ def _pace_provider(provider_name: str) -> None:
         if wait_for > 0:
             time.sleep(wait_for)
         _last_request_at[provider_name] = time.monotonic()
+
+
+def _max_concurrent_requests(provider_name: str) -> int:
+    """Read an optional per-provider HTTP in-flight request limit.
+
+    Worker parallelism and provider parallelism are deliberately separate: a
+    benchmark can prepare/retrieve several examples concurrently while keeping
+    only a safe number of paid API requests in flight.
+    """
+    value = os.environ.get(
+        f"{provider_name.upper()}_MAX_CONCURRENT_REQUESTS",
+        os.environ.get("LLM_MAX_CONCURRENT_REQUESTS", "8"),
+    )
+    try:
+        limit = int(value)
+    except ValueError as exc:
+        raise ValueError("LLM_MAX_CONCURRENT_REQUESTS must be an integer") from exc
+    if limit < 1:
+        raise ValueError("LLM_MAX_CONCURRENT_REQUESTS must be at least 1")
+    return limit
+
+
+@contextmanager
+def _request_slot(provider_name: str):
+    """Bound concurrent provider requests without serializing local KG work."""
+    limit = _max_concurrent_requests(provider_name)
+    key = (provider_name, limit)
+    with _request_slot_lock:
+        slot = _request_slots.get(key)
+        if slot is None:
+            slot = threading.BoundedSemaphore(limit)
+            _request_slots[key] = slot
+    slot.acquire()
+    try:
+        yield
+    finally:
+        slot.release()
 
 
 @contextmanager
@@ -155,8 +194,9 @@ def llm_call(
     while True:
         api_attempts += 1
         try:
-            _pace_provider(provider.name)
-            text = provider.complete(prompt, **kwargs)
+            with _request_slot(provider.name):
+                _pace_provider(provider.name)
+                text = provider.complete(prompt, **kwargs)
             succeeded = True
             break
         except Exception as error:
