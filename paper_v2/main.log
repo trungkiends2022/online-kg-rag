@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  31 OCT 2026 18:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.11.6)  31 OCT 2026 18:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -6,7 +6,7 @@ entering extended mode
 (./main.tex
 LaTeX2e <2020-02-02> patch level 2
 L3 programming layer <2020-02-14> (./llncs.cls
-Document Class: llncs 2024/01/29 v2.24 
+Document Class: llncs 2026/09/03 v2.25 
  LaTeX document class for Lecture Notes in Computer Science
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2019/12/20 v1.4l Standard LaTeX document class
@@ -149,6 +149,10 @@ LaTeX Info: Redefining \vec on input line 394.
 \c@solution=\count269
 \c@remark=\count270
 \headlineindent=\dimen156
+\DescriptionTexts=\write3
+\openout3 = `DescriptionTexts.txt'.
+
+\c@Dfigchecks=\count271
 )
 (/usr/share/texmf/tex/latex/lm/lmodern.sty
 Package: lmodern 2009/10/30 v1.6 Latin Modern Fonts
@@ -201,11 +205,11 @@ Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks18
 )
 \MT@toks=\toks19
-\MT@count=\count271
+\MT@count=\count272
 LaTeX Info: Redefining \textls on input line 790.
 \MT@outer@kern=\dimen157
 LaTeX Info: Redefining \textmicrotypecontext on input line 1354.
-\MT@listname@count=\count272
+\MT@listname@count=\count273
 
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype-pdftex.def
 File: microtype-pdftex.def 2019/11/18 v2.7d Definitions specific to pdftex (RS)
@@ -239,13 +243,13 @@ Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
-\inf@bad=\count273
+\inf@bad=\count274
 LaTeX Info: Redefining \frac on input line 227.
-\uproot@=\count274
-\leftroot@=\count275
+\uproot@=\count275
+\leftroot@=\count276
 LaTeX Info: Redefining \overline on input line 389.
-\classnum@=\count276
-\DOTSCASE@=\count277
+\classnum@=\count277
+\DOTSCASE@=\count278
 LaTeX Info: Redefining \ldots on input line 486.
 LaTeX Info: Redefining \dots on input line 489.
 LaTeX Info: Redefining \cdots on input line 610.
@@ -258,15 +262,15 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
 
 Package amsmath Warning: Unable to redefine math accent \vec.
 
-\macc@depth=\count278
-\c@MaxMatrixCols=\count279
+\macc@depth=\count279
+\c@MaxMatrixCols=\count280
 \dotsspace@=\muskip16
-\c@parentequation=\count280
-\dspbrk@lvl=\count281
+\c@parentequation=\count281
+\dspbrk@lvl=\count282
 \tag@help=\toks21
-\row@=\count282
-\column@=\count283
-\maxfields@=\count284
+\row@=\count283
+\column@=\count284
+\maxfields@=\count285
 \andhelp@=\toks22
 \eqnshift@=\dimen161
 \alignsep@=\dimen162
@@ -323,12 +327,12 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \cmidrulesep=\dimen176
 \cmidrulekern=\dimen177
 \defaultaddspace=\dimen178
-\@cmidla=\count285
-\@cmidlb=\count286
+\@cmidla=\count286
+\@cmidlb=\count287
 \@aboverulesep=\dimen179
 \@belowrulesep=\dimen180
-\@thisruleclass=\count287
-\@lastruleclass=\count288
+\@thisruleclass=\count288
+\@lastruleclass=\count289
 \@thisrulewidth=\dimen181
 )
 (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
@@ -378,16 +382,16 @@ ex
 \pgf@yc=\dimen191
 \pgf@xd=\dimen192
 \pgf@yd=\dimen193
-\w@pgf@writea=\write3
+\w@pgf@writea=\write4
 \r@pgf@reada=\read2
-\c@pgf@counta=\count289
-\c@pgf@countb=\count290
-\c@pgf@countc=\count291
-\c@pgf@countd=\count292
+\c@pgf@counta=\count290
+\c@pgf@countb=\count291
+\c@pgf@countc=\count292
+\c@pgf@countd=\count293
 \t@pgf@toka=\toks29
 \t@pgf@tokb=\toks30
 \t@pgf@tokc=\toks31
-\pgf@sys@id@count=\count293
+\pgf@sys@id@count=\count294
  (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
 File: pgf.cfg 2020/01/08 v3.1.5b (3.1.5b)
 )
@@ -403,8 +407,8 @@ File: pgfsys-common-pdf.def 2020/01/08 v3.1.5b (3.1.5b)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.
 tex
 File: pgfsyssoftpath.code.tex 2020/01/08 v3.1.5b (3.1.5b)
-\pgfsyssoftpath@smallbuffer@items=\count294
-\pgfsyssoftpath@bigbuffer@items=\count295
+\pgfsyssoftpath@smallbuffer@items=\count295
+\pgfsyssoftpath@bigbuffer@items=\count296
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.
 tex
@@ -434,7 +438,7 @@ Package: pgfcore 2020/01/08 v3.1.5b (3.1.5b)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
 \pgfmath@dimen=\dimen194
-\pgfmath@count=\count296
+\pgfmath@count=\count297
 \pgfmath@box=\box96
 \pgfmath@toks=\toks32
 \pgfmath@stack@operand=\toks33
@@ -458,7 +462,7 @@ tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerari
 thmetics.code.tex)))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
-\c@pgfmathroundto@lastzeros=\count297
+\c@pgfmathroundto@lastzeros=\count298
 ))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfint.code.tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.te
@@ -497,7 +501,7 @@ File: pgfcorescopes.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 \pgfpic=\box97
 \pgf@hbox=\box98
 \pgf@layerbox@main=\box99
-\pgf@picture@serial@count=\count298
+\pgf@picture@serial@count=\count299
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.c
 ode.tex
@@ -530,8 +534,8 @@ File: pgfcorearrows.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
 File: pgfcoreshade.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 \pgf@max=\dimen274
-\pgf@sys@shading@range@num=\count299
-\pgf@shadingcount=\count300
+\pgf@sys@shading@range@num=\count300
+\pgf@shadingcount=\count301
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
 File: pgfcoreimage.code.tex 2020/01/08 v3.1.5b (3.1.5b)
@@ -591,7 +595,7 @@ Package: tikz 2020/01/08 v3.1.5b (3.1.5b)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers
 .code.tex
 File: pgflibraryplothandlers.code.tex 2020/01/08 v3.1.5b (3.1.5b)
-\pgf@plot@mark@count=\count301
+\pgf@plot@mark@count=\count302
 \pgfplotmarksize=\dimen279
 )
 \tikz@lastx=\dimen280
@@ -606,18 +610,18 @@ File: pgflibraryplothandlers.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 \tikz@figbox@bg=\box103
 \tikz@tempbox=\box104
 \tikz@tempbox@bg=\box105
-\tikztreelevel=\count302
-\tikznumberofchildren=\count303
-\tikznumberofcurrentchild=\count304
-\tikz@fig@count=\count305
+\tikztreelevel=\count303
+\tikznumberofchildren=\count304
+\tikznumberofcurrentchild=\count305
+\tikz@fig@count=\count306
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
 File: pgfmodulematrix.code.tex 2020/01/08 v3.1.5b (3.1.5b)
-\pgfmatrixcurrentrow=\count306
-\pgfmatrixcurrentcolumn=\count307
-\pgf@matrix@numberofcolumns=\count308
+\pgfmatrixcurrentrow=\count307
+\pgfmatrixcurrentcolumn=\count308
+\pgf@matrix@numberofcolumns=\count309
 )
-\tikz@expandcount=\count309
+\tikz@expandcount=\count310
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
 zlibrarytopaths.code.tex
@@ -658,23 +662,23 @@ File: tikzlibrarybackgrounds.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 \pgf@layerboxsaved@background=\box107
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count310
+\lst@mode=\count311
 \lst@gtempboxa=\box108
 \lst@token=\toks37
-\lst@length=\count311
+\lst@length=\count312
 \lst@currlwidth=\dimen292
-\lst@column=\count312
-\lst@pos=\count313
+\lst@column=\count313
+\lst@pos=\count314
 \lst@lostspace=\dimen293
 \lst@width=\dimen294
-\lst@newlines=\count314
-\lst@lineno=\count315
+\lst@newlines=\count315
+\lst@lineno=\count316
 \lst@maxwidth=\dimen295
 
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2019/09/10 1.8c (Carsten Heinz)
-\c@lstnumber=\count316
-\lst@skipnumbers=\count317
+\c@lstnumber=\count317
+\lst@skipnumbers=\count318
 \lst@framebox=\box109
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
@@ -685,7 +689,7 @@ Package: listings 2019/09/10 1.8c (Carsten Heinz)
 (/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2019/05/31 v2.5 Span multiple rows of a table
 \multirow@colwidth=\skip55
-\multirow@cntb=\count318
+\multirow@cntb=\count319
 \multirow@dima=\skip56
 \bigstrutjot=\dimen296
 )
@@ -711,12 +715,12 @@ Package: enumitem 2019/06/20 v3.9 Customized lists
 \enit@outerparindent=\dimen299
 \enit@toks=\toks40
 \enit@inbox=\box112
-\enit@count@id=\count319
-\enitdp@description=\count320
+\enit@count@id=\count320
+\enitdp@description=\count321
 )
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
 File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
-\l__kernel_color_stack_int=\count321
+\l__kernel_color_stack_int=\count322
 \l__pdf_internal_box=\box113
 )
 (./main.aux)
@@ -753,16 +757,16 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 )
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count322
+\scratchcounter=\count323
 \scratchdimen=\dimen300
 \scratchbox=\box114
-\nofMPsegments=\count323
-\nofMParguments=\count324
+\nofMPsegments=\count324
+\nofMParguments=\count325
 \everyMPshowfont=\toks41
-\MPscratchCnt=\count325
+\MPscratchCnt=\count326
 \MPscratchDim=\dimen301
-\MPnumerator=\count326
-\makeMPintoPDFobject=\count327
+\MPnumerator=\count327
+\makeMPintoPDFobject=\count328
 \everyMPtoPDFconversion=\toks42
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -774,7 +778,7 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 ABD: EveryShipout initializing macros
-\c@lstlisting=\count328
+\c@lstlisting=\count329
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 4
 9.
  (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
@@ -888,47 +892,44 @@ Package pdftex.def Info: figures/fig3_two_tier_reasoning.png  used on input lin
 e 3.
 (pdftex.def)             Requested size: 312.40906pt x 153.76744pt.
 ) [8] [9 <./figures/fig3_two_tier_reasoning.png (PNG copy)>] [10] [11] [12] [13
-] [14] (./main.bbl) [15] (./main.aux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+] [14] (./main.bbl [15]) [16] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 19187 strings out of 483183
- 363943 string characters out of 5966292
- 676527 words of memory out of 5000000
- 33598 multiletter control sequences out of 15000+600000
- 728395 words of font info for 266 fonts, out of 8000000 for 9000
+ 19195 strings out of 483183
+ 364044 string characters out of 5966292
+ 676595 words of memory out of 5000000
+ 33604 multiletter control sequences out of 15000+600000
+ 728525 words of font info for 267 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,19n,69p,2024b,992s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
-ips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share
-/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm
--mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ts1.enc}</usr/share/texmf/f
-onts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.
-pfb></usr/share/texmf/fonts/type1/public/lm/lmbx5.pfb></usr/share/texmf/fonts/t
-ype1/public/lm/lmbx6.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx7.pfb></us
-r/share/texmf/fonts/type1/public/lm/lmbx9.pfb></usr/share/texmf/fonts/type1/pub
-lic/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/sha
-re/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/
-lm/lmmi5.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texm
-f/fonts/type1/public/lm/lmmi7.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9
-.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/font
-s/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr5.pfb></
-usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/pu
-blic/lm/lmr7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr9.pfb></usr/share/t
-exmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/l
-mri7.pfb></usr/share/texmf/fonts/type1/public/lm/lmri9.pfb></usr/share/texmf/fo
-nts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy5.pf
-b></usr/share/texmf/fonts/type1/public/lm/lmsy7.pfb></usr/share/texmf/fonts/typ
-e1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtk10.pfb></usr
-/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/pub
-lic/lm/lmtt8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam5.pfb>
-Output written on main.pdf (15 pages, 961129 bytes).
+{/usr/share/texmf/fonts/enc/dvips/l
+m/lm-ec.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texm
+f/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.e
+nc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/e
+nc/dvips/lm/lm-ts1.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr
+/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/pub
+lic/lm/lmbx5.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx6.pfb></usr/share/
+texmf/fonts/type1/public/lm/lmbx7.pfb></usr/share/texmf/fonts/type1/public/lm/l
+mbx9.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/
+fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10
+.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi5.pfb></usr/share/texmf/fonts/
+type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi7.pfb></u
+sr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/texmf/fonts/type1/pu
+blic/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/sha
+re/texmf/fonts/type1/public/lm/lmr5.pfb></usr/share/texmf/fonts/type1/public/lm
+/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr7.pfb></usr/share/texmf/fo
+nts/type1/public/lm/lmr9.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb
+></usr/share/texmf/fonts/type1/public/lm/lmri7.pfb></usr/share/texmf/fonts/type
+1/public/lm/lmri9.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/
+share/texmf/fonts/type1/public/lm/lmsy5.pfb></usr/share/texmf/fonts/type1/publi
+c/lm/lmsy7.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/te
+xmf/fonts/type1/public/lm/lmtk10.pfb></usr/share/texmf/fonts/type1/public/lm/lm
+tt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt8.pfb></usr/share/texmf/fo
+nts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/symbols/msam5.pfb>
+Output written on main.pdf (16 pages, 963188 bytes).
 PDF statistics:
- 208 PDF objects out of 1000 (max. 8388607)
- 157 compressed objects within 2 object streams
+ 211 PDF objects out of 1000 (max. 8388607)
+ 159 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  43026 words of extra memory for PDF output out of 51595 (max. 10000000)
 

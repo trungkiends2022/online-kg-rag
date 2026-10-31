@@ -25,10 +25,10 @@
 \makeatletter
 \renewcommand\footnoterule{%
   \kern-3\p@
-  \moveright 1cm \vbox{\hrule \@width 2truecm}%
+  \hrule \@width 2truecm
   \kern2.6\p@}
 \renewcommand\@makefntext[1]{%
-  \noindent\hspace*{1cm}\hb@xt@1em{\@makefnmark\hss}#1}
+  \noindent\@makefnmark~#1}
 \makeatother
 
 \begin{document}
@@ -51,7 +51,7 @@ Viettel AI, Viettel Group, Hanoi, Vietnam\\
 \begin{abstract}
 Retrieval-augmented generation (RAG) over heterogeneous databases requires resolving complex queries across semi-structured tables and unstructured text passages. Under strict context-grounded constraints where models must reason exclusively over retrieved context without parametric hallucination, answering multi-hop queries demands verified cross-modal evidence. However, existing paradigms rarely examine the evidentiary grounding of LLM answers: standard RAG linearizes tables into flat strings, dissolving horizontal row-level bindings and conflating symmetric records, while recent graph-based methods either discard critical peripheral evidence via heuristic pruning or incur high latency through unbounded agent loops, leaving generated answers without verifiable evidence chains. In this work, we propose QEG-RAG, centered on \emph{path-scaffolded diagnostic reasoning over query-time evidence graphs}. At query time, QEG-RAG unifies retrieved tabular and textual evidence into a schema-preserving multigraph using star-topology record centroids to enforce horizontal row bindings. Rather than discarding context via pruning, it preserves complete evidence through compact prompt serialization while extracting deterministic, multi-factor scored reasoning paths to guide language model attention across cross-modal hops. To resolve initial retrieval ambiguity such as candidate collisions or missing passages, QEG-RAG employs a bounded two-tier execution protocol: confident queries conclude in a single primary call, whereas structural ambiguities trigger a diagnostic handoff directing targeted, candidate-balanced bridge retrieval to verify competing candidates factually within at most two calls, producing verified answers with auditable provenance traces. Empirical evaluations on multi-hop benchmarks demonstrate that QEG-RAG improves grounding accuracy and reduces ungrounded answers under strict evidence constraints with bounded query-time efficiency.
 
-\keywords{Table question answering \and Knowledge graphs \and Retrieval-augmented generation \and Path scaffolding \and Faithful reasoning}
+\keywords{Table question answering \and Knowledge graphs \and Retrieval-augmented generation \and Path scaffolding \and Faithful reasoning.}
 \end{abstract}
 
 \section{Introduction}
@@ -337,7 +337,11 @@ Path-Text Top-$N$                & 1.67  & 1.89  & 1.73  & 97.53\% & \textbf{1.0
 \paragraph{RQ3 (Explicit Reasoning Guidance vs.\ Destructive Pruning):}
 \emph{How effectively does deterministic path scaffolding guide LLM attention along multi-hop chains, and why does aggressive graph pruning degrade accuracy?}
 
-\emph{Finding}: Across Tables~\ref{tab:main-results} and~\ref{tab:qwen-results}, hard path filtering (Path-Text Top-$N$) drops to 1.67\%--13.20\% EM with 75.53\%--97.53\% empty abstentions because cutting peripheral edges severs multi-hop reasoning chains. In Table~\ref{tab:ablation} (Row~6), supplying the unpruned multigraph without path sequences (Graph w/o Path) still retains 61.60\% EM on 120B, proving that QEG's schema-preserving multigraph topology inherently provides the necessary multi-hop reach. However, providing unorganized edge sets disperses LLM attention. Supplying path $p_1$ directs focus along verified relations, yielding 92.0\% chain faithfulness in our manual audit. Furthermore, in Table~\ref{tab:ablation} (Row~1), disabling lossless prompt compression causes EM to drop by $-27.60\%$ with 52.40\% empty answers due to context blowout, demonstrating the critical necessity of lossless serialization.
+\emph{Finding}: Across Tables~\ref{tab:main-results} and~\ref{tab:qwen-results}, hard path filtering (Path-Text Top-$N$) drops to 1.67\%--13.20\% EM with 75.53\%--97.53\% empty abstentions because cutting peripheral edges severs multi-hop reasoning chains. In contrast, QEG-RAG preserves the unpruned multigraph via lossless prompt compression (Row~1 in Table~\ref{tab:ablation}, without which EM drops by $-27.60\%$ due to context blowout). 
+
+Crucially, deterministic path scaffolding serves a vital dual role beyond raw string overlap:
+(1)~\emph{Verifiable Provenance Chains}: On frontier reasoning models (GPT-OSS 120B), supplying the complete multigraph without sequential paths (Row~6, Graph w/o Path) reaches 61.60\% EM (+2.40\%), showing that QEG's schema-preserving topology alone provides flexible multi-hop reach while avoiding heuristic ordering bias. However, explicit path scaffolding $p_1$ is indispensable for auditability: our manual provenance audit ($N=100$) confirms that path scaffolding enforces 92.0\% trace faithfulness and 89.0\% bridge alignment, ensuring answers are grounded in inspectable evidence rather than unexplainable surface shortcuts.
+(2)~\emph{Essential Neuro-Symbolic Guidance for Non-Reasoning LLMs}: On standard instruction-tuned models without internal extended thinking (Qwen 122B on OTT-QA, Table~\ref{tab:qwen-results}), the unguided graph (\emph{Graph w/o Path}) collapses to 9.93\% EM (88.47\% empty) due to dispersed attention. In sharp contrast, QEG's path scaffolding elevates performance to 33.40\% EM (0.00\% empty). This demonstrates that explicit path scaffolding provides essential neuro-symbolic structure that guides general LLMs along cross-modal reasoning chains.
 
 \paragraph{RQ4 (Diagnostic Feedback and Bounded Execution Efficiency):}
 \emph{Can the two-tier diagnostic protocol resolve retrieval collisions factually while strictly bounding execution overhead against unbounded agent loops?}
@@ -385,6 +389,11 @@ While QEG-RAG effectively structures and reasons over retrieved context without 
 \section{Conclusion}
 \label{sec:conclusion}
 We presented QEG-RAG, uniting query-time evidence graphs with path-scaffolded diagnostic reasoning for faithful table--text question answering. By combining schema-preserving multigraphs, compact lossless compression, deterministic path scaffolding, and adaptive two-tier diagnostic verification, QEG-RAG resolves the dilemma between destructive graph pruning and unbounded agent loops. Across both reasoning and non-reasoning paradigms under strict context grounding, QEG-RAG consistently achieves higher grounding accuracy, eliminates empty failures, and provides auditable provenance within a bounded 1-to-2 call budget.
+
+\begin{credits}
+\subsubsection{\discintname}
+The authors have no competing interests to declare that are relevant to the content of this article.
+\end{credits}
 
 \enlargethispage{4.0\baselineskip}
 \makeatletter
