@@ -30,7 +30,7 @@
 \node[panel=blue, minimum width=4.4cm, minimum height=7.2cm] (panel1) at (2.20, 0.00) {};
 \node[titlebar=blue, text width=4.0cm, anchor=north] (t1) at ([yshift=-2.8mm]panel1.north) {Stage 1 (Sec.~3.1): Multi-Source Ingestion};
 
-\node[subcard, text width=3.95cm, anchor=north] (table_box) at ([yshift=-3.5mm]t1.south) {
+\node[subcard, text width=3.95cm, anchor=north] (table_box) at ([yshift=-3.2mm]t1.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Table: \texttt{AFL\_Ontario\_0}} \\[0.5mm]
   \resizebox{\linewidth}{!}{%
@@ -41,23 +41,26 @@
     \textbf{Club} & \textbf{Formed} & \textbf{City} \\
     \hline
     \rowcolor{blue!18} \textbf{Tor.\ Eagles} & \textbf{1989} & \textbf{\underline{Toronto}} \\
+    \rowcolor{orange!18} \textbf{Ott.\ Swans} & \textbf{1989} & \textbf{\underline{Ottawa}} \\
     Ham.\ Tigers & 1991 & Hamilton \\
     \hline
   \end{tabular}%
-  }\\[0.6mm]
-  $\rightarrow$ Matches constraint: \textbf{1989}
+  }\\[0.5mm]
+  $\rightarrow$ Collision ($|\mathcal{C}_q|=2$): Both match \textbf{1989}
   \par}
 };
 
-\node[subcard, text width=3.95cm, anchor=north] (link_box) at ([yshift=-5.5mm]table_box.south) {
+\node[subcard, text width=3.95cm, anchor=north] (link_box) at ([yshift=-3.5mm]table_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{Wikipedia Bridge Passage}: \\
-  \texttt{Toronto} $\rightarrow$ \texttt{Doc:Toronto} \\[0.4mm]
-  \textit{``...capital of Ontario. Established in 1793 as town of \textbf{\underline{York}}...''}
+  \textbf{Wikipedia Bridge Passages}: \\
+  $\bullet$ \texttt{Toronto} $\rightarrow$ \texttt{Doc:Toronto} \\
+  \textit{``...capital of Ont. Established 1793 as \textbf{\underline{York}}...''} \\[0.3mm]
+  $\bullet$ \texttt{Ottawa} $\rightarrow$ \texttt{Doc:Ottawa} \\
+  \textit{``...capital of Canada. Founded 1826 as Bytown...''}
   \par}
 };
 
-\node[subcard, text width=3.95cm, fill=blue!8, draw=blue!45, anchor=north] (retr_summary) at ([yshift=-5.5mm]link_box.south) {
+\node[subcard, text width=3.95cm, fill=blue!8, draw=blue!45, anchor=north] (retr_summary) at ([yshift=-3.5mm]link_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Retriever Output} \\[0.3mm]
   $\bullet$ Candidate table rows \\
@@ -91,7 +94,7 @@
 \draw[kedge=orange] (ent_city) -- node[right, font=\tiny] {\texttt{link}} (doc_node);
 \draw[kedge=red] (doc_node) -- node[right, font=\tiny] {\texttt{orig\_name}} (ans_node_g);
 
-\node[subcard, text width=4.15cm, fill=purple!6, draw=purple!40, anchor=north] (centroid_box) at (7.70, -0.75) {
+\node[subcard, text width=4.15cm, fill=purple!6, draw=purple!40, anchor=north] (centroid_box) at (7.70, -0.80) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Star Record Hubs} \\[0.3mm]
   $\bullet$ Hub binds every cell to its row \\
@@ -134,7 +137,7 @@
 % Diagnostic Packet Box
 \node[subcard, text width=5.15cm, fill=orange!6, draw=orange!75!black, line width=0.5pt, anchor=north] (handoff_box) at ([yshift=-2.2mm]l1_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{Diagnostic Handoff}: \texttt{\{"focus": ["Row 0", "Row 1"], "check": "original name"\}}
+  \textbf{Diagnostic Handoff}: \texttt{\{"focus": ["Row 0 (Toronto)", "Row 1 (Ottawa)"], "check": "1989 AFL"\}}
   \par}
 };
 
@@ -172,7 +175,7 @@
   \textbf{\underline{Verified Answer Span}} \\[0.5mm]
   \centering{\textbf{\small \texttt{"York"}}}\\[0.6mm]
   $\bullet$ Exact context-grounded extraction \\
-  $\bullet$ Zero hallucination
+  $\bullet$ Auditable provenance trace
   \par}
 };
 
@@ -209,14 +212,17 @@
 \draw[flow] (retr_summary.east) -- node[midway, above=1pt, font=\fontsize{4.8pt}{5.8pt}\selectfont\bfseries, text=blue!85!black] {Evidence} (panel2.west |- retr_summary.east);
 
 % Stage 2 -> Stage 3: vertical segment with vertical label in corridor
-\path (path_box.east) -- ++(0.50, 0) coordinate (p_turn);
-\draw[flow, draw=purple!85!black] (path_box.east) -- (p_turn) -- node[midway, rotate=90, above=2pt, font=\tiny\bfseries, text=purple!90!black] {Graph + Path} (p_turn |- l1_box.west) -- (l1_box.west);
+\draw[flow, draw=purple!85!black] (path_box.east) -- (10.50, 0 |- path_box.east) -- node[midway, rotate=90, above=2pt, font=\tiny\bfseries, text=purple!90!black] {Graph + Path} (10.50, 0 |- l1_box.west) -- (l1_box.west);
 
-% Stage 3 -> Stage 4: Branch 1: Fast Exit (rotated vertical label in corridor)
-\draw[flow_green] (l1_box.east |- ans_box.center) -- node[midway, above=1pt, font=\fontsize{4.8pt}{5.8pt}\selectfont\bfseries, text=green!50!black] {Fast Exit} (ans_box.west);
+% Stage 3 -> Stage 4: Branch 1: Fast Exit (strictly horizontal)
+\coordinate (fast_exit_end) at ([yshift=2.5mm]ans_box.west);
+\coordinate (fast_exit_start) at (l1_box.east |- fast_exit_end);
+\draw[flow_green] (fast_exit_start) -- node[midway, above=1pt, font=\fontsize{4.8pt}{5.8pt}\selectfont\bfseries, text=green!50!black] {Fast Exit} (fast_exit_end);
 
-% Stage 3 -> Stage 4: Branch 2: Tier 2 Verified (vertical segment with vertical label in corridor)
-\path (l2_box.east) -- ++(0.50, 0) coordinate (t_turn);
-\draw[flow_teal] (l2_box.east) -- (t_turn) -- node[midway, rotate=90, above=2pt, font=\tiny\bfseries, text=teal!90!black] {Tier 2 Verified} (t_turn |- ans_box.south west) -- (ans_box.south west);
+% Stage 3 -> Stage 4: Branch 2: Tier 2 Verified (strictly orthogonal Manhattan routing)
+\coordinate (t2_end) at ([yshift=-2.5mm]ans_box.west);
+\coordinate (t2_corner2) at (17.10, 0 |- t2_end);
+\coordinate (t2_corner1) at (17.10, 0 |- l2_box.east);
+\draw[flow_teal] (l2_box.east) -- (t2_corner1) -- node[pos=0.5, rotate=90, above=1.5pt, font=\fontsize{4.8pt}{5.8pt}\selectfont\bfseries, text=teal!90!black] {Tier 2 Verified} (t2_corner2) -- (t2_end);
 
 \end{tikzpicture}

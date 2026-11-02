@@ -33,32 +33,38 @@ Tan, X., Wang, X., Liu, Q., Xu, X., Yuan, X., Zhu, L., Zhang, W.: {HydraRAG}:
   Processing. pp. 14431--14459 (2025)
 
 \bibitem{eisenschlos2021mate}
-Eisenschlos, J.M., Gor, M., M{\"u}ller, T., Andor, D.: {MATE}: Multi-view
-  attention for table-text encoding. In: Proceedings of the 59th Annual Meeting
-  of the Association for Computational Linguistics. pp. 7405--7419 (2021)
+Eisenschlos, J.M., Gor, M., M{\"u}ller, T., Cohen, W.W.: {MATE}: Multi-view
+  attention for table transformer efficiency. In: Proceedings of the 2021
+  Conference on Empirical Methods in Natural Language Processing. pp.
+  7606--7619 (2021)
 
 \bibitem{sun2021dochopper}
-Sun, H., Dhingra, B., Srivastava, G., Sun, Y., Cohen, W.W.: {DocHopper}: A
-  multi-hop question answering system over document graphs. In: Proceedings of
-  the 2021 Conference on Empirical Methods in Natural Language Processing. pp.
-  10543--10557 (2021)
+Sun, H., Cohen, W.W., Salakhutdinov, R.: Iterative hierarchical attention for
+  answering complex questions over long documents. In: International Conference
+  on Learning Representations (2022)
 
-\bibitem{chen2022muger2}
-Chen, K., Shen, Y., Zhao, Y., Zhang, W., Zhang, Q.: {MuGER2}: Multi-granularity
-  evidence retrieval and reasoning for hybrid question answering. In:
-  Proceedings of the 2022 Conference on Empirical Methods in Natural Language
-  Processing. pp. 7095--7107 (2022)
+\bibitem{wang2022muger2}
+Wang, Y., Bao, J., Duan, C., Wu, Y., He, X., Zhao, T.: {MuGER$^2$}:
+  Multi-granularity evidence retrieval and reasoning for hybrid question
+  answering. In: Findings of the Association for Computational Linguistics:
+  EMNLP 2022. pp. 6687--6697 (2022)
 
 \bibitem{lei2023s3hqa}
-Lei, F., He, Q., Yang, Y., Hu, B., Zhang, M.: {S3HQA}: A structure-aware
-  sequential sampling approach for {HybridQA}. In: Proceedings of the 61st
-  Annual Meeting of the Association for Computational Linguistics. pp.
-  14021--14035 (2023)
+Lei, F., Li, X., Wei, Y., He, S., Huang, Y., Zhao, J., Liu, K.: {S3HQA}: A
+  three-stage approach for multi-hop text-table hybrid question answering. In:
+  Proceedings of the 61st Annual Meeting of the Association for Computational
+  Linguistics (Volume 2: Short Papers). pp. 1391--1401 (2023)
 
 \bibitem{cheng2023binder}
 Cheng, Z., Gao, T., Yan, Z., Wang, S., Ye, Z., Guan, Z., Liu, P., Yin, P.:
   Binding language models in symbolic languages. In: International Conference
   on Learning Representations (2023)
+
+\bibitem{nahid2024tabsqlify}
+Nahid, M.M.H., Rafiei, D.: {TabSQLify}: Enhancing reasoning capabilities of
+  {LLMs} through table decomposition. In: Proceedings of the 2024 Conference of
+  the North American Chapter of the Association for Computational Linguistics:
+  Human Language Technologies (Volume 1: Long Papers). pp. 4030--4040 (2024)
 
 \bibitem{ye2023dater}
 Ye, Y., Hui, B., Yang, M., Li, B., Huang, F., Li, Y.: Large language models are

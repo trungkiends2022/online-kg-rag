@@ -95,7 +95,7 @@ tikz_code = r"""\begin{tikzpicture}[
 
 \node[subcard, text width=4.15cm, fill=purple!6, draw=purple!40, anchor=north] (centroid_box) at (7.70, -0.75) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{Star Centroid Hub $\mathcal{G}^*(\rho_i)$ ($<20$\,ms)} \\[0.3mm]
+  \textbf{Star Centroid Hub $\mathcal{G}^*(\rho_i)$ (0 LLM calls)} \\[0.3mm]
   $\bullet$ Centroid binds row cells (Prop.~1) \\
   $\bullet$ Mathematically precludes row conflation \\
   $\bullet$ Deterministic rule text extraction (0 LLM)

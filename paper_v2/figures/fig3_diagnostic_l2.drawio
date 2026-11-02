@@ -93,7 +93,7 @@
     </mxCell>
 
     <!-- Step 4: Final Verified Output -->
-    <mxCell id="b2_out" value="&lt;b style='color:#145a32; font-size:14px;'&gt;Verified Output: Answer &quot;York&quot;&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:11.5px; color:#196f3d;'&gt;≤ 2 LLM Calls Total &amp;nbsp;•&amp;nbsp; 100% Grounded Provenance &amp;nbsp;•&amp;nbsp; Zero Hallucination&lt;br&gt;&lt;b&gt;Provenance Trace:&lt;/b&gt; Row 0 → &lt;i&gt;Doc:Toronto_Blues&lt;/i&gt; → &lt;b&gt;York University&lt;/b&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4efdf;strokeColor=#27ae60;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+    <mxCell id="b2_out" value="&lt;b style='color:#145a32; font-size:14px;'&gt;Verified Output: Answer &quot;York&quot;&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:11.5px; color:#196f3d;'&gt;≤ 2 LLM Calls Total &amp;nbsp;•&amp;nbsp; Auditable Provenance &amp;nbsp;•&amp;nbsp; Grounded Verification&lt;br&gt;&lt;b&gt;Provenance Trace:&lt;/b&gt; Row 0 → &lt;i&gt;Doc:Toronto_Blues&lt;/i&gt; → &lt;b&gt;York University&lt;/b&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4efdf;strokeColor=#27ae60;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
       <mxGeometry x="840" y="475" width="440" height="120" as="geometry" />
     </mxCell>
 

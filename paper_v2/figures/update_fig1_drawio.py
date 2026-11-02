@@ -82,7 +82,7 @@ def create_fig1_drawio():
     <mxCell id="t_d" value="&lt;b&gt;(D) Proposed OUEG-RAG&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:10px; color:#0e8a75;'&gt;[Guided Reasoning &amp;amp; Bounded Tiers]&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1f2eb;strokeColor=#1abc9c;fontSize=12;fontColor=#0e6251;" vertex="1" parent="1">
       <mxGeometry x="1155" y="45" width="330" height="40" as="geometry" />
     </mxCell>
-    <mxCell id="b_d_in" value="&lt;b&gt;Ad-Hoc Table &amp;amp; Text Ingestion&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10.5px;'&gt;• Coarse row anchor + hyperlinked passages&lt;br&gt;• Online multigraph instantiated in &amp;lt; 20 ms&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1abc9c;fontSize=11;" vertex="1" parent="1">
+    <mxCell id="b_d_in" value="&lt;b&gt;Ad-Hoc Table &amp;amp; Text Ingestion&lt;/b&gt;&lt;br&gt;&lt;div style='text-align:left; font-size:10.5px;'&gt;• Coarse row anchor + hyperlinked passages&lt;br&gt;• Deterministic online multigraph (0 LLM calls)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1abc9c;fontSize=11;" vertex="1" parent="1">
       <mxGeometry x="1155" y="100" width="330" height="65" as="geometry" />
     </mxCell>
     <mxCell id="b_d_proc" value="&lt;b&gt;Star Centroids &amp;amp; Explicit Scaffolding&lt;/b&gt;&lt;br&gt;&lt;div style='font-size:10.5px;'&gt;Hubs &amp;rho;&lt;sub&gt;i&lt;/sub&gt; preserve semantics; Scored path p&lt;sub&gt;1&lt;/sub&gt; (S(p)) guides&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f8f5;strokeColor=#a3e4d7;fontSize=11;" vertex="1" parent="1">

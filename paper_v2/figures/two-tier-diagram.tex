@@ -9,11 +9,11 @@
   card_purple/.style={draw=purple!80!black, fill=purple!5, rounded corners=3pt, line width=0.6pt, inner sep=2.5pt, align=left, font=\scriptsize},
   card_green/.style={draw=green!70!black, fill=green!12, rounded corners=3pt, line width=0.65pt, inner sep=2.5pt, align=left, font=\scriptsize},
   card_orange/.style={draw=orange!80!black, fill=orange!8, rounded corners=3pt, line width=0.6pt, inner sep=2.5pt, align=left, font=\scriptsize},
-  card_bridge/.style={draw=teal!80!black, fill=teal!6, rounded corners=4pt, line width=0.65pt, inner sep=2.8pt, align=center, font=\scriptsize},
+  card_bridge/.style={draw=teal!80!black, fill=teal!6, rounded corners=3.5pt, line width=0.65pt, inner sep=2.5pt, align=center, font=\fontsize{4.6pt}{5.5pt}\selectfont},
   % Rhombus Decision
   rhombus_dec/.style={diamond, aspect=2.0, draw=#1!80!black, fill=white, line width=0.6pt, inner sep=1.0pt, align=center, font=\scriptsize},
   % Tags on arrows
-  wire_tag/.style={fill=white, draw=#1!80!black, line width=0.45pt, rounded corners=1.5pt, inner sep=1.2pt, font=\bfseries\fontsize{4.6pt}{5.4pt}\selectfont, text=#1!95!black},
+  wire_tag/.style={fill=white, draw=#1!80!black, line width=0.45pt, rounded corners=1.5pt, inner sep=1.4pt, font=\bfseries\fontsize{4.6pt}{5.4pt}\selectfont, text=#1!95!black},
   % Arrows
   arr/.style={->, line width=0.85pt, draw=gray!75!black},
   arr_blue/.style={->, line width=0.9pt, draw=blue!75!black},
@@ -56,57 +56,57 @@
 % =============================================================
 % GEOMETRY:
 % Width: 12.2 cm
-% Col 1: Center X = 2.45cm, Width = 4.7cm (X: 0.10 to 4.80)
-% Center: Center X = 6.10cm, Width = 1.9cm (X: 5.15 to 7.05)
-% Col 2: Center X = 9.75cm, Width = 4.7cm (X: 7.40 to 12.10)
-% Total Height: 5.8 cm (Y: +2.90 to -2.90)
+% Col 1: Center X = 2.45cm, Width = 4.7cm
+% Center: Center X = 6.10cm, Width = 2.0cm
+% Col 2: Center X = 9.75cm, Width = 4.7cm
+% Total Panel Height: 6.8 cm (Y: +3.40 to -3.40)
 % =============================================================
 
 % -------------------------------------------------------------
 % COLUMN 1: TIER 1
 % -------------------------------------------------------------
-\node[col_panel=blue, minimum width=4.7cm, minimum height=5.6cm] (c1) at (2.45, 0) {};
-\node[col_hdr=blue, minimum width=4.4cm, anchor=north] (t1_hdr) at ([yshift=-1.4mm]c1.north) {
+\node[col_panel=blue, minimum width=4.7cm, minimum height=6.8cm] (c1) at (2.45, 0) {};
+\node[col_hdr=blue, minimum width=4.4cm, anchor=north] (t1_hdr) at ([yshift=-2mm]c1.north) {
   Tier 1: Initial Evidence Reasoning Algorithm
 };
 
 % Step 1.1: Input Multigraph
-\node[card_white=blue, text width=4.15cm] (t1_in) at (2.45, 1.85) {
+\node[card_white=blue, text width=4.15cm, anchor=north] (t1_in) at ([yshift=-3.5mm]t1_hdr.south) {
   \textbf{Input: Full Evidence Multigraph $G_q$}\\
   {\fontsize{4.6pt}{5.4pt}\selectfont
-  $\bullet$ Full unpruned multigraph (all candidate rows \& passages)\\
-  $\bullet$ Tied candidates: \texttt{Toronto Eagles} vs \texttt{Toronto Blues} (1989)}
+  $\bullet$ Full unpruned multigraph (all candidate rows \& connected passages)\\
+  $\bullet$ Tied candidates: \texttt{Toronto Eagles (1989)} vs \texttt{Toronto Blues (1989)}}
 };
 
 % Step 1.2: Primary LLM Reasoning (Call 1)
-\node[card_purple, text width=4.15cm] (t1_llm) at (2.45, 0.85) {
-  \tikz[baseline=-2.5pt]{\pic {brain_icon};}\hspace{3pt}\textbf{Step 1: Primary LLM Reasoning (Call 1)}\\
+\node[card_purple, text width=4.15cm, anchor=north] (t1_llm) at ([yshift=-3.5mm]t1_in.south) {
+  \tikz[baseline=-2.5pt]{\pic {brain_icon};}\hspace{3pt}\textbf{[LLM] Step 1: Primary LLM Reasoning (Call 1)}\\
   {\fontsize{4.6pt}{5.4pt}\selectfont
-  $\bullet$ Evaluates evidence against query constraints; clarity audit\\
-  $\bullet$ \textcolor{purple!90!black}{\textbf{Audit Rule:}} Zero guessing on ambiguous candidate ties}
+  $\bullet$ Evaluates evidence against query constraints; strict clarity audit\\
+  $\bullet$ \textcolor{purple!90!black}{\textbf{Audit Rule:}} Zero ungrounded guessing on candidate ties}
 };
 
 % Step 1.3: Rhombus Candidate Collision?
-\node[rhombus_dec=purple, text width=1.65cm] (t1_dec) at (2.45, -0.25) {
+\node[rhombus_dec=purple, text width=1.65cm, anchor=north] (t1_dec) at ([yshift=-4.0mm]t1_llm.south) {
   Candidate\\Collision?
 };
 
 % Step 1.4a: Fast Exit (Branch: No)
-\node[card_green, text width=1.75cm] (t1_exit) at (1.30, -1.80) {
+\node[card_green, text width=1.75cm, anchor=north] (t1_exit) at ([xshift=-1.15cm, yshift=-4.5mm]t1_dec.south) {
   \textbf{Fast Exit}\\[0.2mm]
   {\fontsize{4.5pt}{5.2pt}\selectfont
   $\bullet$ Single LLM Call\\
-  $\bullet$ $\approx 80\%$ of Queries\\
+  $\bullet$ $\approx$ 80\% of Queries\\
   $\bullet$ Terminate verified}
 };
 
 % Step 1.4b: Diagnostic Packet D (Branch: Yes)
-\node[card_orange, text width=1.90cm] (t1_out) at (3.55, -1.80) {
+\node[card_orange, text width=1.90cm, anchor=north] (t1_out) at ([xshift=1.10cm, yshift=-4.5mm]t1_dec.south) {
   \textbf{Diagnostic Packet $\mathcal{D}$}\\[0.2mm]
   {\fontsize{4.5pt}{5.2pt}\selectfont
-  $\bullet$ Collision: formed 1989\\
+  $\bullet$ Collision Alert: both match 1989\\
   $\bullet$ Bridge passage missing\\
-  $\bullet$ \textcolor{orange!90!black}{\textbf{Controlled Pause}}}
+  $\bullet$ \textcolor{orange!90!black}{\textbf{Controlled Pause (No guess)}}}
 };
 
 % Connectors in Tier 1
@@ -119,38 +119,38 @@
 % -------------------------------------------------------------
 % COLUMN 2: TIER 2
 % -------------------------------------------------------------
-\node[col_panel=teal, minimum width=4.7cm, minimum height=5.6cm] (c2) at (9.75, 0) {};
-\node[col_hdr=teal, minimum width=4.4cm, anchor=north] (t2_hdr) at ([yshift=-1.4mm]c2.north) {
+\node[col_panel=teal, minimum width=4.7cm, minimum height=6.8cm] (c2) at (9.75, 0) {};
+\node[col_hdr=teal, minimum width=4.4cm, anchor=north] (t2_hdr) at ([yshift=-2mm]c2.north) {
   Tier 2: Targeted Collision Resolution Algorithm
 };
 
 % Step 2.1: Input Minimal Capsule
-\node[card_white=teal, text width=4.15cm] (t2_in) at (9.75, 1.85) {
-  \textbf{Input: Minimal State Capsule $\mathcal{S}_{\mathrm{min}}$}\\
+\node[card_white=teal, text width=4.15cm, anchor=north] (t2_in) at ([yshift=-3.5mm]t2_hdr.south) {
+  \textbf{Input: Minimal State Capsule $\mathcal{S}_{\min}$}\\
   {\fontsize{4.6pt}{5.4pt}\selectfont
-  $\bullet$ Compressed subgraph: strictly tied clubs + bridge doc\\
+  $\bullet$ Compressed isolated subgraph: strictly tied clubs + bridge passage\\
   $\bullet$ Zero non-competing candidates; eliminates context dilution}
 };
 
 % Step 2.2: Targeted LLM Call (Call 2)
-\node[card_purple, text width=4.15cm] (t2_llm) at (9.75, 0.85) {
-  \tikz[baseline=-2.5pt]{\pic {brain_icon};}\hspace{3pt}\textbf{Step 2: Targeted LLM Resolution (Call 2)}\\
+\node[card_purple, text width=4.15cm, anchor=north] (t2_llm) at ([yshift=-3.5mm]t2_in.south) {
+  \tikz[baseline=-2.5pt]{\pic {brain_icon};}\hspace{3pt}\textbf{[LLM] Step 2: Targeted LLM Resolution (Call 2)}\\
   {\fontsize{4.6pt}{5.4pt}\selectfont
-  $\bullet$ Prompts LLM exclusively with compressed capsule $\mathcal{S}_{\mathrm{min}}$\\
+  $\bullet$ Prompts LLM exclusively with compressed capsule $\mathcal{S}_{\min}$\\
   $\bullet$ Resolves ambiguity directly against factual bridge evidence}
 };
 
 % Step 2.3: Rhombus Grounded by Bridge?
-\node[rhombus_dec=teal, text width=2.3cm] (t2_dec) at (9.75, -0.25) {
+\node[rhombus_dec=teal, text width=2.3cm, anchor=north] (t2_dec) at ([yshift=-4.0mm]t2_llm.south) {
   Grounded by\\Bridge Passage?
 };
 
 % Step 2.4: Verified Output
-\node[card_green, text width=4.15cm] (t2_out) at (9.75, -1.80) {
+\node[card_green, text width=4.15cm, anchor=north] (t2_out) at ([yshift=-4.5mm]t2_dec.south) {
   \textbf{Verified Output: Answer ``York''}\\[0.2mm]
   {\fontsize{4.6pt}{5.4pt}\selectfont
-  $\bullet$ $\le 2$ LLM Calls Total $\bullet$ 100\% Grounded $\bullet$ Zero Hallucination\\
-  $\bullet$ \textcolor{green!75!black}{\textbf{Provenance:}} Row 0 $\to$ \texttt{Doc:Toronto\_Blues} $\to$ \textbf{York University}}
+  $\bullet$ $\le 2$ LLM Calls $\bullet$ Auditable Provenance $\bullet$ Grounded Verification\\
+  $\bullet$ \textcolor{green!75!black}{\textbf{Provenance Trace:}} Row 0 $\to$ \texttt{Doc:Toronto\_Blues} $\to$ \textbf{York Univ.}}
 };
 
 % Connectors in Tier 2
@@ -162,23 +162,23 @@
 % -------------------------------------------------------------
 % CENTER: BRIDGE SEARCH & GRAPH COMPRESSION
 % -------------------------------------------------------------
-\node[card_bridge, text width=1.85cm] (bridge) at (6.10, 0.00) {
-  \textbf{Automated Bridge Search}\\[-0.2mm]
+\node[card_bridge, text width=2.30cm] (bridge) at (6.10, 0.0) {
+  \textbf{Automated Bridge Search}\\[-0.1mm]
   \textbf{\& Graph Compression}\\[0.6mm]
-  \textcolor{blue!90!black}{\textbf{Zero LLM Calls}}\\[0.6mm]
-  \textbf{Graph Compression:}\\[-0.2mm]
-  \textcolor{teal!90!black}{Prune non-tied paths}\\[-0.2mm]
-  \textcolor{red!80!black}{\textbf{$\approx 85\%$ Size Reduction}}\\[0.5mm]
-  Fetch bridge passage:\\
-  {\fontsize{4.2pt}{5.0pt}\selectfont \texttt{Doc:Toronto\_Blues}}
+  \textcolor{blue!90!black}{\textbf{[Zero LLM Calls]}}\\[0.8mm]
+  \textbf{Graph Compression:}\\[-0.1mm]
+  \textcolor{teal!90!black}{Prune non-tied paths}\\[-0.1mm]
+  \textcolor{red!80!black}{\textbf{$\approx$ 85\% Size Reduction}}\\[0.6mm]
+  \textbf{Fetch missing bridge:}\\[-0.1mm]
+  \texttt{Doc:Toronto\_Blues}
 };
 
 % Inter-tier connecting wires
-\draw[arr_orange, rounded corners=4pt] (t1_out.east) -- (6.10, -1.80) -- (bridge.south);
-\draw[arr_teal, rounded corners=4pt] (bridge.north) -- (6.10, 1.85) -- (t2_in.west);
+\draw[arr_orange, rounded corners=4pt] (t1_out.east) -- (6.10, -2.40) -- (bridge.south);
+\draw[arr_teal, rounded corners=4pt] (bridge.north) -- (6.10, 2.20) -- (t2_in.west);
 
-% Clean wire tags
-\node[wire_tag=orange] at (6.10, -1.35) {Handoff $\mathcal{D}$};
-\node[wire_tag=teal] at (6.10, 1.35) {Capsule $\mathcal{S}_{\mathrm{min}}$};
+% Clean wire tags placed safely on horizontal segments with zero overlap!
+\node[wire_tag=orange] at (5.25, -2.40) {Handoff $\mathcal{D}$};
+\node[wire_tag=teal] at (6.85, 2.20) {Minimal Capsule $\mathcal{S}_{\min}$};
 
 \end{tikzpicture}
