@@ -62,6 +62,14 @@ class RAGConfig:
     # prompt-pruning ablation; it must not change the main L1 comparison.
     use_path_focused_prompt: bool = False
     prompt_path_budget: int = 8
+    # QEG turns the evidence-path audit into an answer contract: an answer is
+    # accepted only when the reader cites at least one visible KG edge.
+    # OUEG keeps this off for backwards-compatible ablations.
+    require_evidence_path: bool = False
+    # QEG-ECAR may spend its one remaining bounded reader call to repair a
+    # deterministic proof gap after an otherwise usable L1 answer.  This is
+    # deliberately independent of the normal L1-empty adaptive branch.
+    use_ecar_proof_recovery: bool = True
     # OUEG-only: prompt keeps the ambiguity visible by default. The two other
     # modes are explicit selective-prediction behaviours.
     ambiguity_policy: str = "prompt"
@@ -95,7 +103,8 @@ class RAGConfig:
             "use_focus_evidence_augmentation",
             "use_diagnostic_focus_resolution",
             "use_adaptive_verification", "use_prompt_compression",
-            "use_path_focused_prompt",
+            "use_path_focused_prompt", "require_evidence_path",
+            "use_ecar_proof_recovery",
         ):
             if not isinstance(getattr(self, name), bool):
                 raise ValueError(f"{name} must be boolean")

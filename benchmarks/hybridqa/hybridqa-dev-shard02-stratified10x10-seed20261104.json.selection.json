@@ -1,0 +1,58 @@
+{
+  "source": "benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard02.json",
+  "reference": "data/results/hybridqa-shard02-ablations-120b/no_path_guidance/hybridqa__shard02-of08__openrouter__openai-gpt-oss-120b__online_unified_evidence_graph__no_path_guidance.jsonl",
+  "ambiguity_status": "SCORE_COLLISION_TIE",
+  "seed": 20261104,
+  "count": 20,
+  "strata": {
+    "ambiguous": 10,
+    "non_ambiguous": 10
+  },
+  "ambiguous_question_ids": [
+    "18c8dec4d251069f",
+    "fc32dc6ee5eeea22",
+    "03b74593d042dc96",
+    "e50c0fc0644c1817",
+    "c0b376caebe4cb89",
+    "e515f0ee646f09e5",
+    "857ba79b2fe601be",
+    "40fda95a874e6fe5",
+    "b459c2cb2ef16781",
+    "e9188b67cb402773"
+  ],
+  "non_ambiguous_question_ids": [
+    "8a4beb018099ed24",
+    "5de3aed5acae413d",
+    "3a423902ba53b086",
+    "31bd95f3859f11e2",
+    "b44d1ea74073f3a6",
+    "45f050ef11ba3213",
+    "aec16e01c40170ba",
+    "e8235a5e4b538a03",
+    "aef0b40f7ee083c6",
+    "79efc1c2b3a0db44"
+  ],
+  "skip": 0,
+  "question_ids": [
+    "18c8dec4d251069f",
+    "fc32dc6ee5eeea22",
+    "03b74593d042dc96",
+    "e50c0fc0644c1817",
+    "c0b376caebe4cb89",
+    "e515f0ee646f09e5",
+    "857ba79b2fe601be",
+    "40fda95a874e6fe5",
+    "b459c2cb2ef16781",
+    "e9188b67cb402773",
+    "8a4beb018099ed24",
+    "5de3aed5acae413d",
+    "3a423902ba53b086",
+    "31bd95f3859f11e2",
+    "b44d1ea74073f3a6",
+    "45f050ef11ba3213",
+    "aec16e01c40170ba",
+    "e8235a5e4b538a03",
+    "aef0b40f7ee083c6",
+    "79efc1c2b3a0db44"
+  ]
+}

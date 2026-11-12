@@ -1,0 +1,9 @@
+\begin{figure}[t]
+\centering
+\resizebox{0.88\linewidth}{!}{\input{figures/two-tier-diagram}}
+\Description{Detailed workflow of the two-tier controlled reasoning engine showing Tier 1 primary evaluation, diagnostic handoff, zero-LLM targeted bridge retrieval and state capsule compression, and Tier 2 targeted resolution within at most two calls.}
+\vspace{0.5mm}
+\caption{Two-tier controlled reasoning engine (Stage~3) structured as two parallel algorithmic blocks with deterministic graph compression, illustrated via the running AFL example. (Left) Tier~1 evaluates the lossless evidence graph representation. When candidate evidence is unambiguous, execution terminates via Fast Exit in a single LLM call ($\approx 80\%$ of queries). When candidate collision occurs (e.g., candidate clubs both matching 1989 where bridge evidence is missing), the LLM emits a structured diagnostic packet $\mathcal{D}$. (Center to Right) An automated zero-LLM search fetches targeted bridge passages (\texttt{Doc:Toronto\_Blues}) and executes algorithmic graph compression by pruning non-competing candidates to construct the minimal state capsule $\mathcal{S}_{\min}$. In Tier~2, the LLM resolves the ambiguity deterministically by factual evidence in a targeted second call (at most 2 calls total), producing the verified answer with verifiable provenance.}
+\vspace{-3mm}
+\label{fig:two-tier}
+\end{figure}

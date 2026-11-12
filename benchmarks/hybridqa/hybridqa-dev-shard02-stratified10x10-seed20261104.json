@@ -1,0 +1,632 @@
+[
+  {
+    "question_id": "18c8dec4d251069f",
+    "question": "The Pleiku Stadium is in what province of Vietnam ?",
+    "table_id": "2011_V-League_0",
+    "answer-text": "Gia Lai",
+    "question_postag": "DT NNP NNP VBZ IN WP NN IN NNP .",
+    "answer-node": [
+      [
+        "Hoàng Anh Gia Lai",
+        [
+          5,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "2004 V-League",
+        [
+          0,
+          4
+        ],
+        "/wiki/2004_V-League",
+        "passage"
+      ],
+      [
+        "2004 V-League",
+        [
+          3,
+          4
+        ],
+        "/wiki/2004_V-League",
+        "passage"
+      ],
+      [
+        "2003 V-League",
+        [
+          1,
+          4
+        ],
+        "/wiki/2003_V-League",
+        "passage"
+      ],
+      [
+        "2003 V-League",
+        [
+          4,
+          4
+        ],
+        "/wiki/2003_V-League",
+        "passage"
+      ],
+      [
+        "2003 V-League",
+        [
+          5,
+          4
+        ],
+        "/wiki/2003_V-League",
+        "passage"
+      ],
+      [
+        "Pleiku",
+        [
+          5,
+          1
+        ],
+        "/wiki/Pleiku",
+        "passage"
+      ],
+      [
+        "Pleiku Stadium",
+        [
+          5,
+          2
+        ],
+        "/wiki/Pleiku_Stadium",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "fc32dc6ee5eeea22",
+    "question": "Who was the oldest player to win 3 times at the Lexus Cup ?",
+    "table_id": "2005_Lexus_Cup_0",
+    "answer-text": "Sophie Gustafson",
+    "question_postag": "WP VBD DT JJS NN TO VB CD NNS IN DT NNP NNP .",
+    "answer-node": [
+      [
+        "Sophie Gustafson",
+        [
+          1,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "03b74593d042dc96",
+    "question": "In the village that was previously an isolated ranch that housed four families , what was the historic place also known as ?",
+    "table_id": "National_Register_of_Historic_Places_listings_in_Mora_County,_New_Mexico_0",
+    "answer-text": "Chamblis Hotel",
+    "question_postag": "IN DT NN WDT VBD RB DT JJ NN WDT VBD CD NNS , WP VBD DT JJ NN RB VBN IN .",
+    "answer-node": [
+      [
+        "Santa Clara Hotel",
+        [
+          14,
+          1
+        ],
+        "/wiki/Santa_Clara_Hotel",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e50c0fc0644c1817",
+    "question": "What is the English title of the film whose director was born on 11 October 1961 ?",
+    "table_id": "List_of_Palestinian_submissions_for_the_Academy_Award_for_Best_Foreign_Language_Film_0",
+    "answer-text": "Omar",
+    "question_postag": "WP VBZ DT JJ NN IN DT NN WP$ NN VBD VBN IN CD NNP CD .",
+    "answer-node": [
+      [
+        "Omar",
+        [
+          5,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Hany Abu-Assad",
+        [
+          2,
+          3
+        ],
+        "/wiki/Hany_Abu-Assad",
+        "passage"
+      ],
+      [
+        "Hany Abu-Assad",
+        [
+          5,
+          3
+        ],
+        "/wiki/Hany_Abu-Assad",
+        "passage"
+      ],
+      [
+        "Hany Abu-Assad",
+        [
+          8,
+          3
+        ],
+        "/wiki/Hany_Abu-Assad",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c0b376caebe4cb89",
+    "question": "What was the birth month of the player that went from Carlton to West Coast during the 2007 AFL draft ?",
+    "table_id": "2007_AFL_Draft_0",
+    "answer-text": "August",
+    "question_postag": "WP VBD DT JJ NN IN DT NN WDT VBD IN NNP TO NNP NNP IN DT CD NNP NN .",
+    "answer-node": [
+      [
+        "Martin Mattner",
+        [
+          0,
+          0
+        ],
+        "/wiki/Martin_Mattner",
+        "passage"
+      ],
+      [
+        "Josh Kennedy (footballer, born 1987)",
+        [
+          2,
+          3
+        ],
+        "/wiki/Josh_Kennedy_(footballer,_born_1987)",
+        "passage"
+      ],
+      [
+        "Josh Kennedy (footballer, born 1987)",
+        [
+          3,
+          0
+        ],
+        "/wiki/Josh_Kennedy_(footballer,_born_1987)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e515f0ee646f09e5",
+    "question": "In 2013 , how many registered members were there in the First Nation that is the namesake of the town of Sooke and had land covered by the Douglas treaties North-west of Sooke Inlet ?",
+    "table_id": "Douglas_Treaties_0",
+    "answer-text": "251 registered members",
+    "question_postag": "IN CD , WRB JJ VBD NNS VBD RB IN DT JJ NN WDT VBZ DT NN IN DT NN IN NNP CC VBD NN VBN IN DT NNP VBZ NNP IN NNP NNP .",
+    "answer-node": [
+      [
+        "T'sou-ke Nation",
+        [
+          6,
+          1
+        ],
+        "/wiki/T'sou-ke_Nation",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "857ba79b2fe601be",
+    "question": "What was the time of the runner that participated in the Olympics the most number of times ?",
+    "table_id": "1996_IAAF_World_Half_Marathon_Championships_1",
+    "answer-text": "1:10:57",
+    "question_postag": "WP VBD DT NN IN DT NN WDT VBD IN DT NNPS DT RBS NN IN NNS .",
+    "answer-node": [
+      [
+        "1:10:57",
+        [
+          1,
+          3
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "40fda95a874e6fe5",
+    "question": "What is the name of the keyboardist in the band that formed in London in 2007 and had an album that spent 196 weeks in the UK album charts ?",
+    "table_id": "List_of_albums_which_have_spent_the_most_weeks_on_the_UK_Albums_Chart_1",
+    "answer-text": "Isabella Summers",
+    "question_postag": "WP VBZ DT NN IN DT NN IN DT NN WDT VBD IN NNP IN CD CC VBD DT NN WDT VBD CD NNS IN DT NNP NN NNS .",
+    "answer-node": [
+      [
+        "Lungs (album)",
+        [
+          0,
+          0
+        ],
+        "/wiki/Lungs_(album)",
+        "passage"
+      ],
+      [
+        "Florence and the Machine",
+        [
+          0,
+          1
+        ],
+        "/wiki/Florence_and_the_Machine",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b459c2cb2ef16781",
+    "question": "When the luchador also known to be a licensed Chiropractor won his prision fatal match , what wager did he took ?",
+    "table_id": "Prison_Fatal_(2013)_0",
+    "answer-text": "Hair",
+    "question_postag": "WRB DT NN RB VBN TO VB DT JJ NNP VBD PRP$ NN JJ NN , WP NN VBD PRP VBD .",
+    "answer-node": [
+      [
+        "Hair",
+        [
+          2,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Hair",
+        [
+          3,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Hair",
+        [
+          4,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Hair",
+        [
+          5,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Hair",
+        [
+          7,
+          3
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Prisión Fatal (March 2013)",
+        [
+          2,
+          0
+        ],
+        "/wiki/Prisión_Fatal_(March_2013)",
+        "passage"
+      ],
+      [
+        "Prisión Fatal (June 2013)",
+        [
+          3,
+          0
+        ],
+        "/wiki/Prisión_Fatal_(June_2013)",
+        "passage"
+      ],
+      [
+        "Prisión Fatal (May 2014)",
+        [
+          4,
+          0
+        ],
+        "/wiki/Prisión_Fatal_(May_2014)",
+        "passage"
+      ],
+      [
+        "Prisión Fatal (August 2014)",
+        [
+          5,
+          0
+        ],
+        "/wiki/Prisión_Fatal_(August_2014)",
+        "passage"
+      ],
+      [
+        "Prisión Fatal (July 2017)",
+        [
+          7,
+          0
+        ],
+        "/wiki/Prisión_Fatal_(July_2017)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e9188b67cb402773",
+    "question": "How many people inhabit the metro area of the city that María José González Ginestre is from ?",
+    "table_id": "Miss_Venezuela_2009_1",
+    "answer-text": "1,827,165",
+    "question_postag": "WRB JJ NNS VBP DT JJ NN IN DT NN WDT NNP NNP NNP NNP VBZ IN .",
+    "answer-node": [
+      [
+        "Valencia, Venezuela",
+        [
+          6,
+          4
+        ],
+        "/wiki/Valencia,_Venezuela",
+        "passage"
+      ],
+      [
+        "Valencia, Venezuela",
+        [
+          8,
+          4
+        ],
+        "/wiki/Valencia,_Venezuela",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "8a4beb018099ed24",
+    "question": "Who wrote the book basis of the movie Bolivia sent to the 68th Oscars ?",
+    "table_id": "List_of_Bolivian_submissions_for_the_Academy_Award_for_Best_Foreign_Language_Film_0",
+    "answer-text": "José Wolfango Montes Vannuci",
+    "question_postag": "WP VBD DT NN NN IN DT NN NNP VBD TO DT CD NNS .",
+    "answer-node": [
+      [
+        "Jonah and the Pink Whale",
+        [
+          0,
+          1
+        ],
+        "/wiki/Jonah_and_the_Pink_Whale",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "5de3aed5acae413d",
+    "question": "How many clinical departments are contained in the post-secondary school attended by Charles Mann ?",
+    "table_id": "List_of_Washington_Redskins_players_12",
+    "answer-text": "16",
+    "question_postag": "WRB JJ JJ NNS VBP VBN IN DT JJ NN VBN IN NNP NNP .",
+    "answer-node": [
+      [
+        "16",
+        [
+          14,
+          4
+        ],
+        null,
+        "table"
+      ],
+      [
+        "University of Alabama",
+        [
+          0,
+          3
+        ],
+        "/wiki/University_of_Alabama",
+        "passage"
+      ],
+      [
+        "University of Nevada, Reno",
+        [
+          7,
+          3
+        ],
+        "/wiki/University_of_Nevada,_Reno",
+        "passage"
+      ],
+      [
+        "Ron Marciniak",
+        [
+          10,
+          1
+        ],
+        "/wiki/Ron_Marciniak",
+        "passage"
+      ],
+      [
+        "Bud Marshall",
+        [
+          11,
+          1
+        ],
+        "/wiki/Bud_Marshall",
+        "passage"
+      ],
+      [
+        "University of Florida",
+        [
+          15,
+          3
+        ],
+        "/wiki/University_of_Florida",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "3a423902ba53b086",
+    "question": "Who owned the team who had a replaced player who made his first class debut in November 2006 ?",
+    "table_id": "List_of_2011_Indian_Premier_League_personnel_changes_1",
+    "answer-text": "Reliance Industries",
+    "question_postag": "WP VBD DT NN WP VBD DT VBN NN WP VBD PRP$ JJ NN NN IN NNP CD .",
+    "answer-node": [
+      [
+        "Mumbai Indians",
+        [
+          8,
+          2
+        ],
+        "/wiki/Mumbai_Indians",
+        "passage"
+      ],
+      [
+        "Mumbai Indians",
+        [
+          9,
+          2
+        ],
+        "/wiki/Mumbai_Indians",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "31bd95f3859f11e2",
+    "question": "What is the medical practice the subject of the 2005 show in which Britanny Snow played Ariel Alderman ?",
+    "table_id": "Brittany_Snow_1",
+    "answer-text": "plastic surgery",
+    "question_postag": "WP VBZ DT JJ NN DT NN IN DT CD NN IN WDT NNP NNP VBD NNP NNP .",
+    "answer-node": [
+      [
+        "Nip/Tuck",
+        [
+          3,
+          1
+        ],
+        "/wiki/Nip/Tuck",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "b44d1ea74073f3a6",
+    "question": "What is the English meaning of the name of the settlement in the Attica region associated with the football club that was established in 1924 by Greek refugees from Constantinople ?",
+    "table_id": "List_of_football_clubs_in_Greece_0",
+    "answer-text": "New Philadelphia",
+    "question_postag": "WP VBZ DT JJ NN IN DT NN IN DT NN IN DT NNP NN VBN IN DT NN NN WDT VBD VBN IN CD IN JJ NNS IN NNP .",
+    "answer-node": [
+      [
+        "Nea Filadelfeia",
+        [
+          0,
+          2
+        ],
+        "/wiki/Nea_Filadelfeia",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "45f050ef11ba3213",
+    "question": "What was the last film in the Before romantic trilogy of the director of the 2011 film Bernie ?",
+    "table_id": "Ebertfest:_Roger_Ebert's_Film_Festival_4",
+    "answer-text": "Before Midnight",
+    "question_postag": "WP VBD DT JJ NN IN DT NNP JJ NN IN DT NN IN DT CD NN NNP .",
+    "answer-node": [
+      [
+        "Richard Linklater",
+        [
+          5,
+          1
+        ],
+        "/wiki/Richard_Linklater",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "aec16e01c40170ba",
+    "question": "Which wars serve as the backdrop of the 2005 film in which Alexander Siddig played Imad ad-Din al-Isfahani ?",
+    "table_id": "Alexander_Siddig_0",
+    "answer-text": "Crusades",
+    "question_postag": "JJ VBZ VBP IN DT NN IN DT CD NN IN WDT NNP NNP VBD NNP JJ NN .",
+    "answer-node": [
+      [
+        "Kingdom of Heaven (film)",
+        [
+          5,
+          1
+        ],
+        "/wiki/Kingdom_of_Heaven_(film)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e8235a5e4b538a03",
+    "question": "Who was the star of the movie directed by Wilson Yip ?",
+    "table_id": "List_of_action_films_of_the_2010s_7",
+    "answer-text": "Louis Koo",
+    "question_postag": "WP VBD DT NN IN DT NN VBN IN NNP NNP .",
+    "answer-node": [
+      [
+        "Louis Koo , Gordon Lam , Wu Yue , Tony Jaa",
+        [
+          16,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Paradox (2017 film)",
+        [
+          16,
+          0
+        ],
+        "/wiki/Paradox_(2017_film)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "aef0b40f7ee083c6",
+    "question": "What is the mascot of the school of catcher Alan Hall ?",
+    "table_id": "1960_College_Baseball_All-America_Team_0",
+    "answer-text": "Wildcats",
+    "question_postag": "WP VBZ DT NN IN DT NN IN NN NNP NNP .",
+    "answer-node": [
+      [
+        "Arizona Wildcats baseball",
+        [
+          2,
+          2
+        ],
+        "/wiki/Arizona_Wildcats_baseball",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "79efc1c2b3a0db44",
+    "question": "Who used to be married to the musician with the record Blunderbuss ?",
+    "table_id": "2012_in_Canadian_music_1",
+    "answer-text": "Meg White",
+    "question_postag": "WP VBD TO VB VBN TO DT NN IN DT NN NNP .",
+    "answer-node": [
+      [
+        "Jack White",
+        [
+          9,
+          1
+        ],
+        "/wiki/Jack_White",
+        "passage"
+      ]
+    ]
+  }
+]

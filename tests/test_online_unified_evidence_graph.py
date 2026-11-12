@@ -4,6 +4,16 @@ from src.baselines.online_unified_evidence_graph import (
     OnlineUnifiedEvidenceGraphBaseline,
     _VerbatimOUEGPromptBuilder,
 )
+from src.baselines.qeg import (
+    QueryEvidenceGraphBaseline,
+    QueryEvidenceGraphPathBalanceBaseline,
+    QueryEvidenceGraphSoftContractBaseline,
+    QueryEvidenceGraphECARBaseline,
+    QueryEvidenceGraphECARL2EvidenceEvalBaseline,
+    QueryEvidenceGraphAnswerToProofBaseline,
+)
+from src.baselines.qeg import _QEGPathBalancePromptBuilder
+from src.baselines.ecar import EvidenceConstrainedAnswerRecovery
 from src.baselines.rag_variants import RAGConfig
 from src.datasets.schema import DatasetExample
 from src.kg.online_kg import OnlineKG
@@ -226,6 +236,28 @@ def test_oueg_path_focused_ablation_keeps_only_top_grounded_paths():
 
 def test_oueg_short_answer_removes_common_labels_and_quotes():
     assert OnlineUnifiedEvidenceGraphBaseline._short_answer('Final Answer: "Mitre"') == "Mitre"
+
+
+def test_qeg_path_balance_removes_path_scores_and_ordering_bias():
+    builder = _QEGPathBalancePromptBuilder()
+    compact = builder.build(
+        question="Which club was first formed?",
+        records=[], contexts_by_source_id={},
+        suggested_paths=[
+            {"path_id": "row_9", "path_kind": "row_bundle", "row_id": "table:T:row:9", "score": 99.0},
+            {"path_id": "row_1", "path_kind": "row_bundle", "row_id": "table:T:row:1", "score": 1.0},
+        ],
+        ordering_hint={"detected_signal": "ordinal_rank", "direction": "descending"},
+        ambiguity={"is_ambiguous": True, "status": "SCORE_COLLISION_TIE", "groups": []},
+        path_generation={},
+    )
+
+    assert [path["id"] for path in compact["payload"]["paths"]] == ["row_1", "row_9"]
+    assert all("score" not in path and "lex" not in path for path in compact["payload"]["paths"])
+    assert compact["payload"]["ordering"]["policy"] == "unranked_candidate_balanced"
+    assert "groups" not in compact["payload"]["ambiguity"]
+    assert "unranked evidence indices" in builder.prompt(question="q", compact_json=compact["json"])
+    assert QueryEvidenceGraphPathBalanceBaseline().config.use_path_guidance is True
 
 
 def test_oueg_seed_dfs_crosses_text_edges_and_scores_without_filtering():
@@ -550,6 +582,615 @@ def test_oueg_evidence_path_audit_accepts_only_ids_visible_to_reader():
     assert audit["provided"] is True
     assert audit["selected_refs"] == ["e7", "p2"]
     assert audit["invalid_refs"] == ["e999"]
+    assert audit["selected_edge_refs"] == ["e7"]
+    assert audit["has_grounded_path"] is False
+
+
+def test_qeg_requires_a_visible_edge_path_for_a_l1_answer(monkeypatch):
+    kg = _kg_with_rows()
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    prompts = []
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda prompt, **kwargs: prompts.append(prompt) or 'FINAL_ANSWER: Club Early\nEVIDENCE_PATH: {"edges":["e0"],"passages":[]}',
+    )
+
+    result = QueryEvidenceGraphBaseline(RAGConfig(max_output_tokens=32), kg_builder=Builder()).run(
+        DatasetExample(
+            example_id="qeg-l1", question="Which club is in Gaborone?",
+            table_rows=[], text_passages=[], answer="Club Early",
+        ),
+    )
+
+    assert result["answer"] == "Club Early"
+    assert result["answer_evidence_verified"] is True
+    assert result["evidence_contract"] == {"required": True, "satisfied": True}
+    assert result["suggested_paths"] == []
+    assert "EVIDENCE_PATH" in prompts[0]
+    assert "Compact QEG payload" in prompts[0]
+
+
+def test_qeg_rejects_an_uncited_answer_in_both_stages(monkeypatch):
+    kg = _kg_with_rows()
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    responses = iter(["FINAL_ANSWER: Club Early", "FINAL_ANSWER: Club Early"])
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda *args, **kwargs: next(responses),
+    )
+
+    result = QueryEvidenceGraphBaseline(RAGConfig(max_output_tokens=32), kg_builder=Builder()).run(
+        DatasetExample(
+            example_id="qeg-reject", question="Which club is in Gaborone?",
+            table_rows=[], text_passages=[], answer="Club Early",
+        ),
+    )
+
+    assert result["answer"] == ""
+    assert result["adaptive_verification"]["first_answer_rejected"] == "missing_or_invalid_evidence_path"
+    assert result["adaptive_verification"]["second_answer_rejected"] == "missing_or_invalid_evidence_path"
+    assert result["evidence_contract"] == {"required": True, "satisfied": False}
+
+
+def test_qeg_soft_contract_keeps_the_answer_then_recovers_a_path(monkeypatch):
+    kg = _kg_with_rows()
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda *args, **kwargs: "FINAL_ANSWER: Club Early",
+    )
+    cite_prompts = []
+    monkeypatch.setattr(
+        "src.baselines.qeg.llm_call",
+        lambda prompt, **kwargs: cite_prompts.append(prompt) or 'EVIDENCE_PATH: {"edges":["e0"],"passages":[]}',
+    )
+
+    result = QueryEvidenceGraphSoftContractBaseline(
+        RAGConfig(max_output_tokens=32), kg_builder=Builder(),
+    ).run(DatasetExample(
+        example_id="qeg-soft", question="Which club is in Gaborone?",
+        table_rows=[], text_passages=[], answer="Club Early",
+    ))
+
+    assert result["answer"] == "Club Early"
+    assert result["answer_evidence_verified"] is True
+    assert result["evidence_contract"] == {"mode": "soft", "required": False, "satisfied": True}
+    assert result["citation_recovery"]["final_decision"] == "grounded"
+    assert result["llm_calls"] == 2
+    assert "CITE_EVIDENCE" in cite_prompts[0]
+
+
+def test_ecar_replaces_a_wrong_reader_answer_only_with_an_executed_ordered_path():
+    recovered = EvidenceConstrainedAnswerRecovery.recover(
+        question="Which club was first formed?",
+        llm_answer="Club Late",
+        kg_trace=_kg_with_rows().to_trace(),
+    )
+
+    assert recovered["answer"] == "Club Early"
+    assert recovered["decision"] == "deterministic_recovery"
+    assert recovered["selected"]["origin"] == "row_order"
+    assert recovered["selected"]["components"]["order"] == 1.0
+    assert recovered["proof_status"] == "verified"
+    assert recovered["proof_gap"] == []
+
+
+def test_ecar_row_order_recognises_debut_date_schema_cues():
+    kg = OnlineKG()
+    kg.register_table_structure("Debuts", [
+        {"Club": "Club Late", "Debut year": "2001"},
+        {"Club": "Club Early", "Debut year": "1991"},
+    ])
+
+    recovered = EvidenceConstrainedAnswerRecovery.recover(
+        question="Which club made its debut earliest?",
+        llm_answer="Club Late",
+        kg_trace=kg.to_trace(),
+    )
+
+    assert recovered["answer"] == "Club Early"
+    assert recovered["selected"]["origin"] == "row_order"
+    assert recovered["selected"]["components"]["order"] == 1.0
+
+
+def test_qeg_ecar_runs_without_a_citation_model_call(monkeypatch):
+    kg = _kg_with_rows()
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    prompts = []
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda prompt, **kwargs: prompts.append(prompt) or "Club Late",
+    )
+
+    result = QueryEvidenceGraphECARBaseline(
+        RAGConfig(max_output_tokens=32), kg_builder=Builder(),
+    ).run(DatasetExample(
+        example_id="qeg-ecar", question="Which club was first formed?",
+        table_rows=[], text_passages=[], answer="Club Early",
+    ))
+
+    assert result["answer"] == "Club Early"
+    assert result["ecar"]["decision"] == "deterministic_recovery"
+    assert result["answer_evidence_verified"] is True
+    assert result["llm_calls"] == 1
+    assert all("CITE_EVIDENCE" not in prompt for prompt in prompts)
+
+
+def test_qeg_ecar_uses_remaining_l2_call_to_repair_a_proof_gap(monkeypatch):
+    kg = _kg_with_rows()
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    responses = iter(["Unsupported answer", 'FINAL_ANSWER: Club Early\nEVIDENCE_PATH: {"edges":["e0"],"passages":[]}'])
+    prompts = []
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda prompt, **kwargs: prompts.append(prompt) or next(responses),
+    )
+    monkeypatch.setattr(
+        "src.baselines.qeg.llm_call",
+        lambda prompt, **kwargs: prompts.append(prompt) or next(responses),
+    )
+    monkeypatch.setattr(
+        "src.baselines.qeg.EvidenceConstrainedAnswerRecovery.recover",
+        lambda *, question, llm_answer, kg_trace: {
+            "answer": llm_answer,
+            "proof_gap": ["missing_relation_witness"],
+            "evidence_verified": False,
+            "proof_status": "partially_grounded",
+            "selected": {"answer": "Club Early", "score": 2.0},
+            "top_candidates": [{"answer": "Club Early", "score": 2.0}],
+        },
+    )
+
+    result = QueryEvidenceGraphECARBaseline(
+        RAGConfig(max_output_tokens=32), kg_builder=Builder(),
+    ).run(DatasetExample(
+        example_id="qeg-ecar-proof-repair", question="Which club is in Gaborone?",
+        table_rows=[], text_passages=[], answer="Club Early",
+    ))
+
+    recovery = result["ecar_proof_recovery"]
+    assert result["answer"] == "Club Early"
+    assert result["llm_calls"] == 2
+    assert result["answer_evidence_verified"] is True
+    assert recovery["triggered"] is True
+    assert recovery["handoff"]["origin"] == "ecar_proof_gap"
+    assert recovery["handoff"]["proof_gap"] == ["missing_relation_witness"]
+    assert recovery["final_decision"] == "verified_after_ecar_proof_repair"
+    assert "ECAR proof-repair handoff" in prompts[1]
+
+
+def test_qeg_ecar_rejects_blank_final_answer_before_evidence_path():
+    answer, diagnostic = QueryEvidenceGraphECARBaseline._parse_ecar_verification_response(
+        'FINAL_ANSWER: \nEVIDENCE_PATH: {"edges":["e12"],"passages":["p4"]}',
+    )
+
+    assert answer == ""
+    assert diagnostic["response_type"] == "invalid_proof_repair_response"
+
+
+def test_qeg_ecar_l2_evidence_eval_keeps_l1_answer_and_records_supported_path(monkeypatch):
+    kg = _kg_with_rows()
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda *args, **kwargs: "Club Early",
+    )
+    monkeypatch.setattr(
+        "src.baselines.qeg.EvidenceConstrainedAnswerRecovery.recover",
+        lambda *, question, llm_answer, kg_trace: {
+            "answer": llm_answer,
+            "proof_status": "partially_grounded",
+            "proof_gap": ["missing_relation_witness"],
+            "evidence_verified": False,
+            "selected": {"answer": "Club Early", "edge_ids": ["e0"]},
+        },
+    )
+    prompts = []
+    monkeypatch.setattr(
+        "src.baselines.qeg.llm_call",
+        lambda prompt, **kwargs: prompts.append(prompt) or (
+                'EVIDENCE_EVALUATION: {"verdict":"supported","claim_checks":['
+                '{"id":"answer_identity","verdict":"supported","edges":["e0"],"passages":[]},'
+                '{"id":"question_relation","verdict":"supported","edges":["e0"],"passages":[]},'
+                '{"id":"relation_witness","verdict":"supported","edges":["e0"],"passages":[]}],'
+            '"edges":["e0"],"passages":[],"reason":"row binding proves the club"}'
+        ),
+    )
+
+    result = QueryEvidenceGraphECARL2EvidenceEvalBaseline(
+        RAGConfig(max_output_tokens=32), kg_builder=Builder(),
+    ).run(DatasetExample(
+        example_id="qeg-ecar-l2-eval", question="Which club is in Gaborone?",
+        table_rows=[], text_passages=[], answer="Club Early",
+    ))
+
+    assert result["answer"] == "Club Early"
+    assert result["llm_calls"] == 2
+    assert result["l2_evidence_evaluation"]["role"] == "evidence_evaluator"
+    assert result["l2_evidence_evaluation"]["final_decision"] == "supported"
+    assert result["ecar_proof_recovery"]["triggered"] is False
+    assert "not answer generation" in prompts[0]
+
+
+def test_qeg_ecar_l2_evidence_eval_skips_l2_for_a_deterministic_ecar_proof(monkeypatch):
+    kg = _kg_with_rows()
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda *args, **kwargs: "Club Early",
+    )
+    monkeypatch.setattr(
+        "src.baselines.qeg.EvidenceConstrainedAnswerRecovery.recover",
+        lambda *, question, llm_answer, kg_trace: {
+            "answer": llm_answer,
+            "proof_status": "verified",
+            "proof_gap": [],
+            "evidence_verified": True,
+            "selected": {"answer": "Club Early", "edge_ids": ["e0"]},
+        },
+    )
+    monkeypatch.setattr(
+        "src.baselines.qeg.llm_call",
+        lambda *args, **kwargs: pytest.fail("L2 must not re-evaluate a verified ECAR proof"),
+    )
+
+    result = QueryEvidenceGraphECARL2EvidenceEvalBaseline(
+        RAGConfig(max_output_tokens=32), kg_builder=Builder(),
+    ).run(DatasetExample(
+        example_id="qeg-ecar-l2-deterministic", question="Which club is in Gaborone?",
+        table_rows=[], text_passages=[], answer="Club Early",
+    ))
+
+    assert result["answer"] == "Club Early"
+    assert result["llm_calls"] == 1
+    assert result["answer_evidence_verified"] is True
+    assert result["l2_evidence_evaluation"]["role"] == "deterministic_proof_attachment"
+    assert result["l2_evidence_evaluation"]["final_decision"] == "supported"
+
+
+def test_answer_to_proof_does_not_spend_l2_on_a_mismatched_ecar_denotation(monkeypatch):
+    kg = _kg_with_rows()
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda *args, **kwargs: "Club Late",
+    )
+    monkeypatch.setattr(
+        "src.baselines.qeg.llm_call",
+        lambda *args, **kwargs: pytest.fail("L2 must not evaluate a mismatched ECAR answer"),
+    )
+
+    result = QueryEvidenceGraphAnswerToProofBaseline(
+        RAGConfig(max_output_tokens=32), kg_builder=Builder(),
+    ).run(DatasetExample(
+        example_id="answer-to-proof", question="Which club was first formed?",
+        table_rows=[], text_passages=[], answer="Club Early",
+    ))
+
+    # ECAR finds Club Early, but this ablation measures proof attachment only:
+    # the L1 no-path denotation must remain Club Late.
+    assert result["answer"] == "Club Late"
+    assert result["answer_to_proof"]["ecar_audit"]["answer"] == "Club Early"
+    assert result["answer_to_proof"]["same_denotation"] is False
+    assert result["answer_evidence_verified"] is False
+    assert result["llm_calls"] == 1
+    assert result["l2_evidence_evaluation"]["role"] == "not_used"
+    assert result["l2_evidence_evaluation"]["final_decision"] == "unproved"
+
+
+def test_answer_to_proof_uses_l2_only_for_a_partial_same_answer_path(monkeypatch):
+    kg = _kg_with_rows()
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda *args, **kwargs: "Club Early",
+    )
+    monkeypatch.setattr(
+        "src.baselines.qeg.EvidenceConstrainedAnswerRecovery.recover",
+        lambda *, question, llm_answer, kg_trace: {
+            "answer": llm_answer,
+            "proof_status": "partially_grounded",
+            "proof_gap": ["missing_relation_witness"],
+            "evidence_verified": False,
+            "selected": {"answer": "Club Early", "edge_ids": ["e0"]},
+        },
+    )
+    monkeypatch.setattr(
+        "src.baselines.qeg.llm_call",
+        lambda *args, **kwargs: (
+            'EVIDENCE_EVALUATION: {"verdict":"supported","claim_checks":['
+            '{"id":"answer_identity","verdict":"supported","edges":["e0"],"passages":[]},'
+            '{"id":"question_relation","verdict":"supported","edges":["e0"],"passages":[]},'
+            '{"id":"relation_witness","verdict":"supported","edges":["e0"],"passages":[]}],'
+            '"edges":["e0"],"passages":[],"reason":"visible row relation"}'
+        ),
+    )
+
+    result = QueryEvidenceGraphAnswerToProofBaseline(
+        RAGConfig(max_output_tokens=32), kg_builder=Builder(),
+    ).run(DatasetExample(
+        example_id="answer-to-proof-partial", question="Which club is in Gaborone?",
+        table_rows=[], text_passages=[], answer="Club Early",
+    ))
+
+    assert result["answer"] == "Club Early"
+    assert result["llm_calls"] == 2
+    assert result["answer_evidence_verified"] is True
+    assert result["l2_evidence_evaluation"]["role"] == "proof_gap_evaluator"
+    assert result["l2_evidence_evaluation"]["final_decision"] == "supported"
+
+
+def test_answer_to_proof_marks_unverified_ecar_as_unproved_without_l2(monkeypatch):
+    kg = _kg_with_rows()
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda *args, **kwargs: "Club Early",
+    )
+    monkeypatch.setattr(
+        "src.baselines.qeg.EvidenceConstrainedAnswerRecovery.recover",
+        lambda *, question, llm_answer, kg_trace: {
+            "answer": llm_answer,
+            "proof_status": "unverified",
+            "proof_gap": ["no_candidate_path"],
+            "evidence_verified": False,
+            "selected": None,
+        },
+    )
+    monkeypatch.setattr(
+        "src.baselines.qeg.llm_call",
+        lambda *args, **kwargs: pytest.fail("L2 must not search for an unverified proof"),
+    )
+
+    result = QueryEvidenceGraphAnswerToProofBaseline(
+        RAGConfig(max_output_tokens=32), kg_builder=Builder(),
+    ).run(DatasetExample(
+        example_id="answer-to-proof-unverified", question="Which club is in Gaborone?",
+        table_rows=[], text_passages=[], answer="Club Early",
+    ))
+
+    assert result["answer"] == "Club Early"
+    assert result["llm_calls"] == 1
+    assert result["answer_evidence_verified"] is False
+    assert result["l2_evidence_evaluation"]["role"] == "not_used"
+    assert result["l2_evidence_evaluation"]["skip_reason"] == (
+        "ecar_unverified_without_viable_same_answer_path"
+    )
+
+
+def test_qeg_ecar_l2_evidence_eval_canonicalizes_only_a_visible_wiki_prefix():
+    canonical = QueryEvidenceGraphECARL2EvidenceEvalBaseline._canonical_grounded_answer(
+        "Nikola Dinev Nikolov",
+        {"structural_nodes": [{"id": "/wiki/Nikola_Dinev"}]},
+    )
+
+    assert canonical["answer"] == "Nikola Dinev"
+    assert canonical["changed"] is True
+    assert canonical["source_id"] == "/wiki/Nikola_Dinev"
+
+
+def test_qeg_ecar_l2_evidence_eval_rejects_supported_verdict_missing_scope_claim():
+    parsed = QueryEvidenceGraphECARL2EvidenceEvalBaseline._parse_evidence_evaluation(
+        'EVIDENCE_EVALUATION: {"verdict":"supported","claim_checks":['
+        '{"id":"answer_identity","verdict":"supported","edges":["e1"]},'
+        '{"id":"question_relation","verdict":"supported","edges":["e2"]}],'
+        '"edges":["e1","e2"],"passages":[],"reason":"partial proof"}',
+        {"answer_identity", "question_relation", "scope_or_order"},
+    )
+
+    assert parsed["valid"] is False
+    assert parsed["verdict"] == "invalid"
+
+
+def test_qeg_ecar_l2_evidence_eval_uses_l2_for_answer_after_l1_handoff(monkeypatch):
+    kg = _kg_with_rows()
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    responses = iter([
+        'NEED_FOCUS: {"candidates":["Club Early"],"blocker_type":"missing_link",'
+        '"bottleneck":"need the linked record","needed_check":"club row"}',
+        "FINAL_ANSWER: Club Early",
+    ])
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda *args, **kwargs: next(responses),
+    )
+    monkeypatch.setattr(
+        "src.baselines.qeg.llm_call",
+        lambda *args, **kwargs: pytest.fail("evidence evaluator must not run after an L1 handoff"),
+    )
+
+    result = QueryEvidenceGraphECARL2EvidenceEvalBaseline(
+        RAGConfig(max_output_tokens=32), kg_builder=Builder(),
+    ).run(DatasetExample(
+        example_id="qeg-ecar-l2-handoff", question="Which club is in Gaborone?",
+        table_rows=[], text_passages=[], answer="Club Early",
+    ))
+
+    assert result["answer"] == "Club Early"
+    assert result["llm_calls"] == 2
+    assert result["adaptive_verification"]["triggered"] is True
+    assert result["l2_evidence_evaluation"]["role"] == "answer_after_kg_augmentation"
+    assert result["l2_evidence_evaluation"]["final_decision"] == "answer_l2_completed"
+
+
+def test_qeg_ecar_never_adds_a_third_call_after_base_l2(monkeypatch):
+    kg = _kg_with_rows()
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.two_stage_retrieve",
+        lambda *args, **kwargs: {"retrieval_trace": {}},
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "fake"})(),
+    )
+    responses = iter(["", "FINAL_ANSWER: Club Early"])
+    monkeypatch.setattr(
+        "src.baselines.online_unified_evidence_graph.llm_call",
+        lambda *args, **kwargs: next(responses),
+    )
+    monkeypatch.setattr(
+        "src.baselines.qeg.llm_call",
+        lambda *args, **kwargs: pytest.fail("ECAR must not create a third LLM call"),
+    )
+    monkeypatch.setattr(
+        "src.baselines.qeg.EvidenceConstrainedAnswerRecovery.recover",
+        lambda *, question, llm_answer, kg_trace: {
+            "answer": llm_answer,
+            "proof_gap": ["missing_relation_witness"],
+            "evidence_verified": False,
+            "proof_status": "partially_grounded",
+            "selected": {"answer": "Club Early", "score": 2.0},
+            "top_candidates": [],
+        },
+    )
+
+    result = QueryEvidenceGraphECARBaseline(
+        RAGConfig(max_output_tokens=32), kg_builder=Builder(),
+    ).run(DatasetExample(
+        example_id="qeg-ecar-no-third-call", question="Which club is in Gaborone?",
+        table_rows=[], text_passages=[], answer="Club Early",
+    ))
+
+    assert result["llm_calls"] == 2
+    assert result["ecar_proof_recovery"]["triggered"] is False
+    assert result["ecar_proof_recovery"]["skip_reason"] == "l2_budget_already_consumed"
 
 
 def test_oueg_diagnostic_focus_resolves_named_table_value_not_rank_anchor():

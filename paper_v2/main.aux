@@ -2,8 +2,8 @@
 \citation{zhou2026tableqasurvey}
 \citation{hybridqa}
 \@writefile{toc}{\contentsline {title}{QEG-RAG: Query-Time Evidence Graphs with Path-Scaffolded Diagnostic Reasoning for Faithful Table--Text Question Answering}{1}\protected@file@percent }
-\@writefile{toc}{\authcount {5}}
-\@writefile{toc}{\contentsline {author}{Trung-Kien Nguyen \and Khac-Hoai-Nam Bui \and Hoang-Hiep Lai \and Quang-Huy Phung \and Van-Vinh Nguyen\unskip {}}{1}\protected@file@percent }
+\@writefile{toc}{\authcount {6}}
+\@writefile{toc}{\contentsline {author}{Trung-Kien Nguyen \and Khac-Hoai-Nam Bui \and Hoang-Hiep Lai \and Quang-Huy Phung \and Duy-Tung Doan \and Van-Vinh Nguyen\unskip {}}{1}\protected@file@percent }
 \citation{agarwal2025hybrid,peng2024graphragsurvey}
 \citation{agarwal2025hybrid}
 \citation{tan2025hydrarag}
@@ -15,7 +15,7 @@
 \citation{wang2022muger2}
 \citation{lei2023s3hqa}
 \citation{agarwal2025hybrid}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Architectural comparison across four query-time table--text reasoning paradigms. This comparison strictly evaluates query-time evidence construction and inference over ad-hoc inputs, excluding offline corpus-wide pre-indexing (e.g., GraphRAG, HippoRAG\nobreakspace  {}2) and parametric model training or fine-tuning (e.g., HYBRIDER, MuGER²). In contrast to unguided linear prompt concatenation\nobreakspace  {}(a), destructive question-driven graph pruning in online KGs like ODYSSEY\nobreakspace  {}(b), and expensive multi-turn agentic exploration over online KGs in systems like HydraRAG and ToG-3\nobreakspace  {}(c), the proposed QEG-RAG framework\nobreakspace  {}(d) dynamically instantiates a schema-preserving online multigraph on-the-fly, retains complete evidence context, guides attention via deterministic multi-factor scored paths, and resolves bottlenecks via a bounded two-tier diagnostic-driven execution protocol.}}{4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Architectural comparison across four query-time table--text reasoning paradigms. This comparison strictly evaluates query-time evidence construction and inference over ad-hoc inputs, excluding offline corpus-wide pre-indexing (e.g., GraphRAG, HippoRAG\nobreakspace  {}2) and parametric model training or fine-tuning (e.g., HYBRIDER, MuGER²). In contrast to unguided linear prompt concatenation\nobreakspace  {}(a), destructive question-driven graph pruning in online KG protocols like ODYSSEY\nobreakspace  {}(b), and expensive multi-turn agentic exploration over online KGs in systems like HydraRAG and ToG-3\nobreakspace  {}(c), the proposed QEG-RAG framework\nobreakspace  {}(d) dynamically instantiates a schema-preserving online multigraph on-the-fly, retains complete evidence context, guides attention via deterministic multi-factor scored paths, and resolves bottlenecks via a bounded two-tier diagnostic-driven execution protocol.}}{4}\protected@file@percent }
 \newlabel{fig:paradigms}{{1}{4}}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{4}\protected@file@percent }
 \newlabel{sec:related}{{2}{4}}
@@ -42,24 +42,25 @@
 \newlabel{sec:method}{{3}{6}}
 \newlabel{sec:formulation}{{3}{6}}
 \@writefile{toc}{\contentsline {paragraph}{Problem Formulation and Graph Representation.}{6}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Online Evidence Multigraph Representation.}{7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Online Evidence Multigraph Representation.}{6}\protected@file@percent }
 \newlabel{eq:graph-partition}{{1}{7}}
 \@writefile{toc}{\contentsline {paragraph}{Schema-Preservation and Non-Conflation Property.}{7}\protected@file@percent }
 \newlabel{eq:star-subgraph}{{2}{7}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Stage 1: Multi-Source Evidence Ingestion}{8}\protected@file@percent }
-\newlabel{sec:method-retrieval}{{3.1}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Stage 1: Multi-Source Evidence Ingestion}{7}\protected@file@percent }
+\newlabel{sec:method-retrieval}{{3.1}{7}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Stage 2: Schema-Preserving Multigraph Construction}{8}\protected@file@percent }
 \newlabel{sec:method-kg}{{3.2}{8}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Stage 3: Two-Tier Controlled Reasoning Engine}{8}\protected@file@percent }
 \newlabel{sec:method-engine}{{3.3}{8}}
 \@writefile{toc}{\contentsline {paragraph}{Tier 1: Primary Reader and Prompt Packaging (First LLM Call).}{8}\protected@file@percent }
 \newlabel{eq:compression}{{3}{8}}
+\newlabel{eq:path-score}{{4}{8}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Two-tier controlled reasoning engine (Stage\nobreakspace  {}3) structured as two parallel algorithmic blocks with deterministic graph compression, illustrated via the running AFL example. (Left) Tier\nobreakspace  {}1 evaluates the unpruned evidence graph under guided path scaffolding. When candidate evidence is unambiguous, execution terminates via Fast Exit in a single LLM call ($\approx 80\%$ of queries). When candidate collision occurs (e.g., candidate clubs both matching 1989 where bridge evidence is missing), the LLM emits a structured diagnostic packet $\mathcal  {D}$. (Center to Right) An automated zero-LLM search fetches targeted bridge passages (\texttt  {Doc:Toronto\_Blues}) and executes algorithmic graph compression by pruning non-competing candidates to construct the minimal state capsule $\mathcal  {S}_{\qopname  \relax m{min}}$. In Tier\nobreakspace  {}2, the LLM resolves the ambiguity deterministically by factual evidence in a targeted second call (at most 2 calls total), producing the verified answer with verifiable provenance.}}{9}\protected@file@percent }
 \newlabel{fig:two-tier}{{3}{9}}
-\newlabel{eq:path-score}{{4}{9}}
+\@writefile{toc}{\contentsline {paragraph}{Diagnostic Handoff and Targeted Bridge Augmentation.}{9}\protected@file@percent }
+\citation{agarwal2025hybrid}
 \citation{hybridqa}
 \citation{chen2021ottqa}
-\@writefile{toc}{\contentsline {paragraph}{Diagnostic Handoff and Targeted Bridge Augmentation.}{10}\protected@file@percent }
 \newlabel{eq:targeted-retrieval}{{5}{10}}
 \@writefile{toc}{\contentsline {paragraph}{Tier 2: Targeted Reader and State Capsule Packaging (Second LLM Call).}{10}\protected@file@percent }
 \newlabel{eq:l2-capsule}{{6}{10}}
@@ -71,10 +72,12 @@
 \citation{agarwal2025hybrid}
 \citation{agarwal2025hybrid}
 \citation{agarwal2025hybrid}
+\citation{agarwal2025hybrid}
+\citation{agarwal2025hybrid}
 \citation{tan2025hydrarag}
 \citation{wu2025tog3}
 \citation{agarwal2025hybrid}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Comprehensive comparative evaluation of native reasoning models across multi-hop table--text benchmarks under strict context grounding ($k_1=5, k_2=3$, 24k context budget, $N=1{,}500$ per benchmark).}}{11}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Comprehensive comparative evaluation of native reasoning models across multi-hop table--text benchmarks under strict context grounding ($k_1=5, k_2=3$, 24k context budget, $N=1{,}500$ per benchmark; $^*$adapted graph-pruning protocol\nobreakspace  {}\cite  {agarwal2025hybrid}).}}{11}\protected@file@percent }
 \newlabel{tab:main-results}{{1}{11}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Experimental Protocol}{11}\protected@file@percent }
 \newlabel{sec:experiments}{{4}{11}}
@@ -83,24 +86,23 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Baselines and Experimental Settings}{11}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{In-Context Reasoning Condition.}{11}\protected@file@percent }
 \citation{agarwal2025hybrid}
+\citation{agarwal2025hybrid}
 \@writefile{toc}{\contentsline {paragraph}{Paradigms and Configurations.}{12}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {5}Results and In-Depth Analysis}{12}\protected@file@percent }
 \newlabel{sec:results}{{5}{12}}
 \@writefile{toc}{\contentsline {paragraph}{RQ1 (Main Benchmark Grounding Performance):}{12}\protected@file@percent }
 \citation{agarwal2025hybrid}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Cross-paradigm generalization on standard non-reasoning instruction-tuned LLM (Qwen 122B on OTT-QA, $N=1{,}500$). QEG-RAG acts as an external neuro-symbolic scaffold, elevating grounding accuracy and EM.}}{13}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Cross-paradigm generalization on standard non-reasoning instruction-tuned LLM (Qwen 122B on OTT-QA, $N=1{,}500$; $^*$adapted graph-pruning protocol). QEG-RAG acts as an external neuro-symbolic scaffold, elevating grounding accuracy and EM.}}{13}\protected@file@percent }
 \newlabel{tab:qwen-results}{{2}{13}}
 \@writefile{toc}{\contentsline {paragraph}{RQ2 (Cross-Paradigm Generalization to Non-Reasoning LLMs):}{13}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{RQ3 (Explicit Reasoning Guidance vs.\ Destructive Pruning):}{13}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Systematic knockout ablation study on a balanced stratified pooled benchmark ($N=500$, comprising 250 HybridQA and 250 OTT-QA instances under GPT-OSS 120B). All variants isolate individual components against full QEG-RAG.}}{14}\protected@file@percent }
 \newlabel{tab:ablation}{{3}{14}}
-\@writefile{toc}{\contentsline {paragraph}{RQ4 (Diagnostic Feedback and Bounded Execution Efficiency):}{14}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{RQ4 (Diagnostic Feedback, Bounded Execution, and Provenance Audit):}{14}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{RQ5 (Preservation of Tabular Semantics):}{14}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Summary of Findings.}{14}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {6}Limitations and Future Work}{14}\protected@file@percent }
 \newlabel{sec:limitations}{{6}{14}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{14}\protected@file@percent }
-\newlabel{sec:conclusion}{{7}{14}}
 \bibstyle{splncs04_unsrt}
 \bibdata{refs}
 \bibcite{zhou2026tableqasurvey}{1}
@@ -116,7 +118,6 @@
 \bibcite{nahid2024tabsqlify}{11}
 \bibcite{ye2023dater}{12}
 \bibcite{wang2024chainoftable}{13}
-\@writefile{toc}{\contentsline {subsubsection}{Disclosure of Interests.}{15}\protected@file@percent }
 \bibcite{chen2024tablerag}{14}
 \bibcite{yu2025tablerag}{15}
 \bibcite{yasunaga2021qagnn}{16}
@@ -127,3 +128,6 @@
 \bibcite{bui2025kgcqr}{21}
 \bibcite{wu2025tog3}{22}
 \bibcite{chen2021ottqa}{23}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{15}\protected@file@percent }
+\newlabel{sec:conclusion}{{7}{15}}
+\@writefile{toc}{\contentsline {subsubsection}{Disclosure of Interests.}{15}\protected@file@percent }

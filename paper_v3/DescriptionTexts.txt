@@ -1,0 +1,2 @@
+1 (Fig. 1) - Architectural comparison across four query-time table-text reasoning paradigms: Flat Concatenation RAG, Online KG with Destructive Pruning, Agentic Online KG Exploration, and QEG-RAG with Query-Time Evidence Graphs and Bounded Diagnostic Reasoning.
+2 (Fig. 2) - End-to-end architecture of QEG-RAG illustrating the four stages: Multi-Source Evidence Ingestion, Schema-Preserving Multigraph Construction, Two-Tier Controlled Reasoning Engine, and Grounded Provenance Audit.

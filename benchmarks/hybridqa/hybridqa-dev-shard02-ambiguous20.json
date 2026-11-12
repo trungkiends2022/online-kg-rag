@@ -1,0 +1,677 @@
+[
+  {
+    "question_id": "7d2cbbdbecead98c",
+    "question": "What was the person who founded the Shamrock Hotel known to be the king of ?",
+    "table_id": "List_of_Texas_A&M_University_people_21",
+    "answer-text": "Wildcatter",
+    "question_postag": "WP VBD DT NN WP VBD DT NNP NNP VBN TO VB DT NN IN .",
+    "answer-node": [
+      [
+        "Winner of the Hoover Medal ; wildcatter",
+        [
+          4,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Wildcatter",
+        [
+          9,
+          2
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Michael T. Halbouty",
+        [
+          4,
+          0
+        ],
+        "/wiki/Michael_T._Halbouty",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "8a0c9f5861500669",
+    "question": "What is the name of the club whose city/town is situated between Kgale and Oodi Hills ?",
+    "table_id": "Botswana_Premier_League_0",
+    "answer-text": "Gaborone United",
+    "question_postag": "WP VBZ DT NN IN DT NN WP$ NN VBZ VBN IN NNP CC NNP NNP .",
+    "answer-node": [
+      [
+        "Gaborone United",
+        [
+          3,
+          0
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Township Rollers F.C.",
+        [
+          15,
+          0
+        ],
+        "/wiki/Township_Rollers_F.C.",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "40fda95a874e6fe5",
+    "question": "What is the name of the keyboardist in the band that formed in London in 2007 and had an album that spent 196 weeks in the UK album charts ?",
+    "table_id": "List_of_albums_which_have_spent_the_most_weeks_on_the_UK_Albums_Chart_1",
+    "answer-text": "Isabella Summers",
+    "question_postag": "WP VBZ DT NN IN DT NN IN DT NN WDT VBD IN NNP IN CD CC VBD DT NN WDT VBD CD NNS IN DT NNP NN NNS .",
+    "answer-node": [
+      [
+        "Lungs (album)",
+        [
+          0,
+          0
+        ],
+        "/wiki/Lungs_(album)",
+        "passage"
+      ],
+      [
+        "Florence and the Machine",
+        [
+          0,
+          1
+        ],
+        "/wiki/Florence_and_the_Machine",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ad50ce5a5cfdf5d5",
+    "question": "Of the winners in 2005 and 2006 which one was born second ?",
+    "table_id": "Leipzig_Marathon_0",
+    "answer-text": "Julius Kiptum Rop",
+    "question_postag": "IN DT NNS IN CD CC CD WDT CD VBD VBN JJ .",
+    "answer-node": [
+      [
+        "Julius Kiptum Rop",
+        [
+          14,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "91125ed5fbdba303",
+    "question": "Which plain is the city in Yugoslavia that had a GDP index of 172 located on ?",
+    "table_id": "Economy_of_the_Socialist_Federal_Republic_of_Yugoslavia_0",
+    "answer-text": "Pannonian",
+    "question_postag": "JJ NN VBZ DT NN IN NNP WDT VBD DT NNP NN IN CD VBN IN .",
+    "answer-node": [
+      [
+        "Belgrade",
+        [
+          0,
+          0
+        ],
+        "/wiki/Belgrade",
+        "passage"
+      ],
+      [
+        "Novi Sad",
+        [
+          5,
+          0
+        ],
+        "/wiki/Novi_Sad",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "4b2c14918cc950b7",
+    "question": "How many inhabit the Northern Territory district which contains the Ltyentye Apurte suburb ?",
+    "table_id": "List_of_schools_in_the_Northern_Territory_5",
+    "answer-text": "6,863",
+    "question_postag": "WRB JJ VBP DT NNP NNP NN WDT VBZ DT NNP NNP NN .",
+    "answer-node": [
+      [
+        "MacDonnell Region",
+        [
+          2,
+          2
+        ],
+        "/wiki/MacDonnell_Region",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "4f6047b8db1c80b1",
+    "question": "between the members born January 22 , 1880 and March 20 , 1916 what is the name of the university holding the chapter of the one born earlier ?",
+    "table_id": "List_of_Alpha_Phi_Omega_members_6",
+    "answer-text": "University of Utah",
+    "question_postag": "IN DT NNS VBP NNP CD , CD CC NNP CD , CD WP VBZ DT NN IN DT NN VBG DT NN IN DT CD VBN JJR .",
+    "answer-node": [
+      [
+        "University of Utah",
+        [
+          0,
+          1
+        ],
+        "/wiki/University_of_Utah",
+        "passage"
+      ],
+      [
+        "University of Utah",
+        [
+          3,
+          1
+        ],
+        "/wiki/University_of_Utah",
+        "passage"
+      ],
+      [
+        "University of Utah",
+        [
+          7,
+          1
+        ],
+        "/wiki/University_of_Utah",
+        "passage"
+      ],
+      [
+        "University of Utah",
+        [
+          13,
+          1
+        ],
+        "/wiki/University_of_Utah",
+        "passage"
+      ],
+      [
+        "University of Utah",
+        [
+          18,
+          1
+        ],
+        "/wiki/University_of_Utah",
+        "passage"
+      ],
+      [
+        "Hamer Reiser",
+        [
+          13,
+          0
+        ],
+        "/wiki/Hamer_Reiser",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "1dce3877f261dfbc",
+    "question": "Which PNP member was elected to the Senate first ?",
+    "table_id": "25th_Senate_of_Puerto_Rico_0",
+    "answer-text": "Itzamar Peña",
+    "question_postag": "JJ NNP NN VBD VBN TO DT NNP RB .",
+    "answer-node": [
+      [
+        "Itzamar Peña",
+        [
+          18,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "4950879950bb5189",
+    "question": "What year of the member of the Hong Kong films entered the music industry ?",
+    "table_id": "List_of_Hong_Kong_films_of_2014_0",
+    "answer-text": "2007",
+    "question_postag": "WP NN IN DT NN IN DT NNP NNP NNS VBD DT NN NN .",
+    "answer-node": [
+      [
+        "Moses Chan",
+        [
+          7,
+          2
+        ],
+        "/wiki/Moses_Chan",
+        "passage"
+      ],
+      [
+        "Deep Ng",
+        [
+          11,
+          2
+        ],
+        "/wiki/Deep_Ng",
+        "passage"
+      ],
+      [
+        "Andy Lau",
+        [
+          13,
+          2
+        ],
+        "/wiki/Andy_Lau",
+        "passage"
+      ],
+      [
+        "Edison Chen",
+        [
+          13,
+          2
+        ],
+        "/wiki/Edison_Chen",
+        "passage"
+      ],
+      [
+        "Vincent Kok",
+        [
+          15,
+          1
+        ],
+        "/wiki/Vincent_Kok",
+        "passage"
+      ],
+      [
+        "Pakho Chau",
+        [
+          19,
+          2
+        ],
+        "/wiki/Pakho_Chau",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c1f49af7526d9ef2",
+    "question": "Who established the school that was the 2nd place winner of the 2002 Head of the River ( Queensland ) ?",
+    "table_id": "Head_of_the_River_(Queensland)_13",
+    "answer-text": "Society of the Sacred Heart",
+    "question_postag": "WP VBD DT NN WDT VBD DT JJ NN NN IN DT CD NNP IN DT NNP ( NNP ) .",
+    "answer-node": [
+      [
+        "Stuartholme School",
+        [
+          8,
+          1
+        ],
+        "/wiki/Stuartholme_School",
+        "passage"
+      ],
+      [
+        "Stuartholme School",
+        [
+          11,
+          3
+        ],
+        "/wiki/Stuartholme_School",
+        "passage"
+      ],
+      [
+        "Stuartholme School",
+        [
+          12,
+          2
+        ],
+        "/wiki/Stuartholme_School",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "f7bbdf4a7ba0bd43",
+    "question": "What is the college of the person who was educated at Ruabon Grammar School ?",
+    "table_id": "List_of_University_of_Oxford_people_in_the_law_4",
+    "answer-text": "Regent 's Park",
+    "question_postag": "WP VBZ DT NN IN DT NN WP VBD VBN IN NNP NNP NNP .",
+    "answer-node": [
+      [
+        "Regent 's Park",
+        [
+          1,
+          1
+        ],
+        null,
+        "table"
+      ],
+      [
+        "Malcolm Bishop",
+        [
+          1,
+          0
+        ],
+        "/wiki/Malcolm_Bishop",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "c21990dc1e6933b6",
+    "question": "Who composed the song performed by Al Jarreau ?",
+    "table_id": "Grammy_Award_for_Best_Jazz_Vocal_Performance,_Male_0",
+    "answer-text": "Dave Brubeck",
+    "question_postag": "WP VBD DT NN VBN IN NNP NNP .",
+    "answer-node": [
+      [
+        "Blue Rondo à la Turk",
+        [
+          1,
+          2
+        ],
+        "/wiki/Blue_Rondo_à_la_Turk",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "dd013edf891ef6b1",
+    "question": "Where were the Olympics held whem Jocelyn Joseph was the flag bearer for Antigua and Barbuda ?",
+    "table_id": "List_of_flag_bearers_for_Antigua_and_Barbuda_at_the_Olympics_0",
+    "answer-text": "Seoul",
+    "question_postag": "WRB VBD DT NNPS VBD JJ NNP NNP VBD DT NN NN IN NNP CC NNP .",
+    "answer-node": [
+      [
+        "2008 Summer Olympics",
+        [
+          2,
+          1
+        ],
+        "/wiki/2008_Summer_Olympics",
+        "passage"
+      ],
+      [
+        "1988 Summer Olympics",
+        [
+          6,
+          1
+        ],
+        "/wiki/1988_Summer_Olympics",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "83cfa408f168a4b5",
+    "question": "How many recipients of the Nobel Prize have been linked with the university of Anne Treisman ?",
+    "table_id": "Golden_Brain_Award_0",
+    "answer-text": "68",
+    "question_postag": "WRB JJ NNS IN DT NNP NNP VBP VBN VBN IN DT NN IN NNP NNP .",
+    "answer-node": [
+      [
+        "Princeton University",
+        [
+          11,
+          2
+        ],
+        "/wiki/Princeton_University",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "96071d9f3186a6d0",
+    "question": "What is the club whose previous MLS cup appearance was the inaugural season of Major League Soccer , and whose next MLS cup appearance was in 2010 ?",
+    "table_id": "List_of_MLS_club_post-season_droughts_10",
+    "answer-text": "Dallas Burn/FC Dallas",
+    "question_postag": "WP VBZ DT NN WP$ JJ NNP NN NN VBD DT JJ NN IN NNP NNP NNP , CC WP$ JJ NNP NN NN VBD IN CD .",
+    "answer-node": [
+      [
+        "Dallas Burn/FC Dallas",
+        [
+          2,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "4ad1d3215fb69cd0",
+    "question": "What is the largest city of the home country of the sixth place finisher of the 2012 Chicago Marathon ?",
+    "table_id": "2012_Chicago_Marathon_1",
+    "answer-text": "Mombasa",
+    "question_postag": "WP VBZ DT JJS NN IN DT NN NN IN DT JJ NN NN IN DT CD NNP NNP .",
+    "answer-node": [
+      [
+        "Kenya",
+        [
+          1,
+          2
+        ],
+        "/wiki/Kenya",
+        "passage"
+      ],
+      [
+        "Kenya",
+        [
+          2,
+          2
+        ],
+        "/wiki/Kenya",
+        "passage"
+      ],
+      [
+        "Kenya",
+        [
+          4,
+          2
+        ],
+        "/wiki/Kenya",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e302099f22fa351c",
+    "question": "What is the capital and largest city of the country whose student has an older sister , Princess Ashi Sonam Dechen Wangchuck ?",
+    "table_id": "List_of_University_of_Oxford_people_in_public_life_overseas_1",
+    "answer-text": "Thimphu",
+    "question_postag": "WP VBZ DT NN CC JJS NN IN DT NN WP$ NN VBZ DT JJR NN , NNP NNP NNP NNP NNP .",
+    "answer-node": [
+      [
+        "Bhutan",
+        [
+          1,
+          2
+        ],
+        "/wiki/Bhutan",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ccbdad20297be087",
+    "question": "The NAIA-affiliated Nebraska school is located how far ( in miles ) from the city of Lincoln ?",
+    "table_id": "List_of_NCCAA_institutions_0",
+    "answer-text": "50 miles",
+    "question_postag": "DT JJ NNP NN VBZ VBN WRB RB ( IN NNS ) IN DT NN IN NNP .",
+    "answer-node": [
+      [
+        "York College (Nebraska)",
+        [
+          10,
+          0
+        ],
+        "/wiki/York_College_(Nebraska)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "6a0f818bd7158b0d",
+    "question": "What is the highest ranking achieved by the champion of recurve archery in 2007 at Dubai in archery ?",
+    "table_id": "FITA_Archery_World_Cup_0",
+    "answer-text": "number one",
+    "question_postag": "WP VBZ DT JJS NN VBN IN DT NN IN NN NN IN CD IN NNP IN NN .",
+    "answer-node": [
+      [
+        "Park Kyung-mo",
+        [
+          0,
+          1
+        ],
+        "/wiki/Park_Kyung-mo",
+        "passage"
+      ],
+      [
+        "Ilario Di Buò",
+        [
+          0,
+          2
+        ],
+        "/wiki/Ilario_Di_Buò",
+        "passage"
+      ],
+      [
+        "Baljinima Tsyrempilov",
+        [
+          1,
+          1
+        ],
+        "/wiki/Baljinima_Tsyrempilov",
+        "passage"
+      ],
+      [
+        "Im Dong-hyun",
+        [
+          2,
+          1
+        ],
+        "/wiki/Im_Dong-hyun",
+        "passage"
+      ],
+      [
+        "Im Dong-hyun",
+        [
+          4,
+          2
+        ],
+        "/wiki/Im_Dong-hyun",
+        "passage"
+      ],
+      [
+        "Im Dong-hyun",
+        [
+          11,
+          3
+        ],
+        "/wiki/Im_Dong-hyun",
+        "passage"
+      ],
+      [
+        "Viktor Ruban",
+        [
+          2,
+          2
+        ],
+        "/wiki/Viktor_Ruban",
+        "passage"
+      ],
+      [
+        "Marco Galiazzo",
+        [
+          3,
+          1
+        ],
+        "/wiki/Marco_Galiazzo",
+        "passage"
+      ],
+      [
+        "Kim Woo-jin",
+        [
+          6,
+          1
+        ],
+        "/wiki/Kim_Woo-jin",
+        "passage"
+      ],
+      [
+        "Kim Woo-jin",
+        [
+          9,
+          3
+        ],
+        "/wiki/Kim_Woo-jin",
+        "passage"
+      ],
+      [
+        "Kim Woo-jin",
+        [
+          11,
+          1
+        ],
+        "/wiki/Kim_Woo-jin",
+        "passage"
+      ],
+      [
+        "Kim Woo-jin",
+        [
+          12,
+          1
+        ],
+        "/wiki/Kim_Woo-jin",
+        "passage"
+      ],
+      [
+        "Oh Jin-hyek",
+        [
+          7,
+          1
+        ],
+        "/wiki/Oh_Jin-hyek",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "2b9da4e384687fd3",
+    "question": "What event did a country debut in who had an athlete medal at the 2005 Jeux de la Francophonie ?",
+    "table_id": "Doping_at_the_Olympic_Games_10",
+    "answer-text": "equestrian",
+    "question_postag": "WP NN VBD DT NN NN IN WP VBD DT JJ NN IN DT CD NNP FW FW NNP .",
+    "answer-node": [
+      [
+        "Saudi Arabia at the 2012 Summer Olympics",
+        [
+          0,
+          1
+        ],
+        "/wiki/Saudi_Arabia_at_the_2012_Summer_Olympics",
+        "passage"
+      ],
+      [
+        "Syria at the 2012 Summer Olympics",
+        [
+          3,
+          1
+        ],
+        "/wiki/Syria_at_the_2012_Summer_Olympics",
+        "passage"
+      ],
+      [
+        "Morocco at the 2012 Summer Olympics",
+        [
+          8,
+          1
+        ],
+        "/wiki/Morocco_at_the_2012_Summer_Olympics",
+        "passage"
+      ]
+    ]
+  }
+]

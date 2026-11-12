@@ -6,6 +6,14 @@ from src.baselines.graph_retrieval import GraphRetrievalNoPathBaseline
 from src.baselines.online_kg_path_text import OnlineKGPathTextBaseline
 from src.baselines.path_text_top_n import PathTextTopNBaseline
 from src.baselines.online_unified_evidence_graph import OnlineUnifiedEvidenceGraphBaseline
+from src.baselines.qeg import (
+    QueryEvidenceGraphBaseline,
+    QueryEvidenceGraphPathBalanceBaseline,
+    QueryEvidenceGraphSoftContractBaseline,
+    QueryEvidenceGraphECARBaseline,
+    QueryEvidenceGraphECARL2EvidenceEvalBaseline,
+    QueryEvidenceGraphAnswerToProofBaseline,
+)
 from src.baselines.odyssey import OdysseyBaseline, OdysseyConfig
 from src.baselines.rag_variants import (
     FlatTableBM25Baseline,
@@ -21,6 +29,12 @@ __all__ = [
     "OnlineKGPathTextBaseline",
     "PathTextTopNBaseline",
     "OnlineUnifiedEvidenceGraphBaseline",
+    "QueryEvidenceGraphBaseline",
+    "QueryEvidenceGraphPathBalanceBaseline",
+    "QueryEvidenceGraphSoftContractBaseline",
+    "QueryEvidenceGraphECARBaseline",
+    "QueryEvidenceGraphECARL2EvidenceEvalBaseline",
+    "QueryEvidenceGraphAnswerToProofBaseline",
     "OdysseyBaseline",
     "OdysseyConfig",
     "OracleEvidenceBaseline",

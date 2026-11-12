@@ -1,0 +1,206 @@
+\documentclass[tikz,border=3mm]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,backgrounds,calc}
+\usepackage{lmodern}
+
+\begin{document}
+\begin{tikzpicture}[
+  >=Latex,
+  font=\sffamily\scriptsize,
+  % Panels
+  panel/.style={draw=#1!70!black, fill=#1!3, rounded corners=6pt, line width=0.7pt},
+  titlebar/.style={fill=#1!15, draw=#1!70!black, line width=0.5pt, rounded corners=3pt, font=\bfseries\scriptsize, text=#1!90!black, align=center, inner sep=2.5pt, minimum height=4.8mm},
+  % Cards
+  card/.style={draw=gray!30, fill=white, rounded corners=4pt, line width=0.5pt, minimum width=3.85cm, minimum height=2.65cm},
+  llmcard/.style={draw=#1!75!black, fill=#1!7, rounded corners=4pt, line width=0.65pt, minimum width=3.85cm, minimum height=2.65cm},
+  anscard/.style={draw=green!65!black, fill=green!6, rounded corners=4pt, line width=0.65pt, minimum width=3.85cm, minimum height=2.65cm},
+  badge/.style={fill=#1!15, draw=#1!75!black, line width=0.45pt, rounded corners=2pt, inner sep=1.4pt, font=\bfseries\tiny, text=#1!95!black},
+  exbox/.style={fill=gray!6, draw=gray!25, rounded corners=2pt, line width=0.4pt, inner sep=2pt, text width=3.35cm, align=left},
+  % Connectors
+  flow/.style={->, line width=0.85pt, draw=gray!60!black},
+  flow_green/.style={->, line width=1.1pt, draw=green!60!black},
+  flow_orange/.style={->, line width=1.0pt, draw=orange!85!black},
+  flow_purple/.style={->, line width=0.95pt, draw=purple!80!black},
+  flow_blue/.style={->, line width=0.95pt, draw=blue!75!black}
+]
+
+% Geometry Definitions:
+% Total diagram width: 13.0cm, Center X: 6.5cm
+% 3 Columns per panel:
+% Width per card: 3.85cm, Gap: 0.45cm
+% Col 1: X = 2.25cm
+% Col 2: X = 6.50cm
+% Col 3: X = 10.75cm
+
+% Top Panel: Tier 1 (Center Y: 4.15cm, Height: 3.65cm)
+% Bottom Panel: Tier 2 (Center Y: 0.15cm, Height: 3.65cm)
+% Inter-panel gap: 0.35cm
+
+% ==========================================================
+% TOP PANEL: TIER 1 (PRIMARY REASONING & AUDIT)
+% ==========================================================
+\node[panel=blue, minimum width=13.0cm, minimum height=3.65cm] (p1) at (6.5, 4.15) {};
+\node[titlebar=blue, text width=12.6cm, anchor=north] (t1) at ([yshift=-1.8mm]p1.north) {Tier 1: Primary Evidence Evaluation \& Structural Clarity Check};
+
+% Card 1.1: Evidence Input
+\node[card] (c1_1) at (2.25, 3.85) {};
+\begin{scope}[shift={(1.0, 4.65)}, scale=0.55]
+  \draw[fill=blue!15, draw=blue!75!black, rounded corners=1.5pt] (-0.4,-0.35) rectangle (0.4, 0.35);
+  \fill[orange!85!black] (-0.2,0.1) circle (1.8pt);
+  \fill[blue!85!black] (0.2,0.2) circle (1.8pt);
+  \fill[green!75!black] (0.1,-0.15) circle (1.8pt);
+  \draw[gray!70!black, line width=0.5pt] (-0.2,0.1) -- (0.2,0.2);
+  \draw[gray!70!black, line width=0.5pt] (-0.2,0.1) -- (0.1,-0.15);
+\end{scope}
+\node[anchor=west, font=\bfseries\scriptsize, text=blue!90!black] at (1.35, 4.65) {1. Evidence Graph};
+\node[text width=3.6cm, align=left, anchor=north] at (2.25, 4.35) {
+  {\fontsize{5.2pt}{6.2pt}\selectfont
+  $\bullet$ Full multigraph without context pruning\\
+  $\bullet$ Guided path scaffold steers attention\\[1mm]}
+  \begin{tikzpicture}
+    \node[exbox] {
+      {\fontsize{4.8pt}{5.8pt}\selectfont
+      \textbf{Example Input:}\\
+      $\bullet$ \texttt{Row 0: Tor. Eagles (Formed 1989)}\\
+      $\bullet$ \texttt{Row 1: Tor. Blues (Formed 1989)}\\
+      $\bullet$ Path: \texttt{Eagles} $\to$ \texttt{Row 0} $\to$ \texttt{Toronto} $\to$ \texttt{York}}
+    };
+  \end{tikzpicture}
+};
+
+% Card 1.2: Tier 1 LLM Call
+\node[llmcard=blue] (c1_2) at (6.50, 3.85) {};
+\begin{scope}[shift={(5.25, 4.65)}, scale=0.55]
+  \draw[fill=blue!20, draw=blue!80!black, rounded corners=1.5pt] (-0.375,-0.375) rectangle (0.375, 0.375);
+  \node[font=\fontsize{4.5pt}{5pt}\bfseries\selectfont, text=blue!90!black] at (0, 0) {LLM};
+  \foreach \x in {-0.2, 0, 0.2} {
+    \draw[blue!80!black, line width=0.5pt] (\x, 0.375) -- (\x, 0.5);
+    \draw[blue!80!black, line width=0.5pt] (\x, -0.375) -- (\x, -0.5);
+  }
+\end{scope}
+\node[anchor=west, font=\bfseries\scriptsize, text=blue!90!black] at (5.60, 4.65) {2. Primary LLM Call};
+\node[text width=3.6cm, align=left, anchor=north] at (6.50, 4.35) {
+  {\fontsize{5.2pt}{6.2pt}\selectfont
+  $\bullet$ Evaluates initial evidence along path\\
+  $\bullet$ Strictly prohibits hallucinated guess\\[1mm]}
+  \begin{tikzpicture}
+    \node[exbox] {
+      {\fontsize{4.8pt}{5.8pt}\selectfont
+      \textbf{Ambiguity Audit:}\\
+      $\bullet$ Two candidate clubs match \texttt{1989}\\
+      $\bullet$ Bridge passage for \texttt{Blues} is missing\\
+      $\bullet$ \textcolor{orange!85!black}{\textbf{Decision}}: Collision $\to$ Stop \& Handoff}
+    };
+  \end{tikzpicture}
+};
+
+% Card 1.3: Fast Exit vs Handoff
+\node[card, draw=orange!70!black, fill=orange!3] (c1_3) at (10.75, 3.85) {};
+\begin{scope}[shift={(9.5, 4.65)}, scale=0.55]
+  \draw[fill=orange!25, draw=orange!80!black, shape=diamond, line width=0.5pt] (0, 0) circle (0.38);
+  \node[font=\tiny\bfseries, text=orange!90!black] at (0, 0) {?};
+\end{scope}
+\node[anchor=west, font=\bfseries\scriptsize, text=orange!90!black] at (9.85, 4.65) {3. Decision Branch};
+\node[text width=3.6cm, align=left, anchor=north] at (10.75, 4.35) {
+  {\fontsize{5.2pt}{6.2pt}\selectfont
+  $\bullet$ \textbf{Clear}: Fast Exit (1 call, $\approx 80\%$)\\
+  $\bullet$ \textbf{Ambiguous}: Diagnostic Handoff\\[1mm]}
+  \begin{tikzpicture}
+    \node[exbox, fill=orange!8, draw=orange!30] {
+      {\fontsize{4.8pt}{5.8pt}\selectfont
+      \textbf{Diagnostic Packet Emitted:}\\
+      $\bullet$ Competing: \texttt{Eagles} vs \texttt{Blues}\\
+      $\bullet$ Check: Verify founding year in passage\\
+      $\bullet$ Dispatched to Tier 2 ($\approx 20\%$)}
+    };
+  \end{tikzpicture}
+};
+
+% Connectors in Tier 1
+\draw[flow_blue] (c1_1) -- (c1_2);
+\draw[flow_blue] (c1_2) -- (c1_3);
+
+% ==========================================================
+% BOTTOM PANEL: TIER 2 (TARGETED RETRIEVAL & DISAMBIGUATION)
+% ==========================================================
+\node[panel=orange, minimum width=13.0cm, minimum height=3.65cm] (p2) at (6.5, 0.15) {};
+\node[titlebar=orange, text width=12.6cm, anchor=north] (t2) at ([yshift=-1.8mm]p2.north) {Tier 2: Diagnostic Feedback \& Targeted Disambiguation};
+
+% Card 2.1: Automated Bridge Search
+\node[card, draw=purple!65!black, fill=purple!4] (c2_1) at (2.25, -0.15) {};
+\begin{scope}[shift={(1.0, 0.65)}, scale=0.55]
+  \draw[fill=purple!20, draw=purple!80!black, circle] (-0.05, 0.1) circle (0.24);
+  \draw[purple!80!black, line width=1.1pt] (0.12, -0.07) -- (0.33, -0.28);
+\end{scope}
+\node[anchor=west, font=\bfseries\scriptsize, text=purple!90!black] at (1.35, 0.65) {4. Targeted Search};
+\node[text width=3.6cm, align=left, anchor=north] at (2.25, 0.35) {
+  {\fontsize{5.2pt}{6.2pt}\selectfont
+  $\bullet$ \textbf{Zero LLM Calls} (Automated retriever)\\
+  $\bullet$ Fetches missing facts for tied candidates\\[1mm]}
+  \begin{tikzpicture}
+    \node[exbox] {
+      {\fontsize{4.8pt}{5.8pt}\selectfont
+      \textbf{Retrieved Delta Evidence:}\\
+      $\bullet$ Fetches \texttt{Doc:Toronto\_Blues}\\
+      $\bullet$ Passage reveals: Blues formed in 1991\\
+      $\bullet$ Candidate symmetry broken factually}
+    };
+  \end{tikzpicture}
+};
+
+% Card 2.2: State Capsule
+\node[card, draw=purple!75!black, fill=purple!7] (c2_2) at (6.50, -0.15) {};
+\begin{scope}[shift={(5.25, 0.65)}, scale=0.55]
+  \draw[fill=purple!25, draw=purple!80!black, rounded corners=1.5pt] (-0.35, -0.28) rectangle (0.35, 0.28);
+  \draw[purple!80!black, line width=0.5pt] (-0.35, 0.05) -- (0.35, 0.05);
+  \draw[purple!80!black, line width=0.5pt] (0, 0.05) -- (0, 0.28);
+\end{scope}
+\node[anchor=west, font=\bfseries\scriptsize, text=purple!90!black] at (5.60, 0.65) {5. State Capsule};
+\node[text width=3.6cm, align=left, anchor=north] at (6.50, 0.35) {
+  {\fontsize{5.2pt}{6.2pt}\selectfont
+  $\bullet$ Discards irrelevant peripheral rows\\
+  $\bullet$ Compact bundle of verified facts\\[1mm]}
+  \begin{tikzpicture}
+    \node[exbox] {
+      {\fontsize{4.8pt}{5.8pt}\selectfont
+      \textbf{Capsule Content:}\\
+      $\bullet$ Disputed rows: \texttt{Eagles} vs \texttt{Blues}\\
+      $\bullet$ Newly retrieved external passages\\
+      $\bullet$ Target query check: AFL club in 1989}
+    };
+  \end{tikzpicture}
+};
+
+% Card 2.3: Tier 2 LLM Call & Grounded Answer
+\node[anscard] (c2_3) at (10.75, -0.15) {};
+\begin{scope}[shift={(9.5, 0.65)}, scale=0.55]
+  \draw[fill=green!25, draw=green!75!black, circle] (0, 0) circle (0.35);
+  \draw[green!80!black, line width=1.1pt] (-0.15,0) -- (-0.03,-0.13) -- (0.17,0.13);
+\end{scope}
+\node[anchor=west, font=\bfseries\scriptsize, text=green!70!black] at (9.85, 0.65) {6. Grounded Answer};
+\node[text width=3.6cm, align=left, anchor=north] at (10.75, 0.35) {
+  {\fontsize{5.2pt}{6.2pt}\selectfont
+  $\bullet$ \textbf{Tier 2 Call}: Solves focused capsule\\
+  $\bullet$ \textbf{2 Calls Total} (Bounded execution)\\[1mm]}
+  \begin{tikzpicture}
+    \node[exbox, fill=green!12, draw=green!35] {
+      {\fontsize{4.8pt}{5.8pt}\selectfont
+      \textbf{Auditable Resolution:}\\
+      $\bullet$ Confirmed: \texttt{Eagles} is the 1989 club\\
+      $\bullet$ Bridge entity: \texttt{Toronto}\\
+      $\bullet$ \textbf{Final Answer}: \textcolor{green!60!black}{\textbf{York}} (Provenance: 100\%)}
+    };
+  \end{tikzpicture}
+};
+
+% Connectors in Tier 2
+\draw[flow_purple] (c2_1) -- (c2_2);
+\draw[flow_purple] (c2_2) -- (c2_3);
+
+% Inter-tier Feedback Connector (from Card 1.3 to Card 2.1)
+\draw[flow_orange] (c1_3.south) -- ++(0,-0.35) -| (c2_1.north)
+  node[pos=0.25, fill=white, draw=orange!70!black, rounded corners=2pt, inner sep=1.8pt, font=\bfseries\tiny, text=orange!90!black]
+  {Diagnostic Handoff: Missing Bridge Links};
+
+\end{tikzpicture}
+\end{document}

@@ -21,6 +21,12 @@ from src.baselines import (
     OnlineKGPathTextBaseline,
     PathTextTopNBaseline,
     OnlineUnifiedEvidenceGraphBaseline,
+    QueryEvidenceGraphBaseline,
+    QueryEvidenceGraphPathBalanceBaseline,
+    QueryEvidenceGraphSoftContractBaseline,
+    QueryEvidenceGraphECARBaseline,
+    QueryEvidenceGraphECARL2EvidenceEvalBaseline,
+    QueryEvidenceGraphAnswerToProofBaseline,
     OracleEvidenceBaseline,
     PathConsistencyEvaluator,
     GraphRetrievalNoPathBaseline,
@@ -52,6 +58,12 @@ METHODS = (
     "path_text_top_n",
     "odyssey",
     "online_unified_evidence_graph",
+    "qeg",
+    "qeg_path_balance",
+    "qeg_soft_contract",
+    "qeg_ecar",
+    "qeg_ecar_l2_evidence_eval",
+    "qeg_answer_to_proof",
     "oracle_evidence",
     "path_consistency",
     "numerical_ir",
@@ -172,6 +184,7 @@ def _build_run_manifest(args, *, max_workers: int) -> dict:
         "l2_max_contexts_per_candidate": args.l2_max_contexts_per_candidate,
         "l2_context_snippet_chars": args.l2_context_snippet_chars,
         "use_adaptive_verification": args.use_adaptive_verification,
+        "use_ecar_proof_recovery": args.use_ecar_proof_recovery,
         "l2_evidence_mode": args.l2_evidence_mode,
         "use_prompt_compression": args.use_prompt_compression,
         "use_path_focused_prompt": args.use_path_focused_prompt,
@@ -195,6 +208,13 @@ def _build_run_manifest(args, *, max_workers: int) -> dict:
             )
         ),
     }
+    # QEG variants deliberately start from the no-path reader, irrespective of
+    # the CLI default. Record the effective runtime configuration rather than
+    # the pre-construction argparse values in reproducibility manifests.
+    if args.method in {"qeg", "qeg_soft_contract", "qeg_ecar", "qeg_ecar_l2_evidence_eval", "qeg_answer_to_proof"}:
+        config["use_path_guidance"] = False
+        config["use_path_focused_prompt"] = False
+        config["require_evidence_path"] = args.method == "qeg"
     manifest = {
         "schema_version": MANIFEST_SCHEMA_VERSION,
         "dataset": args.dataset,
@@ -298,6 +318,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--l2-max-contexts-per-candidate", type=int, default=3, help="OUEG: passage cap for each L2 candidate packet.")
     parser.add_argument("--l2-context-snippet-chars", type=int, default=900, help="OUEG: maximum chars for each L2 passage snippet.")
     parser.add_argument("--no-adaptive-verification", action="store_false", dest="use_adaptive_verification", help="OUEG ablation: disable the diagnostic-triggered L2 recovery branch after an empty or NEED_FOCUS response.")
+    parser.add_argument("--no-ecar-proof-recovery", action="store_false", dest="use_ecar_proof_recovery", help="QEG-ECAR ablation: retain the L1 answer instead of using the remaining bounded L2 call to repair an ECAR proof gap.")
     parser.add_argument("--l2-evidence-mode", choices=("delta_only", "complete_re_read"), default="delta_only", help="OUEG L2 context: small sufficient state capsule (default) or full-graph diagnostic ablation.")
     parser.add_argument("--no-prompt-compression", action="store_false", dest="use_prompt_compression", help="OUEG ablation: serialize the full uncompressed evidence payload.")
     parser.add_argument("--path-focused-prompt", action="store_true", dest="use_path_focused_prompt", help="OUEG ablation: prune the L1 reader payload to path-focused evidence instead of the full compact OUEG.")
@@ -415,6 +436,7 @@ def _make_method(args):
         l2_max_contexts_per_candidate=args.l2_max_contexts_per_candidate,
         l2_context_snippet_chars=args.l2_context_snippet_chars,
         use_adaptive_verification=args.use_adaptive_verification,
+        use_ecar_proof_recovery=args.use_ecar_proof_recovery,
         l2_evidence_mode=args.l2_evidence_mode,
         use_prompt_compression=args.use_prompt_compression,
         use_path_focused_prompt=args.use_path_focused_prompt,
@@ -457,6 +479,18 @@ def _make_method(args):
         )
     if args.method == "online_unified_evidence_graph":
         return OnlineUnifiedEvidenceGraphBaseline(rag_config)
+    if args.method == "qeg":
+        return QueryEvidenceGraphBaseline(rag_config)
+    if args.method == "qeg_path_balance":
+        return QueryEvidenceGraphPathBalanceBaseline(rag_config)
+    if args.method == "qeg_soft_contract":
+        return QueryEvidenceGraphSoftContractBaseline(rag_config)
+    if args.method == "qeg_ecar":
+        return QueryEvidenceGraphECARBaseline(rag_config)
+    if args.method == "qeg_ecar_l2_evidence_eval":
+        return QueryEvidenceGraphECARL2EvidenceEvalBaseline(rag_config)
+    if args.method == "qeg_answer_to_proof":
+        return QueryEvidenceGraphAnswerToProofBaseline(rag_config)
     if args.method == "oracle_evidence":
         return OracleEvidenceBaseline(rag_config)
     pipeline = OnlineKGPipeline(

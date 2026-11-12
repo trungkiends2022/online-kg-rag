@@ -1,0 +1,28 @@
+{
+  "source": "benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard02.json",
+  "reference": "data/results/hybridqa-shard02-ablations-120b/no_path_guidance/hybridqa__shard02-of08__openrouter__openai-gpt-oss-120b__online_unified_evidence_graph__no_path_guidance.jsonl",
+  "ambiguity_status": "SCORE_COLLISION_TIE",
+  "count": 20,
+  "question_ids": [
+    "7d2cbbdbecead98c",
+    "8a0c9f5861500669",
+    "40fda95a874e6fe5",
+    "ad50ce5a5cfdf5d5",
+    "91125ed5fbdba303",
+    "4b2c14918cc950b7",
+    "4f6047b8db1c80b1",
+    "1dce3877f261dfbc",
+    "4950879950bb5189",
+    "c1f49af7526d9ef2",
+    "f7bbdf4a7ba0bd43",
+    "c21990dc1e6933b6",
+    "dd013edf891ef6b1",
+    "83cfa408f168a4b5",
+    "96071d9f3186a6d0",
+    "4ad1d3215fb69cd0",
+    "e302099f22fa351c",
+    "ccbdad20297be087",
+    "6a0f818bd7158b0d",
+    "2b9da4e384687fd3"
+  ]
+}

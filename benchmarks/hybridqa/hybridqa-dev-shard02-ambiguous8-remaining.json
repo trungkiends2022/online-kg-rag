@@ -1,0 +1,290 @@
+[
+  {
+    "question_id": "1dce3877f261dfbc",
+    "question": "Which PNP member was elected to the Senate first ?",
+    "table_id": "25th_Senate_of_Puerto_Rico_0",
+    "answer-text": "Itzamar Peña",
+    "question_postag": "JJ NNP NN VBD VBN TO DT NNP RB .",
+    "answer-node": [
+      [
+        "Itzamar Peña",
+        [
+          18,
+          1
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "83cfa408f168a4b5",
+    "question": "How many recipients of the Nobel Prize have been linked with the university of Anne Treisman ?",
+    "table_id": "Golden_Brain_Award_0",
+    "answer-text": "68",
+    "question_postag": "WRB JJ NNS IN DT NNP NNP VBP VBN VBN IN DT NN IN NNP NNP .",
+    "answer-node": [
+      [
+        "Princeton University",
+        [
+          11,
+          2
+        ],
+        "/wiki/Princeton_University",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "96071d9f3186a6d0",
+    "question": "What is the club whose previous MLS cup appearance was the inaugural season of Major League Soccer , and whose next MLS cup appearance was in 2010 ?",
+    "table_id": "List_of_MLS_club_post-season_droughts_10",
+    "answer-text": "Dallas Burn/FC Dallas",
+    "question_postag": "WP VBZ DT NN WP$ JJ NNP NN NN VBD DT JJ NN IN NNP NNP NNP , CC WP$ JJ NNP NN NN VBD IN CD .",
+    "answer-node": [
+      [
+        "Dallas Burn/FC Dallas",
+        [
+          2,
+          0
+        ],
+        null,
+        "table"
+      ]
+    ]
+  },
+  {
+    "question_id": "4ad1d3215fb69cd0",
+    "question": "What is the largest city of the home country of the sixth place finisher of the 2012 Chicago Marathon ?",
+    "table_id": "2012_Chicago_Marathon_1",
+    "answer-text": "Mombasa",
+    "question_postag": "WP VBZ DT JJS NN IN DT NN NN IN DT JJ NN NN IN DT CD NNP NNP .",
+    "answer-node": [
+      [
+        "Kenya",
+        [
+          1,
+          2
+        ],
+        "/wiki/Kenya",
+        "passage"
+      ],
+      [
+        "Kenya",
+        [
+          2,
+          2
+        ],
+        "/wiki/Kenya",
+        "passage"
+      ],
+      [
+        "Kenya",
+        [
+          4,
+          2
+        ],
+        "/wiki/Kenya",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "e302099f22fa351c",
+    "question": "What is the capital and largest city of the country whose student has an older sister , Princess Ashi Sonam Dechen Wangchuck ?",
+    "table_id": "List_of_University_of_Oxford_people_in_public_life_overseas_1",
+    "answer-text": "Thimphu",
+    "question_postag": "WP VBZ DT NN CC JJS NN IN DT NN WP$ NN VBZ DT JJR NN , NNP NNP NNP NNP NNP .",
+    "answer-node": [
+      [
+        "Bhutan",
+        [
+          1,
+          2
+        ],
+        "/wiki/Bhutan",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "ccbdad20297be087",
+    "question": "The NAIA-affiliated Nebraska school is located how far ( in miles ) from the city of Lincoln ?",
+    "table_id": "List_of_NCCAA_institutions_0",
+    "answer-text": "50 miles",
+    "question_postag": "DT JJ NNP NN VBZ VBN WRB RB ( IN NNS ) IN DT NN IN NNP .",
+    "answer-node": [
+      [
+        "York College (Nebraska)",
+        [
+          10,
+          0
+        ],
+        "/wiki/York_College_(Nebraska)",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "6a0f818bd7158b0d",
+    "question": "What is the highest ranking achieved by the champion of recurve archery in 2007 at Dubai in archery ?",
+    "table_id": "FITA_Archery_World_Cup_0",
+    "answer-text": "number one",
+    "question_postag": "WP VBZ DT JJS NN VBN IN DT NN IN NN NN IN CD IN NNP IN NN .",
+    "answer-node": [
+      [
+        "Park Kyung-mo",
+        [
+          0,
+          1
+        ],
+        "/wiki/Park_Kyung-mo",
+        "passage"
+      ],
+      [
+        "Ilario Di Buò",
+        [
+          0,
+          2
+        ],
+        "/wiki/Ilario_Di_Buò",
+        "passage"
+      ],
+      [
+        "Baljinima Tsyrempilov",
+        [
+          1,
+          1
+        ],
+        "/wiki/Baljinima_Tsyrempilov",
+        "passage"
+      ],
+      [
+        "Im Dong-hyun",
+        [
+          2,
+          1
+        ],
+        "/wiki/Im_Dong-hyun",
+        "passage"
+      ],
+      [
+        "Im Dong-hyun",
+        [
+          4,
+          2
+        ],
+        "/wiki/Im_Dong-hyun",
+        "passage"
+      ],
+      [
+        "Im Dong-hyun",
+        [
+          11,
+          3
+        ],
+        "/wiki/Im_Dong-hyun",
+        "passage"
+      ],
+      [
+        "Viktor Ruban",
+        [
+          2,
+          2
+        ],
+        "/wiki/Viktor_Ruban",
+        "passage"
+      ],
+      [
+        "Marco Galiazzo",
+        [
+          3,
+          1
+        ],
+        "/wiki/Marco_Galiazzo",
+        "passage"
+      ],
+      [
+        "Kim Woo-jin",
+        [
+          6,
+          1
+        ],
+        "/wiki/Kim_Woo-jin",
+        "passage"
+      ],
+      [
+        "Kim Woo-jin",
+        [
+          9,
+          3
+        ],
+        "/wiki/Kim_Woo-jin",
+        "passage"
+      ],
+      [
+        "Kim Woo-jin",
+        [
+          11,
+          1
+        ],
+        "/wiki/Kim_Woo-jin",
+        "passage"
+      ],
+      [
+        "Kim Woo-jin",
+        [
+          12,
+          1
+        ],
+        "/wiki/Kim_Woo-jin",
+        "passage"
+      ],
+      [
+        "Oh Jin-hyek",
+        [
+          7,
+          1
+        ],
+        "/wiki/Oh_Jin-hyek",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "2b9da4e384687fd3",
+    "question": "What event did a country debut in who had an athlete medal at the 2005 Jeux de la Francophonie ?",
+    "table_id": "Doping_at_the_Olympic_Games_10",
+    "answer-text": "equestrian",
+    "question_postag": "WP NN VBD DT NN NN IN WP VBD DT JJ NN IN DT CD NNP FW FW NNP .",
+    "answer-node": [
+      [
+        "Saudi Arabia at the 2012 Summer Olympics",
+        [
+          0,
+          1
+        ],
+        "/wiki/Saudi_Arabia_at_the_2012_Summer_Olympics",
+        "passage"
+      ],
+      [
+        "Syria at the 2012 Summer Olympics",
+        [
+          3,
+          1
+        ],
+        "/wiki/Syria_at_the_2012_Summer_Olympics",
+        "passage"
+      ],
+      [
+        "Morocco at the 2012 Summer Olympics",
+        [
+          8,
+          1
+        ],
+        "/wiki/Morocco_at_the_2012_Summer_Olympics",
+        "passage"
+      ]
+    ]
+  }
+]

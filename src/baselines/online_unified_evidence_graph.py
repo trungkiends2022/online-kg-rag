@@ -885,22 +885,46 @@ class OnlineUnifiedEvidenceGraphBaseline:
         """Extract model-selected evidence IDs and reject IDs outside its prompt."""
         match = re.search(r"EVIDENCE_PATH\s*:\s*(\{.*?\}|\[.*?\])", str(raw or ""), re.I | re.S)
         if match is None:
-            return {"required": True, "provided": False, "selected_refs": [], "invalid_refs": []}
+            return {
+                "required": True, "provided": False, "selected_refs": [], "invalid_refs": [],
+                "selected_edge_refs": [], "selected_passage_refs": [], "has_grounded_path": False,
+            }
         try:
             value = json.loads(match.group(1))
         except json.JSONDecodeError:
-            return {"required": True, "provided": True, "selected_refs": [], "invalid_refs": [match.group(1)]}
+            return {
+                "required": True, "provided": True, "selected_refs": [], "invalid_refs": [match.group(1)],
+                "selected_edge_refs": [], "selected_passage_refs": [], "has_grounded_path": False,
+            }
         if isinstance(value, dict):
             refs = [item for items in value.values() for item in (items if isinstance(items, list) else [items])]
         else:
             refs = value if isinstance(value, list) else [value]
         rendered = [str(item) for item in refs if str(item).strip()]
+        selected = [item for item in rendered if item in allowed_refs]
+        invalid = [item for item in rendered if item not in allowed_refs]
+        edge_refs = [item for item in selected if re.fullmatch(r"(?:e\d+|kg:\d+)", item)]
+        passage_refs = [item for item in selected if item not in edge_refs]
         return {
             "required": True,
             "provided": True,
-            "selected_refs": [item for item in rendered if item in allowed_refs],
-            "invalid_refs": [item for item in rendered if item not in allowed_refs],
+            "selected_refs": selected,
+            "invalid_refs": invalid,
+            "selected_edge_refs": edge_refs,
+            "selected_passage_refs": passage_refs,
+            # A citation is a path only when it contains at least one actual
+            # graph edge; a bare passage reference cannot establish a graph
+            # traversal or table-to-text binding.
+            "has_grounded_path": bool(edge_refs) and not invalid,
         }
+
+    def _valid_answer_evidence_path(self, audit: dict | None) -> bool:
+        """Apply the evidence contract selected by the current method."""
+        if not audit:
+            return False
+        if not audit.get("selected_refs") or audit.get("invalid_refs"):
+            return False
+        return bool(audit.get("has_grounded_path")) if self.config.require_evidence_path else True
 
     @staticmethod
     def _serialized_evidence_refs(serialized: str) -> set[str]:
@@ -1715,6 +1739,18 @@ class OnlineUnifiedEvidenceGraphBaseline:
                     first_response, self._serialized_evidence_refs(compressed_prompt["json"]),
                 )
                 adaptive_verification["first_evidence_path"] = first_evidence_path
+                # QEG does not allow a plausible but uncited L1 span to skip
+                # verification.  It becomes a grounded L2 recovery request.
+                if answer and self.config.require_evidence_path and not self._valid_answer_evidence_path(first_evidence_path):
+                    adaptive_verification["first_answer_rejected"] = "missing_or_invalid_evidence_path"
+                    model_hint = {
+                        "response_type": "need_focus",
+                        "candidates": [],
+                        "blocker_type": "missing_link",
+                        "bottleneck": "The L1 answer did not cite a visible grounded evidence path.",
+                        "needed_check": "Return the answer with the visible KG edge IDs that prove it.",
+                    }
+                    answer = ""
                 if answer:
                     answer_evidence_path = first_evidence_path
                     adaptive_verification["final_decision"] = "fast_path_answer"
@@ -1810,7 +1846,10 @@ class OnlineUnifiedEvidenceGraphBaseline:
                         temperature=self.config.temperature,
                     )
                     answer, second_diagnostic = self._parse_adaptive_response(second_response)
-                    if not answer and not second_diagnostic and handoff and handoff.get("candidates"):
+                    if (
+                        not self.config.require_evidence_path
+                        and not answer and not second_diagnostic and handoff and handoff.get("candidates")
+                    ):
                         for cand in handoff.get("candidates", []):
                             cand_clean = self._short_answer(cand)
                             if cand_clean:
@@ -1822,6 +1861,9 @@ class OnlineUnifiedEvidenceGraphBaseline:
                     )
                     adaptive_verification["second_evidence_path"] = second_evidence_path
                     adaptive_verification["second_diagnostic"] = second_diagnostic or None
+                    if answer and self.config.require_evidence_path and not self._valid_answer_evidence_path(second_evidence_path):
+                        adaptive_verification["second_answer_rejected"] = "missing_or_invalid_evidence_path"
+                        answer = ""
                     if answer:
                         answer_evidence_path = second_evidence_path
                     adaptive_verification["final_decision"] = (
@@ -1838,11 +1880,7 @@ class OnlineUnifiedEvidenceGraphBaseline:
         retrieval_trace = dict(retrieved.get("retrieval_trace", {}))
         retrieval_trace["collision_evidence_expansion"] = collision_expansion
         retrieval_trace["focus_evidence_augmentation"] = focus_evidence_augmentation
-        answer_evidence_verified = bool(
-            answer_evidence_path
-            and answer_evidence_path.get("selected_refs")
-            and not answer_evidence_path.get("invalid_refs")
-        )
+        answer_evidence_verified = self._valid_answer_evidence_path(answer_evidence_path)
         return {
             "answer": answer,
             "method": self.method_name,
@@ -1863,6 +1901,10 @@ class OnlineUnifiedEvidenceGraphBaseline:
             "adaptive_verification": adaptive_verification,
             "answer_evidence_path": answer_evidence_path,
             "answer_evidence_verified": answer_evidence_verified,
+            "evidence_contract": {
+                "required": self.config.require_evidence_path,
+                "satisfied": bool(answer) and answer_evidence_verified,
+            },
             "collision_evidence_expansion": collision_expansion,
             "focus_evidence_augmentation": focus_evidence_augmentation,
             "entity_anchor": retrieved.get("retrieval_trace", {}).get("entity_anchor", {}),
