@@ -210,7 +210,7 @@ QEG-RAG enforces grounding through an explicit structural mechanism: rather than
 We evaluate across two challenging multi-hop table--text benchmarks ($N=1{,}500$ each, sampled from official development splits following~\cite{agarwal2025hybrid}): (1)~\emph{HybridQA}~\cite{hybridqa}, evaluating reasoning over Wikipedia tables aligned with hyperlinked passages; and (2)~\emph{OTT-QA}~\cite{chen2021ottqa}, evaluating open table-and-text retrieval and question answering where tables and text spans must be jointly fetched. Both benchmarks require integrating semi-structured table cells with unstructured passages, providing a realistic testbed for evaluating cross-modal multi-hop reasoning and targeted diagnostic disambiguation when candidate ambiguities arise.
 
 \paragraph{Evaluation Scope.}
-Unlike supervised models (e.g., MuGER$^2$~\cite{wang2022muger2}, S3HQA~\cite{lei2023s3hqa}) that fine-tune millions of parameters on benchmark-specific training instances, QEG-RAG operates strictly in the training-free, zero-shot in-context RAG regime (0 training examples, 0 updated weights) under standardized retrieval pools ($k_1=5, k_2=3$) and context budgets ($24{,}000$ characters). We report Exact Match (EM), Token-level $\text{F}_1$, Semantic EM, and average LLM calls.
+Unlike supervised models (e.g., MuGER$^2$~\cite{wang2022muger2}, S3HQA~\cite{lei2023s3hqa}) that fine-tune millions of parameters on benchmark-specific training instances, QEG-RAG operates strictly in the training-free, zero-shot in-context RAG regime (0 training examples, 0 updated weights) under standardized retrieval pools ($k_1=5, k_2=3$) and context budgets ($24{,}000$ characters). We report Exact Match (EM), Token-level $\text{F}_1$, and average LLM calls.
 
 \begin{table}[t]
 \caption{Comprehensive comparative evaluation of native reasoning models across multi-hop table--text benchmarks under strict context grounding ($k_1=5, k_2=3$, 24k context budget, $N=1{,}500$ per benchmark; $^*$adapted graph-pruning protocol~\cite{agarwal2025hybrid}).}
@@ -220,37 +220,37 @@ Unlike supervised models (e.g., MuGER$^2$~\cite{wang2022muger2}, S3HQA~\cite{lei
 \scriptsize
 \renewcommand{\arraystretch}{0.88}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}lllrrrr@{}}
+\begin{tabular}{@{}lllrrr@{}}
 \toprule
-Dataset & Model & Method & EM (\%) & $\text{F}_1$ (\%) & Sem.\ EM & Calls \\
+Dataset & Model & Method & EM (\%) & $\text{F}_1$ (\%) & Calls \\
 \midrule
 \multirow{10}{*}{HybridQA} & \multirow{5}{*}{GPT-OSS 20B}  
-  & Direct LLM               & 45.73 & 54.25 & 48.00 & \textbf{1.00} \\
-& & ODYSSEY$^*$~\cite{agarwal2025hybrid} & 32.80 & 39.98 & 34.80 & 5.39 \\
-& & Flat Graph RAG           & 31.80 & 37.92 & 32.93 & \textbf{1.00} \\
-& & Pruned Subgraph RAG      & 10.87 & 12.53 & 10.93 & \textbf{1.00} \\
-& & \textbf{QEG-RAG (Ours)}  & \textbf{53.07} & \textbf{66.45} & \textbf{54.07} & 1.23 \\
-\cmidrule{2-7}
+  & Direct LLM               & 45.73 & 54.25 & \textbf{1.00} \\
+& & ODYSSEY$^*$~\cite{agarwal2025hybrid} & 32.80 & 39.98 & 5.39 \\
+& & Flat Graph RAG           & 31.80 & 37.92 & \textbf{1.00} \\
+& & Pruned Subgraph RAG      & 10.87 & 12.53 & \textbf{1.00} \\
+& & \textbf{QEG-RAG (Ours)}  & \textbf{53.07} & \textbf{66.45} & 1.23 \\
+\cmidrule{2-6}
 & \multirow{5}{*}{GPT-OSS 120B} 
-  & Direct LLM               & 56.20 & 65.62 & 57.87 & \textbf{1.00} \\
-& & ODYSSEY$^*$~\cite{agarwal2025hybrid} & 37.80 & 45.17 & 39.13 & 5.38 \\
-& & Flat Graph RAG           & 33.93 & 39.80 & 34.67 & \textbf{1.00} \\
-& & Pruned Subgraph RAG      & 13.07 & 15.13 & 13.13 & \textbf{1.00} \\
-& & \textbf{QEG-RAG (Ours)}  & \textbf{59.27} & \textbf{70.70} & \textbf{60.00} & 1.20 \\
+  & Direct LLM               & 56.20 & 65.62 & \textbf{1.00} \\
+& & ODYSSEY$^*$~\cite{agarwal2025hybrid} & 37.80 & 45.17 & 5.38 \\
+& & Flat Graph RAG           & 33.93 & 39.80 & \textbf{1.00} \\
+& & Pruned Subgraph RAG      & 13.07 & 15.13 & \textbf{1.00} \\
+& & \textbf{QEG-RAG (Ours)}  & \textbf{59.27} & \textbf{70.70} & 1.20 \\
 \midrule
 \multirow{10}{*}{OTT-QA}   & \multirow{5}{*}{GPT-OSS 20B}  
-  & Direct LLM               & 50.80 & 57.70 & 51.80 & \textbf{1.00} \\
-& & ODYSSEY$^*$~\cite{agarwal2025hybrid} & 37.47 & 43.66 & 38.60 & 5.44 \\
-& & Flat Graph RAG           & 40.87 & 46.35 & 41.60 & \textbf{1.00} \\
-& & Pruned Subgraph RAG      & 9.40  & 10.39 & 9.47  & \textbf{1.00} \\
-& & \textbf{QEG-RAG (Ours)}  & \textbf{55.60} & \textbf{67.59} & \textbf{55.93} & 1.24 \\
-\cmidrule{2-7}
+  & Direct LLM               & 50.80 & 57.70 & \textbf{1.00} \\
+& & ODYSSEY$^*$~\cite{agarwal2025hybrid} & 37.47 & 43.66 & 5.44 \\
+& & Flat Graph RAG           & 40.87 & 46.35 & \textbf{1.00} \\
+& & Pruned Subgraph RAG      & 9.40  & 10.39 & \textbf{1.00} \\
+& & \textbf{QEG-RAG (Ours)}  & \textbf{55.60} & \textbf{67.59} & 1.24 \\
+\cmidrule{2-6}
 & \multirow{5}{*}{GPT-OSS 120B} 
-  & Direct LLM               & 60.40 & 67.93 & 61.20 & \textbf{1.00} \\
-& & ODYSSEY$^*$~\cite{agarwal2025hybrid} & 41.73 & 47.96 & 42.53 & 5.48 \\
-& & Flat Graph RAG           & 42.27 & 47.58 & 42.87 & \textbf{1.00} \\
-& & Pruned Subgraph RAG      & 13.20 & 14.88 & 13.27 & \textbf{1.00} \\
-& & \textbf{QEG-RAG (Ours)}  & \textbf{62.93} & \textbf{73.03} & \textbf{63.07} & 1.22 \\
+  & Direct LLM               & 60.40 & 67.93 & \textbf{1.00} \\
+& & ODYSSEY$^*$~\cite{agarwal2025hybrid} & 41.73 & 47.96 & 5.48 \\
+& & Flat Graph RAG           & 42.27 & 47.58 & \textbf{1.00} \\
+& & Pruned Subgraph RAG      & 13.20 & 14.88 & \textbf{1.00} \\
+& & \textbf{QEG-RAG (Ours)}  & \textbf{62.93} & \textbf{73.03} & 1.22 \\
 \bottomrule
 \end{tabular}%
 }
@@ -294,16 +294,16 @@ To systematically assess the empirical performance and architectural mechanisms 
 \centering
 \scriptsize
 \renewcommand{\arraystretch}{0.88}
-\setlength{\tabcolsep}{7pt}
-\begin{tabular}{@{}lrrrr@{}}
+\setlength{\tabcolsep}{8pt}
+\begin{tabular}{@{}lrrr@{}}
 \toprule
-Method & EM (\%) & $\text{F}_1$ (\%) & Sem.\ EM & Calls \\
+Method & EM (\%) & $\text{F}_1$ (\%) & Calls \\
 \midrule
-Direct LLM                         & 29.27 & 31.52 & 29.53 & \textbf{1.00} \\
-ODYSSEY$^*$~\cite{agarwal2025hybrid} & 5.93  & 6.99  & 5.93  & 6.66 \\
-Flat Graph RAG                     & 9.93  & 11.00 & 10.00 & \textbf{1.00} \\
-Pruned Subgraph RAG                  & 1.67  & 1.89  & 1.73  & \textbf{1.00} \\
-\textbf{QEG-RAG (Ours)}            & \textbf{33.40} & \textbf{35.30} & \textbf{33.53} & 1.64 \\
+Direct LLM                         & 29.27 & 31.52 & \textbf{1.00} \\
+ODYSSEY$^*$~\cite{agarwal2025hybrid} & 5.93  & 6.99  & 6.66 \\
+Flat Graph RAG                     & 9.93  & 11.00 & \textbf{1.00} \\
+Pruned Subgraph RAG                  & 1.67  & 1.89  & \textbf{1.00} \\
+\textbf{QEG-RAG (Ours)}            & \textbf{33.40} & \textbf{35.30} & 1.64 \\
 \bottomrule
 \end{tabular}
 \vspace{1.0mm}
