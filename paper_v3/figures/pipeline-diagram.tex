@@ -98,16 +98,16 @@
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Star Record Hubs} \\[0.3mm]
   $\bullet$ Hub binds every cell to its row \\
-  $\bullet$ Prevents cross-row conflation \\
+  $\bullet$ Mitigates cross-row conflation \\
   $\bullet$ Rule-based text links (no LLM)
   \par}
 };
 
 \node[subcard, text width=4.15cm, fill=purple!12, draw=purple!60, anchor=north] (path_box) at ([yshift=-2.5mm]centroid_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{Lossless Evidence Serialization} \\[0.3mm]
+  \textbf{Evidence-Preserving Serialization} \\[0.3mm]
   $\bullet$ Star record blocks $+$ deduplicated passages \\
-  $\bullet$ Complete context without destructive pruning \\
+  $\bullet$ Retains retrieved evidence within budget \\
   $\bullet$ Compact schema-aligned serialization
   \par}
 };
@@ -123,7 +123,7 @@
 \node[llmcard=orange, text width=5.15cm, anchor=north] (l1_box) at ([yshift=-2.5mm]t3.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{\underline{Tier 1: Primary Reader [LLM Call 1]}} \\[0.3mm]
-  $\bullet$ \textbf{Prompt Packaging}: Lossless compressed graph (deduplicated passages $+$ star row blocks) \\
+  $\bullet$ \textbf{Prompt Packaging}: Compact compressed graph (deduplicated passages $+$ star row blocks) \\
   $\bullet$ \textbf{Controlled Decision}:
   \vspace{-0.5mm}
   \begin{itemize}[leftmargin=3mm]

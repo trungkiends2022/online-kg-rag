@@ -52,6 +52,7 @@ from src.evaluation.async_logger import AsyncBenchmarkLogger
 
 METHODS = (
     "direct_llm",
+    "direct_llm_compact",
     "flat_table_bm25",
     "flat_rag_shared_context",
     "online_kg_path_text",
@@ -448,6 +449,15 @@ def _make_method(args):
     )
     if args.method == "direct_llm":
         return HybridQARAGBaseline(BaselineConfig(
+            passage_top_k=args.top_k,
+            max_context_chars=args.max_context_chars,
+            max_output_tokens=args.max_output_tokens,
+            second_stage_k=args.second_stage_k,
+            temperature=args.temperature,
+        ))
+    if args.method == "direct_llm_compact":
+        from src.baselines.direct_llm_compact import DirectLLMCompactBaseline
+        return DirectLLMCompactBaseline(BaselineConfig(
             passage_top_k=args.top_k,
             max_context_chars=args.max_context_chars,
             max_output_tokens=args.max_output_tokens,
