@@ -1,0 +1,9 @@
+\begin{figure}[t]
+\centering
+\input{figures/pipeline-diagram}
+\Description{End-to-end architecture of QEG-RAG illustrating the four stages in a 2x2 grid: Multi-Source Evidence Ingestion, Schema-Preserving Multigraph Construction, Two-Tier Controlled Reasoning Engine, and Grounded Provenance Audit.}
+\vspace{0.5mm}
+\caption{End-to-end architecture of QEG-RAG in a $2\times 2$ grid. (Sec.~\ref{sec:method-retrieval}) Multi-Source Evidence Ingestion retrieves relevant table rows and linked passages. (Sec.~\ref{sec:method-kg}) Schema-Preserving Multigraph Construction builds star record hubs and text relations without LLMs. (Sec.~\ref{sec:method-engine}) Two-Tier Controlled Reasoning Engine: Tier~1 reads the compressed evidence graph; unambiguous cases exit immediately in one call, while ambiguous collisions trigger a diagnostic handoff and targeted bridge retrieval for conclusive resolution in Tier~2. (Sec.~\ref{sec:method-answer}) Grounded Generation and Provenance Audit outputs answers mapped to auditable provenance traces.}
+\vspace{-1.5mm}
+\label{fig:pipeline}
+\end{figure}

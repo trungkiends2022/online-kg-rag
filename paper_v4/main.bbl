@@ -1,0 +1,117 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{zhou2026tableqasurvey}
+Zhou, W., Ma, B., Friedrich, A., Mesgar, M.: Table question answering in the
+  era of large language models: A comprehensive survey of tasks, methods, and
+  evaluation. In: Proc. ACL (2026)
+
+\bibitem{hybridqa}
+Chen, W., Zha, H., Chen, Z., Xiong, W., Wang, H., Wang, W.Y.: {HybridQA}: A
+  dataset of multi-hop question answering over tabular and textual data. In:
+  Findings of EMNLP. pp. 1026--1036. Association for Computational Linguistics
+  (2020)
+
+\bibitem{peng2024graphragsurvey}
+Peng, C., Shen, Y., Zhang, M., Chen, J., Han, X., Wang, H.: Graph
+  retrieval-augmented generation: A survey. arXiv preprint arXiv:2408.08921
+  (2024)
+
+\bibitem{agarwal2025hybrid}
+Agarwal, A., S, G., Devaguptapu, C.: Hybrid graphs for table-and-text based
+  question answering using {LLMs}. In: Proc. NAACL (2025)
+
+\bibitem{tan2025hydrarag}
+Tan, X., Wang, X., Liu, Q., Xu, X., Yuan, X., Zhu, L., Zhang, W.: {HydraRAG}:
+  Structured cross-source enhanced large language model reasoning. In: Proc.
+  EMNLP. pp. 14431--14459 (2025)
+
+\bibitem{chen2021ottqa}
+Chen, W., Chang, M.W., Schlinger, E., Wang, W.Y., Cohen, W.W.: Open question
+  answering over tables and text. In: Proc. ICLR (2021)
+
+\bibitem{eisenschlos2021mate}
+Eisenschlos, J.M., Gor, M., M{\"u}ller, T., Cohen, W.W.: {MATE}: Multi-view
+  attention for table transformer efficiency. In: Proc. EMNLP. pp. 7606--7619
+  (2021)
+
+\bibitem{sun2021dochopper}
+Sun, H., Cohen, W.W., Salakhutdinov, R.: Iterative hierarchical attention for
+  answering complex questions over long documents. arXiv preprint
+  arXiv:2106.00200  (2021)
+
+\bibitem{lei2023s3hqa}
+Lei, F., Li, X., Wei, Y., He, S., Huang, Y., Zhao, J., Liu, K.: {S3HQA}: A
+  three-stage approach for multi-hop text-table hybrid question answering. In:
+  Proc. ACL. pp. 1391--1401 (2023)
+
+\bibitem{wang2022muger2}
+Wang, Y., Bao, J., Duan, C., Wu, Y., He, X., Zhao, T.: {MuGER$^2$}:
+  Multi-granularity evidence retrieval and reasoning for hybrid question
+  answering. In: Findings of EMNLP. pp. 6687--6697 (2022)
+
+\bibitem{cheng2023binder}
+Cheng, Z., Gao, T., Yan, Z., Wang, S., Ye, Z., Guan, Z., Liu, P., Yin, P.:
+  Binding language models in symbolic languages. In: Proc. ICLR (2023)
+
+\bibitem{nahid2024tabsqlify}
+Nahid, M.M.H., Rafiei, D.: {TabSQLify}: Enhancing reasoning capabilities of
+  {LLMs} through table decomposition. In: Proc. NAACL. pp. 4030--4040 (2024)
+
+\bibitem{ye2023dater}
+Ye, Y., Hui, B., Yang, M., Li, B., Huang, F., Li, Y.: Large language models are
+  versatile decomposers: Decompose evidence and questions for table-based
+  reasoning. In: Proc. SIGIR. pp. 174--184 (2023)
+
+\bibitem{wang2024chainoftable}
+Wang, Z., Zhang, H., Li, C.L., et~al.: Chain-of-table: Evolving tables in the
+  reasoning chain for table understanding. In: Proc. ICLR (2024)
+
+\bibitem{chen2024tablerag}
+Chen, S.A., Miculicich, L., Eisenschlos, J.M., et~al.: {TableRAG}:
+  Million-token table understanding with language models. In: NeurIPS. pp.
+  21001--21028 (2024)
+
+\bibitem{yu2025tablerag}
+Yu, X., Jian, P., Chen, C.: {TableRAG}: A retrieval augmented generation
+  framework for heterogeneous document reasoning. In: Proc. EMNLP. pp.
+  7100--7115 (2025)
+
+\bibitem{yasunaga2021qagnn}
+Yasunaga, M., Ren, H., Bosselut, A., Liang, P., Leskovec, J.: {QA-GNN}:
+  Reasoning with language models and knowledge graphs for question answering.
+  In: Proc. NAACL. pp. 535--546 (2021)
+
+\bibitem{sun2022jointlk}
+Sun, Y., Shi, Q., Qi, L., Zhang, Y.: {JointLK}: Joint reasoning with language
+  models and knowledge graphs for commonsense question answering. In: Proc.
+  NAACL. pp. 5049--5060 (2022)
+
+\bibitem{he2024gretriever}
+He, X., Tian, Y., Sun, N., Chawla, N.V., Laurent, T., Bresson, X.:
+  {G-Retriever}: Retrieval-augmented generation for textual graph understanding
+  and question answering. In: NeurIPS (2024)
+
+\bibitem{edge2024graphrag}
+Edge, D., Trinh, H., Cen, N., Cheng, Y., Bradley, R., Chao, A., Mody, A.,
+  Truitt, S., Larson, J.: From local to global: A graph {RAG} approach to
+  query-focused summarization. arXiv preprint arXiv:2404.16130  (2024)
+
+\bibitem{gutierrez2025hipporag2}
+Guti{\'e}rrez, B.J., Shu, Y., Qi, W., Zhou, S., Su, Y.: From {RAG} to memory:
+  Non-parametric continual learning for large language models. arXiv preprint
+  arXiv:2502.14802  (2025)
+
+\bibitem{bui2025kgcqr}
+Bui, C.M., Thieu, N.M., Nguyen, V.V., Jung, J.J., Bui, K.H.N.: {KG-CQR}:
+  Leveraging structured relation representations in knowledge graphs for
+  contextual query retrieval. In: Proc. EMNLP. pp. 16281--16298 (2025)
+
+\bibitem{wu2025tog3}
+Wu, X., Yang, C., Lin, X., et~al.: Think-on-graph 3.0: Efficient and adaptive
+  {LLM} reasoning on heterogeneous graphs via multi-agent dual-evolving context
+  retrieval. arXiv preprint arXiv:2509.21710  (2025)
+
+\end{thebibliography}

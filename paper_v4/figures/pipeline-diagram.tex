@@ -1,0 +1,162 @@
+% Pipeline Diagram: 2x2 Grid Architecture (12.0cm Native Width for LNCS, Clean Enclosure, Zero Overlap)
+\definecolor{panelBlue}{HTML}{EBF5FB}
+\definecolor{borderBlue}{HTML}{2980B9}
+\definecolor{titleBlue}{HTML}{1B4F72}
+
+\definecolor{panelPurple}{HTML}{F5EEF8}
+\definecolor{borderPurple}{HTML}{8E44AD}
+\definecolor{titlePurple}{HTML}{512E5F}
+
+\definecolor{panelOrange}{HTML}{FEF9E7}
+\definecolor{borderOrange}{HTML}{D35400}
+\definecolor{titleOrange}{HTML}{7E5109}
+
+\definecolor{panelTeal}{HTML}{E8F8F5}
+\definecolor{borderTeal}{HTML}{16A085}
+\definecolor{titleTeal}{HTML}{0E6251}
+
+\begin{tikzpicture}[
+  >=Latex,
+  panel/.style={draw=border#1, fill=panel#1, rounded corners=3.5pt, line width=0.6pt},
+  titlebar/.style={draw=border#1, fill=white, rounded corners=2.2pt, line width=0.5pt, font=\bfseries\fontsize{6.3pt}{7.2pt}\selectfont, text=title#1, align=center, inner sep=2.0pt},
+  subcard/.style={draw=gray!35, fill=white, rounded corners=2.2pt, align=left, inner sep=2.5pt, font=\fontsize{6.2pt}{7.2pt}\selectfont, line width=0.4pt},
+  knode/.style={draw=#1!85!black, fill=#1!18, rounded corners=2pt, inner sep=1.8pt, font=\bfseries\fontsize{6.5pt}{7.2pt}\selectfont, align=center},
+  kedge/.style={->, line width=0.55pt, draw=#1!80!black, font=\fontsize{5.2pt}{6.2pt}\selectfont}
+]
+
+% Geometry: Total width = 12.0cm, 2 columns of 5.45cm each, horizontal gutter = 1.10cm
+\def\wCol{5.45cm}
+\def\wCard{5.10cm}
+\def\hPanelOne{3.30cm}
+\def\hPanelTwo{3.65cm}
+
+% ========================================================
+% TOP BANNER: 1 Single Compact Line (Guaranteed 1 Line)
+% ========================================================
+\node[draw=borderBlue, fill=panelBlue, rounded corners=3pt, line width=0.55pt, text width=11.75cm, inner sep=2.2pt, anchor=north west] (banner) at (0.0, 0.0) {
+  \textbf{\fontsize{6.2pt}{7.2pt}\selectfont Running Case:} {\fontsize{6.2pt}{7.2pt}\selectfont \textit{``Original name of city with AFL club formed in 1989?''} $\;\rightarrow\;$ \textbf{Target:} \texttt{"York"}}
+};
+
+% ========================================================
+% STAGE 1: MULTI-SOURCE INGESTION (Top-Left)
+% Placed 2.2mm strictly below the banner to eliminate overlap!
+% ========================================================
+\node[panel=Blue, minimum width=\wCol, minimum height=\hPanelOne, anchor=north west] (p1) at ([yshift=-2.2mm]banner.south west) {};
+\node[titlebar=Blue, text width=\wCard, anchor=north] (t1) at ([yshift=-1.2mm]p1.north) {Stage 1 (Sec.~3.1): Evidence Ingestion};
+
+\node[subcard, text width=\wCard, anchor=north] (c1_tab) at ([yshift=-1.0mm]t1.south) {
+  \textbf{Table \texttt{AFL\_0}}: Collision ($|\mathcal{C}_q|=2$) on year 1989 \\[0.5mm]
+  \renewcommand{\arraystretch}{1.02}\setlength{\tabcolsep}{2.0pt}%
+  \begin{tabular}{|l|c|l|}
+    \hline
+    \textbf{Club} & \textbf{Year} & \textbf{Linked Entity} \\
+    \hline
+    \rowcolor{blue!15} Tor.\ Eagles & 1989 & Toronto $\to$ \texttt{Doc:Tor} \\
+    \rowcolor{orange!15} Ott.\ Swans & 1989 & Ottawa $\to$ \texttt{Doc:Ott} \\
+    \hline
+  \end{tabular}
+};
+
+\node[subcard, text width=\wCard, anchor=north, fill=blue!6] (c1_psg) at ([yshift=-0.9mm]c1_tab.south) {
+  $\bullet$ \texttt{Doc:Tor}: \textit{``...founded 1793 as \underline{York}...''} \\
+  $\bullet$ \texttt{Doc:Ott}: \textit{``...founded 1826 as Bytown...''}
+};
+
+% ========================================================
+% STAGE 2: MULTIGRAPH CONSTRUCTION (Top-Right)
+% Col 2 starts at x = 0.0 + 5.45 + 1.10 = 6.55cm
+% ========================================================
+\node[panel=Purple, minimum width=\wCol, minimum height=\hPanelOne, anchor=north west] (p2) at ([xshift=1.10cm]p1.north east) {};
+\node[titlebar=Purple, text width=\wCard, anchor=north] (t2) at ([yshift=-1.2mm]p2.north) {Stage 2 (Sec.~3.2): Multigraph Construction};
+
+% Graph Nodes: Placed strictly below t2.south to avoid overlapping titlebar!
+\coordinate (g_origin) at ([xshift=1.15cm, yshift=-0.95cm]p2.north west |- t2.south);
+
+\node[knode=blue]   (club) at ([yshift=0.68cm]g_origin) {Tor.\ Eagles};
+\node[knode=gray]   (year) at ([xshift=1.45cm, yshift=0.68cm]g_origin) {1989};
+
+\node[knode=purple] (rho0) at (g_origin) {$\rho_0$};
+\node[knode=teal]   (city) at ([xshift=1.10cm]g_origin) {Toronto};
+\node[knode=orange] (doc)  at ([xshift=2.30cm]g_origin) {Doc:Tor};
+\node[knode=red]    (ans)  at ([xshift=3.50cm]g_origin) {York};
+
+% Intra-record Star Hub Edges
+\draw[kedge=purple] (rho0) -- node[left=1pt] {club} (club);
+\draw[kedge=gray]   (rho0) -- node[above right=-2.5pt] {year} (year);
+
+% Cross-modal Reasoning Path Edges
+\draw[kedge=teal]   (rho0) -- node[above=1.5pt] {city} (city);
+\draw[kedge=orange] (city) -- node[above=1.5pt] {link} (doc);
+\draw[kedge=red]    (doc)  -- node[above=1.5pt] {orig} (ans);
+
+\node[subcard, text width=\wCard, anchor=north, fill=purple!6] (c2_info) at ([yshift=-0.30cm]city.south -| p2.center) {
+  $\bullet$ \textbf{Star Hub} $\rho_0$ binds row cells (0 cross-row conflation) \\
+  $\bullet$ \textbf{Evidence Preserved}: complete context in prompt $\mathcal{X}^*$
+};
+
+% ========================================================
+% STAGE 3: TWO-TIER REASONING (Bottom-Left)
+% Placed 7.0mm below Row 1 for spacious routing!
+% ========================================================
+\node[panel=Orange, minimum width=\wCol, minimum height=\hPanelTwo, anchor=north west] (p3) at ([yshift=-7.0mm]p1.south west) {};
+\node[titlebar=Orange, text width=\wCard, anchor=north] (t3) at ([yshift=-1.2mm]p3.north) {Stage 3 (Sec.~3.3): Two-Tier Reasoning Engine};
+
+\node[subcard, text width=\wCard, anchor=north, fill=orange!8] (t3_t1) at ([yshift=-1.0mm]t3.south) {
+  \textbf{Tier 1: Graph-Prompt Reader} ($1^{\text{st}}$ LLM Call) \\
+  $\bullet$ \textbf{Fast Exit} ($\approx 78\%$): unambiguous query $\to$ output \\
+  $\bullet$ \textbf{Diagnostic Handoff}: $|\mathcal{C}_q|>1$ triggers Tier 2
+};
+
+\node[subcard, text width=\wCard, anchor=north, fill=orange!16] (t3_t2) at ([yshift=-2.2mm]t3_t1.south) {
+  \textbf{Tier 2: Disambiguation Reader} (bounded $\le 2$ calls) \\
+  $\bullet$ Targeted fetch $\Delta\mathcal{D}$ resolves candidate ambiguity
+};
+\draw[->, line width=0.7pt, borderOrange] (t3_t1.south) -- (t3_t2.north);
+
+% ========================================================
+% STAGE 4: GROUNDED PROVENANCE (Bottom-Right)
+% ========================================================
+\node[panel=Teal, minimum width=\wCol, minimum height=\hPanelTwo, anchor=north west] (p4) at ([xshift=1.10cm]p3.north east) {};
+\node[titlebar=Teal, text width=\wCard, anchor=north] (t4) at ([yshift=-1.2mm]p4.north) {Stage 4 (Sec.~3.4): Provenance Audit};
+
+\node[subcard, text width=\wCard, anchor=north, fill=green!15, align=center] (t4_ans) at ([yshift=-1.0mm]t4.south) {
+  \textbf{Verified Answer}: \quad {\fontsize{8.5pt}{10.0pt}\selectfont \textbf{\texttt{"York"}}} \quad \textit{(verified trace)}
+};
+
+\node[subcard, text width=\wCard, anchor=north, fill=teal!6] (t4_prov) at ([yshift=-1.0mm]t4_ans.south) {
+  \textbf{Provenance Trace}: $\rho_0 \to$ \texttt{Toronto} $\to$ \texttt{Doc:Tor} $\to$ \texttt{"York"}
+};
+
+\node[subcard, text width=\wCard, anchor=north, fill=teal!12] (t4_stat) at ([yshift=-1.0mm]t4_prov.south) {
+  $\bullet$ \textbf{80.97\%} verbatim span in cited evidence (Wilson CI: $\pm 3.7\%$) \\
+  $\bullet$ \textbf{100.0\%} citation validity rate (0 fabricated IDs)
+};
+
+% ========================================================
+% PROMINENT CONNECTING ARROWS IN GUTTERS (1.10cm Horizontal, 9.5mm Vertical)
+% ========================================================
+% 1. Stage 1 -> Stage 2 (Horizontal across 11mm gutter)
+\draw[->, line width=1.1pt, borderBlue] (p1.east) -- node[above=2pt, font=\bfseries\fontsize{6.2pt}{7.2pt}\selectfont, text=borderBlue] {Multigraph} (p2.west);
+
+% 2. Stage 2 -> Stage 3 (Spacious 7.0mm vertical gutter routing)
+\draw[->, line width=1.1pt, borderPurple] ([xshift=1.2cm]p2.south west) -- ++(0,-0.35) -| node[pos=0.25, below=1.5pt, font=\bfseries\fontsize{6.2pt}{7.2pt}\selectfont, text=borderPurple] {Prompt $\mathcal{X}^*$} ([xshift=-1.2cm]p3.north east);
+
+% 3. Stage 3 -> Stage 4 (Fast Exit from Tier 1 + Tier 2 Verified Trace)
+\draw[->, line width=0.95pt, borderTeal, dashed] (t3_t1.east -| p3.east) -- node[above=1.5pt, font=\bfseries\fontsize{6.0pt}{7.0pt}\selectfont, text=borderTeal] {\shortstack{Fast Exit\\($\approx 78\%$)}} (t3_t1.east -| p4.west);
+\draw[->, line width=1.1pt, borderOrange] (t3_t2.east -| p3.east) -- node[above=1.5pt, font=\bfseries\fontsize{6.0pt}{7.0pt}\selectfont, text=borderOrange] {\shortstack{Verified\\Trace}} (t3_t2.east -| p4.west);
+
+% ========================================================
+% LEGEND BAR: Compact 1-line key at the bottom (12.0cm width)
+% ========================================================
+\node[draw=gray!35, fill=gray!5, rounded corners=2.5pt, line width=0.45pt, minimum width=12.0cm, inner sep=2.2pt, font=\fontsize{5.4pt}{6.4pt}\selectfont, anchor=north west] (legend) at ([yshift=-1.5mm]p3.south west) {%
+  \textbf{Legend:}\;%
+  \tikz[baseline=(n.base)]\node[knode=purple, minimum width=0pt, inner sep=1.1pt, font=\bfseries\fontsize{5.1pt}{5.6pt}\selectfont](n){$\rho_i$};\,Hub\;\;%
+  \tikz[baseline=(n.base)]\node[knode=blue, minimum width=0pt, inner sep=1.1pt, font=\bfseries\fontsize{5.1pt}{5.6pt}\selectfont](n){Cell};\,Table Cell\;\;%
+  \tikz[baseline=(n.base)]\node[knode=teal, minimum width=0pt, inner sep=1.1pt, font=\bfseries\fontsize{5.1pt}{5.6pt}\selectfont](n){Ent};\,Bridge\;\;%
+  \tikz[baseline=(n.base)]\node[knode=orange, minimum width=0pt, inner sep=1.1pt, font=\bfseries\fontsize{5.1pt}{5.6pt}\selectfont](n){Doc};\,Passage\;\;%
+  \tikz[baseline=(n.base)]\node[knode=red, minimum width=0pt, inner sep=1.1pt, font=\bfseries\fontsize{5.1pt}{5.6pt}\selectfont](n){Ans};\,Answer\;\;%
+  \tikz[baseline=-0.35ex]\draw[->, line width=0.75pt, borderOrange] (0,0) -- (0.28,0);\,Primary / Tier 2\;\;%
+  \tikz[baseline=-0.35ex]\draw[->, line width=0.75pt, borderTeal, dashed] (0,0) -- (0.28,0);\,Fast Exit%
+};
+
+\end{tikzpicture}

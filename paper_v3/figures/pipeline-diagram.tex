@@ -154,7 +154,7 @@
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{\underline{Tier 2: Targeted Reader [LLM Call 2]}} \\[0.3mm]
   $\bullet$ \textbf{Prompt Packaging}: Transmits \emph{only missing \& disputed facts} (discards all unrelated rows) \\
-  $\bullet$ Resolves candidate ambiguity via verified facts ($\le 2$ calls total)
+  $\bullet$ Resolves candidate ambiguity via retrieved facts ($\le 2$ calls total)
   \par}
 };
 
@@ -172,7 +172,7 @@
 % Answer box aligned with l1_box center vertically!
 \node[subcard, text width=3.95cm, fill=green!15, draw=green!60!black, line width=0.7pt, anchor=north] (ans_box) at ([yshift=-2.8mm]t4.south) {
   {\fontsize{5pt}{6pt}\selectfont
-  \textbf{\underline{Verified Answer Span}} \\[0.5mm]
+  \textbf{\underline{Grounded Answer Span}} \\[0.5mm]
   \centering{\textbf{\small \texttt{"York"}}}\\[0.6mm]
   $\bullet$ Exact context-grounded extraction \\
   $\bullet$ Auditable provenance trace

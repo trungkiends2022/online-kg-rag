@@ -7,6 +7,11 @@
 \usepackage{url}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,shapes.geometric,backgrounds}
 
 \lstset{
   basicstyle=\ttfamily\scriptsize,
@@ -22,19 +27,34 @@
 
 \begin{document}
 
-\title{Supplementary Material: Prompt Templates for QEG-RAG Two-Tier Diagnostic Engine}
-\titlerunning{Prompt Templates for QEG-RAG}
+\title{Supplementary Material: End-to-End Architecture and Prompt Templates for QEG-RAG}
+\titlerunning{Supplementary Material for QEG-RAG}
 \author{Trung-Kien Nguyen\inst{1} \and
 Khac-Hoai-Nam Bui\inst{2} \and
 Hoang-Hiep Lai\inst{2} \and
 Quang-Huy Phung\inst{2} \and
+Duy-Tung Doan\inst{2} \and
 Van-Vinh Nguyen\inst{1}\thanks{Corresponding author.}}
 \authorrunning{T.-K. Nguyen et al.}
-\institute{VNU University of Engineering and Technology, Vietnam National University, Hanoi, Vietnam\\ \and
-Viettel AI, Viettel Group, Hanoi, Vietnam}
+\institute{VNU University of Engineering and Technology, Vietnam National University, Hanoi, Vietnam\\
+\email{26028002@vnu.edu.vn}, \email{vinhnv@vnu.edu.vn} \and
+Viettel Data Services and Artificial Intelligence Center, Viettel Group, Hanoi, Vietnam\\
+\email{\{nambkh, hieplh8, huypq51, tungdd11\}@viettel.com.vn}}
 \maketitle
 
 \appendix
+\section{End-to-End Pipeline Architecture (2$\times$2 Grid)}
+\label{sec:appendix_pipeline}
+
+Fig.~\ref{fig:appendix_pipeline} provides a structured $2\times 2$ visual walkthrough of the four QEG-RAG stages on the running HybridQA example (\textit{``Original name of city with AFL club formed in 1989?''}, target: \texttt{"York"}), illustrating candidate collision detection in Stage~1, star-hub multigraph construction in Stage~2, bounded two-tier disambiguation in Stage~3, and grounded provenance auditing in Stage~4.
+
+\begin{figure}[htbp]
+\centering
+\input{figures/pipeline-diagram-v4}
+\caption{End-to-end architecture of QEG-RAG in a $2\times 2$ grid: Stage~1 (Multi-Source Evidence Ingestion), Stage~2 (Schema-Preserving Multigraph Construction), Stage~3 (Two-Tier Reasoning Engine), and Stage~4 (Provenance Audit).}
+\label{fig:appendix_pipeline}
+\end{figure}
+
 \section{Prompt Templates for Two-Tier Reasoning Engine}
 \label{sec:prompt_templates}
 

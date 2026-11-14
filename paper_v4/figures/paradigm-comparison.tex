@@ -1,0 +1,9 @@
+\begin{figure}[t]
+\centering
+\input{figures/paradigm-comparison-diagram}
+\Description{Architectural comparison across four query-time table-text reasoning paradigms: Flat Concatenation RAG, Online KG with Destructive Pruning, Agentic Graph Exploration, and QEG-RAG with Query-Time Evidence Graphs and Bounded Diagnostic Reasoning.}
+\vspace{2.5mm}
+\caption{Architectural comparison across four query-time table--text reasoning paradigms. This comparison strictly evaluates query-time evidence construction and inference over ad-hoc inputs, excluding offline corpus-wide pre-indexing (e.g., GraphRAG, HippoRAG~2) and parametric model training or fine-tuning (e.g., HYBRIDER, MuGER²). In contrast to unguided linear prompt concatenation~(a), destructive question-driven graph pruning in online KG protocols like ODYSSEY~(b), and expensive multi-turn agentic graph exploration in systems like HydraRAG and ToG-3~(c), the proposed QEG-RAG framework~(d) dynamically instantiates a schema-preserving online multigraph on-the-fly, retains retrieved evidence within context limits via compact prompt serialization, and resolves ambiguities via a bounded two-tier diagnostic-driven execution protocol with targeted bridge retrieval.}
+\vspace{-2mm}
+\label{fig:paradigms}
+\end{figure}

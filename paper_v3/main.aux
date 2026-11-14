@@ -4,20 +4,22 @@
 \@writefile{toc}{\contentsline {title}{QEG-RAG: Query-Time Evidence Graphs with Bounded Diagnostic Reasoning for Grounded Table--Text Question Answering}{1}\protected@file@percent }
 \@writefile{toc}{\authcount {6}}
 \@writefile{toc}{\contentsline {author}{Trung-Kien Nguyen \and Khac-Hoai-Nam Bui \and Hoang-Hiep Lai \and Quang-Huy Phung \and Duy-Tung Doan \and Van-Vinh Nguyen\unskip {}}{1}\protected@file@percent }
-\citation{agarwal2025hybrid,peng2024graphragsurvey}
+\citation{peng2024graphragsurvey}
+\citation{agarwal2025hybrid}
 \citation{agarwal2025hybrid}
 \citation{tan2025hydrarag}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}\protected@file@percent }
 \citation{hybridqa}
+\citation{chen2021ottqa}
 \citation{hybridqa}
 \citation{eisenschlos2021mate}
 \citation{sun2021dochopper}
-\citation{wang2022muger2}
 \citation{lei2023s3hqa}
-\citation{agarwal2025hybrid}
+\citation{wang2022muger2}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{3}\protected@file@percent }
 \newlabel{sec:related}{{2}{3}}
 \@writefile{toc}{\contentsline {paragraph}{Hybrid Table--Text Question Answering and Graph Modeling.}{3}\protected@file@percent }
+\citation{agarwal2025hybrid}
 \citation{zhou2026tableqasurvey}
 \citation{cheng2023binder}
 \citation{nahid2024tabsqlify}
@@ -38,10 +40,10 @@
 \@writefile{toc}{\contentsline {paragraph}{Offline Knowledge Graphs vs.\ Query-Time Online Knowledge Graphs (Online KGs).}{5}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {3}The QEG-RAG Framework}{5}\protected@file@percent }
 \newlabel{sec:method}{{3}{5}}
-\newlabel{sec:formulation}{{3}{5}}
-\@writefile{toc}{\contentsline {paragraph}{Problem Formulation and Graph Representation.}{5}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces End-to-end architecture of QEG-RAG. (Sec.\nobreakspace  {}3.1\hbox {}) Multi-Source Evidence Ingestion retrieves relevant table rows and linked passages. (Sec.\nobreakspace  {}3.2\hbox {}) Schema-Preserving Multigraph Construction builds star record hubs and text relations without LLMs. (Sec.\nobreakspace  {}3.3\hbox {}) Two-Tier Controlled Reasoning Engine: Tier\nobreakspace  {}1 reads the compressed evidence graph; unambiguous cases exit immediately in one call, while ambiguous collisions trigger a diagnostic handoff and targeted bridge retrieval for conclusive resolution in Tier\nobreakspace  {}2. (Sec.\nobreakspace  {}3.4\hbox {}) Grounded Generation and Provenance Audit outputs verified spans with full attribution traces.}}{6}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces End-to-end architecture of QEG-RAG. (Sec.\nobreakspace  {}3.1\hbox {}) Multi-Source Evidence Ingestion retrieves relevant table rows and linked passages. (Sec.\nobreakspace  {}3.2\hbox {}) Schema-Preserving Multigraph Construction builds star record hubs and text relations without LLMs. (Sec.\nobreakspace  {}3.3\hbox {}) Two-Tier Controlled Reasoning Engine: Tier\nobreakspace  {}1 reads the compressed evidence graph; unambiguous cases exit immediately in one call, while ambiguous collisions trigger a diagnostic handoff and targeted bridge retrieval for conclusive resolution in Tier\nobreakspace  {}2. (Sec.\nobreakspace  {}3.4\hbox {}) Grounded Generation and Provenance Audit outputs grounded spans with full attribution traces.}}{6}\protected@file@percent }
 \newlabel{fig:pipeline}{{2}{6}}
+\newlabel{sec:formulation}{{3}{6}}
+\@writefile{toc}{\contentsline {paragraph}{Problem Formulation and Graph Representation.}{6}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Online Evidence Multigraph Representation.}{6}\protected@file@percent }
 \newlabel{eq:graph-partition}{{1}{6}}
 \@writefile{toc}{\contentsline {paragraph}{Schema-Preservation and Non-Conflation Property.}{7}\protected@file@percent }
@@ -55,10 +57,10 @@
 \@writefile{toc}{\contentsline {paragraph}{Tier 1: Primary Reader and Evidence-Preserving Graph Packaging (First LLM Call).}{8}\protected@file@percent }
 \newlabel{eq:compression}{{3}{8}}
 \@writefile{toc}{\contentsline {paragraph}{Diagnostic Handoff and Targeted Bridge Augmentation.}{8}\protected@file@percent }
-\newlabel{eq:targeted-retrieval}{{4}{8}}
 \citation{agarwal2025hybrid}
 \citation{hybridqa}
 \citation{chen2021ottqa}
+\newlabel{eq:targeted-retrieval}{{4}{9}}
 \@writefile{toc}{\contentsline {paragraph}{Tier 2: Targeted Reader and State Capsule Packaging (Second LLM Call).}{9}\protected@file@percent }
 \newlabel{eq:l2-capsule}{{5}{9}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Stage 4: Grounded Generation and Structural Provenance}{9}\protected@file@percent }
@@ -80,10 +82,10 @@
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Comprehensive comparative evaluation of native reasoning models across multi-hop table--text benchmarks under strict context grounding ($k_1=5, k_2=3$, 24k context budget, $N=1{,}500$ per benchmark, unconditional metrics with unextracted/empty answers scored as 0; $^*$adapted graph-pruning protocol\nobreakspace  {}\cite  {agarwal2025hybrid}).}}{10}\protected@file@percent }
 \newlabel{tab:main-results}{{1}{10}}
 \@writefile{toc}{\contentsline {paragraph}{Evaluation Scope.}{10}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Baselines and Experimental Settings}{10}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{In-Context Reasoning Condition.}{10}\protected@file@percent }
 \citation{agarwal2025hybrid}
 \citation{agarwal2025hybrid}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Baselines and Experimental Settings}{11}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{In-Context Reasoning Condition.}{11}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Paradigms and Configurations.}{11}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {5}Results and In-Depth Analysis}{11}\protected@file@percent }
 \newlabel{sec:results}{{5}{11}}
@@ -91,10 +93,10 @@
 \citation{agarwal2025hybrid}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Cross-paradigm generalization on non-reasoning LLM (Qwen 122B, OTT-QA, $N=1{,}500$; $^*$adapted graph protocol).}}{12}\protected@file@percent }
 \newlabel{tab:qwen-results}{{2}{12}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Systematic knockout ablation study on pooled benchmark ($N=500$, GPT-OSS 120B) isolating individual QEG-RAG components.}}{12}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Systematic knockout ablation study on a balanced stratified pooled benchmark ($N=500$, comprising 250 HybridQA and 250 OTT-QA instances under GPT-OSS 120B) isolating individual QEG-RAG components.}}{12}\protected@file@percent }
 \newlabel{tab:ablation}{{3}{12}}
 \@writefile{toc}{\contentsline {paragraph}{RQ2 (Cross-Paradigm Generalization to Non-Reasoning LLMs):}{12}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Systematic evidence grounding and structural provenance fidelity audit on HybridQA ($N=500$ test instances). Conditioned on verified provenance traces, answer correctness increases significantly (+9.80\tmspace  +\thinmuskip {.1667em}pp, $p < 0.0001$).}}{13}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Systematic evidence grounding and structural provenance fidelity audit on HybridQA ($N=500$ test instances under GPT-OSS 120B), comparing exact match on the full population vs.\ answered queries under strict context grounding.}}{13}\protected@file@percent }
 \newlabel{tab:evidence-audit}{{4}{13}}
 \@writefile{toc}{\contentsline {paragraph}{RQ3 (Preserving Retrieved Evidence vs.\ Destructive Pruning):}{13}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{RQ4 (Diagnostic Feedback, Bounded Execution, and Provenance Audit):}{13}\protected@file@percent }
@@ -102,30 +104,30 @@
 \bibdata{refs}
 \bibcite{zhou2026tableqasurvey}{1}
 \bibcite{hybridqa}{2}
-\bibcite{agarwal2025hybrid}{3}
-\bibcite{peng2024graphragsurvey}{4}
+\bibcite{peng2024graphragsurvey}{3}
+\bibcite{agarwal2025hybrid}{4}
 \bibcite{tan2025hydrarag}{5}
-\bibcite{eisenschlos2021mate}{6}
-\bibcite{sun2021dochopper}{7}
-\bibcite{wang2022muger2}{8}
-\bibcite{lei2023s3hqa}{9}
 \@writefile{toc}{\contentsline {paragraph}{RQ5 (Preservation of Tabular Semantics):}{14}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {6}Limitations and Future Work}{14}\protected@file@percent }
 \newlabel{sec:limitations}{{6}{14}}
 \@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{14}\protected@file@percent }
 \newlabel{sec:conclusion}{{7}{14}}
 \@writefile{toc}{\contentsline {subsubsection}{Disclosure of Interests.}{14}\protected@file@percent }
-\bibcite{cheng2023binder}{10}
-\bibcite{nahid2024tabsqlify}{11}
-\bibcite{ye2023dater}{12}
-\bibcite{wang2024chainoftable}{13}
-\bibcite{chen2024tablerag}{14}
-\bibcite{yu2025tablerag}{15}
-\bibcite{yasunaga2021qagnn}{16}
-\bibcite{sun2022jointlk}{17}
-\bibcite{he2024gretriever}{18}
-\bibcite{edge2024graphrag}{19}
-\bibcite{gutierrez2025hipporag2}{20}
-\bibcite{bui2025kgcqr}{21}
-\bibcite{wu2025tog3}{22}
-\bibcite{chen2021ottqa}{23}
+\bibcite{chen2021ottqa}{6}
+\bibcite{eisenschlos2021mate}{7}
+\bibcite{sun2021dochopper}{8}
+\bibcite{lei2023s3hqa}{9}
+\bibcite{wang2022muger2}{10}
+\bibcite{cheng2023binder}{11}
+\bibcite{nahid2024tabsqlify}{12}
+\bibcite{ye2023dater}{13}
+\bibcite{wang2024chainoftable}{14}
+\bibcite{chen2024tablerag}{15}
+\bibcite{yu2025tablerag}{16}
+\bibcite{yasunaga2021qagnn}{17}
+\bibcite{sun2022jointlk}{18}
+\bibcite{he2024gretriever}{19}
+\bibcite{edge2024graphrag}{20}
+\bibcite{gutierrez2025hipporag2}{21}
+\bibcite{bui2025kgcqr}{22}
+\bibcite{wu2025tog3}{23}
