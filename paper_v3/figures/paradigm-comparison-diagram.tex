@@ -62,14 +62,14 @@
 \def\yH{0.00}
 \def\yZero{-0.80}
 \def\yOne{-2.39}
-\def\yTwo{-3.40}
-\def\yThree{-4.41}
-\def\yLeg{-5.50}
+\def\yTwo{-3.22}
+\def\yThree{-4.05}
+\def\yLeg{-4.95}
 
 % Row heights
 \def\hH{0.68cm}
 \def\hZero{1.48cm}
-\def\hNorm{0.90cm}
+\def\hNorm{0.72cm}
 
 % ========================================================
 % HEADERS (y = 0.00, height = 0.68cm)
@@ -139,7 +139,7 @@
 % ========================================================
 % ROW 1: LIMITATION 1 (y = -2.39, height = 0.90cm)
 % ========================================================
-\node[lbl-dark, text width=\wL-4pt, minimum width=\wL, minimum height=\hNorm, anchor=north west] at (\xL, \yOne) {\textbf{Limitation 1}\\\textbf{Tabular \& Semantic}\\\textbf{Bindings}};
+\node[lbl-dark, text width=\wL-4pt, minimum width=\wL, minimum height=\hNorm, anchor=north west] at (\xL, \yOne) {\textbf{Limitation 1}\\\textbf{Tabular \&}\\\textbf{Row Bindings}};
 \node[card-red, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xA, \yOne) {
   \textbf{\color{cellRedText}\texttimes} Rows flattened to text; symmetric rows get conflated
 };
@@ -156,7 +156,7 @@
 % ========================================================
 % ROW 2: LIMITATION 2 (y = -3.40, height = 0.90cm)
 % ========================================================
-\node[lbl-dark, text width=\wL-4pt, minimum width=\wL, minimum height=\hNorm, anchor=north west] at (\xL, \yTwo) {\textbf{Limitation 2}\\\textbf{Evidence Preservation}\\\textbf{\& Context Loss}};
+\node[lbl-dark, text width=\wL-4pt, minimum width=\wL, minimum height=\hNorm, anchor=north west] at (\xL, \yTwo) {\textbf{Limitation 2}\\\textbf{Evidence \&}\\\textbf{Context Loss}};
 \node[card-red, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xA, \yTwo) {
   \textbf{\color{cellRedText}\texttimes} Token truncation or bloated linearized context
 };
@@ -173,18 +173,18 @@
 % ========================================================
 % ROW 3: LIMITATION 3 (y = -4.41, height = 0.90cm)
 % ========================================================
-\node[lbl-dark, text width=\wL-4pt, minimum width=\wL, minimum height=\hNorm, anchor=north west] at (\xL, \yThree) {\textbf{Limitation 3}\\\textbf{Evidence Loss vs.}\\\textbf{Call Overhead}};
-\node[card-gray, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xA, \yThree) {
-  \textbf{--} Nothing pruned, but evidence stays unstructured
+\node[lbl-dark, text width=\wL-4pt, minimum width=\wL, minimum height=\hNorm, anchor=north west] at (\xL, \yThree) {\textbf{Limitation 3}\\\textbf{Execution Cost}\\\textbf{\& Ambiguity}};
+\node[card-red, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xA, \yThree) {
+  \textbf{\color{cellRedText}\texttimes} Single-turn; guesses on retrieval gaps
 };
 \node[card-red, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xB, \yThree) {
-  \textbf{\color{cellRedText}\texttimes} Prunes evidence; peripheral facts lost
+  \textbf{\color{cellRedText}\texttimes} Single-turn; no bridge-link feedback
 };
 \node[card-red, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xC, \yThree) {
-  \textbf{\color{cellRedText}\texttimes} Dozens of LLM calls: high latency and API cost
+  \textbf{\color{cellRedText}\texttimes} Unbounded loops; dozens of LLM calls
 };
 \node[card-green, text width=\wC-6pt, minimum width=\wC, minimum height=\hNorm, anchor=north west] at (\xD, \yThree) {
-  \textbf{\color{cellGreenText}\checkmark} Evidence kept; cost bounded by two tiers
+  \textbf{\color{cellGreenText}\checkmark} Bounded $\le 2$ calls; diagnostic feedback
 };
 
 % ========================================================

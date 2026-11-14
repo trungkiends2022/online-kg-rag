@@ -79,22 +79,22 @@
 \node[panel=purple, minimum width=4.6cm, minimum height=7.2cm] (panel2) at (7.70, 0.00) {};
 \node[titlebar=purple, text width=4.2cm, anchor=north] (t2) at ([yshift=-2.8mm]panel2.north) {Stage 2 (Sec.~3.2): Multigraph Construction};
 
-% Graph nodes
-\node[knode=blue] (ent_club) at (6.65, 2.35) {Toronto\\Eagles};
-\node[knode=purple] (rec_node) at (6.65, 1.45) {Row 0\\Hub};
-\node[knode=teal] (ent_city) at (8.75, 1.45) {Toronto};
-\node[knode=gray] (lit_year) at (6.65, 0.55) {``1989''};
-\node[knode=orange] (doc_node) at (8.75, 0.55) {Doc:\\Toronto};
-\node[knode=red] (ans_node_g) at (8.75, -0.35) {York};
+% Graph nodes (star topology centered at \rho_0)
+\node[knode=purple] (rec_node) at (6.95, 1.35) {$\rho_0$ (Row 0)};
+\node[knode=blue] (ent_club) at (6.05, 2.30) {Tor.\ Eagles};
+\node[knode=gray] (lit_year) at (6.05, 0.40) {``1989''};
+\node[knode=teal] (ent_city) at (8.45, 1.35) {Toronto};
+\node[knode=orange] (doc_node) at (9.10, 0.45) {Doc:\\Toronto};
+\node[knode=red] (ans_node_g) at (9.10, -0.30) {York};
 
-% Graph edges
-\draw[kedge=purple] (ent_club) -- node[left, font=\tiny] {\texttt{rec}} (rec_node);
-\draw[kedge=teal] (rec_node) -- node[above, font=\tiny] {\texttt{city}} (ent_city);
+% Graph edges (outward rays from star hub \rho_0, then cross-modal bridge)
+\draw[kedge=purple] (rec_node) -- node[left, font=\tiny] {\texttt{club}} (ent_club);
 \draw[kedge=gray] (rec_node) -- node[left, font=\tiny] {\texttt{formed}} (lit_year);
+\draw[kedge=teal] (rec_node) -- node[above, font=\tiny] {\texttt{city}} (ent_city);
 \draw[kedge=orange] (ent_city) -- node[right, font=\tiny] {\texttt{link}} (doc_node);
 \draw[kedge=red] (doc_node) -- node[right, font=\tiny] {\texttt{orig\_name}} (ans_node_g);
 
-\node[subcard, text width=4.15cm, fill=purple!6, draw=purple!40, anchor=north] (centroid_box) at (7.70, -0.80) {
+\node[subcard, text width=4.15cm, fill=purple!6, draw=purple!40, anchor=north] (centroid_box) at (7.70, -0.68) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Star Record Hubs} \\[0.3mm]
   $\bullet$ Hub binds every cell to its row \\
@@ -103,12 +103,12 @@
   \par}
 };
 
-\node[subcard, text width=4.15cm, fill=purple!12, draw=purple!60, anchor=north] (path_box) at ([yshift=-2.5mm]centroid_box.south) {
+\node[subcard, text width=4.15cm, fill=purple!12, draw=purple!60, anchor=north] (path_box) at ([yshift=-1.8mm]centroid_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Evidence-Preserving Serialization} \\[0.3mm]
-  $\bullet$ Star record blocks $+$ deduplicated passages \\
-  $\bullet$ Retains retrieved evidence within budget \\
-  $\bullet$ Compact schema-aligned serialization
+  $\bullet$ Star record blocks $+$ unique passages \\
+  $\bullet$ Retains retrieved evidence in budget \\
+  $\bullet$ Compact schema-aligned prompt
   \par}
 };
 
