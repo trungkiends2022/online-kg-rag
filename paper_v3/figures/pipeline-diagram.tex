@@ -18,19 +18,19 @@
 % TOP BANNER: RUNNING USE CASE QUESTION
 % Total width: 22.0cm, Center: 11.00
 % ========================================================
-\node[draw=blue!65!black, fill=blue!7, rounded corners=4pt, line width=0.7pt, text width=21.2cm, inner sep=4pt, align=left] (q_box) at (11.00, 4.35) {
+\node[draw=blue!65!black, fill=blue!7, rounded corners=4pt, line width=0.7pt, text width=21.2cm, inner sep=4pt, align=left] (q_box) at (11.00, 3.98) {
   \textbf{\small Running Case (HybridQA):} \textit{``What was the original name of the city with an AFL club formed in 1989?''} \\
   \tiny \textbf{Target Ground Truth:} \texttt{"York"} \quad $\bullet$ \quad \textbf{Modality Fusion:} Table (\texttt{AFL\_Ontario\_0}) $+$ Wikipedia Bridge (\texttt{/wiki/Toronto})
 };
 
 % ========================================================
 % STAGE 1: MULTI-SOURCE EVIDENCE INGESTION (Sec. 3.1)
-% Panel: height 7.2cm, Center Y: -0.00, Top: 3.60, Bot: -3.60
+% Panel: height 6.5cm, Center Y: -0.00, Top: 3.25, Bot: -3.25
 % ========================================================
-\node[panel=blue, minimum width=4.4cm, minimum height=7.2cm] (panel1) at (2.20, 0.00) {};
-\node[titlebar=blue, text width=4.0cm, anchor=north] (t1) at ([yshift=-2.8mm]panel1.north) {Stage 1 (Sec.~3.1): Multi-Source Ingestion};
+\node[panel=blue, minimum width=4.4cm, minimum height=6.5cm] (panel1) at (2.20, 0.00) {};
+\node[titlebar=blue, text width=4.0cm, anchor=north] (t1) at ([yshift=-2.5mm]panel1.north) {Stage 1 (Sec.~3.1): Multi-Source Ingestion};
 
-\node[subcard, text width=3.95cm, anchor=north] (table_box) at ([yshift=-3.2mm]t1.south) {
+\node[subcard, text width=3.95cm, anchor=north] (table_box) at ([yshift=-2.5mm]t1.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Table: \texttt{AFL\_Ontario\_0}} \\[0.5mm]
   \resizebox{\linewidth}{!}{%
@@ -50,7 +50,7 @@
   \par}
 };
 
-\node[subcard, text width=3.95cm, anchor=north] (link_box) at ([yshift=-3.5mm]table_box.south) {
+\node[subcard, text width=3.95cm, anchor=north] (link_box) at ([yshift=-2.8mm]table_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Wikipedia Bridge Passages}: \\
   $\bullet$ \texttt{Toronto} $\rightarrow$ \texttt{Doc:Toronto} \\
@@ -60,7 +60,7 @@
   \par}
 };
 
-\node[subcard, text width=3.95cm, fill=blue!8, draw=blue!45, anchor=north] (retr_summary) at ([yshift=-3.5mm]link_box.south) {
+\node[subcard, text width=3.95cm, fill=blue!8, draw=blue!45, anchor=north] (retr_summary) at ([yshift=-2.8mm]link_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Retriever Output} \\[0.3mm]
   $\bullet$ Candidate table rows \\
@@ -74,18 +74,18 @@
 
 % ========================================================
 % STAGE 2: SCHEMA-PRESERVING MULTIGRAPH (Sec. 3.2)
-% Panel: height 7.2cm, Center Y: -0.00
+% Panel: height 6.5cm, Center Y: -0.00
 % ========================================================
-\node[panel=purple, minimum width=4.6cm, minimum height=7.2cm] (panel2) at (7.70, 0.00) {};
-\node[titlebar=purple, text width=4.2cm, anchor=north] (t2) at ([yshift=-2.8mm]panel2.north) {Stage 2 (Sec.~3.2): Multigraph Construction};
+\node[panel=purple, minimum width=4.6cm, minimum height=6.5cm] (panel2) at (7.70, 0.00) {};
+\node[titlebar=purple, text width=4.2cm, anchor=north] (t2) at ([yshift=-2.5mm]panel2.north) {Stage 2 (Sec.~3.2): Multigraph Construction};
 
 % Graph nodes (star topology centered at \rho_0)
-\node[knode=purple] (rec_node) at (6.95, 1.35) {$\rho_0$ (Row 0)};
-\node[knode=blue] (ent_club) at (6.05, 2.30) {Tor.\ Eagles};
-\node[knode=gray] (lit_year) at (6.05, 0.40) {``1989''};
-\node[knode=teal] (ent_city) at (8.45, 1.35) {Toronto};
-\node[knode=orange] (doc_node) at (9.10, 0.45) {Doc:\\Toronto};
-\node[knode=red] (ans_node_g) at (9.10, -0.30) {York};
+\node[knode=purple] (rec_node) at (7.10, 1.25) {$\rho_0$ (Row 0)};
+\node[knode=blue] (ent_club) at (6.25, 2.05) {Tor.\\Eagles};
+\node[knode=gray] (lit_year) at (6.25, 0.45) {``1989''};
+\node[knode=teal] (ent_city) at (8.60, 1.25) {Toronto};
+\node[knode=orange] (doc_node) at (9.15, 0.40) {Doc:\\Toronto};
+\node[knode=red] (ans_node_g) at (9.15, -0.35) {York};
 
 % Graph edges (outward rays from star hub \rho_0, then cross-modal bridge)
 \draw[kedge=purple] (rec_node) -- node[left, font=\tiny] {\texttt{club}} (ent_club);
@@ -94,7 +94,7 @@
 \draw[kedge=orange] (ent_city) -- node[right, font=\tiny] {\texttt{link}} (doc_node);
 \draw[kedge=red] (doc_node) -- node[right, font=\tiny] {\texttt{orig\_name}} (ans_node_g);
 
-\node[subcard, text width=4.15cm, fill=purple!6, draw=purple!40, anchor=north] (centroid_box) at (7.70, -0.68) {
+\node[subcard, text width=4.15cm, fill=purple!6, draw=purple!40, anchor=north] (centroid_box) at (7.70, -0.72) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{Star Record Hubs} \\[0.3mm]
   $\bullet$ Hub binds every cell to its row \\
@@ -114,13 +114,13 @@
 
 % ========================================================
 % STAGE 3: TWO-TIER CONTROLLED REASONING ENGINE (Sec. 3.3)
-% Panel: height 7.2cm, Center Y: -0.00
+% Panel: height 6.5cm, Center Y: -0.00
 % ========================================================
-\node[panel=orange, minimum width=5.6cm, minimum height=7.2cm] (panel3) at (13.80, 0.00) {};
-\node[titlebar=orange, text width=5.2cm, anchor=north] (t3) at ([yshift=-2.8mm]panel3.north) {Stage 3 (Sec.~3.3): Two-Tier Controlled Engine};
+\node[panel=orange, minimum width=5.6cm, minimum height=6.5cm] (panel3) at (13.80, 0.00) {};
+\node[titlebar=orange, text width=5.2cm, anchor=north] (t3) at ([yshift=-2.5mm]panel3.north) {Stage 3 (Sec.~3.3): Two-Tier Controlled Engine};
 
 % Tier 1 LLM Card
-\node[llmcard=orange, text width=5.15cm, anchor=north] (l1_box) at ([yshift=-2.5mm]t3.south) {
+\node[llmcard=orange, text width=5.15cm, anchor=north] (l1_box) at ([yshift=-2.2mm]t3.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{\underline{Tier 1: Primary Reader [LLM Call 1]}} \\[0.3mm]
   $\bullet$ \textbf{Prompt Packaging}: Compact compressed graph (deduplicated passages $+$ star row blocks) \\
@@ -164,13 +164,13 @@
 
 % ========================================================
 % STAGE 4: GROUNDED GENERATION & PROVENANCE AUDIT (Sec. 3.4)
-% Panel: height 7.2cm, Center Y: -0.00
+% Panel: height 6.5cm, Center Y: -0.00
 % ========================================================
-\node[panel=teal, minimum width=4.4cm, minimum height=7.2cm] (panel4) at (19.80, 0.00) {};
-\node[titlebar=teal, text width=4.0cm, anchor=north] (t4) at ([yshift=-2.8mm]panel4.north) {Stage 4 (Sec.~3.4): Grounded Provenance};
+\node[panel=teal, minimum width=4.4cm, minimum height=6.5cm] (panel4) at (19.80, 0.00) {};
+\node[titlebar=teal, text width=4.0cm, anchor=north] (t4) at ([yshift=-2.5mm]panel4.north) {Stage 4 (Sec.~3.4): Grounded Provenance};
 
 % Answer box aligned with l1_box center vertically!
-\node[subcard, text width=3.95cm, fill=green!15, draw=green!60!black, line width=0.7pt, anchor=north] (ans_box) at ([yshift=-3.5mm]t4.south) {
+\node[subcard, text width=3.95cm, fill=green!15, draw=green!60!black, line width=0.7pt, anchor=north] (ans_box) at ([yshift=-2.8mm]t4.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{\underline{Verified Answer Span}} \\[0.5mm]
   \centering{\textbf{\small \texttt{"York"}}}\\[0.6mm]
@@ -179,7 +179,7 @@
   \par}
 };
 
-\node[subcard, text width=3.95cm, fill=teal!6, draw=teal!60, anchor=north] (prov_box) at ([yshift=-5.2mm]ans_box.south) {
+\node[subcard, text width=3.95cm, fill=teal!6, draw=teal!60, anchor=north] (prov_box) at ([yshift=-4.0mm]ans_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{\underline{Auditable Provenance}} \\[0.3mm]
   $\bullet$ Table: \texttt{AFL\_Ontario\_0} \\
@@ -190,7 +190,7 @@
   \par}
 };
 
-\node[subcard, text width=3.95cm, fill=blue!6, draw=blue!45, anchor=north] (rev_box) at ([yshift=-5.2mm]prov_box.south) {
+\node[subcard, text width=3.95cm, fill=blue!6, draw=blue!45, anchor=north] (rev_box) at ([yshift=-4.0mm]prov_box.south) {
   {\fontsize{5pt}{6pt}\selectfont
   \textbf{\underline{Reverse Grounding Fallback}} \\[0.3mm]
   $\bullet$ Maps answer back to graph coordinates \\
