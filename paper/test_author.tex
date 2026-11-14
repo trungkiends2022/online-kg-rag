@@ -1,0 +1,249 @@
+\documentclass[runningheads]{llncs}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,shapes.geometric,backgrounds}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{enumitem}
+\setlist{noitemsep,topsep=2pt,parsep=0pt,partopsep=0pt}
+\setlength{\parskip}{0pt}
+\lstset{basicstyle=\ttfamily\small,breaklines=true,frame=single,columns=fullflexible,captionpos=b}
+
+\begin{document}
+\title{OUEG-RAG: Schema-Preserving Online Unified Evidence Graphs for Grounded Table--Text Question Answering}
+\titlerunning{OUEG-RAG for Grounded Table--Text Question Answering}
+\author{Trung-Kien Nguyen\inst{1} \and
+Khac-Hoai-Nam Bui\inst{2} \and
+Hoang-Hiep Lai\inst{2} \and
+Quang-Huy Phung\inst{2} \and
+Van-Vinh Nguyen\inst{1}\thanks{Corresponding author.}}
+%
+\authorrunning{T.-K. Nguyen et al.}
+%
+\institute{VNU University of Engineering and Technology, Vietnam National University, Hanoi, Vietnam\\
+\email{26028002@vnu.edu.vn}, \email{vinhnv@vnu.edu.vn} \and
+Viettel AI, Viettel Group, Hanoi, Vietnam\\
+\email{\{nambkh, hieplh8, huypq51\}@viettel.com.vn}}
+\maketitle
+
+\begin{abstract}
+Answering complex questions over semi-structured tables and text requires preserving structural tabular context while connecting multi-hop evidence from external passages. Existing retrieval-augmented generation approaches face a fundamental dilemma: flattening tables into plain text obscures hierarchical header associations and intra-row bindings, whereas graph-based methods typically prune evidence into a few linear paths, inadvertently discarding vital peripheral facts and failing under structural candidate ties. We propose the Online Unified Evidence Graph framework for retrieval-augmented generation, constructing a bounded, schema-preserving multigraph dynamically at query time. The proposed framework combines a two-stage retriever with hyperlink-guided bridge passage expansion, preserving qualified headers and row bindings alongside deterministic text triples. Crucially, rather than applying destructive path filtering, the architecture couples complete evidence subgraph serialization with online grounded path traversal---leveraging dynamically enumerated multi-hop paths as non-filtering reading guides to steer language model attention without losing contextual evidence. Furthermore, the framework introduces an active structural ambiguity evaluator that detects candidate score collisions and supplies lexical tiebreak signals. Comprehensive evaluations on the HybridQA benchmark demonstrate that the proposed framework significantly improves grounding accuracy, Exact Match, and Semantic Exact Match over direct prompting and path-filtering baselines while delivering an auditable, code-free reasoning trace.
+\keywords{Knowledge graphs \and Retrieval-augmented generation \and Table question answering \and Grounded reasoning}
+\end{abstract}
+
+\section{Introduction}
+Question answering over heterogeneous semi-structured tables and unstructured text passages requires reasoning across disparate information modalities~\cite{zhou2026tableqasurvey}. In the standard HybridQA benchmark~\cite{hybridqa}, answering a multi-hop question requires locating an entity within a table cell, traversing its Wikipedia hyperlink to an external unstructured passage (or vice-versa), and extracting the grounded answer span. In this setting, aligning row-level attributes, hierarchical column headers, and passage relations is essential to avoid unfaithful hallucinations and relational disconnects.
+
+The predominant baseline in retrieval-augmented generation (RAG)~\cite{lewis2020rag,guu2020realm,gao2023ragsurvey} is Direct LLM prompting (in-context generation), where serialized table rows and retrieved passages are supplied directly to the language model. While straightforward, direct prompting suffers from acute structural fragility:
+\begin{enumerate}
+    \item \emph{Loss of Tabular Bindings}: Standard serialization flattens tables into plain text, obscuring hierarchical header qualifiers and decoupling cell values from their originating row context.
+    \item \emph{Structural Score Collisions and Ambiguity}: In complex table queries, multiple candidate entities across different rows often satisfy coarse relational constraints equally well. Under direct prompting, language models struggle to break these structural ties deterministically, frequently resorting to arbitrary guesses or hallucinated attributes.
+\end{enumerate}
+
+To impart structure, previous graph-augmented methods construct knowledge graphs and extract candidate reasoning paths~\cite{yasunaga2021qagnn,pan2024unifying,peng2024graphragsurvey}. However, existing path-based architectures rely on strict top-$N$ path filtering, discarding unselected edges. This introduces \emph{evidence loss}: linear paths prune away peripheral attributes (e.g., dates, locations, numerical qualifiers) present elsewhere in the row or passage, while score collisions cause valid candidates to be truncated arbitrarily.
+
+To resolve this dilemma, we propose OUEG-RAG (Online Unified Evidence Graphs for Retrieval-Augmented Generation). OUEG-RAG is organized around the principle of \emph{complete subgraph preservation with guided online path traversal}. At query time, a two-stage retriever anchors relevant table rows and expands Wikipedia hyperlink passages. A schema-preserving multigraph is dynamically constructed using star-topology record nodes to enforce intra-row bindings, qualified header edges, and deterministic rule-based text triples. Rather than applying destructive path pruning, OUEG-RAG serializes the complete evidence multigraph via \emph{compact subgraph prompt compression} while enumerating grounded multi-hop paths as \emph{non-filtering suggested reading guides}. Furthermore, OUEG-RAG introduces an active \emph{structural ambiguity evaluator} that detects candidate score collisions and supplies lexical tiebreak signals to resolve ties deterministically.
+
+Rather than pursuing task-specific supervised training over thousands of labeled instances or brittle multi-turn code sandboxes, our framework focuses on establishing an auditable, training-free in-context RAG pipeline for frozen open-weights LLMs. We conduct a rigorous comparative evaluation isolating the benefits of schema-preserving multigraphs and guided reading against matched standard RAG baselines (Direct LLM prompting and Path-Text filtering) on HybridQA. Our empirical findings demonstrate three core advantages:
+(1)~\emph{Generalizable Grounding Gains}: Structuring heterogeneous table cells and linked text into a schema-preserving multigraph consistently improves exact match and token-level F1 across model scales (e.g., $+2.67\%$ EM and $+3.41\%$ F1 on 120B, $p < 0.01$).
+(2)~\emph{Resilience Under Candidate Structural Ambiguity}: On queries exhibiting structural score collisions across symmetric rows (71.2\% of instances), active collision detection and lexical tiebreaking systematically avert the arbitrary guesses that plague direct prompting.
+(3)~\emph{Verifiable Provenance and Context Integrity}: By bounding candidate rows and external hyperlink passages within a compact evidence multigraph, OUEG-RAG mitigates context truncation while supplying a verified provenance trace ($92.0\%$ faithful grounded chains under human audit).
+
+We articulate four main methodological contributions:
+\begin{itemize}
+    \item A query-time schema-preserving online graph construction procedure combining star-topology record nodes, qualified headers, and deterministic text triples without offline pre-indexing or auxiliary schema mapping.
+    \item An online graph-and-path unified pipeline (OUEG-RAG) that reconciles full evidence subgraph preservation via prompt compression with online guided path reading without destructive filtering.
+    \item \emph{Structural Ambiguity Assessment and Tiebreak}: An active mechanism that detects candidate score collisions among symmetric rows and supplies lexical tiebreak signals to resolve ties deterministically.
+    \item \emph{Empirical Verification and Provenance Audit}: A comprehensive evaluation across open-weights model scales demonstrating consistent gains over standard RAG baselines, corroborated by a manual audit confirming high provenance trace faithfulness.
+\end{itemize}
+
+\section{Related Work}
+\label{sec:related}
+
+\input{figures/paradigm-comparison}
+
+\paragraph{Hybrid Table--Text Question Answering.}
+Multi-hop reasoning over heterogeneous tabular and textual data was catalyzed by HybridQA~\cite{hybridqa}, which introduced the seminal HYBRIDER baseline combining coarse row retrieval with a fine-tuned cross-modal machine reading comprehension reader. Subsequent specialized neural architectures advanced table--text comprehension through multi-view attention mechanisms over cell and text tokens (MATE~\cite{eisenschlos2021mate}), multi-hop document-hopping retrieval (DocHopper~\cite{sun2021dochopper}), and multi-instance cell-passage linking (MITQA~\cite{kumar2021mitqa}). To capture complex structural dependencies, graph-based HybridQA methods construct multi-granularity evidence graphs containing row, cell, and sentence nodes, such as MuGER²~\cite{chen2022muger2} and S3HQA~\cite{lei2023s3hqa}, training graph neural networks (GNNs) or sequential samplers via supervised fine-tuning. While effective, these early systems fundamentally rely on task-specific parameter training over thousands of labeled instances. In contrast, OUEG-RAG operates in the modern training-free in-context learning regime, empowering frozen open-weights LLMs to reason over heterogeneous tables and text zero-shot without fine-tuning or task-specific parameters. Most recently, ODYSSEY~\cite{agarwal2025hybrid} explored zero-shot table--text reasoning by constructing hybrid entity graphs pruned via question-guided filtering. While sharing the zero-shot hybrid graph premise, ODYSSEY relies on destructive graph pruning and lacks mechanisms for intra-row attribute binding or candidate collision tiebreaking, leaving the model vulnerable to evidence loss and symmetric row ties.
+
+\paragraph{Table Reasoning with Large Language Models.}
+As surveyed comprehensively by Zhou et al.~\cite{zhou2026tableqasurvey}, recent research leverages LLMs for table reasoning through symbolic programs, task decomposition, or retrieval augmentation. Programmatic frameworks bind LLMs to programming languages such as SQL or Python (Binder~\cite{cheng2023binder}, TabSQLify), iteratively decompose complex table queries into sub-questions (DATER~\cite{ye2023dater}), or progressively evolve tabular states through stepwise operations (Chain-of-Table~\cite{wang2024chainoftable}). Concurrently, TableRAG architectures~\cite{chen2024tablerag,yu2025tablerag} scale retrieval across large documents and tabular schemas. While symbolic execution excels on structured arithmetic over clean isolated tables, it falters in hybrid multi-hop settings where the critical reasoning step requires traversing unstructured Wikipedia passages linked to table cells. Code interpreters cannot natively evaluate fuzzy semantic hops across free text without fragile ad-hoc prompts or multi-turn sandbox loops. OUEG-RAG bridges this gap by unifying semi-structured table cells and external text passages into a single symbolic evidence multigraph evaluated in a single, code-free LLM call.
+
+\paragraph{Contextualizing Star-Topology and Knowledge Graph Paradigms.}
+Extracting structured representations from tables and texts encompasses three prior paradigms alongside our proposed framework (Fig.~\ref{fig:paradigms}): Semantic Table Interpretation (STI)~\cite{ritze2016matching,deng2020turl} relies on rigid ontology-matching pipelines (Fig.~\ref{fig:paradigms}a); LLM-driven open triple extraction~\cite{edge2024graphrag,pan2024unifying} hallucinates phantom edges and destroys tabular row bindings (Fig.~\ref{fig:paradigms}b); and persistent GraphRAG~\cite{edge2024graphrag,tan2025hydrarag,peng2024graphragsurvey} requires static pre-indexing and aggressive top-$k$ pruning that discards peripheral cells (Fig.~\ref{fig:paradigms}c).
+
+While earlier HybridQA graph systems (e.g., MuGER², MITQA, S3HQA) explored heterogeneous row and cell node abstractions for neural GNN message passing and ODYSSEY~\cite{agarwal2025hybrid} relies on destructive graph filtering, the role of our star-topology ($\rho_i \rightarrow v_{i,j}$) is fundamentally different: it is an \emph{in-context symbolic serialization mechanism}. In LLM prompt generation, direct table flattening destroys horizontal row bindings, whereas naive triple extraction causes entity disconnection or token explosion. OUEG-RAG's record hubs $\rho_i$ explicitly bind multi-column cell attributes horizontally within a compact, schema-preserving prompt representation. Furthermore, OUEG-RAG departs from existing graph paradigms across three key principles: (1)~\emph{Full Evidence Retention vs.\ Destructive Pruning}: rather than discarding peripheral cells via destructive pruning (ODYSSEY) or top-$k$ filtering (which collapses EM by $-38.00\%$ in our ablation), it preserves the complete retrieved evidence multigraph in compact format while employing candidate paths strictly as non-filtering reading guides; (2)~\emph{Structural Collision Tiebreaking}: when candidate rows share identical graph scores (a pervasive challenge unaddressed in prior hybrid graph methods), OUEG-RAG resolves collisions deterministically ($\tau(c)$) via bridge lexical keywords rather than arbitrary truncation; and (3)~\emph{Zero-LLM Graph Construction}: graph construction uses deterministic heuristic rules executed in $<20$\,ms, enabling single-turn greedy generation ($T=0$).
+
+\paragraph{Cross-Source Graph-Augmented Reasoning.}
+Augmenting language models with structured knowledge graphs captures non-local multi-hop dependencies that keyword and dense retrieval miss, as demonstrated by QA-GNN~\cite{yasunaga2021qagnn}, JointLK~\cite{sun2022jointlk}, KAPING~\cite{baek2023kaped}, and G-Retriever~\cite{he2024gretriever}. More recently, HydraRAG~\cite{tan2025hydrarag} highlighted the power of structured guidance by querying persistent global KGs with multi-factor verification loops. OUEG-RAG achieves robust graph-guided reasoning on dynamic table-text inputs without external triple stores, providing high-precision multi-hop grounding with a single, cost-effective LLM call.
+
+\section{The OUEG-RAG Framework}
+\label{sec:method}
+\label{sec:problem}
+
+\subsection{Problem Formulation and Graph Representation}
+\label{sec:formulation}
+We formulate the task of multi-hop question answering over heterogeneous tabular and textual knowledge sources. An input instance is defined as a tuple $\mathcal{I} = (q, T, \mathcal{D}_T)$, where $q$ is a natural language question; $T = (C, R)$ is a semi-structured table comprising ordered headers $C = (c_1, \dots, c_m)$ and rows $R = \{r_1, \dots, r_n\}$ with discrete cells $v_{i,j}$; and $\mathcal{D}_T = \{d_1, \dots, d_K\}$ is the corpus of external text passages associated with $T$, where cell values link to passages via hyperlink mappings $\ell(v_{i,j}) \rightarrow d_k$. The objective is to extract the grounded answer span $a^* \in \mathcal{A}$ along with an auditable reasoning path $p^*$, where $a^*$ may reside as a table cell ($a^* = v_{i,j}$) or as an unstructured text span within a linked passage ($a^* \subset d_k$).
+
+\paragraph{Online Evidence Multigraph Representation.}
+Unlike persistent knowledge base settings that depend on static global entity graphs, table--text RAG requires synthesizing unstructured text with tabular structures on-the-fly. For each query $q$, we dynamically instantiate a bounded, query-specific directed multigraph $G_q = (V_q, E_q)$ whose node and edge sets are partitioned as:
+\begin{equation}
+\label{eq:graph-partition}
+V_q = V_{\text{ent}} \cup V_{\text{rec}} \cup V_{\text{lit}}, \qquad
+E_q = E_{\text{rec}} \cup E_{\text{attr}} \cup E_{\text{link}} \cup E_{\text{text}}.
+\end{equation}
+The node partition divides vertices by semantic abstraction:
+\begin{itemize}[leftmargin=1.5em]
+    \item $V_{\text{ent}}$: Named entity mentions extracted from linked table cells or passage text spans.
+    \item $V_{\text{rec}} = \{\rho_i \mid r_i \in R\}$: Local star-topology record hub centroids, where each node $\rho_i = \texttt{table:}T\texttt{:row:}i$ uniquely anchors and binds all cell attributes of row $r_i$ to prevent cross-row attribute conflation.
+    \item $V_{\text{lit}}$: Unlinked literal values (e.g., numbers, scores, dates, unlinked strings).
+\end{itemize}
+The edge set $E_q$ consists of directed relational facts $e = (h, r, t, \pi)$, where $h, t \in V_q$, $r$ is a normalized predicate, and $\pi$ stores source provenance:
+\begin{itemize}[leftmargin=1.5em]
+    \item $E_{\text{rec}} = \{ (u_i, \texttt{has\_record}, \rho_i) \}$: Structural edges connecting row subject entity $u_i$ to its centroid hub $\rho_i$.
+    \item $E_{\text{attr}} = \{ (\rho_i, \operatorname{norm}(H_j), v_{i,j}) \}$: Schema-level attribute edges from centroid $\rho_i$ to column cell values $v_{i,j}$.
+    \item $E_{\text{link}} = \{ (v_{i,j}, \texttt{linked\_passage}, d_k) \}$: Cross-modal hyperlink edges connecting candidate cells to external Wikipedia passages.
+    \item $E_{\text{text}}$: Intra-passage relational triples extracted from retrieved passage sentences.
+\end{itemize}
+Once question answering concludes, the dynamic multigraph $G_q$ is discarded, incurring zero persistent graph database index overhead. Throughout this section, we illustrate the operational stages of OUEG-RAG via the running HybridQA example depicted in Fig.~\ref{fig:pipeline}: \textit{``What was the original name of the city with an AFL club formed in 1989?''} (ground truth: \texttt{"York"}).
+
+\input{figures/pipeline}
+\input{method}
+
+\section{Experimental Protocol}
+\label{sec:experiments}
+\subsection{Benchmark and Evaluation Metrics}
+We evaluate on a controlled 1,500-example stratified development subset sampled from the official HybridQA development split~\cite{hybridqa} to rigorously evaluate multi-hop table-and-text reasoning without overclaiming. Rather than arbitrary random sampling, this benchmark subset is explicitly constructed to preserve the characteristic multimodal reasoning distribution of the dataset: every instance strictly requires verified table-and-text context with grounded cross-modal answer annotations, ensuring genuine multi-hop reasoning. The sample is stratified across key reasoning axes: answer modality (numeric vs.\ text), evidence source distribution (table, passage, joint cross-modal bindings), bridge-entity traversal dependencies, and question reasoning cues (ordinals, superlatives, and comparisons).
+
+We report three complementary accuracy metrics:
+\begin{enumerate}
+    \item \emph{Exact Match (EM)}: Strict string equality against the gold reference answer after standard normalization.
+    \item \emph{Token-level F1}: Harmonic mean of token-level precision and recall over word tokens, rewarding partially correct answer spans.
+    \item \emph{Semantic Exact Match (Semantic EM)}: Evaluates denotation equivalence under semantic tolerance (discounting surface variations such as leading articles, number formatting, punctuation, or recognized entity aliases).
+\end{enumerate}
+In addition, we measure system efficiency via logical LLM calls, total input/output prompt tokens, and end-to-end wall-clock latency per question.
+
+\begin{table}[t]
+\caption{Main benchmark evaluation across prompting and RAG baselines on HybridQA ($N=1{,}500$) across the open-weights GPT-OSS model family (20B and 120B). All RAG variants share identical retrieved evidence ($k_1=5, k_2=3$) and context limits (24,000 chars).}
+\label{tab:main-results}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.2pt}
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+Model Scale & Method & EM (\%) & F1 (\%) & Sem.\ EM & Empty & Lat.\ (s) \\
+\midrule
+\multirow{4}{*}{GPT-OSS 20B}  & Direct LLM        & 54.80 & 64.67 & 56.67 & 5.40\% & 9.74 \\
+                              & Flat-RAG          & 54.53 & 64.53 & 56.40 & 6.40\% & 7.02 \\
+                              & Path-Text Top-$N$ & 21.20 & 27.22 & 21.87 & 19.53\% & 57.70 \\
+                              & \textbf{OUEG-RAG} & \textbf{56.47} & \textbf{67.12} & \textbf{58.47} & \textbf{3.87\%} & 25.73 \\
+\midrule
+\multirow{4}{*}{GPT-OSS 120B} & Direct LLM        & 58.73 & 69.70 & 60.47 & 1.07\% & 6.40 \\
+                              & Flat-RAG          & 59.40 & 70.01 & 60.60 & 2.53\% & 6.32 \\
+                              & Path-Text Top-$N$ & 29.53 & 37.46 & 30.13 & 2.80\% & 35.90 \\
+                              & \textbf{OUEG-RAG} & \textbf{61.40} & \textbf{73.11} & \textbf{63.00} & \textbf{0.53\%} & 23.65 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Baselines and Model Configurations}
+\label{sec:baselines}
+To strictly isolate the contribution of our schema-preserving graph and guided reading architecture, we evaluate against three representative baselines under matched language backbones and evidence budgets (24,000 characters, $T=0$):
+\begin{itemize}
+    \item \emph{Direct LLM}: Zero-shot in-context prompting over linearised tables without external hyperlink passage expansion.
+    \item \emph{Flat-RAG}: Standard concatenation of the linearised table with raw retrieved text passages ($k_1=5, k_2=3$) without multigraph structuring.
+    \item \emph{Path-Text Top-$N$}: Hard filtering that retains only the top-$N$ ($N=5$) ranked reasoning paths, linearising their traversed cell and passage texts while discarding the remainder of the table.
+\end{itemize}
+All methods are evaluated across two open-weights scales: \emph{GPT-OSS 20B} (compact, local deployment) and \emph{GPT-OSS 120B} (large open-weights model).
+
+\section{Results and Error Analysis}
+\label{sec:results}
+
+\paragraph{Main benchmark results across model scales.}
+Table~\ref{tab:main-results} presents the comparative evaluation across all 1,500 questions in the stratified development subset of HybridQA. 
+Across both model regimes, OUEG-RAG establishes the strongest grounding accuracy. On 20B, OUEG-RAG reaches 56.47\% EM and 67.12\% F1 (+1.67\% EM, +2.45\% F1 over Direct LLM; +1.94\% EM over Flat-RAG). On 120B, OUEG-RAG reaches 61.40\% EM and 73.11\% F1 (+2.67\% EM, +3.41\% F1 over Direct LLM, McNemar $p = 0.0058 < 0.01$; +2.00\% EM over Flat-RAG). 
+
+Crucially, the baseline comparisons offer two clear empirical lessons:
+First, \emph{Flat-RAG} yields negligible improvement over Direct LLM on 20B (54.53\% vs.\ 54.80\% EM) and modest gains on 120B (59.40\% vs.\ 58.73\% EM). Concatenating raw text passages without structural entity bindings disperses model attention across irrelevant distractor paragraphs.
+Second, \emph{Path-Text Top-$N$} hard filtering collapses accuracy to 21.20\% on 20B and 29.53\% on 120B (a drop of $>28\%$ EM). Because initial heuristic path scoring is imperfect, hard pruning irreversibly removes essential table cells and peripheral context required for answer verification. In contrast, OUEG-RAG's non-filtering dual track provides structured path guidance without pruning the underlying multigraph, achieving optimal accuracy.
+
+Average latency is 25.73\,s on 20B and 23.65\,s on 120B for OUEG-RAG, compared to 9.74\,s and 6.40\,s for Direct LLM. Online multigraph construction takes $<20$\,ms; runtime is dominated by LLM prefill over richer structured prompts.
+
+\paragraph{Candidate ambiguity and tiebreak resolution.}
+In HybridQA, multi-candidate tables frequently induce structural score collisions where multiple candidate entities satisfy coarse relational constraints with identical graph scores ($S^*$). Across the 1,500 questions, 71.2\% of instances (1,068 of 1,500) exhibit such ties ($|\mathcal{C}_q| > 1$). 
+We candidly emphasize that this high collision frequency underscores an inherent limitation of coarse-grained heuristic path scoring: additive constant weights ($C=2.0, M=1.5, R=1.0, B=1.0$) reward schema-level graph alignment equally across structurally symmetric rows, rendering $S(p)$ ineffective as an isolated fine-grained discriminator. 
+Consequently, structural graph scoring alone cannot isolate the target entity, making the secondary contextual tiebreak $\tau(c)$ indispensable.
+
+Under this collision partition (1,068 cases), Direct LLM degrades to 52.62\% EM (62.45\% F1) on 20B and 56.93\% EM (67.19\% F1) on 120B due to arbitrary selection among symmetric candidates. In contrast, OUEG-RAG actively evaluates cross-referenced bridge lexical tokens: $\tau(c)$ successfully produces a unique tiebreak winner in 68.4\% of collision queries (731 of 1,068), while the remaining 31.6\% (337 queries) remain tied and are provided to the LLM without preference hints. Crucially, when a unique tiebreak winner $c^*$ is identified, it corresponds to the gold target entity in 61.2\% of instances---substantially surpassing the random guessing expectation of 24.3\% across an average collision candidate set size of $|\mathcal{C}_q| \approx 4.12$. This targeted disambiguation elevates ambiguous subset performance to 54.87\% EM (65.78\% F1) on 20B and 59.64\% EM (71.75\% F1, $+4.56\%$ F1 gain) on 120B. On unambiguous queries (28.8\% of cases, 432 instances), both approaches achieve high accuracy (60.19\% vs.\ 60.42\% on 20B, and 63.19\% vs.\ 65.74\% on 120B). While collision queries inherently possess greater headroom for improvement, our ablation demonstrates the causal benefit of lexical tiebreaking.
+
+\begin{table}[t]
+\caption{Component ablation study on the controlled development partition ($N=500$, Shards 06--08 under GPT-OSS 20B). All ablations isolate individual architectural modules against the full OUEG-RAG framework.}
+\label{tab:ablation}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.0pt}
+\begin{tabular}{@{}lrrrp{3.8cm}@{}}
+\toprule
+Ablation Configuration & EM (\%) & F1 (\%) & $\Delta$ EM & Architectural Mechanism \\
+\midrule
+\textbf{Full OUEG-RAG} & \textbf{56.00} & \textbf{66.52} & --- & Dual-track multigraph synergy \\
+\midrule
+w/o Subgraph Compression & 33.00 & 38.87 & -23.00 & Raw triples overflow context budget (47.6\% empty) \\
+w/o Subgraph (Path-Text Top-$N$) & 18.00 & 24.28 & -38.00 & Hard path pruning forfeits peripheral evidence \\
+w/o Hyperlink Expansion ($k_2=0$) & 54.00 & 63.54 & -2.00 & Missing cross-modal text passages \\
+w/o Record Nodes $\rho_i$ (Flat-RAG) & 54.60 & 64.67 & -1.40 & Disintegrates cell entity bindings \\
+w/o Collision Tiebreaker $\tau(c)$ & 55.20 & 66.63 & -0.80 & Structural ties induce guessing \\
+w/o Path Guidance (Subgraph only) & 55.60 & 65.66 & -0.40 & Unguided graph disperses attention \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Component ablation analysis.}
+Table~\ref{tab:ablation} systematically evaluates the architectural pillars across 500 questions ($N=500$, Shards 06--08 under GPT-OSS 20B):
+(1)~\emph{Pruned Path vs.\ Full Graph with Compression}: Discarding the surrounding graph and preserving only top-$N$ Path-Text drops EM catastrophically by $-38.00\%$ (down to 18.00\%), confirming that hard path pruning forfeits essential peripheral evidence required for multi-hop verification; conversely, retaining the complete graph requires compression: disabling subgraph deduplication collapses EM by $-23.00\%$ (down to 33.00\%) and drives the empty answer rate to 47.60\% due to raw triple token overflow;
+(2)~\emph{Full Graph w/o Reading Guide vs.\ Guided Graph}: Providing the full compressed graph without candidate path highlights reduces EM by $-0.40\%$ and doubles the empty failure rate from 4.20\% to 8.40\%, demonstrating that prioritized paths prevent attention dispersion across large graphs;
+(3)~\emph{Guided Graph w/o Tiebreaker vs.\ Tiebreaker Resolution}: Disabling contextual tiebreaking $\tau(c)$ degrades EM by $-0.80\%$ (from 56.00\% to 55.20\%), proving that when multiple candidate rows share identical graph scores, lexical tiebreaking directly resolves candidate collisions; and
+(4)~\emph{Structural and Cross-Modal Bindings}: Omitting external passages ($k_2=0$) drops EM by $-2.00\%$ and F1 by $-2.98\%$, while replacing star-topology record hubs with flat text decreases EM by $-1.40\%$, validating schema-preserving multimodal representation.
+
+\paragraph{Case study and human audit of provenance traces ($N=100$).}
+Because specialized fine-tuned models on HybridQA rely on supervised training over thousands of task-specific instances, our framework is intentionally framed as an auditable, training-free RAG pipeline evaluated against standard frozen prompting baselines under matched language backbones. Beyond span accuracy, a primary operational advantage of OUEG-RAG is its verifiable provenance trace. A manual audit on 100 randomly sampled evaluation questions confirms:
+(1)~\emph{Trace Faithfulness}: In 92.0\% of cases (92/100), OUEG-RAG generated completely faithful reasoning paths $p^*$ where every traversed edge $(u_i \rightarrow \rho_i \rightarrow v_{i,j} \xrightarrow{\ell} d_k)$ maps strictly to an existing cell coordinate or validated hyperlink in the source data without phantom relations;
+(2)~\emph{Bridge Alignment Precision}: In 89.0\% of cases, the multigraph path correctly identified the ground-truth bridge entity linking the candidate table row to the external text passage; and
+(3)~\emph{Comparison against Direct LLM}: When Direct LLM was prompted for post-hoc natural language rationales, 37.0\% of rationales suffered from attribution hallucination (e.g., inventing dates or conflating cell values across rows).
+\emph{Case in Point}: On \textit{``What was the original name of the city with an AFL club formed in 1989?''} (Fig.~\ref{fig:pipeline}), Direct LLM guesses without provenance. In contrast, OUEG-RAG yields the grounded chain $\text{Eagles} \xrightarrow{\texttt{rec}} \rho_0 \xrightarrow{\texttt{city}} \text{Toronto} \xrightarrow{\ell} \text{Doc:Toronto} \xrightarrow{\texttt{orig}} \text{York}$, verified against cell coordinates and passage text.
+
+\section{Limitations}
+While OUEG-RAG delivers consistent grounding gains, several limitations remain. First, query-time graph construction and richer multigraph prompts incur latency over direct prompting ($\approx 23\text{--}25$\,s vs.\ $\approx 6\text{--}10$\,s). Second, path scoring weights were chosen via domain heuristics without automated tuning; while avoiding dev leakage, future work could explore supervised calibration. Third, our evaluation uses the controlled 1,500-example dev subset for open-weights auditability; submitting to the blinded leaderboard remains an important future milestone. Finally, structured graphs rely on upstream retrieval ($k_1, k_2$) and cannot recover omitted passages.
+
+\section{Conclusion}
+We presented OUEG-RAG, an online unified evidence graph framework for grounded table--text question answering. By uniting schema-preserving multigraphs with compact prompt compression and non-filtering path guidance, OUEG-RAG mitigates evidence loss while resolving candidate collisions. Across 20B and 120B open-weights models, OUEG-RAG consistently outperforms direct prompting in exact match and provenance faithfulness ($p < 0.01$ on 120B).
+
+\makeatletter
+\renewenvironment{thebibliography}[1]
+     {\section*{\refname}%
+      \def\@biblabel##1{##1.}%
+      \fontsize{7.0pt}{8.2pt}\selectfont
+      \list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \setlength{\itemsep}{-2.0pt}%
+            \setlength{\parsep}{0pt}%
+            \setlength{\topsep}{0pt}%
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \renewcommand\newblock{\hskip .11em \@plus.33em \@minus.07em}%
+      \sloppy\clubpenalty4000\widowpenalty4000%
+      \sfcode`\.=1000\relax}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+\makeatother
+\bibliographystyle{splncs04}
+\bibliography{refs}
+\end{document}

@@ -1,4 +1,5 @@
 import json
+import threading
 import time
 
 from src.llm import client
@@ -108,3 +109,32 @@ def test_llm_call_many_runs_independent_prompts_concurrently(monkeypatch):
         assert client.llm_call_many(["one", "two", "three"], max_workers=3) == ["ONE", "TWO", "THREE"]
     assert time.perf_counter() - started < 0.1
     assert metrics["llm_calls"] == 3
+
+
+def test_llm_request_concurrency_cap_is_shared_across_parallel_calls(monkeypatch):
+    class CappedProvider:
+        name = "captest"
+        model = "fake-model"
+
+        def __init__(self):
+            self.active = 0
+            self.peak = 0
+            self.lock = threading.Lock()
+
+        def complete(self, prompt, *, max_tokens):
+            with self.lock:
+                self.active += 1
+                self.peak = max(self.peak, self.active)
+            time.sleep(0.02)
+            with self.lock:
+                self.active -= 1
+            return prompt
+
+    provider = CappedProvider()
+    monkeypatch.setenv("CAPTEST_MAX_CONCURRENT_REQUESTS", "2")
+    monkeypatch.setattr(client, "_provider", provider)
+
+    assert client.llm_call_many(["one", "two", "three", "four"], max_workers=4) == [
+        "one", "two", "three", "four",
+    ]
+    assert provider.peak == 2

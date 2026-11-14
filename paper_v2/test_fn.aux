@@ -1,0 +1,103 @@
+\relax 
+\citation{zhou2026tableqasurvey}
+\citation{hybridqa}
+\@writefile{toc}{\contentsline {title}{QEG-RAG: Query-Time Evidence Graphs with Path-Scaffolded Diagnostic Reasoning for Faithful Table--Text Question Answering}{1}\protected@file@percent }
+\@writefile{toc}{\authcount {5}}
+\@writefile{toc}{\contentsline {author}{Trung-Kien Nguyen \and Khac-Hoai-Nam Bui \and Hoang-Hiep Lai \and Quang-Huy Phung \and Van-Vinh Nguyen\unskip {}}{1}\protected@file@percent }
+\citation{agarwal2025hybrid,peng2024graphragsurvey}
+\citation{agarwal2025hybrid}
+\citation{tan2025hydrarag}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}\protected@file@percent }
+\citation{hybridqa}
+\citation{hybridqa}
+\citation{eisenschlos2021mate}
+\citation{sun2021dochopper}
+\citation{chen2022muger2}
+\citation{lei2023s3hqa}
+\citation{agarwal2025hybrid}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Architectural comparison across four query-time table--text reasoning paradigms. This comparison strictly evaluates query-time evidence construction and inference over ad-hoc inputs, excluding offline corpus-wide pre-indexing (e.g., GraphRAG, HippoRAG\nobreakspace  {}2) and parametric model training or fine-tuning (e.g., HYBRIDER, MuGER²). In contrast to unguided linear prompt concatenation\nobreakspace  {}(a), destructive question-driven graph pruning in online KGs like ODYSSEY\nobreakspace  {}(b), and expensive multi-turn agentic exploration over online KGs in systems like HydraRAG and ToG-3\nobreakspace  {}(c), the proposed QEG-RAG framework\nobreakspace  {}(d) dynamically instantiates a schema-preserving online multigraph on-the-fly, retains complete evidence context, guides attention via deterministic multi-factor scored paths, and resolves bottlenecks via a bounded two-tier diagnostic-driven execution protocol.}}{4}\protected@file@percent }
+\newlabel{fig:paradigms}{{1}{4}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{4}\protected@file@percent }
+\newlabel{sec:related}{{2}{4}}
+\@writefile{toc}{\contentsline {paragraph}{Hybrid Table--Text Question Answering and Graph Modeling.}{4}\protected@file@percent }
+\citation{zhou2026tableqasurvey}
+\citation{cheng2023binder}
+\citation{ye2023dater}
+\citation{wang2024chainoftable}
+\citation{chen2024tablerag,yu2025tablerag}
+\citation{yasunaga2021qagnn}
+\citation{sun2022jointlk}
+\citation{he2024gretriever}
+\citation{edge2024graphrag}
+\citation{gutierrez2025hipporag2}
+\citation{bui2025kgcqr}
+\citation{tan2025hydrarag}
+\citation{wu2025tog3}
+\@writefile{toc}{\contentsline {paragraph}{Table Reasoning and Programmatic Decomposition with LLMs.}{5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Offline Knowledge Graphs vs.\ Query-Time Online Knowledge Graphs (Online KGs).}{5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces End-to-end architecture of QEG-RAG. (Sec.\nobreakspace  {}\G@refundefinedtrue \text  {\normalfont  \bfseries  ??}\GenericWarning  {               }{LaTeX Warning: Reference `sec:method-retrieval' on page 6 undefined}) Multi-Source Evidence Ingestion retrieves relevant table rows and linked passages. (Sec.\nobreakspace  {}\G@refundefinedtrue \text  {\normalfont  \bfseries  ??}\GenericWarning  {               }{LaTeX Warning: Reference `sec:method-kg' on page 6 undefined}) Schema-Preserving Multigraph Construction builds star record hubs and text relations without LLMs. (Sec.\nobreakspace  {}\G@refundefinedtrue \text  {\normalfont  \bfseries  ??}\GenericWarning  {               }{LaTeX Warning: Reference `sec:method-engine' on page 6 undefined}) Two-Tier Controlled Reasoning Engine: Tier\nobreakspace  {}1 reads the compressed graph guided by the top reasoning path; clear cases exit immediately in one call, while ambiguous collisions trigger a diagnostic handoff and targeted bridge retrieval for conclusive resolution in Tier\nobreakspace  {}2. (Sec.\nobreakspace  {}\G@refundefinedtrue \text  {\normalfont  \bfseries  ??}\GenericWarning  {               }{LaTeX Warning: Reference `sec:method-answer' on page 6 undefined}) Grounded Generation and Provenance Audit outputs verified spans with full attribution traces.}}{6}\protected@file@percent }
+\newlabel{fig:pipeline}{{2}{6}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}The QEG-RAG Framework}{6}\protected@file@percent }
+\newlabel{sec:method}{{3}{6}}
+\newlabel{sec:formulation}{{3}{6}}
+\@writefile{toc}{\contentsline {paragraph}{Problem Formulation and Graph Representation.}{6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Online Evidence Multigraph Representation.}{6}\protected@file@percent }
+\newlabel{eq:graph-partition}{{1}{7}}
+\@writefile{toc}{\contentsline {paragraph}{Schema-Preservation and Non-Conflation Property.}{7}\protected@file@percent }
+\newlabel{eq:star-subgraph}{{2}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Stage 1: Multi-Source Evidence Ingestion}{7}\protected@file@percent }
+\newlabel{sec:method-retrieval}{{3.1}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Stage 2: Schema-Preserving Multigraph Construction}{8}\protected@file@percent }
+\newlabel{sec:method-kg}{{3.2}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Stage 3: Two-Tier Controlled Reasoning Engine}{8}\protected@file@percent }
+\newlabel{sec:method-engine}{{3.3}{8}}
+\@writefile{toc}{\contentsline {paragraph}{Tier 1: Primary Reader and Prompt Packaging (First LLM Call).}{8}\protected@file@percent }
+\newlabel{eq:compression}{{3}{8}}
+\newlabel{eq:path-score}{{4}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Two-tier controlled reasoning engine (Stage\nobreakspace  {}3) structured as two parallel algorithmic blocks with deterministic graph compression, illustrated via the running AFL example. (Left) Tier\nobreakspace  {}1 evaluates the unpruned evidence graph under guided path scaffolding. When candidate evidence is unambiguous, execution terminates via Fast Exit in a single LLM call ($\approx 80\%$ of queries). When candidate collision occurs (e.g., both Toronto Eagles and Toronto Blues formed in 1989), the LLM emits a structured diagnostic packet. (Center to Right) An automated zero-LLM search fetches targeted bridge passages and executes algorithmic graph compression ($\approx 85\%$ size reduction), discarding non-competing candidates to construct the minimal state capsule. In Tier\nobreakspace  {}2, the LLM resolves the ambiguity deterministically by factual evidence in a targeted second call (at most 2 calls total), producing the verified answer with full provenance.}}{9}\protected@file@percent }
+\newlabel{fig:two-tier}{{3}{9}}
+\@writefile{toc}{\contentsline {paragraph}{Diagnostic Handoff and Targeted Bridge Augmentation.}{9}\protected@file@percent }
+\newlabel{eq:targeted-retrieval}{{5}{9}}
+\citation{hybridqa}
+\citation{chen2021ottqa}
+\citation{chen2022muger2}
+\citation{lei2023s3hqa}
+\citation{agarwal2025hybrid}
+\@writefile{toc}{\contentsline {paragraph}{Tier 2: Targeted Reader and State Capsule Packaging (Second LLM Call).}{10}\protected@file@percent }
+\newlabel{eq:l2-capsule}{{6}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Stage 4: Grounded Generation and Provenance Audit}{10}\protected@file@percent }
+\newlabel{sec:method-answer}{{3.4}{10}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Experimental Protocol}{10}\protected@file@percent }
+\newlabel{sec:experiments}{{4}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Benchmark Datasets and Evaluation Metrics}{10}\protected@file@percent }
+\citation{agarwal2025hybrid}
+\citation{agarwal2025hybrid}
+\citation{agarwal2025hybrid}
+\citation{agarwal2025hybrid}
+\citation{agarwal2025hybrid}
+\@writefile{toc}{\contentsline {paragraph}{Evaluation Scope: Zero-Shot In-Context RAG vs.\ Supervised Fine-Tuning.}{11}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Strict Context-Grounded Protocol.}{11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Baselines and Experimental Settings}{11}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Model Paradigms and Benchmark Scope.}{11}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Compared Configurations.}{11}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Comprehensive comparative evaluation of native reasoning models across multi-hop table--text benchmarks under strict context grounding ($k_1=5, k_2=3$, 24k context budget, $N=1{,}500$ per benchmark).}}{12}\protected@file@percent }
+\newlabel{tab:main-results}{{1}{12}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Results and In-Depth Analysis}{12}\protected@file@percent }
+\newlabel{sec:results}{{5}{12}}
+\@writefile{toc}{\contentsline {paragraph}{RQ1 (Main Benchmark Grounding Performance):}{12}\protected@file@percent }
+\citation{agarwal2025hybrid}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Cross-paradigm generalization on standard non-reasoning instruction-tuned LLM (Qwen 122B on OTT-QA, $N=1{,}500$). QEG-RAG acts as an external neuro-symbolic scaffold, eliminating empty abstentions and elevating EM.}}{13}\protected@file@percent }
+\newlabel{tab:qwen-results}{{2}{13}}
+\@writefile{toc}{\contentsline {paragraph}{RQ2 (Cross-Paradigm Generalization to Non-Reasoning LLMs):}{13}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{RQ3 (Explicit Reasoning Guidance vs.\ Destructive Pruning):}{13}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Systematic knockout ablation study on pooled partitions ($N=500$ under GPT-OSS 120B). All variants isolate individual components against full QEG-RAG.}}{14}\protected@file@percent }
+\newlabel{tab:ablation}{{3}{14}}
+\@writefile{toc}{\contentsline {paragraph}{RQ4 (Diagnostic Feedback and Bounded Execution Efficiency):}{14}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{RQ5 (Preservation of Tabular Semantics):}{14}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Summary of Knockout Ablations \& Provenance Audit.}{14}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Limitations}{14}\protected@file@percent }
+\newlabel{sec:limitations}{{6}{14}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{14}\protected@file@percent }
+\newlabel{sec:conclusion}{{7}{14}}
+\bibstyle{splncs04_unsrt}
+\bibdata{refs}

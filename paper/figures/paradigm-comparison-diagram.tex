@@ -1,0 +1,157 @@
+\begin{tikzpicture}[
+  >=Latex,
+  font=\scriptsize,
+  row_panel/.style={draw=gray!38, fill=gray!3, rounded corners=3.5pt, line width=0.5pt, inner sep=3pt},
+  row_panel_ours/.style={draw=teal!85!black, fill=teal!3, rounded corners=3.5pt, line width=0.85pt, inner sep=3pt},
+  tag_badge/.style={fill=gray!15, draw=gray!50, rounded corners=2pt, font=\fontsize{5.2pt}{6.2pt}\selectfont\bfseries, inner sep=2pt},
+  tag_ours/.style={fill=teal!18, draw=teal!80!black, text=teal!90!black, rounded corners=2pt, font=\fontsize{5.2pt}{6.2pt}\selectfont\bfseries, inner sep=2pt},
+  flow_box/.style={draw=gray!45, fill=white, rounded corners=2pt, font=\fontsize{5.2pt}{6.3pt}\selectfont, align=center, inner sep=2.5pt, line width=0.4pt, minimum height=1.12cm},
+  flow_box_ours/.style={draw=teal!70!black, fill=white, rounded corners=2pt, font=\fontsize{5.2pt}{6.3pt}\selectfont, align=center, inner sep=2.5pt, line width=0.6pt, minimum height=1.12cm},
+  arrow_flow/.style={->, line width=0.6pt, draw=gray!70!black},
+  arrow_flow_ours/.style={->, line width=0.7pt, draw=teal!85!black},
+  critique_bad/.style={fill=red!5, draw=red!45!black, text=red!80!black, font=\fontsize{5.1pt}{6.2pt}\selectfont, rounded corners=2pt, inner sep=2.8pt, align=left, minimum height=1.12cm},
+  critique_good/.style={fill=teal!8, draw=teal!70!black, text=teal!90!black, font=\fontsize{5.1pt}{6.2pt}\selectfont, rounded corners=2pt, inner sep=2.8pt, align=left, minimum height=1.12cm}
+]
+
+% ========================================================
+% ROW 1: (a) Semantic Table Interpretation (STI)
+% ========================================================
+\def\yA{0}
+\node[tag_badge, anchor=south west] (lbl_a) at (0.1, \yA+0.66) {(a) Semantic Table Interpretation (STI) \textit{[e.g., TURL, Ritze et al.]}};
+
+\node[flow_box, text width=1.75cm, anchor=west] (a_in) at (0.1, \yA) {
+  \textbf{Web Tables}\\
+  Raw tabular grids
+};
+
+\node[flow_box, text width=2.45cm, anchor=west] (a_proc) at (2.25, \yA) {
+  \textbf{Multi-Stage Cascade}\\
+  Entity Linking $\rightarrow$ Typing $\rightarrow$ Relation Extraction
+};
+
+\node[flow_box, text width=1.95cm, anchor=west] (a_out) at (5.05, \yA) {
+  \textbf{Curated Global KG}\\
+  DBpedia / Wikidata
+};
+
+\node[critique_bad, text width=4.3cm, anchor=west] (a_crit) at (7.35, \yA) {
+  $\times$ \textbf{Offline-only} KB population (not query-time)\\
+  $\times$ Rigid predefined ontology (fails ad-hoc)\\
+  $\times$ Multi-stage pipeline causes error cascades
+};
+
+\draw[arrow_flow] (a_in) -- (a_proc);
+\draw[arrow_flow] (a_proc) -- (a_out);
+\draw[arrow_flow] (a_out) -- (a_crit);
+
+\begin{scope}[on background layer]
+  \node[row_panel, fit=(lbl_a)(a_in)(a_proc)(a_out)(a_crit)] (p_a) {};
+\end{scope}
+
+% ========================================================
+% ROW 2: (b) LLM-Driven Triplet Extraction
+% ========================================================
+\def\yB{-1.85}
+\node[tag_badge, anchor=south west] (lbl_b) at (0.1, \yB+0.66) {(b) LLM-Driven Graph Extraction \textit{[e.g., GraphRAG, Pan et al.]}};
+
+\node[flow_box, text width=1.75cm, anchor=west] (b_in) at (0.1, \yB) {
+  \textbf{Text \& Tables}\\
+  Serialized chunks
+};
+
+\node[flow_box, text width=2.45cm, anchor=west] (b_proc) at (2.25, \yB) {
+  \textbf{Zero-Shot Extraction}\\
+  Open relation prompting without schema bounds
+};
+
+\node[flow_box, text width=1.95cm, anchor=west] (b_out) at (5.05, \yB) {
+  \textbf{Unstructured Triples}\\
+  Open-domain edge pool
+};
+
+\node[critique_bad, text width=4.3cm, anchor=west] (b_crit) at (7.35, \yB) {
+  $\times$ \textbf{Severe hallucination} of non-existent edges\\
+  $\times$ Corrupts tabular row-level bindings\\
+  $\times$ High LLM token cost and extraction latency
+};
+
+\draw[arrow_flow] (b_in) -- (b_proc);
+\draw[arrow_flow] (b_proc) -- (b_out);
+\draw[arrow_flow] (b_out) -- (b_crit);
+
+\begin{scope}[on background layer]
+  \node[row_panel, fit=(lbl_b)(b_in)(b_proc)(b_out)(b_crit)] (p_b) {};
+\end{scope}
+
+% ========================================================
+% ROW 3: (c) Persistent GraphRAG & Path Pruning
+% ========================================================
+\def\yC{-3.70}
+\node[tag_badge, anchor=south west] (lbl_c) at (0.1, \yC+0.66) {(c) Persistent GraphRAG \& Path Pruning \textit{[e.g., HydraRAG, Edge et al.]}};
+
+\node[flow_box, text width=1.75cm, anchor=west] (c_in) at (0.1, \yC) {
+  \textbf{Static Global KG}\\
+  Pre-indexed corpus graph
+};
+
+\node[flow_box, text width=2.45cm, anchor=west] (c_proc) at (2.25, \yC) {
+  \textbf{Subgraph Retrieval}\\
+  Top-$N$ path extraction \& agentic pruning loops
+};
+
+\node[flow_box, text width=1.95cm, anchor=west] (c_out) at (5.05, \yC) {
+  \textbf{Pruned Linear Paths}\\
+  Filtered evidence subset
+};
+
+\node[critique_bad, text width=4.3cm, anchor=west] (c_crit) at (7.35, \yC) {
+  $\times$ \textbf{Destructive pruning} drops critical cells\\
+  $\times$ Static index cannot ingest dynamic tables\\
+  $\times$ Arbitrary tiebreaking for top-$k$ paths
+};
+
+\draw[arrow_flow] (c_in) -- (c_proc);
+\draw[arrow_flow] (c_proc) -- (c_out);
+\draw[arrow_flow] (c_out) -- (c_crit);
+
+\begin{scope}[on background layer]
+  \node[row_panel, fit=(lbl_c)(c_in)(c_proc)(c_out)(c_crit)] (p_c) {};
+\end{scope}
+
+% ========================================================
+% ROW 4: (d) OUEG-RAG (Ours)
+% ========================================================
+\def\yD{-5.55}
+\node[tag_ours, anchor=south west] (lbl_d) at (0.1, \yD+0.66) {(d) Proposed OUEG-RAG: Online Evidence Multigraph};
+
+\node[flow_box_ours, text width=1.75cm, anchor=west] (d_in) at (0.1, \yD) {
+  \textbf{Query Context $(q, T, D)$}\\
+  Retrieved rows + passage bridges
+};
+
+\node[flow_box_ours, text width=2.45cm, anchor=west] (d_proc) at (2.25, \yD) {
+  \textbf{Online Schema Multigraph}\\
+  Star-topology $\rho_i$ + rule text links + anchor cross-edges
+};
+
+\node[flow_box_ours, text width=1.95cm, anchor=west] (d_out) at (5.05, \yD) {
+  \textbf{Lossless Serialization}\\
+  Whole subgraph + candidate guided paths + tiebreak $c^*$
+};
+
+\node[critique_good, text width=4.3cm, anchor=west] (d_crit) at (7.35, \yD) {
+  $\checkmark$ \textbf{Zero-LLM graph build} on-the-fly ($<20$\,ms)\\
+  $\checkmark$ \textbf{Lossless prompt encoding} (no path edge dropping)\\
+  $\checkmark$ Active tiebreaking via candidate routing $c^*$\\
+  $\checkmark$ Single-turn greedy generation ($T=0$, no loops)
+};
+
+\draw[arrow_flow_ours] (d_in) -- (d_proc);
+\draw[arrow_flow_ours] (d_proc) -- (d_out);
+\draw[arrow_flow_ours] (d_out) -- (d_crit);
+
+\begin{scope}[on background layer]
+  \node[row_panel_ours, fit=(lbl_d)(d_in)(d_proc)(d_out)(d_crit)] (p_d) {};
+\end{scope}
+
+\end{tikzpicture}

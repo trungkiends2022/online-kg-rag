@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "dataset": "hybridqa",
+  "method": "online_kg_path_text",
+  "code_worktree_diff_sha256": "49aa64662af4e4f1e6817045d0413290a8ef6c4cbfd309cf96ed7073873fca25",
+  "input": {
+    "path": "/tmp/hybridqa_failed_three_cases.json",
+    "sha256": "699b2bb4b8fe89b3b39a2ebf8388e7bdc7df7c71c77b713f49579295bc8f4a1b"
+  },
+  "resources": {
+    "tables_dir": "data/WikiTables-WithLinks/tables_tok",
+    "tables_revision": "dc066e1a6d5281511d8b73a6107d5ad2824cc2b2",
+    "tables_worktree_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "passages_dir": "data/WikiTables-WithLinks/request_tok",
+    "passages_revision": "dc066e1a6d5281511d8b73a6107d5ad2824cc2b2",
+    "passages_worktree_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "hitab_tables_dir": null,
+    "hitab_tables_revision": null,
+    "hitab_tables_worktree_diff_sha256": null
+  },
+  "provider": {
+    "provider": "openrouter",
+    "model": "deepseek/deepseek-v4-flash"
+  },
+  "provider_options": {
+    "COMPAT_BASE_URL": "http://localhost:11434/v1",
+    "OPENROUTER_REASONING_ENABLED": "true",
+    "LLM_RATE_LIMIT_RETRIES": "3"
+  },
+  "code_revision": "4387344213626185bcb51989fdafe8199f17153a",
+  "config": {
+    "top_k": 5,
+    "second_stage_k": 3,
+    "max_context_chars": 24000,
+    "max_output_tokens": 512,
+    "temperature": 0.0,
+    "n_paths": 5,
+    "max_replans": 2,
+    "finqa_table_format": "official",
+    "llm_timeout_seconds": 120.0,
+    "llm_sdk_retries": 2,
+    "max_workers": 3,
+    "llm_max_concurrent_requests": 3
+  },
+  "fingerprint": "5537eb22be72df3a4d87bc7b6580d34c2b05d8555360aefbf82bb901e367954f"
+}

@@ -30,5 +30,11 @@ class GroqProvider(LLMProvider):
         )
         if temperature is not None:
             kwargs["temperature"] = temperature
+        # GPT-OSS defaults to medium reasoning on Groq.  Let smoke tests and
+        # latency-sensitive callers opt into the documented low mode without
+        # imposing an unsupported parameter on other models by default.
+        reasoning_effort = os.environ.get("GROQ_REASONING_EFFORT", "").strip()
+        if reasoning_effort:
+            kwargs["reasoning_effort"] = reasoning_effort
         response = self._client.chat.completions.create(**kwargs)
         return response.choices[0].message.content or ""

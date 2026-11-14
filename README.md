@@ -129,6 +129,8 @@ Ví dụ dùng Groq:
 LLM_PROVIDER=groq
 GROQ_API_KEY=gsk_...
 GROQ_MODEL=openai/gpt-oss-20b
+# Optional for GPT-OSS: low, medium (default), or high.
+GROQ_REASONING_EFFORT=low
 
 python -m src.llm.test_prompt "Trả lời ngắn gọn: 1+1 bằng bao nhiêu?" --max-tokens 1024
 ```
@@ -146,9 +148,11 @@ GEMINI_MODEL=gemini-3.8-flash
 ```
 
 Đối với benchmark chính thức, không đổi provider giữa các câu trong cùng một
-run. Nếu provider lỗi quota, dừng và tiếp tục bằng `--resume`, hoặc tạo một run
-mới có tên provider/model rõ ràng. `openrouter/free` chỉ phù hợp smoke test vì
-model thực tế và availability có thể thay đổi.
+run. `--resume` chỉ được dùng với đúng JSONL có manifest cùng fingerprint
+(model/provider, code revision, input checksum, resource revision và cấu hình);
+nếu provider lỗi quota, giữ nguyên mọi tham số rồi resume, hoặc tạo run mới với
+`RUN_TAG`/output mới có tên provider-model rõ ràng. `openrouter/free` chỉ phù hợp
+smoke test vì model thực tế và availability có thể thay đổi.
 
 Ví dụ dùng DeepSeek V4 Flash qua OpenRouter, với reasoning của OpenRouter:
 
@@ -251,6 +255,22 @@ test -d data/WikiTables-WithLinks/request_tok
 test -f data/FinQA/dataset/dev.json
 ```
 
+### OTT-QA (oracle train/dev context)
+
+OTT-QA lưu question split, bảng và passages ở các tệp tách riêng. Adapter hiện
+dùng bảng cùng passages liên kết được cung cấp cho train/dev; đây là smoke test
+cho reader/OUEG, không phải đánh giá retrieval open-domain trên toàn bộ corpus.
+
+```bash
+python -m src.run_baselines \
+  --dataset ottqa --method online_unified_evidence_graph \
+  --input data/OTT-QA/released_data/dev.json \
+  --tables-dir data/OTT-QA/data/traindev_tables_tok \
+  --passages-dir data/OTT-QA/data/traindev_request_tok \
+  --example-id 2b6359edb1b352c3 --limit 1 \
+  --output data/results/ottqa-dev-1-oueg.jsonl
+```
+
 ### HybridQA — bắt đầu bằng oracle context
 
 Tải câu hỏi và bảng/passage chính thức:
@@ -310,9 +330,10 @@ python -m src.run_hybridqa_baseline \
 ```
 
 Khi chạy toàn bộ dev split, bỏ `--limit`. Có thể thêm `--resume` để tiếp tục từ
-file JSONL đang có; khi đó `--limit` là số câu mới cần chạy. Script tạo thêm file
-`*.summary.json` chứa EM và token-F1 theo cách chuẩn hóa của evaluation script
-HybridQA, cả dạng tỷ lệ và phần trăm.
+file JSONL đang có; khi đó `--limit` là số câu mới cần chạy. Lần chạy đầu tạo
+`*.jsonl.manifest.json`; resume chỉ được phép khi fingerprint của model, code,
+input, resource và cấu hình khớp. Runner cũng tạo `*.summary.json` chứa EM và
+token-F1 theo cách chuẩn hóa của evaluation script HybridQA, cả dạng tỷ lệ và phần trăm.
 
 Để chạy lại đúng một câu đã biết, thêm `--example-id <question_id>`.
 
@@ -329,19 +350,191 @@ nhất EM, F1, số LLM call/câu và latency trung bình. Bảng kết quả đ
 so sánh với nghiên cứu trước, cần bổ sung riêng các số chính thức từ HybridQA và
 ghi rõ khác biệt về model, split và retrieval setting.
 
-### Bộ baseline thống nhất
+### Protocol benchmark đã chốt: grounded table--text QA
+
+Các bảng kết quả chính dùng năm phương pháp dưới đây trên cùng model, `T=0`,
+`max_context_chars=24,000`, và context do instance cung cấp. Direct/flat/graph
+baselines phải trả `FINAL_ANSWER` kèm context ID; khi evidence không đủ chúng
+trả `NEED_FOCUS` hoặc `UNRESOLVED`, không được đoán từ parametric memory.
+
+| Method | Vai trò trong bảng chính |
+|---|---|
+| `online_unified_evidence_graph` | Phương pháp đề xuất: L1 đọc toàn bộ compact OUEG lossless (giữ nguyên reader cũ); chỉ khi L1 trả `NEED_FOCUS`/`UNRESOLVED` mới chạy L2 diagnostic grounding. |
+| `direct_llm` | Đối chứng tối giản: một lần đọc raw table--text context đầy đủ. |
+| `odyssey` | Đối chứng graph-pruning zero-shot theo giao thức ODYSSEY. |
+| `graph_retrieval_no_path` | Tách hiệu quả của graph evidence khỏi connected path reasoning. |
+| `path_text_top_n` | Đối chứng destructive pruning; chỉ thấy top-$N$ path evidence (`--strict-path-text-top-n`). |
+
+Không đưa `flat_rag_shared_context` vào bảng chính: sau khi Direct LLM đã nhận
+cùng full context, nó là một biến thể gần trùng. Có thể để ở Appendix nếu cần
+so sánh serialization. `oracle_evidence` là ceiling retrieval, không phải đối
+chứng cùng điều kiện; các phương pháp numerical/programmatic không thuộc
+table--text QA zero-shot không nằm trong bảng này.
+
+HybridQA dùng full 1,500 cho bảng chính và 500 mẫu (shards 06--08) cho
+ablation. OTT-QA dùng full 500 cho external validation; không cần lặp toàn bộ
+ablation trên OTT-QA. Hai runner tương ứng là:
+
+```bash
+bash scripts/run_hybridqa_1500.sh
+bash scripts/run_ottqa_500.sh
+```
+
+Tất cả các runner đều **tự động nạp cấu hình từ `.env`** nếu file tồn tại. Thiết lập file `.env` theo nhu cầu:
+
+- **Chạy LLM Local trên server (vLLM / SGLang / Ollama):**
+  ```bash
+  LLM_PROVIDER=openai_compatible
+  COMPAT_BASE_URL=http://localhost:8000/v1       # hoặc http://localhost:11434/v1 với Ollama
+  COMPAT_MODEL=openai/gpt-oss-20b              # model ID local đang phục vụ
+  COMPAT_API_KEY=not-needed
+  MAX_WORKERS=4
+  LLM_REQUEST_TIMEOUT_SECONDS=180
+  ```
+
+- **Chạy LLM Cloud qua OpenRouter:**
+  ```bash
+  LLM_PROVIDER=openrouter
+  OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxxxxxxxxxx
+  OPENROUTER_MODEL=openai/gpt-oss-20b
+  OPENROUTER_REASONING_ENABLED=true
+  MAX_WORKERS=4
+  LLM_REQUEST_TIMEOUT_SECONDS=180
+  ```
+
+Các cờ cấu hình chuẩn hóa hiện tại:
+- `max_output_tokens=2048`: đảm bảo trần token cho reasoning không làm cắt cụt completion.
+- `online_unified_evidence_graph`: chạy `--no-path-focused-prompt` (L1 giữ trọn vẹn compact graph) và tự động kích hoạt L2 Focus Augmentation khi L1 có danh sách candidate để nạp linked passages từ corpus.
+- `direct_llm`: đọc toàn bộ raw context không cắt top-K.
+
+Trên server, dùng launcher hoặc runner trực tiếp với tag mong muốn:
+
+```bash
+# Chạy toàn bộ HybridQA hoặc theo shard
+RUN_TAG=local-server-v1 bash scripts/run_hybridqa_1500.sh [01..08]
+
+# Chạy toàn bộ OTT-QA hoặc theo shard
+RUN_TAG=local-server-v1 bash scripts/run_ottqa_500.sh [01..05]
+```
+
+### Ablation OUEG đã chốt
+
+| Configuration | Vai trò nhân quả |
+|---|---|
+| `full` | Control: L1 full compact OUEG như hệ cũ; L2 chỉ là nhánh recovery sau diagnostic, không thay L1 khi đã có đáp án. |
+| `no_record_nodes` | Kiểm tra row-record centroids có bảo toàn binding giữa các cell trong cùng hàng hay không. |
+| `no_path_guidance` | Kiểm tra scored paths có giúp điều hướng attention mà không cắt evidence hay không. |
+| `l1_only` | Đo giá trị của diagnostic-triggered L2 verification. |
+| `no_l2_new_evidence` | Tách giá trị của targeted new evidence khỏi việc chỉ đọc lại evidence cũ. |
+| `no_diagnostic_focus_resolution` | Kiểm tra việc grounding diagnostic vào row/candidate cụ thể. |
+| `no_prompt_compression` | Kiểm tra lossless compact serialization; phải báo cáo context coverage, token/latency và empty rate cùng EM/F1. |
+
+Chạy bằng `scripts/run_hybridqa_500_oueg_component_ablations.sh`; chạy một
+model chính trước, sau đó chỉ lặp những ablation quan trọng nếu ngân sách cho
+phép.
+
+### Các baseline khác được hỗ trợ
 
 Runner `src.run_baselines` hỗ trợ các phương án:
 
 | Method | Mô tả |
 |---|---|
+| `graph_retrieval_no_path` | Dựng Online KG + coarse retrieval (không sinh/thực thi path reasoning) |
 | `direct_llm` | Bảng oracle + passage BM25, một LLM call |
 | `flat_table_bm25` | Flatten từng row, trộn với passage rồi BM25 top-k |
+| `flat_rag_shared_context` | Flat RAG dùng chính evidence từ two-stage retrieval của các baseline KG |
 | `online_kg_path_text` | Dựng KG và sinh path dạng text, không sinh/thực thi code |
+| `path_text_top_n` | Chỉ tổng hợp top-N path của planner cùng evidence trực tiếp của các path đó |
+| `odyssey` | ODYSSEY: LLM question analysis, header-filtered sub-table, cell--document/entity graph, BFS tối đa 3 hop, hop-wise reader và full-context fallback |
+| `online_unified_evidence_graph` | Toàn bộ subgraph + context dedupe; path chỉ là candidate view, không lọc evidence |
 | `oracle_evidence` | Chỉ dùng supporting facts do dataset annotate |
 | `path_consistency` | Online-KG nhưng chọn output bằng số path đồng ý |
 | `numerical_ir` | Online-KG + typed numerical IR có operator đóng và provenance |
 | `online_kg` | Pipeline đầy đủ với grounded consistency |
+
+`odyssey` tái lập giao thức graph-pruning của Agarwal et al. (NAACL 2025): ba
+LLM call cho question analysis, lọc header để tạo sub-table, hybrid graph giữa
+cell--document/entity, semantic matching, BFS tối đa ba hop, reader theo từng
+hop và fallback sang full context. Mặc định dependency-free dùng NER và semantic
+matching lexical có ghi rõ trong output (`*_mode`); nếu tái lập đúng model gốc,
+truyền custom entity extractor/semantic matcher khi khởi tạo baseline. Ví dụ:
+
+```bash
+python -m src.run_baselines \
+  --dataset hybridqa --method odyssey \
+  --input benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard01.json \
+  --tables-dir data/WikiTables-WithLinks/tables_tok \
+  --passages-dir data/WikiTables-WithLinks/request_tok \
+  --output data/results/hybridqa-shard01-odyssey.jsonl \
+  --odyssey-max-hops 3 --odyssey-semantic-threshold 0.8 --temperature 0
+```
+
+### Benchmark HybridQA 1500: Chia Shard, Theo dõi Tqdm & Đối sánh Direct LLM
+
+Tập benchmark 1500 mẫu phân tầng của HybridQA được lưu trữ trong [`benchmarks/hybridqa/`](benchmarks/hybridqa/):
+* **Tập tổng:** `benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027.json` (1500 mẫu từ `dev.traced.json`).
+* **Các Shard:** Chia đều thành 8 shard cân bằng phân tầng (*stratified reasoning*):
+  * `shard01` đến `shard07`: Mỗi shard gồm **200 mẫu**.
+  * `shard08`: Gồm **100 mẫu**.
+
+Tái tạo hoặc xuất mới bộ dữ liệu và các shard bằng lệnh:
+```bash
+python3 -m src.sample_hybridqa \
+  --input data/HybridQA/released_data/dev.traced.json \
+  --tables-dir data/WikiTables-WithLinks/tables_tok \
+  --passages-dir data/WikiTables-WithLinks/request_tok \
+  --output benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027.json \
+  --size 1500 \
+  --shard-size 200 \
+  --seed 2027 \
+  --require-answer-node \
+  --stratify-reasoning
+```
+
+#### Chạy benchmark từ Shard bằng script runner `scripts/run_hybridqa_shard.sh`
+
+Script [`scripts/run_hybridqa_shard.sh`](scripts/run_hybridqa_shard.sh) hỗ trợ:
+1. **Cấu hình số luồng chạy song song:** Qua `--workers <1..8>` (hoặc `-w`), tối đa là 8 luồng (nếu truyền > 8 sẽ tự động điều chỉnh về 8).
+2. **Theo dõi tiến độ trực quan bằng `tqdm`:** Tích hợp thanh tiến trình sạch sẽ (`--quiet-records`), cập nhật tức thời EM% và số lượt gọi LLM trung bình.
+3. **Tự động đối sánh với `direct_llm`:** Chạy phương pháp được chọn song song đối chứng với `direct_llm` trên cùng shard, sau đó xuất bảng Markdown so sánh chi tiết.
+4. **Ghi log đầy đủ:** Ghi nhận Exact Match (EM), Semantic Exact Match (ACC), F1, số lần gọi LLM (`total_llm_calls`, `mean_llm_calls`), thời gian chạy (`wall_time_ms`, `llm_latency_ms`) vào các file `.jsonl` và `.summary.json`.
+
+**Các câu lệnh mẫu:**
+
+* Chạy Shard 01 với 8 luồng song song, đối sánh `graph_retrieval_no_path` (mặc định) với `direct_llm`:
+  ```bash
+  ./scripts/run_hybridqa_shard.sh --shard 01 --workers 8
+  ```
+
+* Chạy thử nhanh 5 mẫu đầu của Shard 02 với 4 luồng:
+  ```bash
+  ./scripts/run_hybridqa_shard.sh --shard 02 --workers 4 --limit 5
+  ```
+
+* Chạy phương pháp Full Online KG (`online_kg`) trên Shard 01 với 8 luồng:
+  ```bash
+  ./scripts/run_hybridqa_shard.sh --shard 01 --workers 8 --method online_kg
+  ```
+
+* Chạy tuần tự toàn bộ 8 Shard (1500 mẫu) với 8 luồng:
+  ```bash
+  ./scripts/run_hybridqa_shard.sh --shard all --workers 8
+  ```
+
+* Chạy trực tiếp qua Python module `src.run_baselines`:
+  ```bash
+  python3 -m src.run_baselines \
+    --dataset hybridqa \
+    --method graph_retrieval_no_path \
+    --input benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard01.json \
+    --tables-dir data/WikiTables-WithLinks/tables_tok \
+    --passages-dir data/WikiTables-WithLinks/request_tok \
+    --output data/results/shard01_graph_retrieval_no_path.jsonl \
+    --top-k 5 --second-stage-k 3 \
+    --max-workers 8 --llm-max-concurrent-requests 8 \
+    --quiet-records --force-progress --resume
+  ```
+
 
 Các phương án thực thi Online-KG dùng retrieval hai giai đoạn: BM25 theo câu hỏi,
 sau đó bổ sung tối đa `--second-stage-k` passage bằng query expansion deterministic
@@ -362,6 +555,32 @@ for method in direct_llm flat_table_bm25 online_kg_path_text path_consistency on
     --output "data/results/hybridqa-${method}.jsonl" \
     --top-k 5 --temperature 0 --limit 100
 done
+```
+
+#### Chạy Flat-RAG shared context và Path-Text top-N với GPT-OSS
+
+Runner dưới đây chạy tuần tự hai baseline mới với `openai/gpt-oss-20b` và
+`openai/gpt-oss-120b`. Mỗi JSONL, manifest, summary và log chứa shard, provider,
+model và tên baseline; cấu hình model, limit, workers và top-N đều nhận qua CLI.
+
+```bash
+bash scripts/run_hybridqa_shared_context_ablation.sh --shard 01
+
+# Smoke test riêng Path-Text top-3 trên GPT-OSS 120B.
+bash scripts/run_hybridqa_shared_context_ablation.sh \
+  --shard 01 --model 120b --baseline path --n-paths 3 --limit 10 --workers 2
+```
+
+Để dùng server nội bộ tương thích OpenAI (vLLM, SGLang, v.v.), chọn
+`--provider inhouse`. Model ID là tên server công bố; có thể dùng alias `20b`,
+`120b` hoặc truyền tên chính xác. Đặt `COMPAT_API_KEY` trong `.env` nếu server
+cần xác thực; truyền endpoint qua `--base-url` hoặc đặt `COMPAT_BASE_URL` trong
+`.env`.
+
+```bash
+bash scripts/run_hybridqa_shared_context_ablation.sh \
+  --provider inhouse --model gpt-oss-20b --base-url http://llm-server:8000/v1 \
+  --shard 01 --workers 4
 ```
 
 Oracle Evidence của HybridQA cần split traced vì file thường không có annotation
@@ -439,13 +658,20 @@ I/O). Cấu hình số worker bằng `--max-workers` hoặc biến môi trườn
 xong, throughput và ETA khi chạy trong terminal. Không truyền `--no-progress`
 nếu muốn xem progress bar.
 
-Ví dụ chạy batch đầu 50 câu của shard 02 trên OpenRouter/DeepSeek:
+Số worker và số request LLM đang bay là hai giới hạn tách biệt. Mặc định đều là
+8: worker vẫn có thể dựng KG/retrieval đồng thời, còn client chỉ cho tối đa 8
+HTTP request tới cùng provider. Đặt `LLM_MAX_CONCURRENT_REQUESTS` cho mọi
+provider hoặc, ví dụ, `GROQ_MAX_CONCURRENT_REQUESTS=12` cho riêng Groq. Cờ
+`--llm-max-concurrent-requests` có độ ưu tiên cao nhất. Hạ giới hạn này khi có
+429/timeout; không cần hạ `--max-workers` trước.
 
+Ví dụ chạy batch đầu 50 câu của shard 02 trên OpenRouter/DeepSeek:
 ```bash
 LLM_PROVIDER=openrouter \
 OPENROUTER_MODEL=deepseek/deepseek-v4-flash \
 OPENROUTER_REASONING_ENABLED=false \
 BENCHMARK_MAX_WORKERS=8 \
+LLM_MAX_CONCURRENT_REQUESTS=8 \
 .venv/bin/python -m src.run_baselines \
   --dataset finqa \
   --method online_kg \
@@ -453,6 +679,7 @@ BENCHMARK_MAX_WORKERS=8 \
   --output data/results/finqa-shard02-online-kg.jsonl \
   --limit 50 \
   --max-workers 8 \
+  --llm-max-concurrent-requests 8 \
   --n-paths 3 \
   --max-replans 1 \
   --top-k 5 \
@@ -487,7 +714,9 @@ BENCHMARK_MAX_WORKERS=8 \
 Khởi đầu với 6--8 worker, rồi tăng dần nếu provider không trả 429/timeout.
 Rate pacing, retry và JSONL logging vẫn được áp dụng cho từng LLM call.
 
-Mỗi output JSONL có metric theo dataset và một file `*.summary.json`. HybridQA
+Mỗi output JSONL có metric theo dataset, một `*.summary.json` và một
+`*.jsonl.manifest.json`. Manifest ghi provider/model, code revision, checksum
+input, revision resource, configuration và fingerprint để audit/resume. HybridQA
 dùng EM/token-F1; FinQA dùng numeric execution accuracy. `program_accuracy`
 hiện để `null` vì code Python path chưa được canonicalize sang DSL chính thức
 của FinQA. Annotation `answer-node` của HybridQA là weak/approximate label, nên

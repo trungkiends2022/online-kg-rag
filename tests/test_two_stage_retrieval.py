@@ -88,3 +88,99 @@ def test_table_literal_constraint_prioritizes_candidate_passages_and_does_not_mi
         "enforce_output": True,
     }]
     assert "lithuania" in [item["id"] for item in result["text_passages"]]
+
+
+def test_short_table_retrieval_keeps_every_row_and_original_index():
+    result = two_stage_retrieve(
+        "What is the middle name of the player with the second most rushing yards?",
+        [{"table_name": "rushing", "rows": [
+            {"Rank": "1", "Player": "Emmitt Smith"},
+            {"Rank": "2", "Player": "Walter Payton"},
+            {"Rank": "3", "Player": "Barry Sanders"},
+        ]}],
+        [],
+        [],
+        top_k=1,
+        second_stage_k=0,
+    )
+
+    group = result["table_rows"][0]
+    assert group["rows"] == [
+        {"Rank": "1", "Player": "Emmitt Smith"},
+        {"Rank": "2", "Player": "Walter Payton"},
+        {"Rank": "3", "Player": "Barry Sanders"},
+    ]
+    assert group["row_indices"] == [0, 1, 2]
+    assert result["retrieval_trace"]["selected_table_rows"] == 3
+
+
+def test_short_table_retrieval_preserves_all_cell_links():
+    result = two_stage_retrieve(
+        "Where was Alpha born?",
+        [{
+            "table_name": "people",
+            "rows": [{"Name": "Alpha"}, {"Name": "Beta"}],
+            "cell_links": [
+                {"row_index": 0, "column_name": "Name", "cell_value": "Alpha", "url": "/wiki/Alpha"},
+                {"row_index": 1, "column_name": "Name", "cell_value": "Beta", "url": "/wiki/Beta"},
+            ],
+        }],
+        [], [], top_k=1, second_stage_k=0,
+    )
+
+    assert result["table_rows"][0]["cell_links"] == [
+        {"row_index": 0, "column_name": "Name", "cell_value": "Alpha", "url": "/wiki/Alpha"},
+        {"row_index": 1, "column_name": "Name", "cell_value": "Beta", "url": "/wiki/Beta"},
+    ]
+
+
+def test_default_table_retrieval_keeps_every_long_row_for_kg():
+    rows = [{"Name": f"Person {index}"} for index in range(30)]
+    rows.append({"Name": "Target Person"})
+    result = two_stage_retrieve(
+        "Where was Target Person born?",
+        [{
+            "table_name": "people",
+            "rows": rows,
+            "cell_links": [
+                {"row_index": 0, "column_name": "Name", "cell_value": "Person 0", "url": "/wiki/Person_0"},
+                {"row_index": 30, "column_name": "Name", "cell_value": "Target Person", "url": "/wiki/Target"},
+            ],
+        }],
+        [], [], top_k=1, second_stage_k=0,
+    )
+
+    group = result["table_rows"][0]
+    assert group["row_indices"] == list(range(31))
+    assert group["cell_links"] == [
+        {"row_index": 0, "column_name": "Name", "cell_value": "Person 0", "url": "/wiki/Person_0"},
+        {"row_index": 30, "column_name": "Name", "cell_value": "Target Person", "url": "/wiki/Target"},
+    ]
+    assert result["retrieval_trace"]["max_table_rows"] is None
+
+
+def test_table_row_limit_filters_cell_links_to_selected_rows():
+    rows = [{"Name": f"Person {index}"} for index in range(30)]
+    rows.append({"Name": "Target Person"})
+    result = two_stage_retrieve(
+        "Where was Target Person born?",
+        [{
+            "table_name": "people",
+            "rows": rows,
+            "cell_links": [
+                {"row_index": 0, "column_name": "Name", "cell_value": "Person 0", "url": "/wiki/Person_0"},
+                {"row_index": 30, "column_name": "Name", "cell_value": "Target Person", "url": "/wiki/Target"},
+            ],
+        }],
+        [], [], top_k=1, second_stage_k=0, max_table_rows=1,
+    )
+
+    group = result["table_rows"][0]
+    assert group["row_indices"] == [30]
+    assert group["cell_links"] == [{
+        "row_index": 30,
+        "column_name": "Name",
+        "cell_value": "Target Person",
+        "url": "/wiki/Target",
+    }]
+    assert result["retrieval_trace"]["max_table_rows"] == 1

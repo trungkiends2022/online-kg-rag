@@ -198,3 +198,100 @@ def test_multigraph_provenance_does_not_duplicate_lookup_values():
     assert kg.graph.number_of_edges() == 2
     assert kg.get_neighbors("revenue", "2015") == ["45"]
     assert len(kg.get_evidence("revenue", "45", "2015")) == 2
+
+
+def test_record_edges_preserve_same_row_binding_for_path_text():
+    kg = OnlineKG()
+    kg.register_table_structure(
+        "revenue",
+        [{"Company": "A", "Year": "2022", "Revenue": "10M"}],
+        row_indices=[7],
+    )
+
+    records = kg.path_edge_records()
+    row_id = "table:revenue:row:7"
+    assert any(
+        edge["head"] == "A"
+        and edge["relation"] == "has_record"
+        and edge["tail"] == row_id
+        for edge in records
+    )
+    assert {
+        (edge["relation"], edge["tail"])
+        for edge in records
+        if edge["head"] == row_id
+    } >= {("year", "2022"), ("revenue", "10M")}
+    assert all(
+        edge["row_index"] == 7
+        for edge in records
+        if edge.get("structural")
+    )
+
+
+def test_table_header_relates_row_to_cell_node_before_display_value():
+    kg = OnlineKG()
+    kg.register_table_structure(
+        "league", [{"Club": "Gaborone United", "City / Town": "Gaborone"}],
+        row_indices=[3],
+    )
+
+    row_id = "table:league:row:3"
+    cell_id = f"{row_id}:cell:City / Town"
+    records = kg.path_edge_records()
+    assert any(
+        edge["head"] == row_id
+        and edge["relation"] == "city_town"
+        and edge["tail"] == cell_id
+        and edge.get("cell_node")
+        for edge in records
+    )
+    assert any(
+        edge["head"] == cell_id
+        and edge["relation"] == "cell_value"
+        and edge["tail"] == "Gaborone"
+        for edge in records
+    )
+    assert any(node["id"] == cell_id and node["type"] == "Cell"
+               for node in kg.to_trace()["structural_nodes"])
+
+
+def test_new_name_is_not_merged_without_an_explicit_same_source_merger():
+    kg = OnlineKG()
+    kg.add_triple(_triple("New York", "is_in", "United States"))
+    kg.add_triple(_triple("York", "is_in", "England"))
+
+    EntityResolver().resolve(kg)
+
+    assert "New York" in kg.graph
+    assert "York" in kg.graph
+
+def test_cell_multi_entity_splitter_creates_atomic_row_and_link_edges():
+    kg = OnlineKG()
+    value = "Tommy Dunne / Stuart Ashton"
+    kg.register_table_structure("league", [{"Team": "Cork City", "Manager": value}], cell_links=[
+        {"row_index": 0, "column_name": "Manager", "cell_value": value, "url": "/wiki/Tommy_Dunne"},
+        {"row_index": 0, "column_name": "Manager", "cell_value": value, "url": "/wiki/Stuart_Ashton"},
+    ])
+    records = kg.path_edge_records()
+    manager_members = {
+        edge["tail"] for edge in records
+        if edge["head"] == "table:league:row:0" and edge["relation"] == "manager"
+    }
+    assert {"Tommy Dunne", "Stuart Ashton"} <= manager_members
+    linked_members = {
+        edge["head"] for edge in records
+        if edge["relation"] == "linked_passage" and edge["tail"] == "passage:/wiki/Tommy_Dunne"
+    }
+    assert "Tommy Dunne" in linked_members
+
+
+def test_linked_display_aliases_canonicalize_path_view_without_duplicate_edges():
+    kg = OnlineKG()
+    source = "https://example.org/Ltyentye_Apurte"
+    kg.add_triple(Triple("Ltyentye Apurte Community", "linked_passage", source, Provenance("table", "places")))
+    kg.add_triple(Triple("Ltyentye Apurte", "linked_passage", source, Provenance("table", "places")))
+    EntityResolver().resolve(kg)
+
+    assert kg._resolve_entity("Ltyentye Apurte") == "Ltyentye Apurte Community"
+    linked = [edge for edge in kg.path_edge_records() if edge["relation"] == "linked_passage"]
+    assert len(linked) == 1

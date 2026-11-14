@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "dataset": "hybridqa",
+  "method": "online_unified_evidence_graph",
+  "code_worktree_diff_sha256": null,
+  "input": {
+    "path": "/workspace/storage-shared/nlp/huypq51/projects/online-kg-rag-wip-main-changes-20260926/benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard01.json",
+    "sha256": "ced0f8f2744a9f8d653fe966ab695946e488d4980551f08778ea3c0e86187d55"
+  },
+  "resources": {
+    "tables_dir": "data/WikiTables-WithLinks/tables_tok",
+    "tables_revision": null,
+    "tables_worktree_diff_sha256": null,
+    "passages_dir": "data/WikiTables-WithLinks/request_tok",
+    "passages_revision": null,
+    "passages_worktree_diff_sha256": null,
+    "hitab_tables_dir": null,
+    "hitab_tables_revision": null,
+    "hitab_tables_worktree_diff_sha256": null
+  },
+  "provider": {
+    "provider": "openai_compatible",
+    "model": "Qwen3.5-122B-A10B"
+  },
+  "provider_options": {
+    "COMPAT_BASE_URL": "http://localhost:8020/v1",
+    "OPENROUTER_REASONING_ENABLED": null,
+    "LLM_RATE_LIMIT_RETRIES": null
+  },
+  "code_revision": null,
+  "config": {
+    "top_k": 5,
+    "second_stage_k": 3,
+    "max_context_chars": 24000,
+    "max_table_rows_for_kg": null,
+    "max_output_tokens": 1024,
+    "temperature": 0.0,
+    "use_rule_text_triples": true,
+    "ambiguity_policy": "prompt",
+    "oueg_context_mode": "lossless",
+    "n_paths": 5,
+    "max_replans": 0,
+    "finqa_table_format": "official",
+    "llm_timeout_seconds": 120.0,
+    "llm_sdk_retries": 2,
+    "max_workers": 64,
+    "llm_max_concurrent_requests": 64
+  },
+  "fingerprint": "4ddeb6ee837326e2c5b7bee1b9f6c0d4e551c6023ef3573743ff729f9e00bc7e"
+}

@@ -33,6 +33,7 @@ class EntityAnchor:
     constraints: dict[str, str]
     bridge_entities: tuple[str, ...]
     table_constraints: tuple[dict[str, Any], ...] = ()
+    table_witnesses: tuple[dict[str, Any], ...] = ()
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -135,12 +136,22 @@ def _answer_column(row: dict[str, Any], question: str) -> str | None:
 
 def _question_requests_column(question: str, column: str) -> bool:
     """Whether the answer is explicitly expected to be a value of this column."""
-    if not re.search(r"\b(?:which|what|who)\b", question.casefold()):
+    lowered = question.casefold()
+    if not re.search(r"\b(?:which|what|who)\b", lowered):
         return False
     column_key = _clean(column).casefold()
-    return bool(column_key and re.search(
-        rf"\b{re.escape(column_key)}\b", question.casefold()
-    ))
+    if not column_key:
+        return False
+    target_match = re.search(r"\b(?:which|what|who)\s+(?:'s\s+)?([a-z0-9_]+)", lowered)
+    if target_match:
+        requested_target = target_match.group(1)
+        if (
+            requested_target in {"country", "city", "state", "province", "region", "jurisdiction", "nation"}
+            and column_key != requested_target
+        ):
+            return False
+    return bool(re.search(rf"\b{re.escape(column_key)}\b", lowered))
+
 
 
 def _table_value_constraints(question: str, table_rows: list[dict]) -> tuple[dict[str, Any], ...]:
@@ -191,19 +202,33 @@ def _table_value_constraints(question: str, table_rows: list[dict]) -> tuple[dic
     return tuple(constraints)
 
 
-def anchor_question(question: str, table_rows: list[dict]) -> EntityAnchor:
+def anchor_question(
+    question: str,
+    table_rows: list[dict],
+    text_passages: list[dict] | None = None,
+) -> EntityAnchor:
     """Return question constraints and table-derived bridge entities.
 
     ``table_rows`` uses the repository's grouped-table schema.  The rank rule
     intentionally supports the common HybridQA pattern "the second most …".
     More anchor extractors can be added without changing retrieval callers.
     """
+    from src.planning.table_operator import TableOperatorPlanner
+
     rank = _rank_constraint(question)
     constraints: dict[str, str] = {}
     if rank is not None:
         constraints["rank"] = rank
 
     bridge_entities: list[str] = []
+    witnesses = TableOperatorPlanner().plan(question, table_rows, text_passages)
+    witness_dicts = tuple(w.to_dict() for w in witnesses)
+
+    for w in witnesses:
+        for entity in w.bridge_entities:
+            if entity and entity not in bridge_entities:
+                bridge_entities.append(entity)
+
     if rank is not None:
         for group in table_rows:
             for row in group.get("rows", []):
@@ -213,12 +238,23 @@ def anchor_question(question: str, table_rows: list[dict]) -> EntityAnchor:
                         if entity and entity not in bridge_entities:
                             bridge_entities.append(entity)
 
-    table_constraints = _table_value_constraints(question, table_rows)
-    for constraint in table_constraints:
+    table_constraints_list = list(_table_value_constraints(question, table_rows))
+    for w in witnesses:
+        table_constraints_list.append({
+            "column": w.evidence_columns[0] if w.evidence_columns else "operator",
+            "value": w.operator,
+            "entity_column": "witness",
+            "candidates": list(w.bridge_entities),
+            "enforce_output": False,
+            "witness": w.to_dict(),
+        })
+
+    for constraint in table_constraints_list:
         for entity in constraint["candidates"]:
             if entity not in bridge_entities:
                 bridge_entities.append(entity)
 
+    table_constraints = tuple(table_constraints_list)
     direct_mentions = tuple(re.findall(r"\b[A-Z][\w'-]+(?:\s+[A-Z][\w'-]+)+\b", question))
     return EntityAnchor(
         direct_mentions=direct_mentions,
@@ -227,4 +263,6 @@ def anchor_question(question: str, table_rows: list[dict]) -> EntityAnchor:
         constraints=constraints,
         bridge_entities=tuple(bridge_entities),
         table_constraints=table_constraints,
+        table_witnesses=witness_dicts,
     )
+

@@ -43,6 +43,7 @@ class AnswerSynthesizer:
                 "triple": [item.head, item.relation, item.tail],
                 "source_type": item.source_type,
                 "source_id": item.source_id,
+                "text_context": item.text_context,
             }
             for item in best.exec_result.evidence[:10]
         ]

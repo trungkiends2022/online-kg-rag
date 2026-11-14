@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: splncs04.bst
+Database file #1: refs.bib
+Warning--can't use both volume and number fields in deng2020turl
+You've used 26 entries,
+            2850 wiz_defined-function locations,
+            725 strings with 11263 characters,
+and the built_in function-call counts, 19342 in all, are:
+= -- 1616
+> -- 817
+< -- 21
++ -- 332
+- -- 306
+* -- 1238
+:= -- 2473
+add.period$ -- 45
+call.type$ -- 26
+change.case$ -- 275
+chr.to.int$ -- 0
+cite$ -- 27
+duplicate$ -- 1562
+empty$ -- 1575
+format.name$ -- 332
+if$ -- 4214
+int.to.chr$ -- 0
+int.to.str$ -- 26
+missing$ -- 332
+newline$ -- 84
+num.names$ -- 52
+pop$ -- 715
+preamble$ -- 1
+purify$ -- 205
+quote$ -- 0
+skip$ -- 539
+stack$ -- 0
+substring$ -- 1106
+swap$ -- 874
+text.length$ -- 21
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 104
+warning$ -- 1
+while$ -- 135
+width$ -- 28
+write$ -- 260
+(There was 1 warning)

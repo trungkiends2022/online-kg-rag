@@ -1,0 +1,571 @@
+{
+  "method": "flat_rag_shared_context",
+  "dataset": "hybridqa",
+  "num_examples": 100,
+  "failed_examples": 0,
+  "run_manifest": "data/results/hybridqa_shard08_env/flat_rag_shared_context/shard08-of08__openai_compatible__GPT-OSS-20B__flat_rag_shared_context.jsonl.manifest.json",
+  "run_fingerprint": "df2962398e945988568a43a1618309ad2a2625030c73fa0cf7aa7694ed7f7143",
+  "provider": "openai_compatible",
+  "model": "GPT-OSS-20B",
+  "code_revision": null,
+  "input_sha256": "cd64113f08d90676cc460133d0d1d4264e0ce0239b953782be2dc36995ca8183",
+  "exact_match": 0.58,
+  "f1": 0.6925537970801129,
+  "exact_match_percent": 57.99999999999999,
+  "f1_percent": 69.25537970801129,
+  "semantic_exact_match": 0.58,
+  "semantic_exact_match_percent": 57.99999999999999,
+  "empty_answer_count": 5,
+  "empty_answer_rate": 0.05,
+  "error_taxonomy": {
+    "table_context_budget": 13,
+    "retrieval_miss": 9,
+    "format_or_normalization": 10,
+    "retrieval_or_reasoning": 5,
+    "output_format": 5
+  },
+  "error_audit_sample": [
+    {
+      "id": "d673192ac091066c",
+      "question": "Of those whose original chapter is San Diego State University , which one has the earliest birth date ?",
+      "gold_answer": "John Frederick Dryer",
+      "answer": "No data",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "f1a039aa92cccb1a",
+      "question": "What is the population of the city for the school that opened in 1907 ?",
+      "gold_answer": "57,449 people",
+      "answer": "57,449",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "b40cca6a45ee3483",
+      "question": "What temple is in the city where the Medical College was established in the year 2019 ?",
+      "gold_answer": "Madan Mohan",
+      "answer": "Madan\u202fMohan\u202fTemple",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "2f337d8d607b2354",
+      "question": "What portion of the home nation of Yelena Makolova is covered by forests ?",
+      "gold_answer": "Over 40%",
+      "answer": "No information",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "ed0725d86d993422",
+      "question": "What asteroids was discovered on 14 September 1951 and is the same type that exploded over the city of Chelyabinsk ?",
+      "gold_answer": "Geographos",
+      "answer": "1620\u202fGeographos",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "1c95b268b15c5687",
+      "question": "What people founded the place in Elmore ?",
+      "gold_answer": "French",
+      "answer": "French colonists",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "da9d4e2210dea876",
+      "question": "The directorate of the voivodship with 9.7 % of shares is located in a city on which river ?",
+      "gold_answer": "Warta River",
+      "answer": "Warta",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "12ad267438690b49",
+      "question": "Which century saw the delineation of the present boundaries of the home country of Amass Amankona ?",
+      "gold_answer": "1900s",
+      "answer": "20th century",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "3dad1f1d7a1dc598",
+      "question": "What year was the team with the champion in the earliest year started ?",
+      "gold_answer": "1927",
+      "answer": "1992",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "3ce9d18930ec1039",
+      "question": "How many have purchased records by the musicians with the single Just Breathe ?",
+      "gold_answer": "85 million",
+      "answer": "No",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "0db3fd75f85b7890",
+      "question": "Which publication 's ranking put the person who finished the qualifying round of the French Grand Prix in 1:13.625 in 2001 at 30th out of all F1 drivers ?",
+      "gold_answer": "Times Online 's",
+      "answer": "Times Online",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "3a2427e0de7cd246",
+      "question": "For the state formerly represented by John McCain , who is likely to be a Senate candidate in 2020 ?",
+      "gold_answer": "astronaut and political activist Mark Kelly",
+      "answer": "Martha McSally",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "2774580e928235a7",
+      "question": "What date did the season begin of the school whose team is led by second year head coach Shaheen Holloway ?",
+      "gold_answer": "November 27 , 1981",
+      "answer": "2023-24 season",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "17bd1c6735080096",
+      "question": "What 2022 winter olympic sports with be played in the area used for volleyball in 2008 ?",
+      "gold_answer": "figure skating , curling and ice hockey",
+      "answer": "Figure skating, curling, ice hockey",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "d06f10a544f875f4",
+      "question": "What was the first name nickname of the member from the electorate which was represented by 21 members of parliament ?",
+      "gold_answer": "Nabob",
+      "answer": "Nabob Wilson",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "b65d12c6aaf5a00e",
+      "question": "What team did the player who won the 1986 Cy Young Award in the season he was most valuable player ?",
+      "gold_answer": "Houston Astros",
+      "answer": "New York Mets",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "00c882d1bfbc8aa3",
+      "question": "What is the description if the dish that is a localised version of Indian Achaar ?",
+      "gold_answer": "Various chopped vegetables in vinegar",
+      "answer": "Acar is a type of vegetable pickle from Indonesia , and popular in Malaysia , Singapore and Brunei .",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "6ff41d63828c01f6",
+      "question": "Which company developed the stealth game released in March 2005 whose OST is done by the English independent record label with a satellite office in Los Angeles ?",
+      "gold_answer": "Ubisoft",
+      "answer": "Ubisoft\u202fMontreal and Ubisoft\u202fMilan",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "9a673b041cc92df3",
+      "question": "what is the event of the competition that lasted from 6/22-6/25 ?",
+      "gold_answer": "Triple Jump",
+      "answer": "2017 USA Track and Field Outdoor Championships",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "0c64dfeaceb45bfb",
+      "question": "Which leading goalscorer of the 1952 - 53 season passed away first ?",
+      "gold_answer": "Per Jacobsen",
+      "answer": "",
+      "error_category": "output_format",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "14e391275e529f19",
+      "question": "What is the title whose notes is an American composer and alto saxophonist subtitled ?",
+      "gold_answer": "Volume 1",
+      "answer": "The Gerry Mulligan Songbook",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "c57355847612cbde",
+      "question": "How many of the flag bearers were born in December ?",
+      "gold_answer": "3",
+      "answer": "2",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "68bb583b7da5beb0",
+      "question": "What type of aircraft was in service in 1939 ?",
+      "gold_answer": "troop transport",
+      "answer": "Bristol\u202fBombay\u202fbomber/transport",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "2af7ecb74970415a",
+      "question": "What telenovela is the telenovela in which Daniela Romo played Estrella in 1982 a remake of ?",
+      "gold_answer": "Cristina Franco",
+      "answer": "Cristina",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "2c1e60c344e2b104",
+      "question": "Which valley adjoins the city of KAII-TV ?",
+      "gold_answer": "Iao",
+      "answer": "Iao Valley",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "bb4643294a887907",
+      "question": "How many disciplines are there in the sport of Salvatore Sanzo ?",
+      "gold_answer": "three disciplines",
+      "answer": "3",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "aacc7a9edca15a6e",
+      "question": "What is the producer of the film Angrej wife 's name ?",
+      "gold_answer": "wife producer Pammi Baweja",
+      "answer": "Aman Khatkar",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "2779051b15cb84ac",
+      "question": "In what city was the building located on Chicago Road founded ?",
+      "gold_answer": "1835",
+      "answer": "Moscow",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "513064a9a8bdef3d",
+      "question": "What medals were won at the FIS Nordic World Ski Championships by the gold medalist in men 's individual Nordic combined at the 2006 Winter Olympics ?",
+      "gold_answer": "silver",
+      "answer": "Silver medals in the 4\u202f\u00d7\u202f5\u202fkm team event at the 2003 and 2005 FIS Nordic World Ski Championships.",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "7142d80d4b33784b",
+      "question": "What is the new name of this football club as of 2018 , based in the capital and the largest city of Kenya ?",
+      "gold_answer": "Mt Kenya United",
+      "answer": "",
+      "error_category": "output_format",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "e6f86b2d4694890f",
+      "question": "What is the status of the futsal club that placed 3rd during the season when the team founded on 1981 with one Portuguese Futsal Cup was the runners-up ?",
+      "gold_answer": "dissolved",
+      "answer": "",
+      "error_category": "output_format",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "418754ed462bf571",
+      "question": "Which non-European country has its embassy in the district where the Pushkin Museum is located ?",
+      "gold_answer": "Austria",
+      "answer": "Bangladesh",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "e8afdd30d2d89a3e",
+      "question": "Which host facility has an installation where pilots practice landing on aircraft carriers by flying at night ?",
+      "gold_answer": "Marine Corps Auxiliary Landing Field Bogue Field",
+      "answer": "Marine Corps Air Station Cherry Point",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "7d3665b5ec03ba2e",
+      "question": "How large is the land area in square miles of the city with the most runners-up ?",
+      "gold_answer": "203",
+      "answer": "203 square miles",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "1a9dfbe67122470f",
+      "question": "What produce is the city containing the historical Santa Cruz landmark of Castro Adobe known for growing ?",
+      "gold_answer": "strawberries , apples , lettuce",
+      "answer": "strawberries",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "dc897ef87af1d657",
+      "question": "What is the estimated population of the hometown of the first African American winner of Miss Teen USA ?",
+      "gold_answer": "112,525",
+      "answer": "No data available",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "27432f264c71480d",
+      "question": "Which county in the province where the high-profile Three Gorges Dam is located at Yichang has the lowest % of China 's Tujia Population ?",
+      "gold_answer": "Jianshi",
+      "answer": "Wufeng",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "51a8ab50c42fbc7e",
+      "question": "On which date was this spacecraft decommissioned , which was built to explore the C-type asteroid composed of primitive carbonaceous material ?",
+      "gold_answer": "1 November 2018",
+      "answer": "",
+      "error_category": "output_format",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "c9bf8310ba01b701",
+      "question": "Where did the most recent winner go to high school ?",
+      "gold_answer": "Perris High School",
+      "answer": "Perris High School in Perris, California",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 1.0
+      }
+    },
+    {
+      "id": "d8b866999b5bd723",
+      "question": "What football club is located in the most populous town in the Syunik Province ?",
+      "gold_answer": "Gandzasar Stadium",
+      "answer": "Gandzasar",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "48ec52f14caa596d",
+      "question": "What are the No . of Discs of the set details person who was married to the soprano Galina Vishnevskaya ?",
+      "gold_answer": "10",
+      "answer": "",
+      "error_category": "output_format",
+      "retrieval_audit": {
+        "gold_row_recall": 0.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "13eec969c4674727",
+      "question": "Where was the sport held in which one of the gold medalists was born on 10 January 1985 ?",
+      "gold_answer": "The CRPF Campus ( Kadarpur )",
+      "answer": "CRPF Campus",
+      "error_category": "table_context_budget",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    }
+  ],
+  "mean_gold_row_recall": 0.86,
+  "mean_gold_hyperlink_recall": 1.0,
+  "mean_gold_passage_recall": 0.5584415584415584,
+  "total_wall_time_ms": 295737.24,
+  "mean_wall_time_ms": 2957.37,
+  "total_llm_latency_ms": 293902.33,
+  "mean_llm_latency_ms": 2939.02,
+  "total_non_llm_time_ms": 1834.91,
+  "mean_non_llm_time_ms": 18.35,
+  "total_llm_calls": 100.0,
+  "mean_llm_calls": 1.0,
+  "total_llm_api_attempts": 100.0,
+  "mean_llm_api_attempts": 1.0,
+  "total_llm_prompt_chars": 1965493.0,
+  "mean_llm_prompt_chars": 19654.93,
+  "total_llm_response_chars": 1448.0,
+  "mean_llm_response_chars": 14.48,
+  "config": {
+    "top_k": 5,
+    "use_rule_text_triples": true,
+    "use_record_nodes": true,
+    "use_path_guidance": true,
+    "use_lexical_tiebreak": true,
+    "use_hyperlink_expansion": true,
+    "use_prompt_compression": true,
+    "ambiguity_policy": "prompt",
+    "oueg_context_mode": "lossless",
+    "max_context_chars": 24000,
+    "max_output_tokens": 1024,
+    "temperature": 0.0,
+    "n_paths": 5,
+    "max_replans": 0,
+    "max_table_rows_for_kg": null,
+    "finqa_table_format": "official",
+    "second_stage_k": 3,
+    "max_workers": 64,
+    "llm_max_concurrent_requests": 64
+  }
+}

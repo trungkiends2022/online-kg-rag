@@ -1,0 +1,110 @@
+[
+  {
+    "question_id": "4b2c14918cc950b7",
+    "question": "How many inhabit the Northern Territory district which contains the Ltyentye Apurte suburb ?",
+    "table_id": "List_of_schools_in_the_Northern_Territory_5",
+    "answer-text": "6,863",
+    "question_postag": "WRB JJ VBP DT NNP NNP NN WDT VBZ DT NNP NNP NN .",
+    "answer-node": [
+      [
+        "MacDonnell Region",
+        [
+          2,
+          2
+        ],
+        "/wiki/MacDonnell_Region",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "4950879950bb5189",
+    "question": "What year of the member of the Hong Kong films entered the music industry ?",
+    "table_id": "List_of_Hong_Kong_films_of_2014_0",
+    "answer-text": "2007",
+    "question_postag": "WP NN IN DT NN IN DT NNP NNP NNS VBD DT NN NN .",
+    "answer-node": [
+      [
+        "Moses Chan",
+        [
+          7,
+          2
+        ],
+        "/wiki/Moses_Chan",
+        "passage"
+      ],
+      [
+        "Deep Ng",
+        [
+          11,
+          2
+        ],
+        "/wiki/Deep_Ng",
+        "passage"
+      ],
+      [
+        "Andy Lau",
+        [
+          13,
+          2
+        ],
+        "/wiki/Andy_Lau",
+        "passage"
+      ],
+      [
+        "Edison Chen",
+        [
+          13,
+          2
+        ],
+        "/wiki/Edison_Chen",
+        "passage"
+      ],
+      [
+        "Vincent Kok",
+        [
+          15,
+          1
+        ],
+        "/wiki/Vincent_Kok",
+        "passage"
+      ],
+      [
+        "Pakho Chau",
+        [
+          19,
+          2
+        ],
+        "/wiki/Pakho_Chau",
+        "passage"
+      ]
+    ]
+  },
+  {
+    "question_id": "1ac9822f92cc06aa",
+    "question": "How many boroughs does the 10th most populated metro area have ?",
+    "table_id": "Metropolitan_areas_of_Mexico_0",
+    "answer-text": "Seven",
+    "question_postag": "WRB JJ NN VBZ DT CD JJS JJ JJ NN VBP .",
+    "answer-node": [
+      [
+        "Santiago de Querétaro",
+        [
+          9,
+          1
+        ],
+        "/wiki/Santiago_de_Querétaro",
+        "passage"
+      ],
+      [
+        "San Luis Potosí",
+        [
+          10,
+          2
+        ],
+        "/wiki/San_Luis_Potosí",
+        "passage"
+      ]
+    ]
+  }
+]

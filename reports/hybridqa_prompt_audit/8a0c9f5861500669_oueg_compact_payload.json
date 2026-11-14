@@ -1,0 +1,3302 @@
+{
+  "format": "oueg-compact-v1",
+  "legend": {
+    "tables": {
+      "t0": "Botswana Premier League"
+    },
+    "passages": {
+      "p0": "/wiki/Extension_Gunners",
+      "p1": "/wiki/Francistown",
+      "p2": "/wiki/Gaborone",
+      "p3": "/wiki/Mahalapye",
+      "p4": "/wiki/Miscellaneous_SC_Serowe",
+      "p5": "/wiki/Morupule_Wanderers_FC",
+      "p6": "/wiki/Palapye",
+      "p7": "/wiki/Township_Rollers_F.C."
+    },
+    "ids": "e=edge; t:r=row; t:c=column; p=passage",
+    "edge_schema": [
+      "id",
+      "h",
+      "r",
+      "t",
+      "p(type,src,row,col,group)",
+      "ctx"
+    ]
+  },
+  "rows": [
+    {
+      "table": "t0",
+      "row": "r0",
+      "order": 0,
+      "entity": "Botswana Defence Force XI FC",
+      "values": {
+        "City / Town": "Gaborone",
+        "Position in 2018-19": "5th",
+        "passage": "/wiki/Gaborone | /wiki/Botswana_Defence_Force_XI_FC | passage:/wiki/Botswana_Defence_Force_XI_FC | p2"
+      },
+      "edges": "e77,e82,e85,e0,e37,e221-e222"
+    },
+    {
+      "table": "t0",
+      "row": "r1",
+      "order": 1,
+      "entity": "Botswana Railways Highlanders",
+      "values": {
+        "City / Town": "Mahalapye",
+        "Position in 2018-19": "11th",
+        "passage": "/wiki/Botswana_Railways_Highlanders | /wiki/Mahalapye | passage:/wiki/Botswana_Railways_Highlanders | p3"
+      },
+      "edges": "e86,e91,e94,e11-e12,e223-e224"
+    },
+    {
+      "table": "t0",
+      "row": "r10",
+      "order": 10,
+      "entity": "Police XI",
+      "values": {
+        "City / Town": "Otse",
+        "Position in 2018-19": "4th",
+        "passage": "/wiki/Wonder_Sporting_Club | /wiki/Otse | passage:/wiki/Wonder_Sporting_Club | passage:/wiki/Otse"
+      },
+      "edges": "e167,e172,e175,e30-e31,e52,e244-e246"
+    },
+    {
+      "table": "t0",
+      "row": "r11",
+      "order": 11,
+      "entity": "Prisons XI",
+      "values": {
+        "City / Town": "Gaborone",
+        "Position in 2018-19": "13th",
+        "passage": "/wiki/Gaborone | /wiki/Prisons_XI | passage:/wiki/Prisons_XI | p2"
+      },
+      "edges": "e176,e181,e184,e3,e35,e247-e248"
+    },
+    {
+      "table": "t0",
+      "row": "r12",
+      "order": 12,
+      "entity": "Security Systems F.C.",
+      "values": {
+        "City / Town": "Otse",
+        "Position in 2018-19": "7th",
+        "passage": "/wiki/Otse | /wiki/Security_Systems_F.C. | passage:/wiki/Security_Systems_F.C. | passage:/wiki/Otse"
+      },
+      "edges": "e185,e190,e193,e32,e53,e249-e250"
+    },
+    {
+      "table": "t0",
+      "row": "r13",
+      "order": 13,
+      "entity": "Sharps Shooting Stars FC",
+      "values": {
+        "City / Town": "Gaborone",
+        "Position in 2018-19": "8th",
+        "passage": "/wiki/Gaborone | /wiki/Sharps_Shooting_Stars_FC | passage:/wiki/Sharps_Shooting_Stars_FC | p2"
+      },
+      "edges": "e194,e199,e202,e4,e56,e251-e252"
+    },
+    {
+      "table": "t0",
+      "row": "r14",
+      "order": 14,
+      "entity": "TAFIC F.C.",
+      "values": {
+        "City / Town": "Francistown",
+        "Position in 2018-19": "Promoted",
+        "passage": "/wiki/Francistown | /wiki/TAFIC_F.C. | passage:/wiki/TAFIC_F.C. | p1"
+      },
+      "edges": "e203,e208,e211,e36,e59,e253-e254"
+    },
+    {
+      "table": "t0",
+      "row": "r15",
+      "order": 15,
+      "entity": "Township Rollers Football Club",
+      "values": {
+        "City / Town": "Gaborone",
+        "Position in 2018-19": "1st",
+        "passage": "/wiki/Gaborone | /wiki/Township_Rollers_F.C. | p7 | p2"
+      },
+      "edges": "e212,e217,e220,e5,e66,e255-e256"
+    },
+    {
+      "table": "t0",
+      "row": "r2",
+      "order": 2,
+      "entity": "Extension Gunners FC",
+      "values": {
+        "City / Town": "Lobatse",
+        "Position in 2018-19": "10th",
+        "passage": "/wiki/Lobatse | /wiki/Extension_Gunners | p0 | passage:/wiki/Lobatse"
+      },
+      "edges": "e95,e100,e103,e13,e75,e225-e226"
+    },
+    {
+      "table": "t0",
+      "row": "r3",
+      "order": 3,
+      "entity": "Gaborone United",
+      "values": {
+        "City / Town": "Gaborone",
+        "Position in 2018-19": "6th",
+        "passage": "/wiki/Gaborone | /wiki/Gaborone_United_S.C. | passage:/wiki/Gaborone_United_S.C. | p2"
+      },
+      "edges": "e104,e109,e112,e1,e17,e40,e227-e229"
+    },
+    {
+      "table": "t0",
+      "row": "r4",
+      "order": 4,
+      "entity": "Gilport Lions",
+      "values": {
+        "City / Town": "Lobatse",
+        "Position in 2018-19": "Promoted",
+        "passage": "/wiki/Lobatse | /wiki/Botswana_Meat_Commission_F.C. | passage:/wiki/Botswana_Meat_Commission_F.C. | passage:/wiki/Lobatse"
+      },
+      "edges": "e113,e118,e121,e14,e20,e41,e230-e232"
+    },
+    {
+      "table": "t0",
+      "row": "r5",
+      "order": 5,
+      "entity": "Jwaneng Galaxy F.C.",
+      "values": {
+        "City / Town": "Jwaneng",
+        "Position in 2018-19": "2nd",
+        "passage": "/wiki/Jwaneng | /wiki/Jwaneng_Galaxy_F.C. | passage:/wiki/Jwaneng_Galaxy_F.C. | passage:/wiki/Jwaneng"
+      },
+      "edges": "e122,e127,e130,e21,e42,e233-e234"
+    },
+    {
+      "table": "t0",
+      "row": "r6",
+      "order": 6,
+      "entity": "Miscellaneous",
+      "values": {
+        "City / Town": "Serowe",
+        "Position in 2018-19": "9th",
+        "passage": "/wiki/Miscellaneous_SC_Serowe | /wiki/Serowe | p4 | passage:/wiki/Serowe"
+      },
+      "edges": "e131,e136,e139,e24-e25,e45,e235-e237"
+    },
+    {
+      "table": "t0",
+      "row": "r7",
+      "order": 7,
+      "entity": "Morupule Wanderers Football Club",
+      "values": {
+        "City / Town": "Palapye",
+        "Position in 2018-19": "Promoted",
+        "passage": "/wiki/Palapye | /wiki/Morupule_Wanderers_FC | p5 | p6"
+      },
+      "edges": "e140,e145,e148,e26,e71,e238-e239"
+    },
+    {
+      "table": "t0",
+      "row": "r8",
+      "order": 8,
+      "entity": "Notwane F.C.",
+      "values": {
+        "City / Town": "Gaborone",
+        "Position in 2018-19": "12th",
+        "passage": "/wiki/Gaborone | /wiki/Notwane_F.C. | passage:/wiki/Notwane_F.C. | p2"
+      },
+      "edges": "e149,e154,e157,e2,e46,e240-e241"
+    },
+    {
+      "table": "t0",
+      "row": "r9",
+      "order": 9,
+      "entity": "Orapa United FC",
+      "values": {
+        "City / Town": "Orapa",
+        "Position in 2018-19": "3rd",
+        "passage": "/wiki/Orapa | /wiki/Orapa_United_FC | passage:/wiki/Orapa_United_FC | passage:/wiki/Orapa"
+      },
+      "edges": "e158,e163,e166,e27,e49,e242-e243"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e6",
+      "h": "Gaborone",
+      "r": "situated_between",
+      "t": "Kgale and Oodi Hills",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Gaborone",
+        "group": "rule_text"
+      },
+      "ctx": [
+        "p2"
+      ]
+    },
+    {
+      "id": "e7",
+      "h": "Gaborone",
+      "r": "situated_between_landmark",
+      "t": "Kgale",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Gaborone",
+        "group": "rule_text"
+      },
+      "ctx": [
+        "p2"
+      ]
+    },
+    {
+      "id": "e8",
+      "h": "Gaborone",
+      "r": "situated_between_landmark",
+      "t": "Oodi Hills",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Gaborone",
+        "group": "rule_text"
+      },
+      "ctx": [
+        "p2"
+      ]
+    },
+    {
+      "id": "e9",
+      "h": "Botswana Railways Highlanders",
+      "r": "city_town",
+      "t": "Mahalapye",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 1,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e10",
+      "h": "Botswana Railways Highlanders",
+      "r": "position_in_2018_19",
+      "t": "11th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 1,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e15",
+      "h": "Gaborone United",
+      "r": "city_town",
+      "t": "Gaborone",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 3,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e16",
+      "h": "Gaborone United",
+      "r": "position_in_2018_19",
+      "t": "6th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 3,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e18",
+      "h": "Gilport Lions",
+      "r": "city_town",
+      "t": "Lobatse",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 4,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e19",
+      "h": "Gilport Lions",
+      "r": "position_in_2018_19",
+      "t": "Promoted",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 4,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e22",
+      "h": "Miscellaneous",
+      "r": "city_town",
+      "t": "Serowe",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 6,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e23",
+      "h": "Miscellaneous",
+      "r": "position_in_2018_19",
+      "t": "9th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 6,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e28",
+      "h": "Police XI",
+      "r": "city_town",
+      "t": "Otse",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 10,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e29",
+      "h": "Police XI",
+      "r": "position_in_2018_19",
+      "t": "4th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 10,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e33",
+      "h": "Prisons XI",
+      "r": "city_town",
+      "t": "Gaborone",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 11,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e34",
+      "h": "Prisons XI",
+      "r": "position_in_2018_19",
+      "t": "13th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 11,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e38",
+      "h": "Botswana Defence Force XI FC",
+      "r": "city_town",
+      "t": "Gaborone",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 0,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e39",
+      "h": "Botswana Defence Force XI FC",
+      "r": "position_in_2018_19",
+      "t": "5th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 0,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e43",
+      "h": "Jwaneng Galaxy F.C.",
+      "r": "city_town",
+      "t": "Jwaneng",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 5,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e44",
+      "h": "Jwaneng Galaxy F.C.",
+      "r": "position_in_2018_19",
+      "t": "2nd",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 5,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e47",
+      "h": "Notwane F.C.",
+      "r": "city_town",
+      "t": "Gaborone",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 8,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e48",
+      "h": "Notwane F.C.",
+      "r": "position_in_2018_19",
+      "t": "12th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 8,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e50",
+      "h": "Orapa United FC",
+      "r": "city_town",
+      "t": "Orapa",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 9,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e51",
+      "h": "Orapa United FC",
+      "r": "position_in_2018_19",
+      "t": "3rd",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 9,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e54",
+      "h": "Security Systems F.C.",
+      "r": "city_town",
+      "t": "Otse",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 12,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e55",
+      "h": "Security Systems F.C.",
+      "r": "position_in_2018_19",
+      "t": "7th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 12,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e57",
+      "h": "Sharps Shooting Stars FC",
+      "r": "city_town",
+      "t": "Gaborone",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 13,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e58",
+      "h": "Sharps Shooting Stars FC",
+      "r": "position_in_2018_19",
+      "t": "8th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 13,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e60",
+      "h": "TAFIC F.C.",
+      "r": "city_town",
+      "t": "Francistown",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 14,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e61",
+      "h": "TAFIC F.C.",
+      "r": "position_in_2018_19",
+      "t": "Promoted",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 14,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e62",
+      "h": "is the capital and largest city of Botswana",
+      "r": "population",
+      "t": "231,626",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Gaborone"
+      },
+      "ctx": [
+        "p2"
+      ]
+    },
+    {
+      "id": "e63",
+      "h": "Township Rollers Football Club",
+      "r": "based_in",
+      "t": "Gaborone",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Township_Rollers_F.C.",
+        "group": "rule_text"
+      },
+      "ctx": [
+        "p7"
+      ]
+    },
+    {
+      "id": "e64",
+      "h": "Township Rollers Football Club",
+      "r": "city_town",
+      "t": "Gaborone",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 15,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e65",
+      "h": "Township Rollers Football Club",
+      "r": "position_in_2018_19",
+      "t": "1st",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 15,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e67",
+      "h": "Miscellaneous Sporting Club",
+      "r": "based_in",
+      "t": "Serowe",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Miscellaneous_SC_Serowe",
+        "group": "rule_text"
+      },
+      "ctx": [
+        "p4"
+      ]
+    },
+    {
+      "id": "e68",
+      "h": "Morupule Wanderers Football Club",
+      "r": "based_in",
+      "t": "Palapye",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Morupule_Wanderers_FC",
+        "group": "rule_text"
+      },
+      "ctx": [
+        "p5"
+      ]
+    },
+    {
+      "id": "e69",
+      "h": "Morupule Wanderers Football Club",
+      "r": "city_town",
+      "t": "Palapye",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 7,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e70",
+      "h": "Morupule Wanderers Football Club",
+      "r": "position_in_2018_19",
+      "t": "Promoted",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 7,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e72",
+      "h": "Extension Gunners FC",
+      "r": "based_in",
+      "t": "Lobatse",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Extension_Gunners",
+        "group": "rule_text"
+      },
+      "ctx": [
+        "p0"
+      ]
+    },
+    {
+      "id": "e73",
+      "h": "Extension Gunners FC",
+      "r": "city_town",
+      "t": "Lobatse",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 2,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e74",
+      "h": "Extension Gunners FC",
+      "r": "position_in_2018_19",
+      "t": "10th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 2,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e76",
+      "h": "It",
+      "r": "located_in",
+      "t": "eastern Botswana",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Francistown"
+      },
+      "ctx": [
+        "p1"
+      ]
+    },
+    {
+      "id": "e78",
+      "h": "t0:r0",
+      "r": "club",
+      "t": "t0:r0:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 0,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e79",
+      "h": "t0:r0:c:Club",
+      "r": "cell_value",
+      "t": "Botswana Defence Force XI FC",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 0,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e80",
+      "h": "t0:r0",
+      "r": "city_town",
+      "t": "t0:r0:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 0,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e81",
+      "h": "t0:r0:c:City / Town",
+      "r": "cell_value",
+      "t": "Gaborone",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 0,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e83",
+      "h": "t0:r0",
+      "r": "position_in_2018_19",
+      "t": "t0:r0:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 0,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e84",
+      "h": "t0:r0:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "5th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 0,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e87",
+      "h": "t0:r1",
+      "r": "club",
+      "t": "t0:r1:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 1,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e88",
+      "h": "t0:r1:c:Club",
+      "r": "cell_value",
+      "t": "Botswana Railways Highlanders",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 1,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e89",
+      "h": "t0:r1",
+      "r": "city_town",
+      "t": "t0:r1:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 1,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e90",
+      "h": "t0:r1:c:City / Town",
+      "r": "cell_value",
+      "t": "Mahalapye",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 1,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e92",
+      "h": "t0:r1",
+      "r": "position_in_2018_19",
+      "t": "t0:r1:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 1,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e93",
+      "h": "t0:r1:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "11th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 1,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e96",
+      "h": "t0:r2",
+      "r": "club",
+      "t": "t0:r2:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 2,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e97",
+      "h": "t0:r2:c:Club",
+      "r": "cell_value",
+      "t": "Extension Gunners FC",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 2,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e98",
+      "h": "t0:r2",
+      "r": "city_town",
+      "t": "t0:r2:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 2,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e99",
+      "h": "t0:r2:c:City / Town",
+      "r": "cell_value",
+      "t": "Lobatse",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 2,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e101",
+      "h": "t0:r2",
+      "r": "position_in_2018_19",
+      "t": "t0:r2:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 2,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e102",
+      "h": "t0:r2:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "10th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 2,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e105",
+      "h": "t0:r3",
+      "r": "club",
+      "t": "t0:r3:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 3,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e106",
+      "h": "t0:r3:c:Club",
+      "r": "cell_value",
+      "t": "Gaborone United",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 3,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e107",
+      "h": "t0:r3",
+      "r": "city_town",
+      "t": "t0:r3:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 3,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e108",
+      "h": "t0:r3:c:City / Town",
+      "r": "cell_value",
+      "t": "Gaborone",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 3,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e110",
+      "h": "t0:r3",
+      "r": "position_in_2018_19",
+      "t": "t0:r3:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 3,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e111",
+      "h": "t0:r3:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "6th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 3,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e114",
+      "h": "t0:r4",
+      "r": "club",
+      "t": "t0:r4:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 4,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e115",
+      "h": "t0:r4:c:Club",
+      "r": "cell_value",
+      "t": "Gilport Lions",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 4,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e116",
+      "h": "t0:r4",
+      "r": "city_town",
+      "t": "t0:r4:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 4,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e117",
+      "h": "t0:r4:c:City / Town",
+      "r": "cell_value",
+      "t": "Lobatse",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 4,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e119",
+      "h": "t0:r4",
+      "r": "position_in_2018_19",
+      "t": "t0:r4:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 4,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e120",
+      "h": "t0:r4:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "Promoted",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 4,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e123",
+      "h": "t0:r5",
+      "r": "club",
+      "t": "t0:r5:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 5,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e124",
+      "h": "t0:r5:c:Club",
+      "r": "cell_value",
+      "t": "Jwaneng Galaxy F.C.",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 5,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e125",
+      "h": "t0:r5",
+      "r": "city_town",
+      "t": "t0:r5:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 5,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e126",
+      "h": "t0:r5:c:City / Town",
+      "r": "cell_value",
+      "t": "Jwaneng",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 5,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e128",
+      "h": "t0:r5",
+      "r": "position_in_2018_19",
+      "t": "t0:r5:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 5,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e129",
+      "h": "t0:r5:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "2nd",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 5,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e132",
+      "h": "t0:r6",
+      "r": "club",
+      "t": "t0:r6:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 6,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e133",
+      "h": "t0:r6:c:Club",
+      "r": "cell_value",
+      "t": "Miscellaneous",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 6,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e134",
+      "h": "t0:r6",
+      "r": "city_town",
+      "t": "t0:r6:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 6,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e135",
+      "h": "t0:r6:c:City / Town",
+      "r": "cell_value",
+      "t": "Serowe",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 6,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e137",
+      "h": "t0:r6",
+      "r": "position_in_2018_19",
+      "t": "t0:r6:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 6,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e138",
+      "h": "t0:r6:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "9th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 6,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e141",
+      "h": "t0:r7",
+      "r": "club",
+      "t": "t0:r7:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 7,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e142",
+      "h": "t0:r7:c:Club",
+      "r": "cell_value",
+      "t": "Morupule Wanderers Football Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 7,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e143",
+      "h": "t0:r7",
+      "r": "city_town",
+      "t": "t0:r7:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 7,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e144",
+      "h": "t0:r7:c:City / Town",
+      "r": "cell_value",
+      "t": "Palapye",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 7,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e146",
+      "h": "t0:r7",
+      "r": "position_in_2018_19",
+      "t": "t0:r7:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 7,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e147",
+      "h": "t0:r7:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "Promoted",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 7,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e150",
+      "h": "t0:r8",
+      "r": "club",
+      "t": "t0:r8:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 8,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e151",
+      "h": "t0:r8:c:Club",
+      "r": "cell_value",
+      "t": "Notwane F.C.",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 8,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e152",
+      "h": "t0:r8",
+      "r": "city_town",
+      "t": "t0:r8:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 8,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e153",
+      "h": "t0:r8:c:City / Town",
+      "r": "cell_value",
+      "t": "Gaborone",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 8,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e155",
+      "h": "t0:r8",
+      "r": "position_in_2018_19",
+      "t": "t0:r8:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 8,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e156",
+      "h": "t0:r8:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "12th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 8,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e159",
+      "h": "t0:r9",
+      "r": "club",
+      "t": "t0:r9:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 9,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e160",
+      "h": "t0:r9:c:Club",
+      "r": "cell_value",
+      "t": "Orapa United FC",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 9,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e161",
+      "h": "t0:r9",
+      "r": "city_town",
+      "t": "t0:r9:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 9,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e162",
+      "h": "t0:r9:c:City / Town",
+      "r": "cell_value",
+      "t": "Orapa",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 9,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e164",
+      "h": "t0:r9",
+      "r": "position_in_2018_19",
+      "t": "t0:r9:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 9,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e165",
+      "h": "t0:r9:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "3rd",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 9,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e168",
+      "h": "t0:r10",
+      "r": "club",
+      "t": "t0:r10:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 10,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e169",
+      "h": "t0:r10:c:Club",
+      "r": "cell_value",
+      "t": "Police XI",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 10,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e170",
+      "h": "t0:r10",
+      "r": "city_town",
+      "t": "t0:r10:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 10,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e171",
+      "h": "t0:r10:c:City / Town",
+      "r": "cell_value",
+      "t": "Otse",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 10,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e173",
+      "h": "t0:r10",
+      "r": "position_in_2018_19",
+      "t": "t0:r10:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 10,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e174",
+      "h": "t0:r10:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "4th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 10,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e177",
+      "h": "t0:r11",
+      "r": "club",
+      "t": "t0:r11:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 11,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e178",
+      "h": "t0:r11:c:Club",
+      "r": "cell_value",
+      "t": "Prisons XI",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 11,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e179",
+      "h": "t0:r11",
+      "r": "city_town",
+      "t": "t0:r11:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 11,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e180",
+      "h": "t0:r11:c:City / Town",
+      "r": "cell_value",
+      "t": "Gaborone",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 11,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e182",
+      "h": "t0:r11",
+      "r": "position_in_2018_19",
+      "t": "t0:r11:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 11,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e183",
+      "h": "t0:r11:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "13th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 11,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e186",
+      "h": "t0:r12",
+      "r": "club",
+      "t": "t0:r12:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 12,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e187",
+      "h": "t0:r12:c:Club",
+      "r": "cell_value",
+      "t": "Security Systems F.C.",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 12,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e188",
+      "h": "t0:r12",
+      "r": "city_town",
+      "t": "t0:r12:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 12,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e189",
+      "h": "t0:r12:c:City / Town",
+      "r": "cell_value",
+      "t": "Otse",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 12,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e191",
+      "h": "t0:r12",
+      "r": "position_in_2018_19",
+      "t": "t0:r12:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 12,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e192",
+      "h": "t0:r12:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "7th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 12,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e195",
+      "h": "t0:r13",
+      "r": "club",
+      "t": "t0:r13:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 13,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e196",
+      "h": "t0:r13:c:Club",
+      "r": "cell_value",
+      "t": "Sharps Shooting Stars FC",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 13,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e197",
+      "h": "t0:r13",
+      "r": "city_town",
+      "t": "t0:r13:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 13,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e198",
+      "h": "t0:r13:c:City / Town",
+      "r": "cell_value",
+      "t": "Gaborone",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 13,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e200",
+      "h": "t0:r13",
+      "r": "position_in_2018_19",
+      "t": "t0:r13:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 13,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e201",
+      "h": "t0:r13:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "8th",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 13,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e204",
+      "h": "t0:r14",
+      "r": "club",
+      "t": "t0:r14:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 14,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e205",
+      "h": "t0:r14:c:Club",
+      "r": "cell_value",
+      "t": "TAFIC F.C.",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 14,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e206",
+      "h": "t0:r14",
+      "r": "city_town",
+      "t": "t0:r14:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 14,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e207",
+      "h": "t0:r14:c:City / Town",
+      "r": "cell_value",
+      "t": "Francistown",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 14,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e209",
+      "h": "t0:r14",
+      "r": "position_in_2018_19",
+      "t": "t0:r14:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 14,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e210",
+      "h": "t0:r14:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "Promoted",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 14,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e213",
+      "h": "t0:r15",
+      "r": "club",
+      "t": "t0:r15:c:Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 15,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e214",
+      "h": "t0:r15:c:Club",
+      "r": "cell_value",
+      "t": "Township Rollers Football Club",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 15,
+        "col": "Club"
+      }
+    },
+    {
+      "id": "e215",
+      "h": "t0:r15",
+      "r": "city_town",
+      "t": "t0:r15:c:City / Town",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 15,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e216",
+      "h": "t0:r15:c:City / Town",
+      "r": "cell_value",
+      "t": "Gaborone",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 15,
+        "col": "City / Town"
+      }
+    },
+    {
+      "id": "e218",
+      "h": "t0:r15",
+      "r": "position_in_2018_19",
+      "t": "t0:r15:c:Position in 2018-19",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 15,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e219",
+      "h": "t0:r15:c:Position in 2018-19",
+      "r": "cell_value",
+      "t": "1st",
+      "p": {
+        "type": "table",
+        "src": "t0",
+        "row": 15,
+        "col": "Position in 2018-19"
+      }
+    },
+    {
+      "id": "e257",
+      "h": "p2",
+      "r": "mentions",
+      "t": "Gaborone",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Gaborone"
+      },
+      "ctx": [
+        "p2"
+      ]
+    },
+    {
+      "id": "e258",
+      "h": "p2",
+      "r": "mentions",
+      "t": "Kgale and Oodi Hills",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Gaborone"
+      },
+      "ctx": [
+        "p2"
+      ]
+    },
+    {
+      "id": "e259",
+      "h": "p2",
+      "r": "mentions",
+      "t": "Kgale",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Gaborone"
+      },
+      "ctx": [
+        "p2"
+      ]
+    },
+    {
+      "id": "e260",
+      "h": "p2",
+      "r": "mentions",
+      "t": "Oodi Hills",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Gaborone"
+      },
+      "ctx": [
+        "p2"
+      ]
+    },
+    {
+      "id": "e261",
+      "h": "p2",
+      "r": "mentions",
+      "t": "is the capital and largest city of Botswana",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Gaborone"
+      },
+      "ctx": [
+        "p2"
+      ]
+    },
+    {
+      "id": "e262",
+      "h": "p2",
+      "r": "mentions",
+      "t": "231,626",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Gaborone"
+      },
+      "ctx": [
+        "p2"
+      ]
+    },
+    {
+      "id": "e263",
+      "h": "p7",
+      "r": "mentions",
+      "t": "Township Rollers Football Club",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Township_Rollers_F.C."
+      },
+      "ctx": [
+        "p7"
+      ]
+    },
+    {
+      "id": "e264",
+      "h": "p7",
+      "r": "mentions",
+      "t": "Gaborone",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Township_Rollers_F.C."
+      },
+      "ctx": [
+        "p7"
+      ]
+    },
+    {
+      "id": "e265",
+      "h": "p4",
+      "r": "mentions",
+      "t": "Miscellaneous Sporting Club",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Miscellaneous_SC_Serowe"
+      },
+      "ctx": [
+        "p4"
+      ]
+    },
+    {
+      "id": "e266",
+      "h": "p4",
+      "r": "mentions",
+      "t": "Serowe",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Miscellaneous_SC_Serowe"
+      },
+      "ctx": [
+        "p4"
+      ]
+    },
+    {
+      "id": "e267",
+      "h": "p5",
+      "r": "mentions",
+      "t": "Morupule Wanderers Football Club",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Morupule_Wanderers_FC"
+      },
+      "ctx": [
+        "p5"
+      ]
+    },
+    {
+      "id": "e268",
+      "h": "p5",
+      "r": "mentions",
+      "t": "Palapye",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Morupule_Wanderers_FC"
+      },
+      "ctx": [
+        "p5"
+      ]
+    },
+    {
+      "id": "e269",
+      "h": "p0",
+      "r": "mentions",
+      "t": "Extension Gunners FC",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Extension_Gunners"
+      },
+      "ctx": [
+        "p0"
+      ]
+    },
+    {
+      "id": "e270",
+      "h": "p0",
+      "r": "mentions",
+      "t": "Lobatse",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Extension_Gunners"
+      },
+      "ctx": [
+        "p0"
+      ]
+    },
+    {
+      "id": "e271",
+      "h": "p1",
+      "r": "mentions",
+      "t": "It",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Francistown"
+      },
+      "ctx": [
+        "p1"
+      ]
+    },
+    {
+      "id": "e272",
+      "h": "p1",
+      "r": "mentions",
+      "t": "eastern Botswana",
+      "p": {
+        "type": "text",
+        "src": "/wiki/Francistown"
+      },
+      "ctx": [
+        "p1"
+      ]
+    },
+    {
+      "id": "e273",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r0",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e274",
+      "h": "t0:r0",
+      "r": "row_contains",
+      "t": "t0:r0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e275",
+      "h": "t0:r0:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e276",
+      "h": "t0:r0",
+      "r": "row_contains",
+      "t": "t0:r0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e277",
+      "h": "t0:r0:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e278",
+      "h": "t0:r0",
+      "r": "row_contains",
+      "t": "t0:r0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e279",
+      "h": "t0:r0:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e280",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r1",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e281",
+      "h": "t0:r1",
+      "r": "row_contains",
+      "t": "t0:r1:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e282",
+      "h": "t0:r1:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e283",
+      "h": "t0:r1",
+      "r": "row_contains",
+      "t": "t0:r1:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e284",
+      "h": "t0:r1:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e285",
+      "h": "t0:r1",
+      "r": "row_contains",
+      "t": "t0:r1:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e286",
+      "h": "t0:r1:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e287",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r2",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e288",
+      "h": "t0:r2",
+      "r": "row_contains",
+      "t": "t0:r2:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e289",
+      "h": "t0:r2:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e290",
+      "h": "t0:r2",
+      "r": "row_contains",
+      "t": "t0:r2:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e291",
+      "h": "t0:r2:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e292",
+      "h": "t0:r2",
+      "r": "row_contains",
+      "t": "t0:r2:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e293",
+      "h": "t0:r2:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e294",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r3",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e295",
+      "h": "t0:r3",
+      "r": "row_contains",
+      "t": "t0:r3:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e296",
+      "h": "t0:r3:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e297",
+      "h": "t0:r3",
+      "r": "row_contains",
+      "t": "t0:r3:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e298",
+      "h": "t0:r3:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e299",
+      "h": "t0:r3",
+      "r": "row_contains",
+      "t": "t0:r3:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e300",
+      "h": "t0:r3:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e301",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r4",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e302",
+      "h": "t0:r4",
+      "r": "row_contains",
+      "t": "t0:r4:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e303",
+      "h": "t0:r4:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e304",
+      "h": "t0:r4",
+      "r": "row_contains",
+      "t": "t0:r4:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e305",
+      "h": "t0:r4:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e306",
+      "h": "t0:r4",
+      "r": "row_contains",
+      "t": "t0:r4:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e307",
+      "h": "t0:r4:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e308",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r5",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e309",
+      "h": "t0:r5",
+      "r": "row_contains",
+      "t": "t0:r5:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e310",
+      "h": "t0:r5:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e311",
+      "h": "t0:r5",
+      "r": "row_contains",
+      "t": "t0:r5:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e312",
+      "h": "t0:r5:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e313",
+      "h": "t0:r5",
+      "r": "row_contains",
+      "t": "t0:r5:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e314",
+      "h": "t0:r5:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e315",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r6",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e316",
+      "h": "t0:r6",
+      "r": "row_contains",
+      "t": "t0:r6:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e317",
+      "h": "t0:r6:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e318",
+      "h": "t0:r6",
+      "r": "row_contains",
+      "t": "t0:r6:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e319",
+      "h": "t0:r6:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e320",
+      "h": "t0:r6",
+      "r": "row_contains",
+      "t": "t0:r6:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e321",
+      "h": "t0:r6:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e322",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r7",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e323",
+      "h": "t0:r7",
+      "r": "row_contains",
+      "t": "t0:r7:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e324",
+      "h": "t0:r7:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e325",
+      "h": "t0:r7",
+      "r": "row_contains",
+      "t": "t0:r7:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e326",
+      "h": "t0:r7:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e327",
+      "h": "t0:r7",
+      "r": "row_contains",
+      "t": "t0:r7:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e328",
+      "h": "t0:r7:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e329",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r8",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e330",
+      "h": "t0:r8",
+      "r": "row_contains",
+      "t": "t0:r8:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e331",
+      "h": "t0:r8:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e332",
+      "h": "t0:r8",
+      "r": "row_contains",
+      "t": "t0:r8:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e333",
+      "h": "t0:r8:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e334",
+      "h": "t0:r8",
+      "r": "row_contains",
+      "t": "t0:r8:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e335",
+      "h": "t0:r8:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e336",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r9",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e337",
+      "h": "t0:r9",
+      "r": "row_contains",
+      "t": "t0:r9:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e338",
+      "h": "t0:r9:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e339",
+      "h": "t0:r9",
+      "r": "row_contains",
+      "t": "t0:r9:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e340",
+      "h": "t0:r9:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e341",
+      "h": "t0:r9",
+      "r": "row_contains",
+      "t": "t0:r9:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e342",
+      "h": "t0:r9:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e343",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r10",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e344",
+      "h": "t0:r10",
+      "r": "row_contains",
+      "t": "t0:r10:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e345",
+      "h": "t0:r10:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e346",
+      "h": "t0:r10",
+      "r": "row_contains",
+      "t": "t0:r10:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e347",
+      "h": "t0:r10:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e348",
+      "h": "t0:r10",
+      "r": "row_contains",
+      "t": "t0:r10:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e349",
+      "h": "t0:r10:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e350",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r11",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e351",
+      "h": "t0:r11",
+      "r": "row_contains",
+      "t": "t0:r11:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e352",
+      "h": "t0:r11:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e353",
+      "h": "t0:r11",
+      "r": "row_contains",
+      "t": "t0:r11:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e354",
+      "h": "t0:r11:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e355",
+      "h": "t0:r11",
+      "r": "row_contains",
+      "t": "t0:r11:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e356",
+      "h": "t0:r11:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e357",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r12",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e358",
+      "h": "t0:r12",
+      "r": "row_contains",
+      "t": "t0:r12:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e359",
+      "h": "t0:r12:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e360",
+      "h": "t0:r12",
+      "r": "row_contains",
+      "t": "t0:r12:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e361",
+      "h": "t0:r12:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e362",
+      "h": "t0:r12",
+      "r": "row_contains",
+      "t": "t0:r12:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e363",
+      "h": "t0:r12:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e364",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r13",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e365",
+      "h": "t0:r13",
+      "r": "row_contains",
+      "t": "t0:r13:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e366",
+      "h": "t0:r13:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e367",
+      "h": "t0:r13",
+      "r": "row_contains",
+      "t": "t0:r13:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e368",
+      "h": "t0:r13:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e369",
+      "h": "t0:r13",
+      "r": "row_contains",
+      "t": "t0:r13:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e370",
+      "h": "t0:r13:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e371",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r14",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e372",
+      "h": "t0:r14",
+      "r": "row_contains",
+      "t": "t0:r14:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e373",
+      "h": "t0:r14:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e374",
+      "h": "t0:r14",
+      "r": "row_contains",
+      "t": "t0:r14:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e375",
+      "h": "t0:r14:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e376",
+      "h": "t0:r14",
+      "r": "row_contains",
+      "t": "t0:r14:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e377",
+      "h": "t0:r14:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e378",
+      "h": "table:Botswana Premier League",
+      "r": "row_contains",
+      "t": "t0:r15",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e379",
+      "h": "t0:r15",
+      "r": "row_contains",
+      "t": "t0:r15:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e380",
+      "h": "t0:r15:c:Club",
+      "r": "column_of",
+      "t": "t0:c:Club",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e381",
+      "h": "t0:r15",
+      "r": "row_contains",
+      "t": "t0:r15:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e382",
+      "h": "t0:r15:c:City / Town",
+      "r": "column_of",
+      "t": "t0:c:City / Town",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e383",
+      "h": "t0:r15",
+      "r": "row_contains",
+      "t": "t0:r15:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    },
+    {
+      "id": "e384",
+      "h": "t0:r15:c:Position in 2018-19",
+      "r": "column_of",
+      "t": "t0:c:Position in 2018-19",
+      "p": {
+        "type": "table"
+      }
+    }
+  ],
+  "contexts": {
+    "p0": {
+      "src": "/wiki/Extension_Gunners",
+      "text": "Extension Gunners FC is a football club based in Lobatse , Botswana . The team plays in the Botswana Premier League . The club was founded in 1962 in the Southern town of Lobatse , where it is still based . They play at the Lobatse Sports Complex .",
+      "before": "Botswana Railways Highlanders are a football club in the Botswana Premier League who play home games in Molepolole , but are based out of Mahalapye . Botswana Railways Highlanders are the team of Botswana Railways , but the company 's sponsorship only goes as far as transport and some sporting equipment . In 2015 Highlanders were 100% financed by the Railways corporation . Mahalapye is a town located in the Central District of Botswana . The town has about 41,000 inhabitants and is situated along the main road between the capital Gaborone and the second largest city Francistown . Mahalapye has a bus station , a railway station , a couple of hotels and a market area with many shops and fast food restaurants , Water Shed mall is the latest attraction to those travelling from Gaborone to Francistown , great place for refreshments . It also has several petrol stations , some open 24 hours per day . Being situated on the edge of the Kalahari desert it is quite dry , and the local waterways are dry except during the rainy season . In recent times , it has become a convenient stop-over town for travelers travelling to and from Gaborone . This town is located on the Tropic of Capricorn . Thus at approximately 13:11 hours on 21 December , or at solar noon on Summer Solstice , the sun will be directly overhead at this site . To mark this geographic feature there is a small monument just outside town on the 23rd parallel , or 23 degrees South of the equator . At this time the sun will be directly above this monument where the sun reaches its furthest point South . At this point there will be no shadow on the monument . The Botswana Prison Service ( BPS ) operates the Mahalapye Prison ."
+    },
+    "p1": {
+      "src": "/wiki/Francistown",
+      "text": "Francistown is the second largest city in Botswana , with a population of about 100,079 and 150,800 inhabitants for its agglomeration at the 2011 census . and often described as the Capital of the North . It is located in eastern Botswana , about 400 kilometres ( 250 mi ) north-northeast from the capital , Gaborone . Francistown is located at the confluence of the Tati and Inchwe rivers , and near the Shashe River ( tributary to the Limpopo ) and 90 kilometres ( 55 miles ) from the international border with Zimbabwe . Francistown was the centre of southern Africa 's first gold rush and is still surrounded by old and abandoned mines . The City of Francistown is an administrative district , separated from North-East District . It is administered by Francistown City Council .",
+      "before": "The club were formed in 1984 . Led by Keitsumetse Pio Paul , Sharps won the 2016-17 First Division South , and gained promotion to the Botswana Premier League for the first time . They finished mid-table in their first season in the league . Sharps exceeded expectations at the start of the 2018-19 campaign , winning their first three matches and sitting third on the ladder after the first 11 games . Tati African Football Independent Club also known as TAFIC for short , is a football club based in Francistown , Botswana . The team was relegated from the Botswana Premier League to the First Division North in 2014 . Nicknamed Matjimenyenga , after a stream , which runs behind the low-income locations of Maipaafela and Kgaphamadi . The club motto : Undipe ndi kupe . The club was founded as in 1959 as a break away from the then popular TAFA football club . Information has it that the founders of TAFIC , which was initially known as Sharp Shooters in its formative years , were based at Kgaphamadi . They gained promotion back to the elite league as champions in the 2016/17 season but were subsequently relegated the very next season . They are currently playing in the First Division North ."
+    },
+    "p2": {
+      "src": "/wiki/Gaborone",
+      "text": "Gaborone ( UK : /ˌɡæbəˈroʊni , ˌhæb-/ GAB-ə-ROH-nee , HAB- , US : /ˌɡɑːbəˈroʊni , -neɪ/ GAH-bə-ROH-nee , -⁠nay , Tswana : [ χabʊˈrʊnɛ ] ) is the capital and largest city of Botswana with a population of 231,626 based on the 2011 census , about 10% of the total population of Botswana . Its agglomeration is home to 421,907 inhabitants at the 2011 census . Gaborone City , is situated between Kgale and Oodi Hills , near the confluence Notwane River and Segoditshane River in the south-eastern corner of Botswana , and 15 kilometres ( 9.3 mi ) from the South African border . The city is served by the Sir Seretse Khama International Airport . It is an administrative district in its own right , but is the capital of the surrounding South-East District . Locals often refer to the city as Gabs . The city of Gaborone is named after Chief Gaborone of the Tlokwa tribe , who once controlled land nearby . Because it had no tribal affiliation and was close to fresh water , the city was planned to be the capital in the mid-1960s when the Bechuanaland Protectorate became an independent nation . The centre of the city is a long strip of commercial businesses , called Main Mall with a semicircle-shaped area of government offices to its east . Gaborone is one of the fastest-growing cities in the world , and this has created problems with housing and illegal settlements . The city has also dealt with conflicts spilling into the country from Zimbabwe and South Africa during the 1980s . Gaborone is the economic capital as well as the government capital ; it is headquarters to numerous companies and the Botswana Stock Exchange ."
+    },
+    "p3": {
+      "src": "/wiki/Mahalapye",
+      "text": "Mahalapye is a town located in the Central District of Botswana . The town has about 41,000 inhabitants and is situated along the main road between the capital Gaborone and the second largest city Francistown . Mahalapye has a bus station , a railway station , a couple of hotels and a market area with many shops and fast food restaurants , Water Shed mall is the latest attraction to those travelling from Gaborone to Francistown , great place for refreshments . It also has several petrol stations , some open 24 hours per day . Being situated on the edge of the Kalahari desert it is quite dry , and the local waterways are dry except during the rainy season . In recent times , it has become a convenient stop-over town for travelers travelling to and from Gaborone . This town is located on the Tropic of Capricorn . Thus at approximately 13:11 hours on 21 December , or at solar noon on Summer Solstice , the sun will be directly overhead at this site . To mark this geographic feature there is a small monument just outside town on the 23rd parallel , or 23 degrees South of the equator . At this time the sun will be directly above this monument where the sun reaches its furthest point South . At this point there will be no shadow on the monument . The Botswana Prison Service ( BPS ) operates the Mahalapye Prison ."
+    },
+    "p4": {
+      "src": "/wiki/Miscellaneous_SC_Serowe",
+      "text": "Miscellaneous Sporting Club is a football club based in Serowe , Botswana . Miscellaneous is also known as Tsenala ( the red and white ) , Mmamonotwane , the official nicknames of the club . The club is also often referred to as Matswakabele ( Miscellaneous ) , a nickname that developed in the early days but has never been officially adopted by the club . Miscellaneous Sporting Club is a soccer club based in Serowe , Botswana . The club is currently playing in the Botswana Premier League . The club 's colours are red , white and green . The team is owned by its supporters , whose membership of the club qualifies them to be a part of the Miscellaneous SCs inner sanctum . The society membership elects the Miscellaneous executive committee at annual general meetings ( AGM ) ."
+    },
+    "p5": {
+      "src": "/wiki/Morupule_Wanderers_FC",
+      "text": "Morupule Wanderers Football Club is a football club based in Palapye . Wanderers is also known as Bafana ba Magala or Wandy-Wandy . It is one of the best known Palapye-based teams . At the end of the 2018-19 season the club was promoted to the Botswana Premier League by beating First Division South runners up Jwaneng Fighters in the Botswana Premier League playoffs , ending a 46-year First Division North stay",
+      "before": "Miscellaneous Sporting Club is a football club based in Serowe , Botswana . Miscellaneous is also known as Tsenala ( the red and white ) , Mmamonotwane , the official nicknames of the club . The club is also often referred to as Matswakabele ( Miscellaneous ) , a nickname that developed in the early days but has never been officially adopted by the club . Miscellaneous Sporting Club is a soccer club based in Serowe , Botswana . The club is currently playing in the Botswana Premier League . The club 's colours are red , white and green . The team is owned by its supporters , whose membership of the club qualifies them to be a part of the Miscellaneous SCs inner sanctum . The society membership elects the Miscellaneous executive committee at annual general meetings ( AGM ) . Serowe ( population approximately 60,000 [ citation needed ] ) is an urban village in Botswana 's Central District . A trade and commercial centre , it is Botswana 's largest village . Serowe has played an important role in Botswana 's history , as capital for the Bamangwato people in the early 20th century and as birthplace of several of Botswana 's presidents . More recently it has undergone significant development as the town and Botswana continue to grow ."
+    },
+    "p6": {
+      "src": "/wiki/Palapye",
+      "text": "Palapye is becoming a large town in Botswana , situated about halfway between Francistown and Gaborone ( 240 km away from Gaborone and 170 km away from Francistown ) . Over the years its position has made it a convenient stopover on one of Southern Africa 's principal north-south rail and road routes . [ citation needed ] Located here is the Morupule Colliery coal mine , which supplies Morupule Power Station , Botswana 's principal domestic source of electricity . The power station has undertaken an expansion project to increase its generation capacity in an effort to meet the country 's increasing demand for electricity . Construction began in 2010 . Currently , the plant produces 120 MW of electricity . [ citation needed ] In 1997 Palapye was said to be the fastest-growing village in Africa , and was expected to expand its population from 30,000 to 180,000 ."
+    },
+    "p7": {
+      "src": "/wiki/Township_Rollers_F.C.",
+      "text": "Township Rollers Football Club is a football club based in Gaborone . Rollers are also known as Popa , The Blues or Tse Tala , the official nicknames of the club . The club is also often referred to as Mapalastina , a nickname that developed in the 1990s but has never been officially adopted by the club . Rollers is most successful club in Botswana football history , with more league titles and cup competitions won than any other local side and enjoys the largest support base of any sports team in the country . [ citation needed ] The club was founded in 1961 as Mighty Tigers , later to adopt the name Township Rollers in 1965 . Rollers has an old rivalry with cross town club Gaborone United , the match between the two sides called the Gaborone Derby . Rollers also have a bitter rivalry with Mochudi Centre Chiefs , and matches between the two sides over time eclipsed the Gaborone Derby as the biggest football encounter in Botswana due to both clubs ' following and success . Club financier Jagdish Shah has been the most influential figure at the club since 2013 . The team is owned by its supporters , whose membership of the club qualifies them to be a part of the Township Rollers society . The society membership elects the Rollers executive committee at annual general meetings ( AGM ) . The club is currently administered by an executive committee comprising Walter Kgabung ( chairman ) , Jagdish Shah ( president ) , Khumo Masonya ( secretary general ) , Kebadile Mosiakgabo ( deputy secretary ) , Phempheretlhe Bafana Pheto ( public relations officer ) , Minkie Molatlhegi ( Treasurer ) , and additional member Baatweng Motladiile . Other senior officials are Sydney Magagane ( general manager ) , Ajay Shah ( finance manager ) and Motshegetsi Mafa ( team manager ) ."
+    }
+  },
+  "paths": [
+    {
+      "id": "row_0",
+      "role": "candidate",
+      "row": "t0:r0",
+      "entity": "Botswana Defence Force XI FC",
+      "bridge": "None",
+      "edges": "e77,e82,e256,e6-e8",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_1",
+      "role": "candidate",
+      "row": "t0:r1",
+      "entity": "Botswana Railways Highlanders",
+      "bridge": "None",
+      "edges": "e86,e91,e224",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_2",
+      "role": "candidate",
+      "row": "t0:r2",
+      "entity": "Extension Gunners FC",
+      "bridge": "None",
+      "edges": "e95,e100",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_3",
+      "role": "candidate",
+      "row": "t0:r3",
+      "entity": "Gaborone United",
+      "bridge": "None",
+      "edges": "e104,e109,e256,e6-e8",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_4",
+      "role": "candidate",
+      "row": "t0:r4",
+      "entity": "Gilport Lions",
+      "bridge": "None",
+      "edges": "e113,e118",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_5",
+      "role": "candidate",
+      "row": "t0:r5",
+      "entity": "Jwaneng Galaxy F.C.",
+      "bridge": "None",
+      "edges": "e122,e127",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_6",
+      "role": "candidate",
+      "row": "t0:r6",
+      "entity": "Miscellaneous",
+      "bridge": "None",
+      "edges": "e131,e136",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_7",
+      "role": "candidate",
+      "row": "t0:r7",
+      "entity": "Morupule Wanderers Football Club",
+      "bridge": "None",
+      "edges": "e140,e145,e239",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_8",
+      "role": "candidate",
+      "row": "t0:r8",
+      "entity": "Notwane F.C.",
+      "bridge": "None",
+      "edges": "e149,e154,e256,e6-e8",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_9",
+      "role": "candidate",
+      "row": "t0:r9",
+      "entity": "Orapa United FC",
+      "bridge": "None",
+      "edges": "e158,e163",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_10",
+      "role": "candidate",
+      "row": "t0:r10",
+      "entity": "Police XI",
+      "bridge": "None",
+      "edges": "e167,e172",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_11",
+      "role": "candidate",
+      "row": "t0:r11",
+      "entity": "Prisons XI",
+      "bridge": "None",
+      "edges": "e176,e181,e256,e6-e8",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_12",
+      "role": "candidate",
+      "row": "t0:r12",
+      "entity": "Security Systems F.C.",
+      "bridge": "None",
+      "edges": "e185,e190",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_13",
+      "role": "candidate",
+      "row": "t0:r13",
+      "entity": "Sharps Shooting Stars FC",
+      "bridge": "None",
+      "edges": "e194,e199,e256,e6-e8",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_14",
+      "role": "candidate",
+      "row": "t0:r14",
+      "entity": "TAFIC F.C.",
+      "bridge": "None",
+      "edges": "e203,e208,e254",
+      "score": 0.0,
+      "lex": 0.0
+    },
+    {
+      "id": "row_15",
+      "role": "candidate",
+      "row": "t0:r15",
+      "entity": "Township Rollers Football Club",
+      "bridge": "None",
+      "edges": "e212,e217,e256,e6-e8",
+      "score": 0.0,
+      "lex": 0.0
+    }
+  ],
+  "ordering": {
+    "detected_signal": "none",
+    "note": "No ordering signal detected; candidates remain in original table-row order."
+  }
+}

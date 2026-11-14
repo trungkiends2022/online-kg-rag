@@ -17,7 +17,7 @@ def _cell_value(cell: Any) -> str:
     return str(cell)
 
 
-def _cell_links(cell: Any) -> list[dict]:
+def _cell_links(cell: Any) -> list[Any]:
     if isinstance(cell, dict):
         links = cell.get("urls", cell.get("links", []))
     elif isinstance(cell, (list, tuple)) and len(cell) > 1:
@@ -27,6 +27,18 @@ def _cell_links(cell: Any) -> list[dict]:
     if isinstance(links, dict):
         links = [links]
     return links if isinstance(links, list) else []
+
+
+def _link_url(link: Any) -> str | None:
+    """Return a stable linked-passage identifier from a HybridQA cell link."""
+    if isinstance(link, str):
+        return link.strip() or None
+    if isinstance(link, dict):
+        value = link.get("url") or link.get("id")
+        return str(value).strip() if value else None
+    if isinstance(link, (list, tuple)) and link:
+        return str(link[0]).strip() or None
+    return None
 
 
 def _link_passage(link: Any, fallback_id: str) -> dict | None:
@@ -42,17 +54,26 @@ def _link_passage(link: Any, fallback_id: str) -> dict | None:
     return {"id": str(source_id), "text": str(text)}
 
 
-def _normalize_table(table: dict, table_id: str) -> tuple[list[dict], list[dict]]:
+def _normalize_table(table: dict, table_id: str) -> tuple[list[dict], list[dict], list[dict]]:
     raw_header = table.get("header", [])
     header = [_cell_value(cell).strip() or f"column_{idx}" for idx, cell in enumerate(raw_header)]
-    rows, passages, seen_passages = [], [], set()
+    rows, passages, cell_links, seen_passages = [], [], [], set()
     for row_index, raw_row in enumerate(table.get("data", [])):
         rows.append({
             name: _cell_value(raw_row[col]) if col < len(raw_row) else ""
             for col, name in enumerate(header)
         })
         for col, cell in enumerate(raw_row):
+            cell_value = _cell_value(cell)
             for link_index, link in enumerate(_cell_links(cell)):
+                link_url = _link_url(link)
+                if link_url:
+                    cell_links.append({
+                        "row_index": row_index,
+                        "column_name": header[col] if col < len(header) else f"column_{col}",
+                        "cell_value": cell_value,
+                        "url": link_url,
+                    })
                 passage = _link_passage(link, f"{table_id}:{row_index}:{col}:{link_index}")
                 if passage and passage["id"] not in seen_passages:
                     seen_passages.add(passage["id"])
@@ -65,7 +86,7 @@ def _normalize_table(table: dict, table_id: str) -> tuple[list[dict], list[dict]
             if normalized and normalized["id"] not in seen_passages:
                 seen_passages.add(normalized["id"])
                 passages.append(normalized)
-    return rows, passages
+    return rows, passages, cell_links
 
 
 def _load_external_table(tables_dir: Path, table_id: str) -> dict:
@@ -143,7 +164,7 @@ def load_hybridqa(
                     "HybridQA record has no embedded table; --tables-dir is required"
                 )
             table = _load_external_table(table_root, table_id)
-        rows, passages = _normalize_table(table, table_id)
+        rows, passages, cell_links = _normalize_table(table, table_id)
         if passage_root is not None:
             external = _load_external_passages(passage_root, table_id)
             known_ids = {passage["id"] for passage in passages}
@@ -151,7 +172,11 @@ def load_hybridqa(
         yield DatasetExample(
             example_id=item_id,
             question=str(item["question"]),
-            table_rows=[{"table_name": table.get("title") or table_id, "rows": rows}],
+            table_rows=[{
+                "table_name": table.get("title") or table_id,
+                "rows": rows,
+                "cell_links": cell_links,
+            }],
             text_passages=passages,
             answer=item.get("answer_text", item.get("answer-text", item.get("answer"))),
             metadata={

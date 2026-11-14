@@ -1,0 +1,169 @@
+% \documentclass[tikz,border=2mm]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,backgrounds,calc}
+\usepackage{lmodern}
+
+% ==========================================================
+% BRAIN ICON MACRO (#1 = position, #2 = scale, #3 = color)
+% ==========================================================
+\def\drawbrain#1#2#3{
+  \begin{scope}[shift={(#1)}, scale=#2]
+    % Left hemisphere
+    \draw[fill=#3!25, draw=#3!85!black, line width=0.6pt]
+      (0, 0.72) 
+      .. controls (-0.35, 0.82) and (-0.72, 0.62) .. (-0.72, 0.28)
+      .. controls (-0.92, 0.12) and (-0.92, -0.22) .. (-0.68, -0.34)
+      .. controls (-0.76, -0.58) and (-0.52, -0.78) .. (-0.28, -0.68)
+      .. controls (-0.18, -0.82) and (-0.05, -0.68) .. (0, -0.58)
+      -- cycle;
+    % Right hemisphere
+    \draw[fill=#3!25, draw=#3!85!black, line width=0.6pt]
+      (0, 0.72) 
+      .. controls (0.35, 0.82) and (0.72, 0.62) .. (0.72, 0.28)
+      .. controls (0.92, 0.12) and (0.92, -0.22) .. (0.68, -0.34)
+      .. controls (0.76, -0.58) and (0.52, -0.78) .. (0.28, -0.68)
+      .. controls (0.18, -0.82) and (0.05, -0.68) .. (0, -0.58)
+      -- cycle;
+    % Midline
+    \draw[#3!85!black, line width=0.6pt] (0, 0.70) -- (0, -0.56);
+    % Neural nodes & synapses (Left)
+    \fill[#3!85!black] (-0.32, 0.36) circle (0.9pt);
+    \fill[#3!85!black] (-0.50, 0.02) circle (0.9pt);
+    \fill[#3!85!black] (-0.22, -0.12) circle (0.9pt);
+    \fill[#3!85!black] (-0.38, -0.42) circle (0.9pt);
+    \draw[#3!65!black, line width=0.35pt] (-0.32, 0.36) -- (-0.50, 0.02) -- (-0.22, -0.12) -- (-0.38, -0.42);
+    % Neural nodes & synapses (Right)
+    \fill[#3!85!black] (0.32, 0.36) circle (0.9pt);
+    \fill[#3!85!black] (0.50, 0.02) circle (0.9pt);
+    \fill[#3!85!black] (0.22, -0.12) circle (0.9pt);
+    \fill[#3!85!black] (0.38, -0.42) circle (0.9pt);
+    \draw[#3!65!black, line width=0.35pt] (0.32, 0.36) -- (0.50, 0.02) -- (0.22, -0.12) -- (0.38, -0.42);
+    % Synapse bridge
+    \draw[#3!60!black, line width=0.35pt, dashed] (-0.22, -0.12) -- (0.22, -0.12);
+  \end{scope}
+}
+
+\begin{document}
+\begin{tikzpicture}[
+  >=Latex,
+  font=\sffamily\scriptsize,
+  % Column Panels
+  tier_col/.style={draw=#1!70!black, fill=#1!2!white, rounded corners=6pt, line width=0.7pt},
+  col_title/.style={fill=#1!12, draw=#1!70!black, line width=0.45pt, rounded corners=3pt, font=\bfseries\scriptsize, text=#1!95!black, inner sep=2.5pt, align=center},
+  % Flowchart algorithmic shapes
+  flow_input/.style={draw=#1!75!black, fill=white, rounded corners=3pt, line width=0.55pt, minimum width=4.4cm, minimum height=0.75cm, align=center, inner sep=2.5pt},
+  flow_proc/.style={draw=#1!80!black, fill=#1!8, rounded corners=3pt, line width=0.6pt, minimum width=4.4cm, minimum height=0.75cm, align=center, inner sep=2.5pt},
+  flow_dec/.style={diamond, aspect=2.3, draw=#1!85!black, fill=#1!12, line width=0.6pt, inner sep=2.0pt, font=\bfseries\fontsize{5.2pt}{6.0pt}\selectfont, text=#1!95!black, align=center},
+  flow_exit/.style={draw=green!70!black, fill=green!15, rounded corners=3pt, line width=0.6pt, inner sep=2.0pt, align=center, font=\bfseries\fontsize{5.0pt}{5.8pt}\selectfont, text=green!90!black},
+  flow_term/.style={draw=green!70!black, fill=green!15, rounded corners=4pt, line width=0.75pt, minimum width=4.6cm, minimum height=0.8cm, align=center, inner sep=2.5pt},
+  bridge_block/.style={draw=orange!80!black, fill=orange!8, rounded corners=4pt, line width=0.65pt, minimum width=1.8cm, align=center, inner sep=3.0pt},
+  % Connectors
+  flow_arr/.style={->, line width=0.9pt, draw=gray!75!black},
+  flow_succ/.style={->, line width=1.05pt, draw=green!65!black},
+  flow_wire/.style={->, line width=1.05pt, draw=orange!90!black}
+]
+
+% ----------------------------------------------------------
+% COLUMN 1: TIER 1 ALGORITHM FLOWCHART
+% ----------------------------------------------------------
+\node[tier_col=blue, minimum width=5.2cm, minimum height=5.8cm] (col1) at (2.8, 0) {};
+\node[col_title=blue, minimum width=4.9cm, anchor=north] at ([yshift=-1.5mm]col1.north) {
+  \textbf{Tier 1: Initial Evidence Reasoning \& Clarity Audit}
+};
+
+% 1. Input: Full Graph
+\node[flow_input=blue] (t1_in) at (2.8, 2.0) {
+  \textbf{Input: Full Evidence Graph $G_q$}\\
+  {\fontsize{4.8pt}{5.5pt}\selectfont Unpruned multigraph with guided path scaffold}
+};
+
+% 2. Process: LLM Call 1 with Brain
+\node[flow_proc=purple] (t1_llm) at (2.8, 0.95) {
+  \hspace*{5mm}\textbf{Primary LLM Reasoning (Call 1)}\\
+  \hspace*{5mm}{\fontsize{4.8pt}{5.5pt}\selectfont Strict audit $\bullet$ Linear path evaluation}
+};
+\drawbrain{0.95, 0.95}{0.35}{purple};
+
+% 3. Decision: Clarity Audit
+\node[flow_dec=purple] (t1_dec) at (2.0, -0.2) {
+  Unambiguous\\
+  Evidence?
+};
+
+% Branch: Fast Exit (Right inside Col 1)
+\node[flow_exit, minimum width=1.35cm] (t1_exit) at (4.45, -0.2) {
+  \textbf{Fast Exit}\\[-0.2mm]
+  {\fontsize{4.5pt}{5.0pt}\selectfont $\approx 80\%$ Queries\\1 LLM Call}
+};
+
+% 4. Output: Diagnostic Handoff
+\node[flow_proc=orange, fill=orange!5, draw=orange!80!black] (t1_handoff) at (2.8, -1.85) {
+  \textbf{Diagnostic Handoff $\mathcal{D}$}\\
+  {\fontsize{4.8pt}{5.5pt}\selectfont Collision on \texttt{1989} $\bullet$ Missing \texttt{Blues} bridge passage}
+};
+
+% Tier 1 Internal Connectors
+\draw[flow_arr] (t1_in) -- (t1_llm);
+\draw[flow_arr] (t1_llm) -- (t1_dec);
+\draw[flow_succ] (t1_dec.east) -- (t1_exit.west);
+\node[font=\bfseries\fontsize{4.5pt}{5.0pt}\selectfont, text=green!75!black, anchor=south] at ($(t1_dec.east)!0.5!(t1_exit.west)$) {Yes};
+\draw[flow_wire] (t1_dec.south) |- (t1_handoff.north);
+\node[font=\bfseries\fontsize{4.5pt}{5.0pt}\selectfont, text=orange!85!black, anchor=east] at ([xshift=-1mm]t1_dec.south) {No (Collision)};
+
+% ----------------------------------------------------------
+% CENTER BRIDGE: GRAPH COMPRESSION (ZERO LLM CALLS)
+% ----------------------------------------------------------
+\node[bridge_block] (bridge) at (6.5, -0.9) {
+  \textbf{Graph Compression}\\[-0.3mm]
+  {\fontsize{4.5pt}{5.2pt}\selectfont
+  \textcolor{blue!90!black}{\textbf{Zero LLM Calls}}\\[0.8mm]
+  Fetch \texttt{Doc:Blues}\\[0.4mm]
+  Prune non-tied rows\\[0.4mm]
+  \textcolor{teal!90!black}{\textbf{$\approx 85\%$ size reduction}}}
+};
+
+% ----------------------------------------------------------
+% COLUMN 2: TIER 2 ALGORITHM FLOWCHART
+% ----------------------------------------------------------
+\node[tier_col=teal, minimum width=5.2cm, minimum height=5.8cm] (col2) at (10.2, 0) {};
+\node[col_title=teal, minimum width=4.9cm, anchor=north] at ([yshift=-1.5mm]col2.north) {
+  \textbf{Tier 2: Targeted Collision Resolution}
+};
+
+% 1. Input: Minimal State Capsule (Compressed Graph)
+\node[flow_input=teal] (t2_in) at (10.2, 2.0) {
+  \textbf{Input: Minimal State Capsule $\mathcal{S}_{\text{min}}$}\\
+  {\fontsize{4.8pt}{5.5pt}\selectfont \textcolor{teal!90!black}{\textbf{Compressed graph:}} Tied candidates + bridge evidence}
+};
+
+% 2. Process: Targeted LLM Call with Brain
+\node[flow_proc=purple] (t2_llm) at (10.2, 0.95) {
+  \hspace*{5mm}\textbf{Targeted LLM Resolution (Call 2)}\\
+  \hspace*{5mm}{\fontsize{4.8pt}{5.5pt}\selectfont Isolated context $\bullet$ Zero context dilution}
+};
+\drawbrain{8.35, 0.95}{0.35}{purple};
+
+% 3. Decision: Fact Grounded?
+\node[flow_dec=teal] (t2_dec) at (10.2, -0.2) {
+  Grounded in\\
+  Bridge Evidence?
+};
+
+% 4. Terminal: Final Verified Answer
+\node[flow_term] (t2_term) at (10.2, -1.85) {
+  \textbf{Final Verified Answer: ``York''}\\[0.2mm]
+  {\fontsize{4.8pt}{5.6pt}\selectfont $\le 2$ LLM Calls Total $\bullet$ 100\% Grounded Provenance}
+};
+
+% Tier 2 Internal Connectors
+\draw[flow_arr, draw=teal!80!black] (t2_in) -- (t2_llm);
+\draw[flow_arr] (t2_llm) -- (t2_dec);
+\draw[flow_succ] (t2_dec.south) -- (t2_term.north);
+\node[font=\bfseries\fontsize{4.5pt}{5.0pt}\selectfont, text=green!75!black, anchor=east] at ([xshift=-1mm]$(t2_dec.south)!0.5!(t2_term.north)$) {Yes (Grounded)};
+
+% Connecting wires from Tier 1 to Bridge, and Bridge to Tier 2
+\draw[flow_wire, rounded corners=3pt] (t1_handoff.east) -- (6.5, -1.85) -- (bridge.south);
+\draw[flow_arr, draw=teal!80!black, rounded corners=3pt] (bridge.north) -- (6.5, 2.0) -- (t2_in.west);
+
+\end{tikzpicture}
+\end{document}

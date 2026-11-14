@@ -1,0 +1,3 @@
+1 (Fig. 1) - Architectural comparison across four query-time table-text reasoning paradigms: Flat Concatenation RAG, Online KG with Destructive Pruning, Agentic Online KG Exploration, and QEG-RAG with Path Scaffolding and Two-Tier Controlled Reasoning.
+2 (Fig. 2) - End-to-end architecture of QEG-RAG illustrating the four stages: Multi-Source Evidence Ingestion, Schema-Preserving Multigraph Construction, Two-Tier Controlled Reasoning Engine, and Grounded Provenance Audit.
+3 (Fig. 3) - Detailed workflow of the two-tier controlled reasoning engine showing Tier 1 primary evaluation, diagnostic handoff, zero-LLM targeted bridge retrieval and state capsule compression, and Tier 2 targeted resolution within at most two calls.

@@ -1,0 +1,1 @@
+[{"id": "report-1", "pre_text": ["Revenue increased."], "post_text": ["End of report."], "table": [["Year", "Revenue"], ["2023", "100"]], "qa": {"question": "What was revenue?", "answer": "100", "exe_ans": 100, "program": "add(100, 0)", "gold_inds": {"table_1": "2023 100"}}}]

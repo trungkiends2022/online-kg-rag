@@ -35,14 +35,16 @@ class OnlineKGPipeline:
         execution_mode: str = "python",
         finqa_canonical_ratio: bool = False,
         max_output_tokens: int = 4096,
-        table_llm_enrichment: bool = True,
+        max_table_rows_for_kg: int | None = None,
     ):
         if execution_mode not in {"python", "numerical_ir"}:
             raise ValueError(f"unsupported execution mode: {execution_mode}")
         self.execution_mode = execution_mode
         self.finqa_canonical_ratio = finqa_canonical_ratio
         self.max_output_tokens = max_output_tokens
-        self.table_llm_enrichment = table_llm_enrichment
+        if max_table_rows_for_kg is not None and max_table_rows_for_kg < 1:
+            raise ValueError("max_table_rows_for_kg must be positive when set")
+        self.max_table_rows_for_kg = max_table_rows_for_kg
         self.kg_builder = OnlineKGBuilder(
             EntityRelationExtractor(
                 temperature=temperature, max_output_tokens=max_output_tokens
@@ -72,6 +74,7 @@ class OnlineKGPipeline:
             "row_index": item.row_index,
             "column_name": item.column_name,
             "header_path": item.header_path,
+            "text_context": item.text_context,
         }
 
     def run(
@@ -88,13 +91,8 @@ class OnlineKGPipeline:
         retrieved = two_stage_retrieve(
             question, table_rows, text_passages, web_snippets,
             top_k=retrieval_top_k, second_stage_k=retrieval_second_stage_k,
+            max_table_rows=self.max_table_rows_for_kg,
         )
-        # FinQA already supplies a normalized table.  Its deterministic cell
-        # triples retain every value and header, while skipping optional table
-        # paraphrasing avoids the largest and least reliable OpenRouter calls.
-        if not self.table_llm_enrichment:
-            for row_group in retrieved.get("table_rows", []):
-                row_group["deterministic_only"] = True
         kg = self.kg_builder.build(retrieved)
         constraint_context = retrieved.get("retrieval_trace", {})
         operation_intent = infer_operation_intent(question, kg)
@@ -124,6 +122,7 @@ class OnlineKGPipeline:
 
             candidates = []
             ir_validation: dict[str, tuple[bool, bool]] = {}
+            early_exit_path_id: str | None = None
             # High-confidence table templates use the exact same typed IR and
             # executor as model programs. They are included as candidates rather
             # than replacing planning, so the evidence-aware evaluator can still
@@ -167,25 +166,25 @@ class OnlineKGPipeline:
                             bool(getattr(exc, "schema_valid", False)),
                         )
                 candidates.append((path, code, result))
+                # Code synthesis and sandbox execution are the expensive part
+                # of the legacy branch. Stop this attempt as soon as one path
+                # passes the same grounded evaluator used for final selection.
+                provisional = self.evaluator.evaluate_all(
+                    [(path, code, result)],
+                    constraint_context.get("constraint_policy", {}),
+                    question=question,
+                )
+                if provisional and provisional[0].score > float("-inf"):
+                    early_exit_path_id = path.path_id
+                    break
 
             constraint_policy = constraint_context.get("constraint_policy", {})
             scored = self.evaluator.evaluate_all(
                 candidates, constraint_policy, question=question
             )
-            # Deterministic entity-centric paths complement, rather than only
-            # rescue, LLM-generated programs. This makes table -> bridge entity
-            # -> linked passage patterns available even when a planner returns
-            # a plausible but incomplete path.
-            if self.execution_mode == "python":
-                symbolic_candidates = self.symbolic_search.search(question, kg)
-                if symbolic_candidates:
-                    candidates.extend(symbolic_candidates)
-                    scored = self.evaluator.evaluate_all(
-                        candidates, constraint_policy, question=question
-                    )
-            # Symbolic graph search returns an already executed path rather than
-            # a numerical program. Disable it for the IR ablation so the method
-            # cannot silently fall back to a different execution formalism.
+            # Deterministic entity-centric paths are a fallback when planned
+            # paths do not yield a grounded value. Do not execute extra paths
+            # after an already valid candidate.
             if (
                 self.execution_mode == "python"
                 and not any(item.score > float("-inf") for item in scored)
@@ -263,6 +262,7 @@ class OnlineKGPipeline:
                     "planner_error": self.planner.last_error,
                     "extraction_errors": kg.extraction_errors,
                     "replans_used": attempt,
+                    "early_exit_path_id": early_exit_path_id,
                     "execution_mode": self.execution_mode,
                     "retrieval_trace": retrieved.get("retrieval_trace", {}),
                     "entity_anchor": retrieved.get("retrieval_trace", {}).get("entity_anchor", {}),

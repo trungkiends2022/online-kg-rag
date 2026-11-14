@@ -1,3 +1,5 @@
+import json
+
 from src.baselines.metrics import (
     extract_last_number,
     finqa_execution_match,
@@ -13,6 +15,7 @@ from src.baselines.rag_variants import (
 from src.baselines.online_kg_path_text import OnlineKGPathTextBaseline
 from src.datasets.schema import DatasetExample
 from src.execution.sandbox import ExecResult
+from src.extraction import extractor as extractor_module
 from src.kg.online_kg import OnlineKG
 from src.kg.schema import Provenance, Triple
 from src.planning.planner import PathStep, ReasoningPath
@@ -56,7 +59,7 @@ def test_flat_table_baseline_retrieves_and_calls_once(monkeypatch):
     )
     monkeypatch.setattr(
         "src.baselines.rag_variants.llm_call",
-        lambda prompt, **kwargs: calls.append(prompt) or "Liverpool",
+        lambda prompt, **kwargs: calls.append(prompt) or 'FINAL_ANSWER: Liverpool\nEVIDENCE_PATH: {"context_ids":["table:Managers:row:0"]}',
     )
 
     result = FlatTableBM25Baseline(RAGConfig(top_k=2)).run(_example())
@@ -77,7 +80,10 @@ def test_online_kg_path_text_answers_without_program_execution(monkeypatch):
 
     class Planner:
         def generate_candidates(self, question, graph, n, constraint_context=None):
-            return [ReasoningPath("p1", [PathStep(1, "Follow Alice --club--> answer")])]
+            return [ReasoningPath(
+                "p1", [PathStep(1, "Follow Alice --club--> answer")],
+                edges=graph.path_edge_records(),
+            )]
 
     prompts = []
     monkeypatch.setattr(
@@ -86,13 +92,21 @@ def test_online_kg_path_text_answers_without_program_execution(monkeypatch):
     )
     monkeypatch.setattr(
         "src.baselines.online_kg_path_text.llm_call",
-        lambda prompt, **kwargs: prompts.append(prompt) or "Liverpool",
+        lambda prompt, **kwargs: prompts.append(prompt) or json.dumps({
+            "selected_path_id": "p1", "answer": "Liverpool",
+            "evidence_edge_ids": ["semantic:0:0"],
+        }),
     )
     baseline = OnlineKGPathTextBaseline(
         RAGConfig(top_k=2), n_paths=1, kg_builder=Builder(), planner=Planner()
     )
     result = baseline.run(_example())
     assert result["answer"] == "Liverpool"
+    assert len(prompts) == 1
+    assert "evidence synthesizer" in prompts[0]
+    assert result["final_judge_response_format"] == "deterministic_reverse_grounding"
+    assert result["final_judge_valid"] is True
+    assert result["llm_selected_path_ids"] == ["p1"]
     assert result["execution_mode"] == "path_text"
     assert result["code_generated"] is False
     assert result["program_executed"] is False
@@ -110,7 +124,10 @@ def test_online_kg_path_text_ranks_relevant_late_edge_and_keeps_json_context(mon
 
     class Planner:
         def generate_candidates(self, question, graph, n, constraint_context=None):
-            return [ReasoningPath("p1", [PathStep(1, "Find Lithuania named after river")])]
+            return [ReasoningPath(
+                "p1", [PathStep(1, "Find Lithuania named after river")],
+                edges=[graph.path_edge_records()[1]],
+            )]
 
     prompts = []
     monkeypatch.setattr(
@@ -119,7 +136,10 @@ def test_online_kg_path_text_ranks_relevant_late_edge_and_keeps_json_context(mon
     )
     monkeypatch.setattr(
         "src.baselines.online_kg_path_text.llm_call",
-        lambda prompt, **kwargs: prompts.append(prompt) or "Lithuania",
+        lambda prompt, **kwargs: prompts.append(prompt) or json.dumps({
+            "selected_path_id": "p1", "answer": "Lithuania",
+            "evidence_edge_ids": ["semantic:1:0"],
+        }),
     )
     baseline = OnlineKGPathTextBaseline(
         RAGConfig(top_k=1, max_context_chars=600), n_paths=1,
@@ -148,7 +168,10 @@ def test_online_kg_path_text_canonicalizes_resolved_entity_alias(monkeypatch):
 
     class Planner:
         def generate_candidates(self, question, graph, n, constraint_context=None):
-            return [ReasoningPath("p1", [PathStep(1, "Find home arena")])]
+            return [ReasoningPath(
+                "p1", [PathStep(1, "Find home arena")],
+                edges=graph.path_edge_records(),
+            )]
 
     monkeypatch.setattr(
         "src.baselines.online_kg_path_text.get_provider",
@@ -156,13 +179,150 @@ def test_online_kg_path_text_canonicalizes_resolved_entity_alias(monkeypatch):
     )
     monkeypatch.setattr(
         "src.baselines.online_kg_path_text.llm_call",
-        lambda prompt, **kwargs: "Vazgen Sargsyan Republican Stadium",
+        lambda prompt, **kwargs: json.dumps({
+            "selected_path_id": "p1", "answer": "Vazgen Sargsyan Republican Stadium",
+            "evidence_edge_ids": ["semantic:0:0"],
+        }),
     )
     result = OnlineKGPathTextBaseline(
         RAGConfig(top_k=1), n_paths=1, kg_builder=Builder(), planner=Planner()
     ).run(_example())
 
     assert result["answer"] == "Republican Stadium"
+
+
+def test_online_kg_path_text_reverse_grounds_without_second_llm_call(monkeypatch):
+    kg = OnlineKG()
+    kg.add_triple(Triple("Alice", "club", "Liverpool", Provenance("table", "Managers")))
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    class Planner:
+        def generate_candidates(self, question, graph, n, constraint_context=None):
+            return [ReasoningPath(
+                "p1", [PathStep(1, "Follow Alice --club--> Liverpool")],
+                edges=graph.path_edge_records(),
+            )]
+
+    calls = []
+    monkeypatch.setattr(
+        "src.baselines.online_kg_path_text.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "m"})(),
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_kg_path_text.llm_call",
+        lambda prompt, **kwargs: calls.append(prompt) or "Liverpool",
+    )
+
+    result = OnlineKGPathTextBaseline(
+        RAGConfig(top_k=1), n_paths=1, kg_builder=Builder(), planner=Planner(),
+    ).run(_example())
+
+    assert len(calls) == 1
+    assert result["answer"] == "Liverpool"
+    assert result["final_judge_valid"] is True
+    assert result["llm_selected_path_id"] == "p1"
+    assert result["final_judge_evidence_edge_ids"] == ["semantic:0:0"]
+    assert result["grounding_audit"]["mode"] == "deterministic_reverse_answer_match"
+
+
+
+def test_online_kg_path_text_keeps_incomplete_paths_for_post_answer_grounding():
+    baseline = OnlineKGPathTextBaseline(RAGConfig(top_k=1))
+    records = [
+        {
+            "path_id": "wrong_high_score",
+            "score": 99.0,
+            "edges": [{
+                "edge_id": "wrong", "head": "Bob", "relation": "club",
+                "tail": "Arsenal", "source_type": "text",
+            }],
+            "nodes": ["Bob", "Arsenal"], "steps": [],
+        },
+        {
+            "path_id": "grounded_row",
+            "score": 1.0,
+            "edges": [{
+                "edge_id": "right", "head": "Alice", "relation": "club",
+                "tail": "Liverpool", "source_type": "table", "row_index": 4,
+            }],
+            "nodes": ["Alice", "Liverpool"], "steps": [],
+        },
+    ]
+    selected, audit = baseline._select_verified_paths(
+        "What is Alice's club?", records,
+        {
+            "table_witnesses": [{
+                "row_indices": [4], "bridge_entities": ["Alice"], "hyperlinks": [],
+            }],
+            "constraint_policy": {"require_table_evidence": True},
+        },
+    )
+
+    assert [path["path_id"] for path in selected] == ["wrong_high_score", "grounded_row"]
+    assert audit["rejected_path_ids"] == ["wrong_high_score"]
+    assert audit["pre_answer_path_selection"] is False
+    assert audit["abstained_for_missing_grounding"] is False
+    assert audit["verification_by_path"]["wrong_high_score"]["hard_failures"] == [
+        "missing_table_witness"
+    ]
+    assert selected[1]["path_verification"]["status"] == "qualified"
+def test_online_kg_path_text_rejects_empty_grounded_path_set(monkeypatch):
+    kg = OnlineKG()
+    kg.add_triple(Triple("Alice", "club", "Liverpool", Provenance("table", "Managers")))
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    class Planner:
+        def generate_candidates(self, question, graph, n, constraint_context=None):
+            return []
+
+    monkeypatch.setattr(
+        "src.baselines.online_kg_path_text.llm_call",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            AssertionError("answer model must not be called without a grounded path")
+        ),
+    )
+    result = OnlineKGPathTextBaseline(
+        RAGConfig(top_k=1), n_paths=1, kg_builder=Builder(), planner=Planner()
+    ).run(_example())
+
+    assert result["answer"] is None
+    assert result["reasoning_paths"] == []
+    assert "No grounded text path" in result["error"]
+
+
+def test_online_kg_path_text_uses_raw_text_context_without_extraction_llm(monkeypatch):
+    monkeypatch.setattr(
+        extractor_module, "llm_call_json",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("text extraction LLM must not run")),
+    )
+    prompts = []
+    monkeypatch.setattr(
+        "src.baselines.online_kg_path_text.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "m"})(),
+    )
+    def valid_judge(prompt, **kwargs):
+        prompts.append(prompt)
+        payload = json.loads(prompt.split("Online KG candidate payload:\n", 1)[1].split("\n\nFinal answer:", 1)[0])
+        path = payload["reasoning_paths"][0]
+        return json.dumps({
+            "selected_path_id": path["path_id"],
+            "answer": "Liverpool",
+            "evidence_edge_ids": [path["edge_ids"][0]],
+        })
+
+    monkeypatch.setattr("src.baselines.online_kg_path_text.llm_call", valid_judge)
+
+    result = OnlineKGPathTextBaseline(RAGConfig(top_k=2), n_paths=1).run(_example())
+
+    assert result["answer"] == "Liverpool"
+    assert result["text_extraction_mode"] == "direct_context_no_llm"
+    assert "Alice managed Liverpool." in prompts[0]
 
 
 def test_oracle_evidence_uses_finqa_gold_facts_only(monkeypatch):
@@ -230,3 +390,36 @@ def test_finqa_numeric_answer_metrics():
     assert finqa_ratio_percentage_match(0.21651, 21.650534895568008) == 1.0
     assert finqa_ratio_percentage_match(21.65053, 0.2165053) == 1.0
     assert finqa_ratio_percentage_match(0.21651, 18.0) == 0.0
+
+def test_path_text_abstains_after_blank_answer_without_a_forced_retry(monkeypatch):
+    kg = OnlineKG()
+    kg.add_triple(Triple("Edna Work Hall", "located_in", "Chadron", Provenance("table", "places")))
+
+    class Builder:
+        def build(self, retrieved):
+            return kg
+
+    class Planner:
+        def generate_candidates(self, question, graph, n, constraint_context=None):
+            return [ReasoningPath("edna", [PathStep(1, "Find Edna Work Hall")], nodes=["Edna Work Hall"], edges=[{
+                "edge_id": "edna:1", "head": "passage:/edna", "relation": "mentions",
+                "tail": "Edna Work Hall", "traversal_from": "passage:/edna",
+                "traversal_to": "Edna Work Hall", "source_type": "text", "contexts": [],
+            }])]
+
+    calls = []
+    monkeypatch.setattr(
+        "src.baselines.online_kg_path_text.get_provider",
+        lambda: type("Provider", (), {"name": "fake", "model": "m"})(),
+    )
+    monkeypatch.setattr(
+        "src.baselines.online_kg_path_text.llm_call",
+        lambda prompt, **kwargs: calls.append(prompt) or "",
+    )
+    result = OnlineKGPathTextBaseline(
+        RAGConfig(top_k=1), n_paths=1, kg_builder=Builder(), planner=Planner(),
+    ).run(_example())
+
+    assert len(calls) == 1
+    assert result["answer"] == ""
+    assert result["abstained_for_missing_grounding"] is True

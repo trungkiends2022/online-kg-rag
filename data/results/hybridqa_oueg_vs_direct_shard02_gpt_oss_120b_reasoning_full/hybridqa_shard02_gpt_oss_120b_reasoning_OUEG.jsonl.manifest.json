@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "dataset": "hybridqa",
+  "method": "online_unified_evidence_graph",
+  "code_worktree_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "input": {
+    "path": "benchmarks/hybridqa/hybridqa-dev-table-text-traced-1500-seed2027-shard02.json",
+    "sha256": "a529c3633171826cb0d7f126fc501bde19fd084923c4a95914334fa5dfcd0f6b"
+  },
+  "resources": {
+    "tables_dir": "data/WikiTables-WithLinks/tables_tok",
+    "tables_revision": "dc066e1a6d5281511d8b73a6107d5ad2824cc2b2",
+    "tables_worktree_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "passages_dir": "data/WikiTables-WithLinks/request_tok",
+    "passages_revision": "dc066e1a6d5281511d8b73a6107d5ad2824cc2b2",
+    "passages_worktree_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "hitab_tables_dir": null,
+    "hitab_tables_revision": null,
+    "hitab_tables_worktree_diff_sha256": null
+  },
+  "provider": {
+    "provider": "openrouter",
+    "model": "openai/gpt-oss-120b"
+  },
+  "provider_options": {
+    "COMPAT_BASE_URL": "http://localhost:11434/v1",
+    "OPENROUTER_REASONING_ENABLED": "true",
+    "LLM_RATE_LIMIT_RETRIES": "3"
+  },
+  "code_revision": "9c4262daae4d1c29c37bf7e7cd80621dcef50016",
+  "config": {
+    "top_k": 5,
+    "second_stage_k": 3,
+    "max_context_chars": 24000,
+    "max_table_rows_for_kg": null,
+    "max_output_tokens": 1024,
+    "temperature": 0.0,
+    "use_rule_text_triples": true,
+    "ambiguity_policy": "prompt",
+    "oueg_context_mode": "lossless",
+    "n_paths": 5,
+    "max_replans": 0,
+    "finqa_table_format": "official",
+    "llm_timeout_seconds": 120.0,
+    "llm_sdk_retries": 2,
+    "max_workers": 4,
+    "llm_max_concurrent_requests": 4
+  },
+  "fingerprint": "32c385eebe8b073ed7485ce6888c9eb750560f69d3a4f7959378f1ba1ac6ddcd"
+}

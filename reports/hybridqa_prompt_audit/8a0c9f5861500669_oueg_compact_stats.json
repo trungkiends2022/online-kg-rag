@@ -1,0 +1,13 @@
+{
+  "full_edge_count": 385,
+  "row_record_count": 16,
+  "edge_record_count": 265,
+  "context_count": 8,
+  "extractive_context_count": 0,
+  "all_edges_represented": true,
+  "prompt_payload_chars": 51111,
+  "source_result": "data/results/hybridqa-case-8a0c9f5861500669-oueg-semantic-bridge-final-rerun-20260927.jsonl",
+  "full_prompt_chars": 226155,
+  "compact_prompt_chars": 51825,
+  "char_reduction_ratio": 0.7708
+}

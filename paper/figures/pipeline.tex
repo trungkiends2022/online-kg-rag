@@ -1,12 +1,8 @@
 \begin{figure}[t]
 \centering
-\input{figures/pipeline-diagram}
-\caption{Overview of Online-KG. Retrieval and graph construction run once per
-question. Candidate plans are converted to Python programs or, in the numerical
-variant, typed IR programs. Execution returns outputs and accessed-edge evidence
-for candidate selection. The dashed loop generates fresh plans over the same
-graph when no candidate is admissible, subject to a replanning budget. Python
-mode additionally permits a symbolic-search fallback before replanning
-(omitted from the diagram).}
+\resizebox{\linewidth}{!}{\input{figures/pipeline-diagram}}
+\vspace{-2mm}
+\caption{End-to-end architecture of OUEG-RAG illustrated with a running HybridQA query. (1)~Multi-source ingestion anchors candidate table rows and expands hyperlinked Wikipedia passages. (2)~Schema-preserving online multigraph construction introduces star-topology record centroids $\rho_i$ to bind cell attributes, bridging tabular entities to external passages via deterministic text triples. (3)~The dual-track engine serializes the complete subgraph via compact prompt compression while enumerating scored candidate paths as non-filtering reading guides, actively resolving structural score collisions. (4)~The unified prompt payload steers LLM generation to produce the grounded answer with an auditable provenance trace.}
+\vspace{-2mm}
 \label{fig:pipeline}
 \end{figure}

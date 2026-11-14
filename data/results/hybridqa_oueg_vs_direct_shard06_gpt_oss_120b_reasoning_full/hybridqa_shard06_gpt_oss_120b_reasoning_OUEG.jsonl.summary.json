@@ -1,0 +1,1030 @@
+{
+  "method": "online_unified_evidence_graph",
+  "dataset": "hybridqa",
+  "num_examples": 200,
+  "failed_examples": 0,
+  "run_manifest": "data/results/hybridqa_oueg_vs_direct_shard06_gpt_oss_120b_reasoning_full/hybridqa_shard06_gpt_oss_120b_reasoning_OUEG.jsonl.manifest.json",
+  "run_fingerprint": "85e6721e4a03f9f227e5ef9a1260a964c4c64957066b9e3f7760004fcd49db38",
+  "provider": "openrouter",
+  "model": "openai/gpt-oss-120b",
+  "code_revision": "f0a565294b952b30f376672b7edbb4430eff76ad",
+  "input_sha256": "d7819b78783946f59b751c8d5bffde4ad8d971af135c12c1438f8a059c0833f6",
+  "exact_match": 0.6,
+  "f1": 0.7319816017316018,
+  "exact_match_percent": 60.0,
+  "f1_percent": 73.19816017316018,
+  "semantic_exact_match": 0.62,
+  "semantic_exact_match_percent": 62.0,
+  "empty_answer_count": 2,
+  "empty_answer_rate": 0.01,
+  "error_taxonomy": {
+    "retrieval_miss": 66,
+    "output_format": 2,
+    "retrieval_or_reasoning": 7,
+    "format_or_normalization": 4,
+    "numeric_or_temporal_reasoning": 1
+  },
+  "error_audit_sample": [
+    {
+      "id": "05fafefcf4185b3f",
+      "question": "What is the nickname of the gold medalist who competed in the Men 's Slalom B event ?",
+      "gold_answer": "Macca",
+      "answer": "Bob",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "6c13593cf292a26f",
+      "question": "What is the current league of the 2013 Korea National League team whose stadium seated the most people ?",
+      "gold_answer": "K3",
+      "answer": "K3\u202fLeague",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "2a9b60a7d68a2c15",
+      "question": "A member of the South Carolina House of Representatives was part of a chapter that was formed after what conflict ?",
+      "gold_answer": "American Civil War",
+      "answer": "World\u202fWar\u202fII",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "0f2bbfd98ea1504c",
+      "question": "How was eligibility ascertained for participation in the event that held first in the seventh month of 2009 ?",
+      "gold_answer": "determined on residence",
+      "answer": "by residence",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "19f9db0257d6ab7c",
+      "question": "Which song in the Coast to Coast Album was also released acoustically ?",
+      "gold_answer": "No Place That Far",
+      "answer": "Against All Odds",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "38c022dc75b42938",
+      "question": "Of the teams that did not play in the top division last season , the oldest one plays out of a stadium that was originally built to host what event ?",
+      "gold_answer": "1999 Summer Universiade in Palma",
+      "answer": "",
+      "error_category": "output_format",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "7d77c7fe05a2dd61",
+      "question": "What country is the nation that finished in 3:05:18 at the IAAF World Half Marathon Championships of 1998 southeast of ?",
+      "gold_answer": "Sudan",
+      "answer": "Kenya",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "aa503399ffa11ba6",
+      "question": "When did the home arena of the Calgary Flames receive its current name ?",
+      "gold_answer": "2010",
+      "answer": "October\u202f2010",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "b4d318580064d596",
+      "question": "What effect on the organ does the pathophysiology have that is associated with a preventable cause of intellectual disability ?",
+      "gold_answer": "gross enlargement",
+      "answer": "hyperplasia of the thyroid",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "d9f05734005e6184",
+      "question": "What year was first mention of a city where a plane was shot down by the world 's first mass-produced supersonic aircraft ?",
+      "gold_answer": "742",
+      "answer": "1964",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "89e1c7f63ef47776",
+      "question": "What is the length in km of the county route that cross the eastern part of the american state of New York ?",
+      "gold_answer": "2.11",
+      "answer": "3.36\u202fkm",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "e395b48ee1e0259f",
+      "question": "The college located in the second most densely populated township in Montgomery County has roughly how many undergraduate students ?",
+      "gold_answer": "4000",
+      "answer": "about\u202f4,000",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "2690c08b9f7d8ba8",
+      "question": "What is the full name of the guest from November 3 ?",
+      "gold_answer": "James Todd Spader",
+      "answer": "James Spader",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "695afc0a3320cccc",
+      "question": "When did the most recently launched ship hit a reef and catch fire ?",
+      "gold_answer": "8 January 1971",
+      "answer": "January\u202f8\u202f,\u202f1971",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "dfbd01c175d7d284",
+      "question": "what is the reason of the politician/general born in early 1794 ?",
+      "gold_answer": "Mexican-American War",
+      "answer": "He abolished the 1824 Federal Constitution and established the Siete\u202fLeyes to centralize the government.",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "da22c1c6e2e30c02",
+      "question": "What geographic feature does the Chilean city containing the stadium that can hold 18,750 lie in ?",
+      "gold_answer": "valley",
+      "answer": "the Pacific coast",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "5d3e006c41a960d0",
+      "question": "Which town had a higher population ? One containing a historic aqueduct , or one containing a 2-story farm and barn built in 1883 ?",
+      "gold_answer": "Springfield Township",
+      "answer": "Metamora",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "db5406cc936ce416",
+      "question": "In which city does this industrial railway operate , which is owned by this company that produces second most nickel in the world ?",
+      "gold_answer": "Greater Sudbury , Ontario , Canada",
+      "answer": "Sudbury",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "adcacf21eb6e93c2",
+      "question": "How many writers worked on the most recently released cartoon ?",
+      "gold_answer": "two",
+      "answer": "2",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "5ce0fae14b9f8da3",
+      "question": "Of the two events held in Japan , which one was held in Kansai region of Honshu ?",
+      "gold_answer": "7th World Cup Final",
+      "answer": "2006\u202fFIG\u202fRhythmic\u202fGymnastics\u202fWorld\u202fCup\u202fFinal",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "6544b3e2c4935ca6",
+      "question": "What was the country 's population near the end of the reign of the Polish United Worker 's Party ?",
+      "gold_answer": "37.9 million",
+      "answer": "\u2248\u202f37.9\u202fmillion inhabitants",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "e9f351a7b62a265d",
+      "question": "Which prehistoric immigrants got to the continent of the nation with 500,000 residents with origins in Lebanon ?",
+      "gold_answer": "Paleo-Indians",
+      "answer": "Lebanese American",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "0fb72fb371fb412a",
+      "question": "Whose violation was the first one to occur in the 21st century ?",
+      "gold_answer": "Tony Dees",
+      "answer": "Vadim\u202fDevyatovskiy",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "d67b931721866e23",
+      "question": "What services does the station have that is located between Avenue of the Americas and Seventh Avenue ?",
+      "gold_answer": "1 , 2 , 3",
+      "answer": "F,\u202fM,\u202f1,\u202f2,\u202f3",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "53625f430b0f6efb",
+      "question": "What year was an Eagle Scout born who is noted for a University that offers over 90 undergraduate and 160 graduate programs across ten schools ?",
+      "gold_answer": "1951",
+      "answer": "1966",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "e7b0cbf661de5786",
+      "question": "What church is the town with a club that won the Meath Senior Football Championship once in 1943 ?",
+      "gold_answer": "St Cian\u00e1ns",
+      "answer": "St\u202fCian\u00e1ns\u202fChurch",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "2e204d948cf1e89f",
+      "question": "Ref . [ 1 ] has a Municipality with a population of how many people ?",
+      "gold_answer": "25,062",
+      "answer": "population not given",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "4190e99b1fc0cd9c",
+      "question": "Which year did the person who completed the qualifying race of the Canadian Grand Prix of 1999 in 1:19.440 first get onto the podium ?",
+      "gold_answer": "1995",
+      "answer": "1994",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "de9ea9da4ae38867",
+      "question": "Who beat the team in the World Series whose manager managed the Toronto Blue Jays from 1982 to 1985 ?",
+      "gold_answer": "Minnesota Twins",
+      "answer": "Toronto\u202fBlue\u202fJays",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "31a0b3df2df17104",
+      "question": "What is the automobile whose class originated in Europe in the early 1900s ?",
+      "gold_answer": "Nissan Z-cars",
+      "answer": "Ford Mustang",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "3bebafaef21a679b",
+      "question": "How many federated states comprise the country that is the homeland of the artists who recorded the song with the word `` Stern '' in its title that was certified gold in Switzerland ?",
+      "gold_answer": "Nine federated states",
+      "answer": "nine",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "32f2e953e386d39d",
+      "question": "How many women governors have held the governor position of the politician who became an attorney with Latham & Watkins ?",
+      "gold_answer": "Four",
+      "answer": "0",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "2c9d29d60efd9722",
+      "question": "what is the age the player born 28 October 1973 ?",
+      "gold_answer": "46",
+      "answer": "52",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "4dcf6e19c3bb39b5",
+      "question": "What is the origin of this language spoken in the archipelago off the west coast of mainland Scotland ?",
+      "gold_answer": "Old Irish",
+      "answer": "It developed from Old\u202fIrish.",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "ffd446eb1b40e694",
+      "question": "What is the league whose city has a history of over 2,200 years and was a major terminus of the maritime Silk Road ?",
+      "gold_answer": "Hong Kong Premier League",
+      "answer": "Chinese Super League",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "de75dc732fabe59e",
+      "question": "How many live in the country with fewer than 7 but more than 4 Wimbledon men 's singles title ?",
+      "gold_answer": "seven million",
+      "answer": "approximately seven million",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "454175cc4a477252",
+      "question": "What is the date of the station whose river is Eastern Canada 's longest river ?",
+      "gold_answer": "1931",
+      "answer": "1962",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "2375c1c21c7cd32d",
+      "question": "What was corrected in the Olympic Games in which Rajendra Bahadur Bhandari bore the flag for Nepal ?",
+      "gold_answer": "medal obverse",
+      "answer": "the final medalists were corrected.",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "ef1dde11fb06ae2c",
+      "question": "In which state lays the burial place of the United States president that led the Union Army as Commanding General of the United States Army in winning the American Civil War ?",
+      "gold_answer": "New York City",
+      "answer": "New\u202fYork",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "073ce2c527261e10",
+      "question": "The Austrian skier born in Radstadt in 1975 won the Silver medal in the event that the Gold medal winner was from what country ?",
+      "gold_answer": "France",
+      "answer": "Austria",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "7a39d46c0a900083",
+      "question": "Which city is located nearby this elaborate tomb in this country bordered by Romania to the north ?",
+      "gold_answer": "Kazanlak , Bulgaria",
+      "answer": "Kazanlak",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "c11b0740b1084da0",
+      "question": "In what country is the dome with a diameter just smaller than 15.80 located in ?",
+      "gold_answer": "northern",
+      "answer": "Italy",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "8c6bb68f98411466",
+      "question": "What is the explanation for a matrix that is its own inverse ?",
+      "gold_answer": "I",
+      "answer": "A square matrix which is its own inverse, i.e.\u202fA\u00b2\u202f=\u202fI.",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "237f9bbf883540da",
+      "question": "What is the name of the route that goes via the location whose population was 9,449 at the 2010 census ?",
+      "gold_answer": "CR 202",
+      "answer": "CR\u202f208",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "c281f92a7917f0b8",
+      "question": "How many people live in the home city of the club that finished in 2nd place overall in 2011 ?",
+      "gold_answer": "2.9 million",
+      "answer": "2.9\u202fmillion people",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "a6bd2e37d4c31372",
+      "question": "Who were runners up in the year when the most supported and most successful club in the league to date were first champions ?",
+      "gold_answer": "Adelaide United",
+      "answer": "Adelaide United Football Club",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "15104ba3ef52de9c",
+      "question": "What county has extended parts of the city which contains Morris Brown College ?",
+      "gold_answer": "DeKalb",
+      "answer": "DeKalb\u202fCounty",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "d82506405d5a9184",
+      "question": "The school whose trustees are the Worshipful Company of Brewers is served by a bus route that starts in which district ?",
+      "gold_answer": "East Finchley",
+      "answer": "Finchley",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "e10d77c4b97b48ed",
+      "question": "What is the meaning of the title of the 1981 film directed by Frank Ripploh ?",
+      "gold_answer": "a.k.a . Taxi to the Toilet",
+      "answer": "Taxi\u202fto\u202fthe\u202fToilet",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "04e5db54d9ed2577",
+      "question": "At which air force base did the pilot who graduated in 1968 serve ?",
+      "gold_answer": "Hickam",
+      "answer": "",
+      "error_category": "output_format",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "ce92d8c4b95ea926",
+      "question": "In 2010 , Sam Pinto played Elizaria in a series directed by whom ?",
+      "gold_answer": "Mark A. Reyes",
+      "answer": "Roxanne\u202fPicard",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "dc2a5a4316ee78f5",
+      "question": "Which club did the oldest player that left club in 2011 , move to ?",
+      "gold_answer": "Le\u00f3n de Hu\u00e1nuco",
+      "answer": "Atl\u00e9tico Nacional",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "6a6fed001116d24f",
+      "question": "The flag bearer at the Rio and London Games competed in what event ?",
+      "gold_answer": "400m",
+      "answer": "400\u202fm",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "1fa003313e977227",
+      "question": "What is the average depth , in feet , of the feature also known as the Central Polar Basin ?",
+      "gold_answer": "12,960",
+      "answer": "12,960\u202fft",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "82c463cee028e7ad",
+      "question": "Who did the member defeat in 2012 to represent the constituency situated at the confluence of the Alaknanda ?",
+      "gold_answer": "B. C. Khanduri",
+      "answer": "Kedar\u202fSingh\u202fRawat",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "a98b74225985bd58",
+      "question": "About how many miles long is the coast of the country of birth of a recipient whose rank required hard physical labor , such as shoveling fuel ?",
+      "gold_answer": "12",
+      "answer": "12\u202fmiles",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "e21b2fa14b6b032b",
+      "question": "What type of grapes are used to make the champagne of the champagne house founded in 1849 in a town known for coronations of french royalty ?",
+      "gold_answer": "Grand Cru",
+      "answer": "Grand\u202fCru\u202fgrapes",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "145825860ef076ea",
+      "question": "Who is the director of the most recent film to feature one of Shende 's songs ?",
+      "gold_answer": "Gautham",
+      "answer": "Gautham\u202fMenon",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "996ff24a70994a65",
+      "question": "What is the alumni base of the university located in North Carolina that was chartered in 1932 ?",
+      "gold_answer": "55,000",
+      "answer": "around\u202f55,000",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "17e98a1f02b64f21",
+      "question": "The senator who was also President of the Belgian Senate was appointed by which parliament ?",
+      "gold_answer": "Walloon",
+      "answer": "Walloon Parliament",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "02b6448b566066f0",
+      "question": "What was the year of completion for the church that is a Grade II listed building ?",
+      "gold_answer": "1860",
+      "answer": "1861",
+      "error_category": "retrieval_or_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "9c3dc7011fdbf7ce",
+      "question": "When was the vessel in the class that consisted of 151 frigates launched ?",
+      "gold_answer": "14 December 1944",
+      "answer": "1945",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "51994b0c74870590",
+      "question": "What is the rank of the 555 meter South Korean building in the world in terms of height ?",
+      "gold_answer": "5th",
+      "answer": "1",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "65b69d46bd5b9ab4",
+      "question": "What temperature scale was invented in the city that was the capital of Sweden from 1273 to 1436 ?",
+      "gold_answer": "Celsius",
+      "answer": "Celsius scale",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "0793f27829274525",
+      "question": "How many annual visitors are pulled in by the marathon that Tegla Loroupe won in 2002 ?",
+      "gold_answer": "2,500",
+      "answer": "2,500\u202ftourists each year",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "f927c363b59ed93a",
+      "question": "What was the season in which the title of best coach was bestowed upon the manager of the team that drew a home attendance of 4000 in the first round of the 2017 domestic league season ?",
+      "gold_answer": "2004/2005",
+      "answer": "2012",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "286fc3b35ad650ae",
+      "question": "What is the shape of the bacterium source of the restriction enzyme Sau3AI ?",
+      "gold_answer": "round-shaped",
+      "answer": "coccus (spherical)",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "8bee2d1e7e68a51a",
+      "question": "What are the considered weaknesses of the player recruited by the club that has won thirteen VFL/AFL premierships ?",
+      "gold_answer": "slight frame , weighing just 70 kilograms",
+      "answer": "a slight frame, weighing just\u202f70\u202fkg",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "c3e1e6d2d4aafc2d",
+      "question": "How did the musician with the single Keep Me a Secret put out his first album ?",
+      "gold_answer": "independently",
+      "answer": "independently released",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "801ae6f8c0fe1f4c",
+      "question": "What medal did the flag bearer win at the Olympic Games in which eleven people were killed by Black September terrorists ?",
+      "gold_answer": "gold medal",
+      "answer": "gold",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "09828a9a107af8a4",
+      "question": "Which championship occurred first ? Was it one which was originally raced in 1927 and won by Joe Davis , or the one which Judd Trump often wins ?",
+      "gold_answer": "German Open",
+      "answer": "World Snooker Championship",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "0885f9744bf8f219",
+      "question": "Which of the churches in the town that was built by George Andrew is the oldest ?",
+      "gold_answer": "St Paul 's Parish Church",
+      "answer": "St\u202fPaul\u2019s\u202fParish\u202fChurch",
+      "error_category": "format_or_normalization",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "caeef3d21bc6029c",
+      "question": "Which people occupied the home country of Thomas Voeckler following the Gauls ?",
+      "gold_answer": "Rome",
+      "answer": "the Romans and the Germanic\u202fFranks",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "05b8c7774bdbf894",
+      "question": "In which city is this institute located that the retired American professional basketball player born on November 23 , 1971 is affiliated with ?",
+      "gold_answer": "Carbondale , Illinois",
+      "answer": "Carbondale",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "a9ee53ddb1011c5b",
+      "question": "What is the biggest city in the state that is home to Standing Rock Indian Reservation ?",
+      "gold_answer": "Sioux Falls",
+      "answer": "Fargo",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "74c78bc9ffb4fd39",
+      "question": "What is the birthday of Ford 's oldest winning driver ?",
+      "gold_answer": "October 28 , 1944",
+      "answer": "June\u202f23\u202f1948",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "f36270c917a195c7",
+      "question": "Why did the protagonist of the series in which Lark Voorhies played Cindy in 1992 have to leave his hometown ?",
+      "gold_answer": "a fight",
+      "answer": "He was sent away after getting into a fight in his hometown.",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "49a05ba340d7f0b7",
+      "question": "Who was the commander of the Scots in the 1138 battle at Yorkshire , England ?",
+      "gold_answer": "David I",
+      "answer": "King\u202fDavid\u202fI of Scotland",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    },
+    {
+      "id": "c068e5d9e33ccb92",
+      "question": "How many years of existence apply to the province that was also known as the Eyalet of Jeddah ?",
+      "gold_answer": "313 years ( 1554-1867 )",
+      "answer": "313 years",
+      "error_category": "numeric_or_temporal_reasoning",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": null,
+        "gold_passage_recall": null
+      }
+    },
+    {
+      "id": "31fe5d56fd5bd58b",
+      "question": "What kind of dam is the tallest dam in Europe ?",
+      "gold_answer": "Gravity",
+      "answer": "Concrete gravity dam",
+      "error_category": "retrieval_miss",
+      "retrieval_audit": {
+        "gold_row_recall": 1.0,
+        "gold_hyperlink_recall": 1.0,
+        "gold_passage_recall": 0.0
+      }
+    }
+  ],
+  "ambiguous_count": 141,
+  "ambiguous_exact_match": 0.5602836879432624,
+  "ambiguous_semantic_exact_match": 0.5815602836879432,
+  "ambiguous_f1": 0.698193177980412,
+  "unambiguous_count": 59,
+  "unambiguous_exact_match": 0.6949152542372882,
+  "unambiguous_semantic_exact_match": 0.711864406779661,
+  "unambiguous_f1": 0.8127302076454618,
+  "mean_gold_row_recall": 1.0,
+  "mean_gold_hyperlink_recall": 1.0,
+  "mean_gold_passage_recall": 0.0,
+  "total_wall_time_ms": 4285669.09,
+  "mean_wall_time_ms": 21428.35,
+  "total_llm_latency_ms": 1439853.86,
+  "mean_llm_latency_ms": 7199.27,
+  "total_non_llm_time_ms": 2845815.23,
+  "mean_non_llm_time_ms": 14229.08,
+  "total_llm_calls": 204.0,
+  "mean_llm_calls": 1.02,
+  "total_llm_api_attempts": 204.0,
+  "mean_llm_api_attempts": 1.02,
+  "total_llm_prompt_chars": 16145477.0,
+  "mean_llm_prompt_chars": 80727.38,
+  "total_llm_response_chars": 2623.0,
+  "mean_llm_response_chars": 13.12,
+  "config": {
+    "top_k": 5,
+    "use_rule_text_triples": true,
+    "ambiguity_policy": "prompt",
+    "oueg_context_mode": "lossless",
+    "max_context_chars": 24000,
+    "max_output_tokens": 1024,
+    "temperature": 0.0,
+    "n_paths": 5,
+    "max_replans": 0,
+    "max_table_rows_for_kg": null,
+    "finqa_table_format": "official",
+    "second_stage_k": 3,
+    "max_workers": 4,
+    "llm_max_concurrent_requests": 4
+  }
+}

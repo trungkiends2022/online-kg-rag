@@ -18,6 +18,10 @@ class OpenAICompatibleProvider(LLMProvider):
         from openai import OpenAI
 
         self.model = model or os.environ.get("COMPAT_MODEL", "llama3.1")
+        self.reasoning_enabled = os.environ.get(
+            "COMPAT_REASONING_ENABLED",
+            os.environ.get("OPENROUTER_REASONING_ENABLED", "false")
+        ).strip().lower() in {"1", "true", "yes", "on"}
         self._client = OpenAI(
             api_key=api_key or os.environ.get("COMPAT_API_KEY", "not-needed"),
             base_url=base_url or os.environ.get("COMPAT_BASE_URL", "http://localhost:11434/v1"),
@@ -33,5 +37,8 @@ class OpenAICompatibleProvider(LLMProvider):
         )
         if temperature is not None:
             kwargs["temperature"] = temperature
+        if self.reasoning_enabled:
+            # Hỗ trợ vLLM / SGLang / OpenRouter-style reasoning payload qua extra_body
+            kwargs["extra_body"] = {"reasoning": {"enabled": True}}
         resp = self._client.chat.completions.create(**kwargs)
         return resp.choices[0].message.content or ""
