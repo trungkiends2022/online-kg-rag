@@ -218,31 +218,31 @@ Unlike supervised models (e.g., MuGER$^2$~\cite{wang2022muger2}, S3HQA~\cite{lei
 Dataset & Model & Method & EM (\%) & $\text{F}_1$ (\%) & Calls \\
 \midrule
 \multirow{10}{*}{HybridQA} & \multirow{5}{*}{GPT-OSS 20B}  
-  & Direct LLM               & 45.73 & 54.25 & \textbf{1.00} \\
+  & Direct LLM               & 45.73 & 54.25 & 1.00 \\
 & & ODYSSEY$^*$~\cite{agarwal2025hybrid} & 32.80 & 39.98 & 5.39 \\
-& & Flat Graph RAG           & 31.80 & 37.92 & \textbf{1.00} \\
-& & Pruned Subgraph RAG      & 10.87 & 12.53 & \textbf{1.00} \\
+& & Flat Graph RAG           & 31.80 & 37.92 & 1.00 \\
+& & Pruned Subgraph RAG      & 10.87 & 12.53 & 1.00 \\
 & & \textbf{QEG-RAG (Ours)}  & \textbf{53.07} & \textbf{66.45} & 1.23 \\
 \cmidrule{2-6}
 & \multirow{5}{*}{GPT-OSS 120B} 
-  & Direct LLM               & 56.20 & 65.62 & \textbf{1.00} \\
+  & Direct LLM               & 56.20 & 65.62 & 1.00 \\
 & & ODYSSEY$^*$~\cite{agarwal2025hybrid} & 37.80 & 45.17 & 5.38 \\
-& & Flat Graph RAG           & 33.93 & 39.80 & \textbf{1.00} \\
-& & Pruned Subgraph RAG      & 13.07 & 15.13 & \textbf{1.00} \\
+& & Flat Graph RAG           & 33.93 & 39.80 & 1.00 \\
+& & Pruned Subgraph RAG      & 13.07 & 15.13 & 1.00 \\
 & & \textbf{QEG-RAG (Ours)}  & \textbf{59.27} & \textbf{70.70} & 1.20 \\
 \midrule
 \multirow{10}{*}{OTT-QA}   & \multirow{5}{*}{GPT-OSS 20B}  
-  & Direct LLM               & 50.80 & 57.70 & \textbf{1.00} \\
+  & Direct LLM               & 50.80 & 57.70 & 1.00 \\
 & & ODYSSEY$^*$~\cite{agarwal2025hybrid} & 37.47 & 43.66 & 5.44 \\
-& & Flat Graph RAG           & 40.87 & 46.35 & \textbf{1.00} \\
-& & Pruned Subgraph RAG      & 9.40  & 10.39 & \textbf{1.00} \\
+& & Flat Graph RAG           & 40.87 & 46.35 & 1.00 \\
+& & Pruned Subgraph RAG      & 9.40  & 10.39 & 1.00 \\
 & & \textbf{QEG-RAG (Ours)}  & \textbf{55.60} & \textbf{67.59} & 1.24 \\
 \cmidrule{2-6}
 & \multirow{5}{*}{GPT-OSS 120B} 
-  & Direct LLM               & 60.40 & 67.93 & \textbf{1.00} \\
+  & Direct LLM               & 60.40 & 67.93 & 1.00 \\
 & & ODYSSEY$^*$~\cite{agarwal2025hybrid} & 41.73 & 47.96 & 5.48 \\
-& & Flat Graph RAG           & 42.27 & 47.58 & \textbf{1.00} \\
-& & Pruned Subgraph RAG      & 13.20 & 14.88 & \textbf{1.00} \\
+& & Flat Graph RAG           & 42.27 & 47.58 & 1.00 \\
+& & Pruned Subgraph RAG      & 13.20 & 14.88 & 1.00 \\
 & & \textbf{QEG-RAG (Ours)}  & \textbf{62.93} & \textbf{73.03} & 1.22 \\
 \bottomrule
 \end{tabular}
@@ -286,10 +286,10 @@ To systematically assess the empirical performance and architectural mechanisms 
 \toprule
 Method & EM (\%) & $\text{F}_1$ (\%) & Calls \\
 \midrule
-Direct LLM                         & 29.27 & 31.52 & \textbf{1.00} \\
+Direct LLM                         & 29.27 & 31.52 & 1.00 \\
 ODYSSEY$^*$~\cite{agarwal2025hybrid} & 5.93  & 6.99  & 6.66 \\
-Flat Graph RAG                     & 9.93  & 11.00 & \textbf{1.00} \\
-Pruned Subgraph                    & 1.67  & 1.89  & \textbf{1.00} \\
+Flat Graph RAG                     & 9.93  & 11.00 & 1.00 \\
+Pruned Subgraph                    & 1.67  & 1.89  & 1.00 \\
 \textbf{QEG-RAG (Ours)}            & \textbf{33.40} & \textbf{35.30} & 1.64 \\
 \bottomrule
 \end{tabular}
@@ -324,7 +324,7 @@ Pruned Subgraph                    & 1.67  & 1.89  & \textbf{1.00} \\
 \paragraph{RQ2 (Cross-Paradigm Generalization to Non-Reasoning LLMs):}
 \emph{Can QEG-RAG generalize beyond native reasoning architectures and improve performance on standard instruction-tuned LLMs under strict grounding?}
 
-\emph{Finding}: Outside the main benchmark, Table~\ref{tab:qwen-results} evaluates cross-paradigm generalization on Qwen 122B (OTT-QA). Under strict grounding with reasoning tokens disabled (\texttt{enable\_thinking=false}), instruction-tuned LLMs struggle with multi-hop relations: Direct LLM achieves 29.27\% EM (31.52\% $\text{F}_1$), while ODYSSEY$^*$ drops to 5.93\% EM (6.99\% $\text{F}_1$) because fragmented triples fail to provide cohesive grounding. In comparison, QEG-RAG functions as an external neuro-symbolic scaffold, reaching 33.40\% EM and 35.30\% $\text{F}_1$ (+4.13\,pp EM over Direct LLM; vs.\ 5.93\% for ODYSSEY$^*$). Noticeably, Qwen averages 1.64 LLM calls, higher than the 1.20--1.24 calls of native reasoning models (which achieve $\approx 80\%$ single-call Fast Exits). Because test-time thinking tokens are disabled (\texttt{enable\_thinking=false}), the instruction-tuned model lacks internal chain-of-thought verification; it conservatively invokes the diagnostic handoff (\texttt{NEED\_FOCUS}) more frequently ($\approx 64\%$ triggering Tier~2), demonstrating how the two-tier engine acts as an external diagnostic scaffold when internal reasoning capacity is unavailable. This confirms that structured query-time evidence graphs and bounded diagnostic reasoning can effectively scaffold reasoning in models without test-time reasoning tokens.
+\emph{Finding}: Table~\ref{tab:qwen-results} evaluates cross-paradigm generalization on Qwen 122B (OTT-QA) with reasoning tokens disabled (\texttt{enable\_thinking=false}). Under strict grounding, instruction-tuned LLMs struggle with multi-hop relations: Direct LLM achieves 29.27\% EM (31.52\% $\text{F}_1$), while unorganized or pruned graph baselines degrade sharply---Flat Graph RAG to 9.93\% EM, ODYSSEY$^*$ to 5.93\% EM (6.99\% $\text{F}_1$ at 6.66 calls), and Pruned Subgraph to 1.67\% EM. In comparison, QEG-RAG reaches 33.40\% EM and 35.30\% $\text{F}_1$ (+4.13\,pp EM over Direct LLM; vs.\ 5.93\% for ODYSSEY$^*$). Noticeably, Qwen averages 1.64 LLM calls (still $4.1\times$ fewer than ODYSSEY$^*$'s 6.66), higher than the 1.20--1.24 calls of native reasoning models ($\approx 80\%$ single-call Fast Exits). Lacking internal chain-of-thought verification, the model conservatively triggers the diagnostic handoff ($\mathcal{D}$) more often ($\approx 64\%$ entering Tier~2), showing that the structured multigraph and two-tier engine serve as an effective external diagnostic scaffold when test-time reasoning tokens are unavailable.
 
 
 
@@ -334,48 +334,46 @@ Pruned Subgraph                    & 1.67  & 1.89  & \textbf{1.00} \\
 
 
 \begin{table}[t]
-\caption{Systematic evidence grounding and structural provenance fidelity audit across multi-hop benchmarks ($N=500$ test instances on HybridQA and an exploratory pilot on OTT-QA with $N=17$). Conditioned on verified provenance traces, answer correctness increases significantly (+9.80\,pp on HybridQA, $p < 0.0001$). $^\dagger$Results on OTT-QA serve solely as an illustrative pilot due to the small sample size ($N=17$).}
+\caption{Systematic evidence grounding and structural provenance fidelity audit on HybridQA ($N=500$ test instances). Conditioned on verified provenance traces, answer correctness increases significantly (+9.80\,pp, $p < 0.0001$).}
 \label{tab:evidence-audit}
-\vspace{0.5mm}
+\vspace{1.0mm}
 \centering
 \scriptsize
-\renewcommand{\arraystretch}{0.74}
-\setlength{\tabcolsep}{6pt}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{@{}llrr@{}}
+\renewcommand{\arraystretch}{0.85}
+\setlength{\tabcolsep}{7pt}
+\begin{tabular}{@{}llr@{}}
 \toprule
-\textbf{Audit Dimension} & \textbf{Grounding Evaluation Metric} & \textbf{HybridQA} & \textbf{OTT-QA$^\dagger$} \\
+Audit Dimension & Grounding Evaluation Metric & HybridQA \\
 \midrule
 \multirow{3}{*}{Evidence Coverage} 
-  & Evaluated Test Cohort ($N$)                & 500               & 17              \\
-  & Response Generation Rate ($N_{\text{ans}}$)  & 86.20\% (431/500) & 70.59\% (12/17) \\
-  & Grounded Output Count ($a^* \in E_q^*$)    & 431               & 12              \\
+  & Evaluated Test Cohort ($N$)                         & 500 \\
+  & Response Generation Rate ($N_{\text{ans}}$)           & 86.20\% (431/500) \\
+  & Grounded Output Count ($a^* \in E_q^*$)             & 431 \\
 \midrule
 \multirow{3}{*}{Grounding Fidelity} 
-  & \textbf{Grounded Answer Rate (GAR)}        & \textbf{100.0\%}  & \textbf{100.0\%} \\
-  & Wilson 95\% Confidence Interval            & [99.12\%, 100\%]  & [75.75\%, 100\%]\\
-  & Hallucinated / Invalid Citations           & 5.48\% (25/456)   & 0.00\% (0/12)   \\
+  & Grounded Answer Rate (GAR)                          & \textbf{100.0\%} \\
+  & Wilson 95\% Confidence Interval                     & [99.12\%, 100\%] \\
+  & Hallucinated / Invalid Citations                    & 5.48\% (25/456) \\
 \midrule
-\multirow{3}{*}{Grounding vs.\ Accuracy} 
-  & Full-Population Exact Match (Unconditional)& 61.20\% (306/500) & 64.71\% (11/17) \\
-  & Answered Exact Match (Conditioned on $N_{\text{ans}}$) & 71.00\% (306/431) & 91.67\% (11/12) \\
-  & \textbf{Exact Match on Verified Provenance}& \textbf{71.00\%} (306/431) & \textbf{91.67\%} (11/12) \\
-  & \emph{Provenance Accuracy Boost}           & \textbf{+9.80\,pp}& \textbf{+26.96\,pp}\\
+\multirow{4}{*}{Grounding vs.\ Accuracy} 
+  & Full-Population Exact Match (Unconditional)         & 61.20\% (306/500) \\
+  & Answered Exact Match (Conditioned on $N_{\text{ans}}$) & 71.00\% (306/431) \\
+  & Exact Match on Verified Provenance                  & 71.00\% (306/431) \\
+  & \emph{Provenance Accuracy Boost}                    & \textbf{+9.80\,pp} \\
 \midrule
 \multirow{2}{*}{Ambiguity Audit ($N=100$)} 
-  & Faithful Provenance Alignment              & 92.00\%           & ---             \\
-  & Ground-Truth Bridge Entity Match           & 89.00\%           & ---             \\
+  & Faithful Provenance Alignment                       & 92.00\% \\
+  & Ground-Truth Bridge Entity Match                    & 89.00\% \\
 \bottomrule
-\end{tabular}%
-}
-\vspace{0.5mm}
+\end{tabular}
+\vspace{1.0mm}
 \end{table}
 
 \enlargethispage{6.0\baselineskip}
 \paragraph{RQ4 (Diagnostic Feedback, Bounded Execution, and Provenance Audit):}
-\emph{Can two-tier diagnostics resolve retrieval collisions under bounded execution, and how does structural provenance support faithful evidence grounding?} \emph{Finding}: Unlike unbounded loops (HydraRAG), QEG-RAG concludes unambiguous queries via single-call Fast Exit ($\approx 80\%$ of queries), averaging 1.20--1.24 calls (vs.\ 5.38--6.66 for ODYSSEY$^*$). On structural collisions ($|\mathcal{C}_q| > 1$), Tier~2 resolves ambiguity factually: omitting Tier~2 (Row~5) drops $\text{F}_1$ by 1.28\,pp, while omitting targeted bridge evidence $\Delta\mathcal{D}$ (Row~3) reduces EM by 3.20\,pp and $\text{F}_1$ by 4.46\,pp. 
+\emph{Can two-tier diagnostics resolve retrieval collisions under bounded execution, and how does structural provenance support verified evidence grounding?} \emph{Finding}: Unlike unbounded loops (HydraRAG), QEG-RAG concludes unambiguous queries via single-call Fast Exit ($\approx 80\%$ of queries), averaging 1.20--1.24 calls (vs.\ 5.38--6.66 for ODYSSEY$^*$). On structural collisions ($|\mathcal{C}_q| > 1$), Tier~2 and diagnostic focus resolve ambiguity factually: omitting Tier~2 (Row~5) drops $\text{F}_1$ by 1.28\,pp, omitting diagnostic focus $\mathcal{C}_{\text{focus}}$ (Row~4) reduces EM by 1.40\,pp and $\text{F}_1$ by 2.32\,pp, and omitting targeted bridge evidence $\Delta\mathcal{D}$ (Row~3) reduces EM by 3.20\,pp and $\text{F}_1$ by 4.46\,pp. 
 
-\emph{Provenance Audit and Grounding Correlation}: As summarized in Table~\ref{tab:evidence-audit}, a systematic audit across the full $N=500$ evaluation cohort confirms high grounding fidelity: QEG-RAG achieves a Grounded Answer Rate of 100.0\% on HybridQA (Wilson 95\% CI: [99.12\%, 100.0\%]), with invalid citations strictly penalized and filtered out (5.48\%, 25/456 attempts). Under strict context grounding, models refrain from ungrounded guessing when evidence is missing, emitting empty responses on 13.80\% of queries (scored as 0 in unconditional EM). Importantly, grounded answers correlate directly with higher accuracy: conditioned on verified multigraph traces ($a^* \in E_q^*$), Exact Match reaches 71.00\% (+9.80\,pp higher than the unconditional full-population EM of 61.20\%, $p < 0.0001$). We additionally examined an exploratory sample of OTT-QA ($N=17$); while 12/12 generated responses exhibited verified provenance grounding (GAR 100.0\%, achieving 91.67\% conditioned EM; +26.96\,pp boost), we explicitly note that this OTT-QA result serves solely as an illustrative pilot due to the small sample size ($N=17$), whereas primary statistical validation is established on the well-powered HybridQA cohort ($N=500$). To assess evidentiary integrity, two independent domain annotators (co-authors blinded to method origin) audited 100 randomly sampled collision queries ($|\mathcal{C}_q| > 1$): (1)~\emph{Trace Faithfulness} (92.0\%, Cohen's $\kappa = 0.86$): an answer trace is scored as faithful if and only if each intermediate hop ($\text{row} \to \text{cell} \to \text{bridge} \to \text{answer}$) is strictly substantiated by factual assertions in the cited table cells and text excerpts without ungrounded extrapolation; and (2)~\emph{Bridge Alignment} (89.0\%): scored as correct if the multigraph's resolved bridge entity matches the gold Wikipedia hyperlink specified in HybridQA ground truth (adjudicating discrepancies by consensus).
+\emph{Provenance Audit and Grounding Correlation}: As summarized in Table~\ref{tab:evidence-audit}, a systematic audit across the full $N=500$ HybridQA evaluation cohort confirms high grounding fidelity: QEG-RAG achieves a Grounded Answer Rate of 100.0\% (Wilson 95\% CI: [99.12\%, 100.0\%]), with invalid citations strictly penalized and filtered out (5.48\%, 25/456 attempts). Under strict context grounding, models refrain from ungrounded guessing when evidence is missing, emitting empty responses on 13.80\% of queries (scored as 0 in unconditional EM). Importantly, grounded answers correlate directly with higher accuracy: conditioned on verified multigraph traces ($a^* \in E_q^*$), Exact Match reaches 71.00\% (+9.80\,pp higher than the unconditional full-population EM of 61.20\%, $p < 0.0001$). To assess evidentiary integrity, two independent domain annotators (co-authors blinded to method origin) audited 100 randomly sampled collision queries ($|\mathcal{C}_q| > 1$): (1)~\emph{Trace Faithfulness} (92.0\%, Cohen's $\kappa = 0.86$): an answer trace is scored as faithful if and only if each intermediate hop ($\text{row} \to \text{cell} \to \text{bridge} \to \text{answer}$) is strictly substantiated by factual assertions in the cited table cells and text excerpts without ungrounded extrapolation; and (2)~\emph{Bridge Alignment} (89.0\%): scored as correct if the multigraph's resolved bridge entity matches the gold Wikipedia hyperlink specified in HybridQA ground truth (adjudicating discrepancies by consensus).
 
 \paragraph{RQ5 (Preservation of Tabular Semantics):}
 \emph{How effectively does the star centroid formulation mitigate cross-row attribute conflation without LLM extraction costs?} \emph{Finding}: In Table~\ref{tab:ablation} (Row~2), eliminating star centroids $\rho_i$ drops EM by 3.00\,pp and $\text{F}_1$ by 5.32\,pp, confirming that star centroids enforce row attribute integrity across symmetric records without LLM extraction overhead. In summary, empirical results demonstrate that structured multigraph serialization retains retrieved evidence within budget without destructive pruning (RQ1--RQ3), two-tier diagnostics resolve collisions within $\le 2$ calls with $\approx 80\%$ Fast Exits and 100.0\% grounded rate (RQ4), and star centroids reduce cross-row conflation (RQ5).
@@ -398,29 +396,6 @@ We presented QEG-RAG, uniting query-time evidence graphs with bounded diagnostic
 \subsubsection{\discintname}
 The authors have no competing interests to declare that are relevant to the content of this article.
 \end{credits}
-
-\makeatletter
-\renewenvironment{thebibliography}[1]
-     {\section*{\refname}%
-      \def\@biblabel##1{##1.}%
-      \fontsize{5.8pt}{6.7pt}\selectfont
-      \list{\@biblabel{\@arabic\c@enumiv}}%
-           {\settowidth\labelwidth{\@biblabel{#1}}%
-            \leftmargin\labelwidth
-            \advance\leftmargin\labelsep
-            \setlength{\itemsep}{-1.5pt plus 0.1pt}%
-            \setlength{\parsep}{0pt}%
-            \setlength{\topsep}{0.5pt}%
-            \usecounter{enumiv}%
-            \let\p@enumiv\@empty
-            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
-      \renewcommand\newblock{\hskip .11em \@plus.33em \@minus.07em}%
-      \sloppy\clubpenalty4000\widowpenalty4000%
-      \sfcode`\.=1000\relax}
-     {\def\@noitemerr
-       {\@latex@warning{Empty `thebibliography' environment}}%
-      \endlist}
-\makeatother
 
 \bibliographystyle{splncs04_unsrt}
 \bibliography{refs}
